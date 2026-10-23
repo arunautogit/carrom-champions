@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Carrom Champions - Player vs AI</title>
+  
+  <script src="https://www.youtube.com/game_api/v1" onerror="console.log('[Playables] Standalone mode')"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #27140a 0%, #110702 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    #game-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      max-width: 900px;
+      max-height: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    canvas {
+      display: block;
+      background: #dfb279;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 100px rgba(0,0,0,0.5);
+      border-radius: 14px;
+      touch-action: none;
+      cursor: default;
+    }
+
+    /* UI Overlays */
+    .overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(16, 8, 4, 0.92);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      backdrop-filter: blur(6px);
+      transition: opacity 0.3s ease;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    h1 {
+      font-size: 2.7rem;
+      color: #f7ca48;
+      text-shadow: 0 4px 15px rgba(247, 202, 72, 0.45), 0 2px 4px #000;
+      margin-bottom: 6px;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    p.subtitle {
+      font-size: 1rem;
+      color: #d1b89d;
+      margin-bottom: 22px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    /* Primary Split Cards: Normal vs Fun Mode */
+    .primary-mode-row {
+      display: flex;
+      gap: 18px;
+      width: 100%;
+      max-width: 540px;
+      margin-bottom: 22px;
+    }
+
+    .big-card {
+      flex: 1;
+      background: linear-gradient(135deg, #3d2210 0%, #1e1008 100%);
+      border: 2px solid #a07855;
+      border-radius: 18px;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+    }
+
+    .big-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      border-color: #ffd700;
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+      background: linear-gradient(135deg, #572e14 0%, #291408 100%);
+    }
+
+    .big-card-icon {
+      font-size: 3.2rem;
+      margin-bottom: 12px;
+    }
+
+    .big-card-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #ffd700;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .big-card-desc {
+      font-size: 0.84rem;
+      color: #cbb49e;
+      line-height: 1.3;
+    }
+
+    /* Sub-grid for Fun Modes */
+    .fun-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+      max-width: 580px;
+      margin-bottom: 20px;
+    }
+
+    .fun-card {
+      background: linear-gradient(135deg, #381f0e 0%, #1c0e05 100%);
+      border: 2px solid #8c6747;
+      border-radius: 14px;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.22s ease;
+    }
+
+    .fun-card:hover {
+      transform: translateY(-3px);
+      border-color: #f7ca48;
+      box-shadow: 0 6px 18px rgba(247, 202, 72, 0.35);
+      background: linear-gradient(135deg, #4d2b14 0%, #271407 100%);
+    }
+
+    /* Customization Tabs & Grids */
+    .custom-section {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 18px;
+    }
+
+    .custom-title {
+      font-size: 1.05rem;
+      color: #ffd700;
+      font-weight: bold;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+      text-align: left;
+    }
+
+    .option-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .opt-chip {
+      padding: 8px 14px;
+      background: #2b160b;
+      border: 1.5px solid #8c6747;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      color: #eed8c3;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .opt-chip:hover {
+      border-color: #f7ca48;
+      color: #fff;
+    }
+
+    .opt-chip.active {
+      border-color: #f7ca48;
+      background: #542d13;
+      color: #ffd700;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(247, 202, 72, 0.4);
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 270px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: #fff;
+      background: linear-gradient(135deg, #b8860b 0%, #8b6508 100%);
+      border: 2px solid #ffd700;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.4);
+      transition: all 0.2s ease;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #d4af37 0%, #a67c1e 100%);
+      box-shadow: 0 8px 20px rgba(247, 202, 72, 0.4);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #4a2c11 0%, #2f1906 100%);
+      border-color: #a07855;
+    }
+
+    /* In-Game HUD */
+    #hud {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    .player-badge {
+      background: rgba(30, 16, 9, 0.88);
+      border: 1px solid #c99742;
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.3s ease;
+    }
+
+    .player-badge.active-turn {
+      border: 2px solid #f7ca48;
+      box-shadow: 0 0 15px rgba(247, 202, 72, 0.6);
+      transform: scale(1.04);
+    }
+
+    .badge-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #333;
+    }
+
+    .score-txt {
+      font-weight: bold;
+      font-size: 1.05rem;
+      color: #f7ca48;
+    }
+
+    #mode-pill-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      pointer-events: auto;
+    }
+
+    #mode-pill {
+      background: rgba(45, 20, 10, 0.92);
+      border: 1.5px solid #ffd700;
+      color: #ffd700;
+      padding: 4px 13px;
+      border-radius: 16px;
+      font-size: 0.82rem;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    #mode-sub-pill {
+      font-size: 0.72rem;
+      color: #ff9800;
+      font-weight: bold;
+      text-shadow: 0 1px 2px #000;
+    }
+
+    #turn-msg {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(30, 16, 9, 0.92);
+      border: 1px solid #c99742;
+      padding: 6px 20px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #ffd700;
+      pointer-events: none;
+      z-index: 50;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .icon-btn {
+      pointer-events: auto;
+      background: rgba(40, 20, 10, 0.9);
+      border: 1px solid #c99742;
+      color: #ffd700;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+
+    .modal-box {
+      background: linear-gradient(135deg, #3d2010 0%, #1e1008 100%);
+      border: 3px solid #f7ca48;
+      border-radius: 20px;
+      padding: 32px 36px;
+      text-align: center;
+      box-shadow: 0 15px 50px rgba(0,0,0,0.8);
+      max-width: 420px;
+      width: 90%;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="game-container">
+    <canvas id="carromCanvas" width="800" height="800"></canvas>
+
+    <!-- Top In-Game HUD -->
+    <div id="hud" class="hidden">
+      <div id="p1-badge" class="player-badge active-turn">
+        <div id="p1-badge-coin" class="badge-icon"></div>
+        <span>You</span>:
+        <span id="p1-score" class="score-txt">0</span>
+      </div>
+
+      <div id="mode-pill-container">
+        <div id="mode-pill">🌟 NORMAL MODE</div>
+        <div id="mode-sub-pill"></div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button id="sound-btn" class="icon-btn" title="Toggle Sound">🔊</button>
+        <button id="pause-btn" class="icon-btn" title="Menu">⚙️</button>
+      </div>
+
+      <div id="p2-badge" class="player-badge">
+        <div id="p2-badge-coin" class="badge-icon"></div>
+        <span>AI Bot</span>:
+        <span id="p2-score" class="score-txt">0</span>
+      </div>
+    </div>
+
+    <div id="turn-msg" class="hidden">Slide striker & drag to shoot</div>
+
+    <!-- 1. STARTING SCREEN: Split Normal Mode & Fun Mode -->
+    <div id="menu-overlay" class="overlay">
+      <h1>CARROM CHAMPIONS</h1>
+      <p class="subtitle">Player vs AI Edition</p>
+
+      <div class="primary-mode-row">
+        <!-- Normal Mode Card -->
+        <div id="card-normal" class="big-card">
+          <div class="big-card-icon">🌟</div>
+          <div class="big-card-title">NORMAL MODE</div>
+          <div class="big-card-desc">Standard professional carrom rules against intelligent AI bot.</div>
+        </div>
+
+        <!-- Fun Mode Card -->
+        <div id="card-fun" class="big-card">
+          <div class="big-card-icon">🚀</div>
+          <div class="big-card-title">FUN MODE</div>
+          <div class="big-card-desc">Magnet vortex, stone pulse, time bombs, tag coins & coin breakers!</div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button id="btn-custom" class="btn btn-secondary" style="font-size: 0.95rem;">🎨 Customization</button>
+      </div>
+    </div>
+
+    <!-- 2. FUN MODE SELECTION SUB-SCREEN -->
+    <div id="fun-menu-overlay" class="overlay hidden">
+      <h1>SELECT FUN MODE</h1>
+      <p class="subtitle">Choose your special gameplay variant vs AI</p>
+
+      <div class="fun-grid">
+        <div class="fun-card" data-mode="magnet">
+          <div style="font-size: 2rem; margin-bottom: 4px;">🧲</div>
+          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Magnet Event</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">120s timer triggers 20s center vortex pulling coins!</div>
+        </div>
+
+        <div class="fun-card" data-mode="stone">
+          <div style="font-size: 2rem; margin-bottom: 4px;">🪨</div>
+          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Stone Pulse</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">Coins petrify +5% every 15s. Double-hit reduces to 50%!</div>
+        </div>
+
+        <div class="fun-card" data-mode="bomber">
+          <div style="font-size: 2rem; margin-bottom: 4px;">💣</div>
+          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Player Bomber</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">120s countdown. Timeout triggers blast & +10 penalty!</div>
+        </div>
+
+        <div class="fun-card" data-mode="tagcoins">
+          <div style="font-size: 2rem; margin-bottom: 4px;">🏷️</div>
+          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Tag Coins</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">240s phases: Tag coins first, then pocket only your tags!</div>
+        </div>
+
+        <div class="fun-card" data-mode="coin_breaker" style="grid-column: span 2;">
+          <div style="font-size: 2rem; margin-bottom: 4px;">🔨</div>
+          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Coin Breaker & Glue</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">Power shots shatter coins into halves; Glue phase fuses them!</div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button id="btn-fun-back" class="btn btn-secondary">Back to Main</button>
+      </div>
+    </div>
+
+    <!-- 3. CUSTOMIZATION SCREEN (Strikers, Board, Coins) -->
+    <div id="custom-overlay" class="overlay hidden">
+      <h1>CUSTOMIZATION</h1>
+      <p class="subtitle">Customize Striker, Board & Coin Aesthetics</p>
+
+      <!-- Striker Selector (Godot Strikers 0 to 5) -->
+      <div class="custom-section">
+        <div class="custom-title">⚡ Striker Model (From Godot Assets)</div>
+        <div class="option-row" id="striker-options">
+          <div class="opt-chip active" data-striker="0">🟡 Striker 0: Classic Gold</div>
+          <div class="opt-chip" data-striker="1">🔵 Striker 1: Cyber Neon</div>
+          <div class="opt-chip" data-striker="2">🔴 Striker 2: Crimson Dragon</div>
+          <div class="opt-chip" data-striker="3">🟢 Striker 3: Jade Emperor</div>
+          <div class="opt-chip" data-striker="4">⚫ Striker 4: Obsidian Shadow</div>
+          <div class="opt-chip" data-striker="5">⚪ Striker 5: Titanium Silver</div>
+        </div>
+      </div>
+
+      <!-- Board Style & Shape Selector -->
+      <div class="custom-section">
+        <div class="custom-title">🪵 Board Style & Color</div>
+        <div class="option-row" id="board-options">
+          <div class="opt-chip active" data-board="square_wood">🟫 Classic Maple (Square)</div>
+          <div class="opt-chip" data-board="round_wood">⭕ Carrooka Round Board</div>
+          <div class="opt-chip" data-board="emerald">🟢 Tournament Emerald</div>
+          <div class="opt-chip" data-board="midnight">⬛ Midnight Ebony Dark</div>
+        </div>
+      </div>
+
+      <!-- Coin Color Palette Selector -->
+      <div class="custom-section">
+        <div class="custom-title">🪙 Coin Color Palette</div>
+        <div class="option-row" id="coin-options">
+          <div class="opt-chip active" data-coin="classic">⚪ Classic Ivory & Ebony</div>
+          <div class="opt-chip" data-coin="cyber">🟦 Cyber Cyan & Magenta</div>
+          <div class="opt-chip" data-coin="royale">🪙 Royal Gold & Platinum</div>
+          <div class="opt-chip" data-coin="wood">🪵 Birch & Dark Walnut</div>
+        </div>
+      </div>
+
+      <div class="btn-group" style="margin-top: 10px;">
+        <button id="btn-custom-done" class="btn">Apply & Done</button>
+      </div>
+    </div>
+
+    <!-- 4. RESULT OVERLAY -->
+    <div id="result-overlay" class="overlay hidden">
+      <div class="modal-box">
+        <h1 id="winner-title" style="font-size: 2.3rem;">VICTORY!</h1>
+        <p id="winner-desc" class="subtitle" style="margin-bottom: 22px;">You defeated the AI Bot!</p>
+        <div class="btn-group" style="margin: 0 auto;">
+          <button id="btn-rematch" class="btn">Play Again</button>
+          <button id="btn-home" class="btn btn-secondary">Main Menu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       AUDIO SYNTHESIZER
+       ========================================================================= */
+    const Sound = (() => {
+      let ctx = null;
+      let enabled = true;
+
+      function getCtx() {
+        if (!ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) ctx = new AudioContext();
+        }
+        if (ctx && ctx.state === 'suspended') ctx.resume();
+        return ctx;
+      }
+
+      return {
+        toggle() { enabled = !enabled; return enabled; },
+        isEnabled() { return enabled; },
+        setEnabled(val) { enabled = val; },
+
+        playClack(speed) {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(600 + Math.random() * 400, ac.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(120, ac.currentTime + 0.04);
+          const vol = Math.min(Math.max(speed / 15, 0.1), 0.8);
+          gain.gain.setValueAtTime(vol, ac.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.05);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(ac.currentTime + 0.05);
+        },
+
+        playPocket() {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(180, ac.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(45, ac.currentTime + 0.18);
+          gain.gain.setValueAtTime(0.7, ac.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.2);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(ac.currentTime + 0.2);
+        },
+
+        playFlick() {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(320, ac.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(700, ac.currentTime + 0.06);
+          gain.gain.setValueAtTime(0.5, ac.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.07);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(ac.currentTime + 0.07);
+        },
+
+        playExplosion() {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(140, ac.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(25, ac.currentTime + 0.5);
+          gain.gain.setValueAtTime(1.0, ac.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.55);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(ac.currentTime + 0.55);
+
+          const bufferSize = ac.sampleRate * 0.3;
+          const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+          const noise = ac.createBufferSource();
+          noise.buffer = buffer;
+          const noiseGain = ac.createGain();
+          noiseGain.gain.setValueAtTime(0.6, ac.currentTime);
+          noiseGain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.3);
+          noise.connect(noiseGain);
+          noiseGain.connect(ac.destination);
+          noise.start();
+        },
+
+        playMagnetHum() {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(160, ac.currentTime);
+          osc.frequency.linearRampToValueAtTime(320, ac.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.18, ac.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.2);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(ac.currentTime + 0.2);
+        },
+
+        playShatter() {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(900, ac.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(300, ac.currentTime + 0.08);
+          gain.gain.setValueAtTime(0.7, ac.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.1);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(ac.currentTime + 0.1);
+        },
+
+        playGlue() {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(260, ac.currentTime);
+          osc.frequency.linearRampToValueAtTime(540, ac.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.4, ac.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.18);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(ac.currentTime + 0.18);
+        },
+
+        playFoul() {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, ac.currentTime);
+          osc.frequency.setValueAtTime(160, ac.currentTime + 0.1);
+          gain.gain.setValueAtTime(0.35, ac.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.25);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(ac.currentTime + 0.25);
+        }
+      };
+    })();
+
+    /* =========================================================================
+       YOUTUBE PLAYABLES INTEGRATION
+       ========================================================================= */
+    const YouTubePlayables = (() => {
+      let isYT = typeof window.ytgame !== 'undefined';
+      function init() {
+        if (isYT && window.ytgame.game && window.ytgame.game.firstFrameReady) window.ytgame.game.firstFrameReady();
+        if (isYT && window.ytgame.system) {
+          window.ytgame.system.onPause(() => Game.pause());
+          window.ytgame.system.onResume(() => Game.resume());
+          window.ytgame.system.onAudioEnabledChange((enabled) => {
+            Sound.setEnabled(enabled);
+            document.getElementById('sound-btn').textContent = enabled ? '🔊' : '🔇';
+          });
+        }
+      }
+      function gameReady() {
+        if (isYT && window.ytgame.game && window.ytgame.game.gameReady) window.ytgame.game.gameReady();
+      }
+      return { init, gameReady };
+    })();
+
+    /* =========================================================================
+       CUSTOMIZATION DEFINITIONS (STRIKERS, BOARDS, COINS)
+       ========================================================================= */
+    const STRIKER_CONFIGS = {
+      0: { name: 'Classic Gold', color: '#ffea75', border: '#d4af37', inner: '#ffd700', emblem: '⚡' },
+      1: { name: 'Cyber Neon', color: '#00e5ff', border: '#0097a7', inner: '#18ffff', emblem: '💠' },
+      2: { name: 'Crimson Dragon', color: '#ff5252', border: '#c62828', inner: '#ff1744', emblem: '🐉' },
+      3: { name: 'Jade Emperor', color: '#69f0ae', border: '#2e7d32', inner: '#00e676', emblem: '🌿' },
+      4: { name: 'Obsidian Shadow', color: '#424242', border: '#212121', inner: '#616161', emblem: '🔮' },
+      5: { name: 'Titanium Silver', color: '#e0e0e0', border: '#9e9e9e', inner: '#ffffff', emblem: '⭐' }
+    };
+
+    const BOARD_THEMES = {
+      square_wood: {
+        isRound: false,
+        frame: '#3a1e0b', frameBorder: '#4e280e',
+        surface: '#e8bc82', pattern: '#9c2424', line: '#222'
+      },
+      round_wood: {
+        isRound: true,
+        frame: '#44230d', frameBorder: '#5c3114',
+        surface: '#dfb279', pattern: '#8e24aa', line: '#222'
+      },
+      emerald: {
+        isRound: false,
+        frame: '#1a3321', frameBorder: '#274b32',
+        surface: '#2d6a4f', pattern: '#d8f3dc', line: '#1b4332'
+      },
+      midnight: {
+        isRound: false,
+        frame: '#18181c', frameBorder: '#2b2b36',
+        surface: '#24242e', pattern: '#ffd700', line: '#4a4a5a'
+      }
+    };
+
+    const COIN_PALETTES = {
+      classic: {
+        p1: { fill: '#f7f4ed', border: '#c7beaf', dot: '#222' },
+        p2: { fill: '#221e1b', border: '#0d0c0a', dot: '#eee' },
+        queen: { fill: '#e63946', border: '#9b111e' }
+      },
+      cyber: {
+        p1: { fill: '#00e5ff', border: '#00838f', dot: '#fff' },
+        p2: { fill: '#d500f9', border: '#8e0000', dot: '#fff' },
+        queen: { fill: '#ffd600', border: '#ff8f00' }
+      },
+      royale: {
+        p1: { fill: '#ffffff', border: '#b0bec5', dot: '#37474f' },
+        p2: { fill: '#ffd54f', border: '#b78103', dot: '#4e342e' },
+        queen: { fill: '#c2185b', border: '#880e4f' }
+      },
+      wood: {
+        p1: { fill: '#f5deb3', border: '#d2b48c', dot: '#8b4513' },
+        p2: { fill: '#5c3818', border: '#3b220d', dot: '#f5deb3' },
+        queen: { fill: '#b71c1c', border: '#7f0000' }
+      }
+    };
+
+    let selectedStrikerId = 0;
+    let selectedBoardKey = 'square_wood';
+    let selectedCoinKey = 'classic';
+
+    /* =========================================================================
+       PHYSICS CONSTANTS & CANVAS SETUP
+       ========================================================================= */
+    const canvas = document.getElementById('carromCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const BOARD_SIZE = 800;
+    const FRAME_WIDTH = 48;
+    const PLAY_AREA_SIZE = BOARD_SIZE - FRAME_WIDTH * 2;
+    const HALF_SIZE = BOARD_SIZE / 2;
+
+    const POCKET_RADIUS = 30;
+    const COIN_RADIUS = 15;
+    const STRIKER_RADIUS = 21;
+    const BASELINE_OFFSET = 240;
+    const BASELINE_HALF_LEN = 160;
+
+    const FRICTION = 0.985;
+    const RESTITUTION = 0.93;
+
+    const POCKETS = [
+      { x: FRAME_WIDTH + 26, y: FRAME_WIDTH + 26 },
+      { x: BOARD_SIZE - FRAME_WIDTH - 26, y: FRAME_WIDTH + 26 },
+      { x: FRAME_WIDTH + 26, y: BOARD_SIZE - FRAME_WIDTH - 26 },
+      { x: BOARD_SIZE - FRAME_WIDTH - 26, y: BOARD_SIZE - FRAME_WIDTH - 26 }
+    ];
+
+    let particles = [];
+    let shockwaves = [];
+
+    class Particle {
+      constructor(x, y, color) {
+        this.x = x; this.y = y;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 8 + 2;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.color = color;
+        this.alpha = 1.0;
+        this.radius = Math.random() * 4 + 2;
+      }
+      update() {
+        this.x += this.vx; this.y += this.vy;
+        this.vx *= 0.95; this.vy *= 0.95;
+        this.alpha -= 0.025;
+      }
+      draw(c) {
+        c.save();
+        c.globalAlpha = Math.max(0, this.alpha);
+        c.beginPath();
+        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        c.fillStyle = this.color;
+        c.fill();
+        c.restore();
+      }
+    }
+
+    class Shockwave {
+      constructor(x, y) {
+        this.x = x; this.y = y;
+        this.radius = 10;
+        this.alpha = 1.0;
+      }
+      update() {
+        this.radius += 10;
+        this.alpha -= 0.04;
+      }
+      draw(c) {
+        c.save();
+        c.globalAlpha = Math.max(0, this.alpha);
+        c.beginPath();
+        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        c.strokeStyle = '#ff9800';
+        c.lineWidth = 6;
+        c.stroke();
+        c.restore();
+      }
+    }
+
+    class Piece {
+      constructor(x, y, radius, type, points = 0) {
+        this.x = x; this.y = y;
+        this.vx = 0; this.vy = 0;
+        this.radius = radius;
+        this.mass = radius === STRIKER_RADIUS ? 3.0 : 1.0;
+        this.type = type; // 'striker', 'p1', 'p2', 'queen'
+        this.points = points;
+        this.isPocketed = false;
+        this.scale = 1.0;
+
+        this.stonePercent = 0;
+        this.stoneLastHit = 0;
+        this.taggedBy = 0;
+        this.isHalf = false;
+        this.isGlued = false;
+      }
+
+      update(isRoundBoard) {
+        if (this.isPocketed) {
+          if (this.scale > 0) this.scale = Math.max(0, this.scale - 0.1);
+          return;
+        }
+
+        if (this.stonePercent >= 100) {
+          this.vx = 0; this.vy = 0;
+          return;
+        }
+
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vx *= FRICTION;
+        this.vy *= FRICTION;
+
+        if (Math.abs(this.vx) < 0.05) this.vx = 0;
+        if (Math.abs(this.vy) < 0.05) this.vy = 0;
+
+        if (isRoundBoard) {
+          // Circular Cushion boundary bounce
+          const distFromCenter = Math.hypot(this.x - HALF_SIZE, this.y - HALF_SIZE);
+          const maxRadius = (PLAY_AREA_SIZE / 2) - this.radius;
+
+          if (distFromCenter > maxRadius) {
+            const angle = Math.atan2(this.y - HALF_SIZE, this.x - HALF_SIZE);
+            this.x = HALF_SIZE + Math.cos(angle) * maxRadius;
+            this.y = HALF_SIZE + Math.sin(angle) * maxRadius;
+
+            // Reflect velocity along normal
+            const nx = Math.cos(angle);
+            const ny = Math.sin(angle);
+            const dot = this.vx * nx + this.vy * ny;
+            this.vx = (this.vx - 2 * dot * nx) * RESTITUTION;
+            this.vy = (this.vy - 2 * dot * ny) * RESTITUTION;
+            Sound.playClack(Math.abs(dot));
+          }
+        } else {
+          // Standard Square Cushions
+          const minX = FRAME_WIDTH + this.radius;
+          const maxX = BOARD_SIZE - FRAME_WIDTH - this.radius;
+          const minY = FRAME_WIDTH + this.radius;
+          const maxY = BOARD_SIZE - FRAME_WIDTH - this.radius;
+
+          if (this.x < minX) {
+            this.x = minX; this.vx = -this.vx * RESTITUTION;
+            Sound.playClack(Math.abs(this.vx));
+          } else if (this.x > maxX) {
+            this.x = maxX; this.vx = -this.vx * RESTITUTION;
+            Sound.playClack(Math.abs(this.vx));
+          }
+
+          if (this.y < minY) {
+            this.y = minY; this.vy = -this.vy * RESTITUTION;
+            Sound.playClack(Math.abs(this.vy));
+          } else if (this.y > maxY) {
+            this.y = maxY; this.vy = -this.vy * RESTITUTION;
+            Sound.playClack(Math.abs(this.vy));
+          }
+        }
+      }
+
+      draw(c) {
+        if (this.isPocketed && this.scale <= 0) return;
+        c.save();
+        c.translate(this.x, this.y);
+        c.scale(this.scale, this.scale);
+
+        // Shadow
+        c.beginPath();
+        c.arc(2, 3, this.radius, 0, Math.PI * 2);
+        c.fillStyle = 'rgba(0,0,0,0.35)';
+        c.fill();
+
+        // Check if Striker
+        if (this.type === 'striker') {
+          const cfg = STRIKER_CONFIGS[selectedStrikerId];
+          c.beginPath();
+          c.arc(0, 0, this.radius, 0, Math.PI * 2);
+          const grad = c.createRadialGradient(-this.radius*0.3, -this.radius*0.3, 2, 0, 0, this.radius);
+          grad.addColorStop(0, '#ffffff');
+          grad.addColorStop(0.35, cfg.color);
+          grad.addColorStop(1, cfg.border);
+          c.fillStyle = grad;
+          c.fill();
+          c.lineWidth = 2.5;
+          c.strokeStyle = cfg.border;
+          c.stroke();
+
+          // Inner emblem
+          c.fillStyle = cfg.inner;
+          c.font = 'bold 13px sans-serif';
+          c.textAlign = 'center';
+          c.textBaseline = 'middle';
+          c.fillText(cfg.emblem, 0, 0);
+
+          c.restore();
+          return;
+        }
+
+        // Regular Coins with Palette
+        const palette = COIN_PALETTES[selectedCoinKey];
+        let pInfo = this.type === 'p1' ? palette.p1 : (this.type === 'p2' ? palette.p2 : palette.queen);
+
+        let fillColor = pInfo.fill;
+        let borderColor = pInfo.border;
+
+        if (this.stonePercent > 0) {
+          const t = this.stonePercent / 100;
+          fillColor = t >= 1 ? '#5c544d' : '#8c8075';
+          borderColor = '#332f2c';
+        }
+
+        c.beginPath();
+        if (this.isHalf) {
+          c.arc(0, 0, this.radius, -Math.PI / 2, Math.PI / 2);
+          c.closePath();
+        } else {
+          c.arc(0, 0, this.radius, 0, Math.PI * 2);
+        }
+
+        const grad = c.createRadialGradient(-this.radius*0.3, -this.radius*0.3, 2, 0, 0, this.radius);
+        grad.addColorStop(0, '#ffffff');
+        grad.addColorStop(0.3, fillColor);
+        grad.addColorStop(1, borderColor);
+        c.fillStyle = grad;
+        c.fill();
+        c.lineWidth = 2;
+        c.strokeStyle = borderColor;
+        c.stroke();
+
+        if (this.taggedBy > 0) {
+          c.beginPath();
+          c.arc(0, 0, this.radius * 0.45, 0, Math.PI * 2);
+          c.fillStyle = this.taggedBy === 1 ? '#e53935' : '#43a047';
+          c.fill();
+          c.fillStyle = '#fff';
+          c.font = 'bold 9px sans-serif';
+          c.textAlign = 'center';
+          c.textBaseline = 'middle';
+          c.fillText('P' + this.taggedBy, 0, 0);
+        } else if (this.stonePercent > 0) {
+          c.fillStyle = '#fff';
+          c.font = 'bold 10px sans-serif';
+          c.textAlign = 'center';
+          c.textBaseline = 'middle';
+          c.fillText(this.stonePercent + '%', 0, 0);
+        } else if (this.isGlued) {
+          c.fillStyle = '#4caf50';
+          c.font = 'bold 11px sans-serif';
+          c.textAlign = 'center';
+          c.textBaseline = 'middle';
+          c.fillText('🔗', 0, 0);
+        } else if (this.type === 'queen') {
+          c.beginPath();
+          c.arc(0, 0, this.radius * 0.28, 0, Math.PI * 2);
+          c.fillStyle = '#ffd700';
+          c.fill();
+        } else if (!this.isHalf) {
+          c.beginPath();
+          c.arc(0, 0, this.radius * 0.55, 0, Math.PI * 2);
+          c.strokeStyle = pInfo.dot || 'rgba(0,0,0,0.2)';
+          c.stroke();
+        }
+
+        c.restore();
+      }
+    }
+
+    /* =========================================================================
+       GAME STATE CONTROLLER (PLAYER VS AI ONLY)
+       ========================================================================= */
+    const Game = (() => {
+      let isFunMode = false;
+      let funVariant = 'classic'; // 'classic', 'magnet', 'stone', 'bomber', 'tagcoins', 'coin_breaker'
+      let turn = 1; // 1 = Human Player, 2 = AI Bot
+      let p1Score = 0;
+      let p2Score = 0;
+      let state = 'aiming'; // 'aiming', 'shooting', 'evaluating'
+      let paused = false;
+
+      let pieces = [];
+      let striker = null;
+
+      let isDraggingStriker = false;
+      let isAiming = false;
+      let aimStart = { x: 0, y: 0 };
+      let aimCurrent = { x: 0, y: 0 };
+      let strikerBaseY = HALF_SIZE + BASELINE_OFFSET;
+      let strikerMinX = HALF_SIZE - BASELINE_HALF_LEN;
+      let strikerMaxX = HALF_SIZE + BASELINE_HALF_LEN;
+
+      let pocketedThisTurn = [];
+
+      // Fun mode states
+      let magnetEventActive = false;
+      let magnetTimer = 120.0;
+      let stoneModeTimer = 180.0;
+      let activeStonePulseTimer = 0.0;
+      let playerBombTimers = { 1: 120.0, 2: 120.0 };
+      let playerBombPenalties = { 1: 0, 2: 0 };
+      let tagcoinsTimer = 240.0;
+      let tagcoinsPhase = 0;
+      let coinBreakerTimer = 120.0;
+      let coinBreakerPhase = 0;
+      let coinsHitThisTurn = [];
+
+      function resetPieces() {
+        pieces = [];
+        particles = [];
+        shockwaves = [];
+        coinsHitThisTurn = [];
+
+        // Center Queen
+        pieces.push(new Piece(HALF_SIZE, HALF_SIZE, COIN_RADIUS, 'queen', 3));
+
+        // Inner 6 coins
+        const r1 = COIN_RADIUS * 2.05;
+        for (let i = 0; i < 6; i++) {
+          const angle = (i * Math.PI) / 3;
+          pieces.push(new Piece(
+            HALF_SIZE + Math.cos(angle) * r1,
+            HALF_SIZE + Math.sin(angle) * r1,
+            COIN_RADIUS,
+            i % 2 === 0 ? 'p1' : 'p2',
+            1
+          ));
+        }
+
+        // Outer 12 coins
+        const r2 = COIN_RADIUS * 4.08;
+        for (let i = 0; i < 12; i++) {
+          const angle = (i * Math.PI) / 6 + Math.PI / 12;
+          pieces.push(new Piece(
+            HALF_SIZE + Math.cos(angle) * r2,
+            HALF_SIZE + Math.sin(angle) * r2,
+            COIN_RADIUS,
+            i % 2 === 1 ? 'p1' : 'p2',
+            1
+          ));
+        }
+
+        // Striker
+        striker = new Piece(HALF_SIZE, strikerBaseY, STRIKER_RADIUS, 'striker', 0);
+        pieces.push(striker);
+      }
+
+      function startMatch(fun = false, variant = 'classic') {
+        isFunMode = fun;
+        funVariant = variant;
+        turn = 1;
+        p1Score = 0;
+        p2Score = 0;
+
+        magnetEventActive = false;
+        magnetTimer = 120.0;
+        stoneModeTimer = 180.0;
+        activeStonePulseTimer = 0.0;
+        playerBombTimers = { 1: 120.0, 2: 120.0 };
+        playerBombPenalties = { 1: 0, 2: 0 };
+        tagcoinsTimer = 240.0;
+        tagcoinsPhase = 0;
+        coinBreakerTimer = 120.0;
+        coinBreakerPhase = 0;
+
+        resetPieces();
+        updateHUD();
+        setTurnState();
+
+        // Update badge coin colors to match palette
+        const palette = COIN_PALETTES[selectedCoinKey];
+        document.getElementById('p1-badge-coin').style.background = palette.p1.fill;
+        document.getElementById('p2-badge-coin').style.background = palette.p2.fill;
+
+        document.getElementById('hud').classList.remove('hidden');
+        document.getElementById('turn-msg').classList.remove('hidden');
+        document.getElementById('menu-overlay').classList.add('hidden');
+        document.getElementById('fun-menu-overlay').classList.add('hidden');
+        document.getElementById('custom-overlay').classList.add('hidden');
+        document.getElementById('result-overlay').classList.add('hidden');
+
+        YouTubePlayables.gameReady();
+      }
+
+      function setTurnState() {
+        state = 'aiming';
+        pocketedThisTurn = [];
+        coinsHitThisTurn = [];
+
+        striker.isPocketed = false;
+        striker.scale = 1.0;
+        striker.vx = 0;
+        striker.vy = 0;
+
+        if (turn === 1) {
+          strikerBaseY = HALF_SIZE + BASELINE_OFFSET;
+          striker.x = HALF_SIZE;
+          striker.y = strikerBaseY;
+          setTurnMsg("Your Turn - Slide striker & drag to shoot");
+        } else {
+          strikerBaseY = HALF_SIZE - BASELINE_OFFSET;
+          striker.x = HALF_SIZE;
+          striker.y = strikerBaseY;
+          setTurnMsg("AI Bot's Turn...");
+          setTimeout(executeAIShot, 900);
+        }
+
+        updateHUD();
+      }
+
+      function setTurnMsg(txt) {
+        document.getElementById('turn-msg').textContent = txt;
+      }
+
+      function updateHUD() {
+        document.getElementById('p1-score').textContent = p1Score;
+        document.getElementById('p2-score').textContent = p2Score;
+        document.getElementById('p1-badge').className = 'player-badge ' + (turn === 1 ? 'active-turn' : '');
+        document.getElementById('p2-badge').className = 'player-badge ' + (turn === 2 ? 'active-turn' : '');
+
+        const pill = document.getElementById('mode-pill');
+        const subPill = document.getElementById('mode-sub-pill');
+
+        if (!isFunMode) {
+          pill.textContent = '🌟 NORMAL MODE';
+          pill.style.borderColor = '#ffd700';
+          subPill.textContent = 'Player vs AI';
+        } else if (funVariant === 'magnet') {
+          if (magnetEventActive) {
+            pill.textContent = '🧲 VORTEX ACTIVE!';
+            pill.style.borderColor = '#e91e63';
+            subPill.textContent = Math.ceil(magnetTimer) + 's remaining';
+          } else {
+            pill.textContent = '🧲 MAGNET EVENT';
+            pill.style.borderColor = '#2196f3';
+            subPill.textContent = 'Event in: ' + Math.ceil(magnetTimer) + 's';
+          }
+        } else if (funVariant === 'stone') {
+          pill.textContent = '🪨 STONE PULSE';
+          pill.style.borderColor = '#b0bec5';
+          subPill.textContent = stoneModeTimer > 0 ? 'Stone in: ' + Math.ceil(stoneModeTimer) + 's' : 'Pulse active (+5%)';
+        } else if (funVariant === 'bomber') {
+          pill.textContent = '💣 BOMBER';
+          pill.style.borderColor = '#ff5722';
+          subPill.textContent = `You: ${Math.ceil(playerBombTimers[1])}s | AI: ${Math.ceil(playerBombTimers[2])}s`;
+        } else if (funVariant === 'tagcoins') {
+          pill.textContent = tagcoinsPhase === 0 ? '🏷️ TAGGING PHASE' : '🏷️ POCKETING PHASE';
+          pill.style.borderColor = tagcoinsPhase === 0 ? '#00e5ff' : '#ff9800';
+          subPill.textContent = Math.ceil(tagcoinsTimer) + 's remaining';
+        } else if (funVariant === 'coin_breaker') {
+          const names = ['NORMAL', 'BREAKER MODE', 'NORMAL', 'GLUE MODE'];
+          pill.textContent = '🔨 ' + names[coinBreakerPhase];
+          pill.style.borderColor = coinBreakerPhase === 1 ? '#f44336' : (coinBreakerPhase === 3 ? '#4caf50' : '#ffd700');
+          subPill.textContent = Math.ceil(coinBreakerTimer) + 's';
+        }
+      }
+
+      /* =================== AI SHOT LOGIC =================== */
+      function executeAIShot() {
+        if (turn !== 2 || state !== 'aiming') return;
+
+        let targets = pieces.filter(p => !p.isPocketed && p !== striker && p.stonePercent < 100);
+
+        if (isFunMode && funVariant === 'tagcoins' && tagcoinsPhase === 1) {
+          const aiTagged = targets.filter(p => p.taggedBy === 2);
+          if (aiTagged.length > 0) targets = aiTagged;
+        } else {
+          const aiCoins = targets.filter(p => p.type === 'p2' || p.type === 'queen');
+          if (aiCoins.length > 0) targets = aiCoins;
+        }
+
+        if (targets.length === 0) return;
+
+        let bestTarget = targets[0];
+        let bestPocket = POCKETS[2];
+        let minScore = Infinity;
+
+        for (const t of targets) {
+          for (const p of POCKETS) {
+            const d = Math.hypot(p.x - t.x, p.y - t.y);
+            if (d < minScore) {
+              minScore = d;
+              bestTarget = t;
+              bestPocket = p;
+            }
+          }
+        }
+
+        const pocketAngle = Math.atan2(bestPocket.y - bestTarget.y, bestPocket.x - bestTarget.x);
+        const hitX = bestTarget.x - Math.cos(pocketAngle) * (bestTarget.radius + STRIKER_RADIUS);
+        const hitY = bestTarget.y - Math.sin(pocketAngle) * (bestTarget.radius + STRIKER_RADIUS);
+
+        striker.x = Math.max(strikerMinX, Math.min(strikerMaxX, hitX));
+        striker.y = strikerBaseY;
+
+        const aimAngle = Math.atan2(hitY - striker.y, hitX - striker.x);
+        const power = Math.min(22, Math.max(12, Math.hypot(hitX - striker.x, hitY - striker.y) * 0.055));
+
+        Sound.playFlick();
+        striker.vx = Math.cos(aimAngle) * power;
+        striker.vy = Math.sin(aimAngle) * power;
+        state = 'shooting';
+      }
+
+      /* =================== TIMER UPDATES =================== */
+      let lastTime = performance.now();
+
+      function updateTimers(delta) {
+        if (!isFunMode) return;
+
+        if (funVariant === 'magnet') {
+          magnetTimer -= delta;
+          if (magnetTimer <= 0) {
+            if (!magnetEventActive) {
+              magnetEventActive = true;
+              magnetTimer = 20.0;
+              Sound.playMagnetHum();
+              setTurnMsg("🧲 CENTER VORTEX ACTIVATED (20s)!");
+            } else {
+              magnetEventActive = false;
+              magnetTimer = 120.0;
+              setTurnMsg("Magnet Vortex Ended.");
+            }
+          }
+        } else if (funVariant === 'stone') {
+          if (stoneModeTimer > 0) {
+            stoneModeTimer -= delta;
+          } else {
+            activeStonePulseTimer += delta;
+            if (activeStonePulseTimer >= 15.0) {
+              activeStonePulseTimer = 0.0;
+              pieces.forEach(p => {
+                if (p !== striker && !p.isPocketed) {
+                  p.stonePercent = Math.min(100, p.stonePercent + 5);
+                  p.mass = 1.0 + (p.stonePercent / 100) * 15.0;
+                }
+              });
+              setTurnMsg("🪨 Stone Pulse! Coins petrified +5%!");
+            }
+          }
+        } else if (funVariant === 'bomber' && state === 'aiming') {
+          playerBombTimers[turn] -= delta;
+          if (playerBombTimers[turn] <= 0) {
+            playerBombTimers[turn] = 90.0;
+            playerBombPenalties[turn] += 10;
+
+            const spawnX = striker.x;
+            const spawnY = striker.y;
+            Sound.playExplosion();
+            shockwaves.push(new Shockwave(spawnX, spawnY));
+            for (let i = 0; i < 35; i++) particles.push(new Particle(spawnX, spawnY, '#ff5722'));
+
+            pieces.forEach(p => {
+              if (p !== striker && !p.isPocketed) {
+                const dist = Math.hypot(p.x - spawnX, p.y - spawnY);
+                if (dist < 220) {
+                  const angle = Math.atan2(p.y - spawnY, p.x - spawnX);
+                  const force = (220 - dist) * 0.12;
+                  p.vx += Math.cos(angle) * force;
+                  p.vy += Math.sin(angle) * force;
+                }
+              }
+            });
+
+            setTurnMsg(`💥 BOMB DETONATED! +10 Penalty!`);
+          }
+        } else if (funVariant === 'tagcoins') {
+          tagcoinsTimer -= delta;
+          if (tagcoinsTimer <= 0) {
+            tagcoinsTimer = 240.0;
+            tagcoinsPhase = tagcoinsPhase === 0 ? 1 : 0;
+            setTurnMsg(tagcoinsPhase === 0 ? "🏷️ TAGGING PHASE - Hit coins to tag!" : "🏷️ POCKETING PHASE - Pocket your tagged coins!");
+          }
+        } else if (funVariant === 'coin_breaker') {
+          coinBreakerTimer -= delta;
+          if (coinBreakerTimer <= 0) {
+            coinBreakerPhase = (coinBreakerPhase + 1) % 4;
+            if (coinBreakerPhase === 0 || coinBreakerPhase === 2) coinBreakerTimer = 120.0;
+            else if (coinBreakerPhase === 1) {
+              coinBreakerTimer = 60.0;
+              setTurnMsg("🔨 BREAKER MODE: Heavy striker hits shatter coins!");
+            } else if (coinBreakerPhase === 3) {
+              coinBreakerTimer = 60.0;
+              setTurnMsg("🔗 GLUE MODE: Colliding coins fuse together!");
+            }
+          }
+        }
+
+        updateHUD();
+      }
+
+      /* =================== FUN MODE PHYSICS & EVENTS =================== */
+      function applyFunModePhysics() {
+        if (isFunMode && funVariant === 'magnet' && magnetEventActive) {
+          pieces.forEach(p => {
+            if (!p.isPocketed && p !== striker) {
+              const dx = HALF_SIZE - p.x;
+              const dy = HALF_SIZE - p.y;
+              const dist = Math.hypot(dx, dy);
+              if (dist > 15) {
+                const force = 0.16;
+                p.vx += (dx / dist) * force;
+                p.vy += (dy / dist) * force;
+              }
+            }
+          });
+        }
+      }
+
+      function breakCoin(coin) {
+        if (coin.isHalf) return;
+        Sound.playShatter();
+        coin.isPocketed = true;
+
+        for (let i = 0; i < 2; i++) {
+          const half = new Piece(
+            coin.x + (i === 0 ? -6 : 6),
+            coin.y + (i === 0 ? -6 : 6),
+            COIN_RADIUS * 0.8,
+            coin.type,
+            0.5
+          );
+          half.isHalf = true;
+          half.mass = 0.5;
+          half.vx = (Math.random() - 0.5) * 6;
+          half.vy = (Math.random() - 0.5) * 6;
+          pieces.push(half);
+        }
+        setTurnMsg("🔨 Coin Shattered into 2 Halves!");
+      }
+
+      function glueCoins(c1, c2) {
+        Sound.playGlue();
+        c1.isPocketed = true;
+        c2.isPocketed = true;
+
+        const merged = new Piece(
+          (c1.x + c2.x) / 2,
+          (c1.y + c2.y) / 2,
+          COIN_RADIUS * 1.35,
+          c1.type,
+          c1.points + c2.points
+        );
+        merged.mass = c1.mass + c2.mass;
+        merged.isGlued = true;
+        pieces.push(merged);
+        setTurnMsg("🔗 Coins Fused Together!");
+      }
+
+      /* =================== COLLISIONS & INTERACTIONS =================== */
+      function resolveCollisions() {
+        applyFunModePhysics();
+        const isRound = BOARD_THEMES[selectedBoardKey].isRound;
+
+        for (let i = 0; i < pieces.length; i++) {
+          const p1 = pieces[i];
+          if (p1.isPocketed) continue;
+
+          for (let j = i + 1; j < pieces.length; j++) {
+            const p2 = pieces[j];
+            if (p2.isPocketed) continue;
+
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const dist = Math.hypot(dx, dy);
+            const minDist = p1.radius + p2.radius;
+
+            if (dist < minDist && dist > 0) {
+              if (p1 === striker || p2 === striker) {
+                const coin = p1 === striker ? p2 : p1;
+                const strikerSpeed = Math.hypot(striker.vx, striker.vy);
+
+                if (isFunMode && funVariant === 'tagcoins' && tagcoinsPhase === 0) {
+                  coin.taggedBy = turn;
+                }
+
+                if (isFunMode && funVariant === 'stone' && coin.stonePercent >= 100) {
+                  if (coin.stoneLastHit !== 0 && coin.stoneLastHit !== turn) {
+                    coin.stonePercent = 50;
+                    coin.mass = 1.0 + (50 / 100) * 15.0;
+                    setTurnMsg("🪨 Double hit reduced stone to 50%!");
+                  }
+                  coin.stoneLastHit = turn;
+                }
+
+                if (isFunMode && funVariant === 'coin_breaker' && coinBreakerPhase === 1) {
+                  const targetOpponentType = turn === 1 ? 'p2' : 'p1';
+                  if (coin.type === targetOpponentType && strikerSpeed > 4.5) {
+                    breakCoin(coin);
+                    continue;
+                  }
+                }
+
+                if (isFunMode && funVariant === 'coin_breaker' && coinBreakerPhase === 3) {
+                  if (!coinsHitThisTurn.includes(coin)) coinsHitThisTurn.push(coin);
+                }
+              }
+
+              if (isFunMode && funVariant === 'coin_breaker' && coinBreakerPhase === 3) {
+                if (p1 !== striker && p2 !== striker) {
+                  if ((p1.isHalf && p2.isHalf && p1.type === p2.type) ||
+                      (!p1.isGlued && !p2.isGlued && p1.type === p2.type && p1.type !== 'queen')) {
+                    glueCoins(p1, p2);
+                    continue;
+                  }
+                }
+              }
+
+              const overlap = (minDist - dist) / 2;
+              const nx = dx / dist;
+              const ny = dy / dist;
+
+              if (p1.stonePercent < 100) { p1.x -= nx * overlap; p1.y -= ny * overlap; }
+              if (p2.stonePercent < 100) { p2.x += nx * overlap; p2.y += ny * overlap; }
+
+              const kx = p1.vx - p2.vx;
+              const ky = p1.vy - p2.vy;
+              const p = 2 * (nx * kx + ny * ky) / (p1.mass + p2.mass);
+
+              if (p1.stonePercent < 100) {
+                p1.vx -= p * p2.mass * nx * RESTITUTION;
+                p1.vy -= p * p2.mass * ny * RESTITUTION;
+              }
+              if (p2.stonePercent < 100) {
+                p2.vx += p * p1.mass * nx * RESTITUTION;
+                p2.vy += p * p1.mass * ny * RESTITUTION;
+              }
+
+              const relSpeed = Math.hypot(kx, ky);
+              if (relSpeed > 1.2) Sound.playClack(relSpeed);
+            }
+          }
+
+          // Pocket check
+          for (const pocket of POCKETS) {
+            const d = Math.hypot(pocket.x - p1.x, pocket.y - p1.y);
+            if (d < POCKET_RADIUS - 2) {
+              if (isFunMode && funVariant === 'tagcoins' && tagcoinsPhase === 1 && p1 !== striker) {
+                if (p1.taggedBy !== turn) {
+                  p1.vx = -p1.vx * 1.5;
+                  p1.vy = -p1.vy * 1.5;
+                  setTurnMsg(`Cannot pocket untagged coin!`);
+                  break;
+                }
+              }
+
+              p1.isPocketed = true;
+              p1.vx = 0; p1.vy = 0;
+              pocketedThisTurn.push(p1);
+              Sound.playPocket();
+              break;
+            }
+          }
+        }
+      }
+
+      function isMoving() {
+        return pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.05 || Math.abs(p.vy) > 0.05)) ||
+               particles.length > 0 || shockwaves.length > 0;
+      }
+
+      function evaluateTurn() {
+        let strikerFouled = striker.isPocketed;
+        let whiteSunk = pocketedThisTurn.filter(p => p.type === 'p1').length;
+        let blackSunk = pocketedThisTurn.filter(p => p.type === 'p2').length;
+
+        p1Score += whiteSunk;
+        p2Score += blackSunk;
+
+        if (isFunMode && funVariant === 'bomber') {
+          if (turn === 1 && whiteSunk > 0 && playerBombPenalties[1] > 0) playerBombPenalties[1] -= 1;
+          if (turn === 2 && blackSunk > 0 && playerBombPenalties[2] > 0) playerBombPenalties[2] -= 1;
+        }
+
+        let extraTurn = false;
+        if (turn === 1 && whiteSunk > 0) extraTurn = true;
+        if (turn === 2 && blackSunk > 0) extraTurn = true;
+
+        if (strikerFouled) {
+          Sound.playFoul();
+          extraTurn = false;
+          setTurnMsg("Foul! Striker pocketed.");
+          if (turn === 1 && p1Score > 0) p1Score--;
+          if (turn === 2 && p2Score > 0) p2Score--;
+        }
+
+        const remainingWhite = pieces.filter(p => !p.isPocketed && p.type === 'p1').length;
+        const remainingBlack = pieces.filter(p => !p.isPocketed && p.type === 'p2').length;
+
+        if (remainingWhite === 0) {
+          endGame("Victory!", "You pocketed all your coins!");
+          return;
+        }
+        if (remainingBlack === 0) {
+          endGame("Defeat!", "AI Bot cleared all their coins!");
+          return;
+        }
+
+        if (!extraTurn) turn = turn === 1 ? 2 : 1;
+        setTurnState();
+      }
+
+      function endGame(title, desc) {
+        document.getElementById('winner-title').textContent = title;
+        document.getElementById('winner-desc').textContent = desc;
+        document.getElementById('result-overlay').classList.remove('hidden');
+      }
+
+      /* =================== BOARD RENDERING =================== */
+      function drawBoard() {
+        const theme = BOARD_THEMES[selectedBoardKey];
+        ctx.clearRect(0, 0, BOARD_SIZE, BOARD_SIZE);
+
+        if (theme.isRound) {
+          // ⭕ ROUND BOARD (Carrooka style)
+          ctx.beginPath();
+          ctx.arc(HALF_SIZE, HALF_SIZE, HALF_SIZE - 2, 0, Math.PI * 2);
+          ctx.fillStyle = theme.frame;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(HALF_SIZE, HALF_SIZE, HALF_SIZE - 12, 0, Math.PI * 2);
+          ctx.fillStyle = theme.frameBorder;
+          ctx.fill();
+
+          // Round Surface
+          ctx.beginPath();
+          ctx.arc(HALF_SIZE, HALF_SIZE, (PLAY_AREA_SIZE / 2) + 10, 0, Math.PI * 2);
+          ctx.fillStyle = theme.surface;
+          ctx.fill();
+        } else {
+          // 🟫 SQUARE BOARD
+          ctx.fillStyle = theme.frame;
+          ctx.fillRect(0, 0, BOARD_SIZE, BOARD_SIZE);
+          ctx.fillStyle = theme.frameBorder;
+          ctx.fillRect(8, 8, BOARD_SIZE - 16, BOARD_SIZE - 16);
+
+          ctx.fillStyle = theme.surface;
+          ctx.fillRect(FRAME_WIDTH, FRAME_WIDTH, PLAY_AREA_SIZE, PLAY_AREA_SIZE);
+        }
+
+        // Center rings & pattern
+        ctx.save();
+        ctx.translate(HALF_SIZE, HALF_SIZE);
+
+        ctx.beginPath();
+        ctx.arc(0, 0, COIN_RADIUS * 4.2, 0, Math.PI * 2);
+        ctx.strokeStyle = theme.pattern;
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        if (isFunMode && funVariant === 'magnet' && magnetEventActive) {
+          const pulse = Math.sin(Date.now() * 0.01) * 0.5 + 0.5;
+          ctx.beginPath();
+          ctx.arc(0, 0, COIN_RADIUS * 5.0, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(156, 39, 176, ${0.2 + pulse * 0.35})`;
+          ctx.fill();
+        }
+
+        ctx.beginPath();
+        ctx.arc(0, 0, COIN_RADIUS * 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = theme.pattern;
+        ctx.fill();
+
+        for (let i = 0; i < 6; i++) {
+          ctx.beginPath();
+          ctx.arc(Math.cos(i * Math.PI / 3) * 35, Math.sin(i * Math.PI / 3) * 35, 12, 0, Math.PI * 2);
+          ctx.strokeStyle = theme.pattern;
+          ctx.globalAlpha = 0.4;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.globalAlpha = 1.0;
+        }
+        ctx.restore();
+
+        // 4 Baselines
+        for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 2) {
+          ctx.save();
+          ctx.translate(HALF_SIZE, HALF_SIZE);
+          ctx.rotate(angle);
+
+          const y1 = BASELINE_OFFSET - 14;
+          const y2 = BASELINE_OFFSET + 14;
+
+          ctx.beginPath();
+          ctx.moveTo(-BASELINE_HALF_LEN, y1);
+          ctx.lineTo(BASELINE_HALF_LEN, y1);
+          ctx.moveTo(-BASELINE_HALF_LEN, y2);
+          ctx.lineTo(BASELINE_HALF_LEN, y2);
+          ctx.strokeStyle = theme.line;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          [-BASELINE_HALF_LEN, BASELINE_HALF_LEN].forEach(x => {
+            ctx.beginPath();
+            ctx.arc(x, BASELINE_OFFSET, 14, 0, Math.PI * 2);
+            ctx.fillStyle = '#d9534f';
+            ctx.fill();
+            ctx.strokeStyle = theme.line;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          });
+
+          ctx.beginPath();
+          ctx.moveTo(110, 110);
+          ctx.lineTo(240, 240);
+          ctx.strokeStyle = theme.pattern;
+          ctx.globalAlpha = 0.5;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.globalAlpha = 1.0;
+
+          ctx.restore();
+        }
+
+        // Pockets
+        POCKETS.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, POCKET_RADIUS + 4, 0, Math.PI * 2);
+          ctx.fillStyle = '#5c3114';
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, POCKET_RADIUS, 0, Math.PI * 2);
+          ctx.fillStyle = '#111';
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, POCKET_RADIUS - 4, 0, Math.PI * 2);
+          ctx.strokeStyle = '#333';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        });
+
+        // Baseline highlight
+        if (state === 'aiming' && turn === 1) {
+          ctx.beginPath();
+          ctx.rect(strikerMinX, strikerBaseY - 14, BASELINE_HALF_LEN * 2, 28);
+          ctx.fillStyle = 'rgba(247, 202, 72, 0.2)';
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(247, 202, 72, 0.6)';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+      }
+
+      function render() {
+        drawBoard();
+        const isRound = BOARD_THEMES[selectedBoardKey].isRound;
+
+        pieces.forEach(p => p.draw(ctx));
+
+        shockwaves.forEach((s, idx) => {
+          s.update(); s.draw(ctx);
+          if (s.alpha <= 0) shockwaves.splice(idx, 1);
+        });
+
+        particles.forEach((pt, idx) => {
+          pt.update(); pt.draw(ctx);
+          if (pt.alpha <= 0) particles.splice(idx, 1);
+        });
+
+        if (isAiming && state === 'aiming' && turn === 1) {
+          const dx = striker.x - aimCurrent.x;
+          const dy = striker.y - aimCurrent.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist > 8) {
+            const pullAngle = Math.atan2(dy, dx);
+            const power = Math.min(dist * 0.16, 24);
+
+            ctx.save();
+            ctx.setLineDash([6, 6]);
+            ctx.beginPath();
+            ctx.moveTo(striker.x, striker.y);
+            ctx.lineTo(striker.x + Math.cos(pullAngle) * dist * 3.5, striker.y + Math.sin(pullAngle) * dist * 3.5);
+            ctx.strokeStyle = 'rgba(255, 235, 59, 0.85)';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.moveTo(striker.x, striker.y);
+            ctx.lineTo(aimCurrent.x, aimCurrent.y);
+            ctx.strokeStyle = 'rgba(244, 67, 54, 0.85)';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(striker.x, striker.y, STRIKER_RADIUS + power * 1.2, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(247, 202, 72, 0.5)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+          }
+        }
+      }
+
+      function loop(now) {
+        if (!paused) {
+          const delta = Math.min((now - lastTime) / 1000, 0.1);
+          lastTime = now;
+
+          updateTimers(delta);
+
+          if (state === 'shooting') {
+            const isRound = BOARD_THEMES[selectedBoardKey].isRound;
+            pieces.forEach(p => p.update(isRound));
+            resolveCollisions();
+
+            if (!isMoving()) {
+              state = 'evaluating';
+              setTimeout(evaluateTurn, 400);
+            }
+          }
+          render();
+        }
+        requestAnimationFrame(loop);
+      }
+
+      function getCanvasCoords(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const scale = BOARD_SIZE / rect.width;
+        return {
+          x: (clientX - rect.left) * scale,
+          y: (clientY - rect.top) * scale
+        };
+      }
+
+      canvas.addEventListener('pointerdown', e => {
+        if (state !== 'aiming' || turn !== 1) return;
+        const pos = getCanvasCoords(e);
+
+        const distToStriker = Math.hypot(pos.x - striker.x, pos.y - striker.y);
+        const nearBaseline = Math.abs(pos.y - strikerBaseY) < 32 && pos.x >= strikerMinX - 20 && pos.x <= strikerMaxX + 20;
+
+        if (distToStriker < STRIKER_RADIUS * 1.5) {
+          isAiming = true;
+          aimStart = pos;
+          aimCurrent = pos;
+        } else if (nearBaseline) {
+          isDraggingStriker = true;
+          striker.x = Math.max(strikerMinX, Math.min(strikerMaxX, pos.x));
+        }
+      });
+
+      window.addEventListener('pointermove', e => {
+        if (state !== 'aiming') return;
+        const pos = getCanvasCoords(e);
+        if (isDraggingStriker) striker.x = Math.max(strikerMinX, Math.min(strikerMaxX, pos.x));
+        else if (isAiming) aimCurrent = pos;
+      });
+
+      window.addEventListener('pointerup', e => {
+        if (isDraggingStriker) isDraggingStriker = false;
+        if (isAiming) {
+          isAiming = false;
+          const dx = striker.x - aimCurrent.x;
+          const dy = striker.y - aimCurrent.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist > 14) {
+            Sound.playFlick();
+            const angle = Math.atan2(dy, dx);
+            const speed = Math.min(dist * 0.16, 24);
+            striker.vx = Math.cos(angle) * speed;
+            striker.vy = Math.sin(angle) * speed;
+            state = 'shooting';
+          }
+        }
+      });
+
+      function resize() {
+        const container = document.getElementById('game-container');
+        const minDim = Math.min(container.clientWidth, container.clientHeight);
+        canvas.style.width = minDim + 'px';
+        canvas.style.height = minDim + 'px';
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+
+      return {
+        start() {
+          YouTubePlayables.init();
+          requestAnimationFrame((t) => { lastTime = t; loop(t); });
+        },
+        startMatch,
+        pause() { paused = true; },
+        resume() { paused = false; lastTime = performance.now(); }
+      };
+    })();
+
+    /* =========================================================================
+       UI SCREEN NAVIGATION & EVENTS
+       ========================================================================= */
+
+    // 1. Normal Mode Button -> Starts Player vs AI directly!
+    document.getElementById('card-normal').addEventListener('click', () => {
+      Sound.playClack(8);
+      Game.startMatch(false, 'classic');
+    });
+
+    // 2. Fun Mode Button -> Opens Fun Mode Selector
+    document.getElementById('card-fun').addEventListener('click', () => {
+      Sound.playClack(8);
+      document.getElementById('menu-overlay').classList.add('hidden');
+      document.getElementById('fun-menu-overlay').classList.remove('hidden');
+    });
+
+    // Back from Fun Menu
+    document.getElementById('btn-fun-back').addEventListener('click', () => {
+      Sound.playClack(8);
+      document.getElementById('fun-menu-overlay').classList.add('hidden');
+      document.getElementById('menu-overlay').classList.remove('hidden');
+    });
+
+    // Click on individual Fun Mode card -> Starts that Fun Mode vs AI!
+    document.querySelectorAll('.fun-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const mode = card.getAttribute('data-mode');
+        Sound.playClack(10);
+        Game.startMatch(true, mode);
+      });
+    });
+
+    // 3. Customization Screen
+    document.getElementById('btn-custom').addEventListener('click', () => {
+      Sound.playClack(8);
+      document.getElementById('menu-overlay').classList.add('hidden');
+      document.getElementById('custom-overlay').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-custom-done').addEventListener('click', () => {
+      Sound.playClack(8);
+      document.getElementById('custom-overlay').classList.add('hidden');
+      document.getElementById('menu-overlay').classList.remove('hidden');
+    });
+
+    // Striker Selection Chips
+    document.querySelectorAll('#striker-options .opt-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('#striker-options .opt-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        selectedStrikerId = parseInt(chip.getAttribute('data-striker'));
+        Sound.playClack(10);
+      });
+    });
+
+    // Board Selection Chips
+    document.querySelectorAll('#board-options .opt-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('#board-options .opt-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        selectedBoardKey = chip.getAttribute('data-board');
+        Sound.playClack(10);
+      });
+    });
+
+    // Coin Palette Chips
+    document.querySelectorAll('#coin-options .opt-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('#coin-options .opt-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        selectedCoinKey = chip.getAttribute('data-coin');
+        Sound.playClack(10);
+      });
+    });
+
+    // In-game Pause & Result buttons
+    document.getElementById('sound-btn').addEventListener('click', () => {
+      const isMuted = !Sound.toggle();
+      document.getElementById('sound-btn').textContent = isMuted ? '🔇' : '🔊';
+    });
+
+    document.getElementById('pause-btn').addEventListener('click', () => {
+      document.getElementById('hud').classList.add('hidden');
+      document.getElementById('turn-msg').classList.add('hidden');
+      document.getElementById('menu-overlay').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-rematch').addEventListener('click', () => {
+      document.getElementById('result-overlay').classList.add('hidden');
+      Game.startMatch(false, 'classic');
+    });
+
+    document.getElementById('btn-home').addEventListener('click', () => {
+      document.getElementById('result-overlay').classList.add('hidden');
+      document.getElementById('hud').classList.add('hidden');
+      document.getElementById('turn-msg').classList.add('hidden');
+      document.getElementById('menu-overlay').classList.remove('hidden');
+    });
+
+    // Launch Engine
+    Game.start();
+  </script>
+</body>
+</html>
