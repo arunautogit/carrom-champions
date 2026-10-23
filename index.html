@@ -21,7 +21,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: radial-gradient(circle at center, #27140a 0%, #110702 100%);
+      background: radial-gradient(circle at center, #140803 0%, #060201 100%);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       align-items: center;
@@ -43,7 +43,7 @@
 
     canvas {
       display: block;
-      background: #dfb279;
+      background: #967046;
       box-shadow: 0 10px 40px rgba(0,0,0,0.85), 0 0 100px rgba(0,0,0,0.5);
       border-radius: 14px;
       touch-action: none;
@@ -952,6 +952,99 @@
       box-shadow: 0 6px 24px rgba(255, 215, 0, 0.8);
       background: linear-gradient(135deg, #fff9c4 0%, #ffd700 100%);
     }
+
+    /* 🎁 EXCITING DIWALI GIFTBOX MODAL */
+    .btn-bazaar-giftbox {
+      padding: 8px 14px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #1a0a00;
+      background: linear-gradient(135deg, #ffd700 0%, #ff3d00 100%);
+      border: 1.5px solid #fff;
+      border-radius: 18px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 61, 0, 0.6);
+      animation: giftPulse 1.6s infinite ease-in-out;
+      transition: all 0.2s ease;
+    }
+    @keyframes giftPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+      50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 61, 0, 0.85); }
+    }
+
+    #giftbox-overlay {
+      background: radial-gradient(circle at center, rgba(40, 10, 5, 0.98) 0%, rgba(10, 2, 0, 0.99) 100%);
+      z-index: 150;
+    }
+    .giftbox-card {
+      background: linear-gradient(135deg, #2b1208 0%, #150602 100%);
+      border: 2px solid #ffd700;
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 540px;
+      width: 92%;
+      text-align: center;
+      box-shadow: 0 0 35px rgba(255, 215, 0, 0.4), 0 10px 40px rgba(0,0,0,0.8);
+      position: relative;
+    }
+    .giftbox-sparkle-title {
+      font-size: 2.2rem;
+      margin-bottom: 2px;
+      color: #ffd700;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+    }
+    .giftbox-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 16px 0;
+      text-align: left;
+    }
+    .giftbox-item-row {
+      background: rgba(50, 20, 10, 0.75);
+      border: 1px solid #ff9800;
+      border-radius: 10px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .giftbox-qty {
+      background: #ffd700;
+      color: #1a0a00;
+      font-weight: bold;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    .giftbox-item-name {
+      font-size: 0.76rem;
+      font-weight: bold;
+      color: #fff;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .btn-claim-giftbox {
+      width: 100%;
+      padding: 12px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: #1a0a00;
+      background: linear-gradient(135deg, #ffd700 0%, #ff6f00 100%);
+      border: 2px solid #fff;
+      border-radius: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 111, 0, 0.6);
+      transition: all 0.2s ease;
+    }
+    .btn-claim-giftbox:hover {
+      transform: scale(1.02);
+      box-shadow: 0 6px 28px rgba(255, 215, 0, 0.9);
+      background: linear-gradient(135deg, #fff 0%, #ffd700 100%);
+    }
+
   </style>
 </head>
 <body>
@@ -1185,7 +1278,8 @@
       <!-- Bottom Action Bar -->
       <div class="bazaar-action-bar">
         <div class="bazaar-quick-btns">
-          <button id="btn-bazaar-bundle" class="btn-bazaar-aux">🎁 Buy 9 Bundle (20% Off)</button>
+          <button id="btn-open-giftbox" class="btn-bazaar-giftbox">🎁 OPEN DIWALI GIFTBOX ✨</button>
+          <button id="btn-bazaar-bundle" class="btn-bazaar-aux">⚡ Buy 9 Bundle (-20%)</button>
           <button id="btn-bazaar-random" class="btn-bazaar-aux">🎲 Surprise Mix</button>
           <button id="btn-bazaar-back" class="btn-bazaar-aux">Back</button>
         </div>
@@ -1371,8 +1465,8 @@
           osc.frequency.linearRampToValueAtTime(baseFreq * 1.8, now + duration * 0.4);
           osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.6, now + duration);
 
-          gain.gain.setValueAtTime(0.18, now);
-          gain.gain.linearRampToValueAtTime(0.3, now + 0.3);
+          gain.gain.setValueAtTime(0.45, now);
+          gain.gain.linearRampToValueAtTime(0.75, now + 0.3);
           gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
           osc.connect(gain);
@@ -1402,8 +1496,8 @@
           filter.Q.value = 2.5;
 
           const gain = ac.createGain();
-          gain.gain.setValueAtTime(0.08, now);
-          gain.gain.linearRampToValueAtTime(0.35, now + 0.5);
+          gain.gain.setValueAtTime(0.55, now);
+          gain.gain.linearRampToValueAtTime(0.85, now + 0.5);
           gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
           noise.connect(filter);
@@ -1525,7 +1619,7 @@
           osc.frequency.exponentialRampToValueAtTime(2400, now + 0.65);
 
           gain.gain.setValueAtTime(0.35, now);
-          gain.gain.linearRampToValueAtTime(0.65, now + 0.4);
+          gain.gain.linearRampToValueAtTime(0.95, now + 0.4);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
 
           osc.connect(gain);
@@ -1704,22 +1798,22 @@
       square_wood: {
         name: 'Classic Maple Tournament',
         frame: '#3a1e0b', frameBorder: '#4e280e',
-        surface: '#e8bc82', pattern: '#9c2424', line: '#222'
+        surface: '#aa7e4e', pattern: '#9c2424', line: '#222'
       },
       rosewood: {
         name: 'Heritage Rosewood',
         frame: '#260c07', frameBorder: '#3d160f',
-        surface: '#dca368', pattern: '#7a1919', line: '#1a0d05'
+        surface: '#996739', pattern: '#7a1919', line: '#1a0d05'
       },
       emerald: {
         name: 'Tournament Emerald',
         frame: '#1a3321', frameBorder: '#274b32',
-        surface: '#2d6a4f', pattern: '#d8f3dc', line: '#1b4332'
+        surface: '#1c4432', pattern: '#d8f3dc', line: '#1b4332'
       },
       midnight: {
         name: 'Midnight Ebony Dark',
         frame: '#18181c', frameBorder: '#2b2b36',
-        surface: '#24242e', pattern: '#ffd700', line: '#4a4a5a'
+        surface: '#18181f', pattern: '#ffd700', line: '#4a4a5a'
       }
     };
 
@@ -2555,6 +2649,102 @@
     /* =========================================================================
        ACTIVE POCKET CRACKER SYSTEM (19 UNIQUE DIWALI CRACKERS)
        ========================================================================= */
+    
+    // 🪔 1000-Wala 60-Second Perimeter Border Celebration State
+    let queenBorderCelebration = {
+      active: false,
+      timer: 0,
+      nextPopTime: 0,
+      popIndex: 0
+    };
+
+    function start1000WalaBorderCelebration() {
+      queenBorderCelebration.active = true;
+      queenBorderCelebration.timer = 60.0; // 60 full seconds
+      queenBorderCelebration.nextPopTime = 0.05;
+      queenBorderCelebration.popIndex = 0;
+      Sound.playBassBoom(105, 1.2, 1.0);
+    }
+
+    function update1000WalaBorderCelebration(dt, particles, shockwaves) {
+      if (!queenBorderCelebration.active) return;
+      queenBorderCelebration.timer -= dt;
+      if (queenBorderCelebration.timer <= 0) {
+        queenBorderCelebration.active = false;
+        return;
+      }
+
+      queenBorderCelebration.nextPopTime -= dt;
+      if (queenBorderCelebration.nextPopTime <= 0) {
+        queenBorderCelebration.nextPopTime = 0.12; // Rapid continuous pops along border
+        queenBorderCelebration.popIndex++;
+
+        // Calculate perimeter coordinates along the inner wooden cushion border
+        const perimeterLen = PLAY_AREA_SIZE * 4;
+        const currentDist = (queenBorderCelebration.popIndex * 38) % perimeterLen;
+        let px, py;
+
+        if (currentDist < PLAY_AREA_SIZE) { // Top edge
+          px = FRAME_WIDTH + currentDist; py = FRAME_WIDTH + 8;
+        } else if (currentDist < PLAY_AREA_SIZE * 2) { // Right edge
+          px = BOARD_SIZE - FRAME_WIDTH - 8; py = FRAME_WIDTH + (currentDist - PLAY_AREA_SIZE);
+        } else if (currentDist < PLAY_AREA_SIZE * 3) { // Bottom edge
+          px = BOARD_SIZE - FRAME_WIDTH - (currentDist - PLAY_AREA_SIZE * 2); py = BOARD_SIZE - FRAME_WIDTH - 8;
+        } else { // Left edge
+          px = FRAME_WIDTH + 8; py = BOARD_SIZE - FRAME_WIDTH - (currentDist - PLAY_AREA_SIZE * 3);
+        }
+
+        // Pop sound with authentic crackle report
+        Sound.playSnappyPop(1100 + (Math.random() - 0.5) * 400, 1.1, true);
+        if (queenBorderCelebration.popIndex % 8 === 0) {
+          Sound.playBassBoom(130, 0.5, 0.9);
+          shockwaves.push(new Shockwave(px, py, 110, '#ffd700', 8));
+        }
+
+        // Multi-colored flash sparks & festive smoke
+        const festColors = ['#ff1744', '#ffd700', '#00e5ff', '#76ff03', '#d500f9', '#ff9100', '#ffffff'];
+        for (let i = 0; i < 8; i++) {
+          const a = Math.random() * Math.PI * 2;
+          const spd = 2 + Math.random() * 5;
+          particles.push(new Particle(px, py, festColors[Math.floor(Math.random() * festColors.length)], 3.5, Math.cos(a)*spd, Math.sin(a)*spd, 0.035));
+        }
+      }
+    }
+
+    function draw1000WalaBorderLights(ctx) {
+      if (!queenBorderCelebration.active) return;
+      const now = Date.now() * 0.008;
+
+      // Draw string of festive blinking lights all along inner frame border
+      const lightSpacing = 28;
+      const lightsPerSide = Math.floor(PLAY_AREA_SIZE / lightSpacing);
+      const lightCols = ['#ff1744', '#ffd700', '#00e5ff', '#76ff03', '#d500f9', '#ff9100'];
+
+      ctx.save();
+      for (let s = 0; s < 4; s++) {
+        for (let i = 0; i <= lightsPerSide; i++) {
+          let lx, ly;
+          if (s === 0) { lx = FRAME_WIDTH + i * lightSpacing; ly = FRAME_WIDTH + 4; }
+          else if (s === 1) { lx = BOARD_SIZE - FRAME_WIDTH - 4; ly = FRAME_WIDTH + i * lightSpacing; }
+          else if (s === 2) { lx = BOARD_SIZE - FRAME_WIDTH - i * lightSpacing; ly = BOARD_SIZE - FRAME_WIDTH - 4; }
+          else { lx = FRAME_WIDTH + 4; ly = BOARD_SIZE - FRAME_WIDTH - i * lightSpacing; }
+
+          // Blinking harmonic glow
+          const blink = Math.sin(now + i * 0.5 + s) * 0.5 + 0.5;
+          const col = lightCols[(i + s) % lightCols.length];
+
+          ctx.beginPath();
+          ctx.arc(lx, ly, 4.5, 0, Math.PI * 2);
+          ctx.fillStyle = col;
+          ctx.shadowColor = col;
+          ctx.shadowBlur = blink * 14;
+          ctx.globalAlpha = 0.4 + blink * 0.6;
+          ctx.fill();
+        }
+      }
+      ctx.restore();
+    }
+
     class ActivePocketCracker {
       constructor(pocketX, pocketY, crackerKey, particlesArray, shockwavesArray, floatTextsArray) {
         this.x = pocketX;
@@ -2813,6 +3003,7 @@
             this.finaleFired = true;
             Sound.playBassBoom(105, 1.2, 1.0); // GRAND SHOWSTOPPER MAX dB
             this.shockwaves.push(new Shockwave(this.x, this.y, 280, '#ffd700', 11));
+            start1000WalaBorderCelebration(); // Launch 60-second perimeter border celebration with blinking lights!
 
             POCKETS.forEach(p => {
               for (let i = 0; i < 18; i++) {
@@ -2966,14 +3157,7 @@
         if (this.type === 'striker') {
           drawStrikerArt(c, 0, 0, this.radius, selectedStrikerId, this.angle);
         } else {
-          // If coin has an unpopped light cracker, render with 35-40% opacity until pocketed
-          if (!this.isPocketed && this.crackerKey && CRACKER_DEFINITIONS[this.crackerKey]) {
-            const cDef = CRACKER_DEFINITIONS[this.crackerKey];
-            const isLightCracker = ['chakkar', 'flowerpot', 'peacock', 'sparkler', 'rocket', 'bijli', 'romancandle', 'twinkling', 'snake'].includes(cDef.type);
-            if (isLightCracker) {
-              c.globalAlpha = 0.38; // 38% opacity (within 30-45% range)
-            }
-          }
+// Coins render at 100% full opacity
           drawCarromCoin(c, 0, 0, this.radius, this.type, this.angle, this.stonePercent, this.taggedBy, this.crackerKey);
         }
 
@@ -3005,6 +3189,8 @@
       let particles = [];
       let floatingTexts = [];
       let activePocketCrackers = [];
+        queenBorderCelebration.active = false;
+        queenBorderCelebration.timer = 0;
 
       let isAiming = false;
       let isDraggingStriker = false;
@@ -3566,6 +3752,7 @@
 
       function render(dt) {
         drawBoard();
+        draw1000WalaBorderLights(ctx);
 
         if (state === 'shooting' && Math.hypot(striker.vx, striker.vy) > 4) {
           const cfg = STRIKER_CONFIGS[selectedStrikerId];
@@ -3643,11 +3830,13 @@
           updateFunMechanics(dt);
           pieces.forEach(p => p.update());
           resolveCollisions();
+          update1000WalaBorderCelebration(dt, particles, shockwaves);
           checkPockets();
           checkTurnEnd();
         } else if (state === 'aiming') {
           updateFunMechanics(dt);
           const anyMoving = pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.04 || Math.abs(p.vy) > 0.04));
+          update1000WalaBorderCelebration(dt, particles, shockwaves);
           if (anyMoving) {
             pieces.forEach(p => p.update());
             resolveCollisions();
@@ -3876,6 +4065,39 @@
     });
 
     // Bazaar Tabs & Buttons
+    
+    // Giftbox Modal Controls
+    document.getElementById('btn-open-giftbox').addEventListener('click', () => {
+      Sound.playFlick();
+      document.getElementById('giftbox-overlay').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-giftbox-close').addEventListener('click', () => {
+      Sound.playFlick();
+      document.getElementById('giftbox-overlay').classList.add('hidden');
+    });
+
+    document.getElementById('btn-giftbox-claim').addEventListener('click', () => {
+      Sound.playPocket();
+      // Unlock all giftbox items in user inventory
+      const giftItems = ['b_01', 'w_01', 'w_06', 'w_16', 'b_16', 'w_11', 'q_01'];
+      giftItems.forEach(id => unlockedCrackers.add(id));
+
+      // Custom user requested loadout:
+      // 9 White: 4 Chakkar ('w_01'), 4 Flower Pot ('w_06'), 1 Peacock ('w_11')
+      equippedWhite = ['w_01', 'w_01', 'w_01', 'w_01', 'w_06', 'w_06', 'w_06', 'w_06', 'w_11'];
+
+      // 9 Black: 2 100-Wala ('b_01'), 4 Rocket ('w_16' or 'b_08'), 2 Sky Shot 5-times ('b_16'), 1 Peacock ('w_11')
+      equippedBlack = ['b_01', 'b_01', 'w_16', 'w_16', 'w_16', 'w_16', 'b_16', 'b_16', 'w_11'];
+
+      // 1 Queen: 1000-Wala Rajah Maha Dhamaka with 60s border celebration!
+      equippedQueen = 'q_01';
+
+      document.getElementById('giftbox-overlay').classList.add('hidden');
+      alert('🎉 DIWALI GIFTBOX CLAIMED!\n\nEquipped in your Arsenal:\n• 9 White: 4 Chakkar, 4 Flower Pot, 1 Peacock\n• 9 Black: 2 100-Wala, 4 Rocket, 2 Sky Shot, 1 Peacock\n• 1 Special Queen: 1000-Wala Rajah Maha Dhamaka (60s Border Celebration!)');
+      renderBazaarUI();
+    });
+
     document.querySelectorAll('.bazaar-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.bazaar-tab').forEach(t => t.classList.remove('active'));
