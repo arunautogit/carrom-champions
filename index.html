@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Carrom Champions - Authentic Physical Edition</title>
+  <title>Carrom Champions - 19 Diwali Crackers Edition</title>
   
   <script src="https://www.youtube.com/game_api/v1" onerror="console.log('[Playables] Standalone mode')"></script>
 
@@ -245,7 +245,7 @@
       background: linear-gradient(135deg, #4d2b14 0%, #271407 100%);
     }
 
-    /* Cracker Highlight Card in Fun Grid (Replacing Coin Breaker) */
+    /* Cracker Highlight Card in Fun Grid */
     .fun-card-cracker {
       grid-column: span 2;
       background: linear-gradient(135deg, #4a1508 0%, #290a03 100%) !important;
@@ -676,20 +676,22 @@
       </div>
     </div>
 
-    <!-- 2. FUN MODE SELECTION SUB-SCREEN (With Diwali Mode occupying the prominent featured slot) -->
+    <!-- 2. FUN MODE SELECTION SUB-SCREEN -->
     <div id="fun-menu-overlay" class="overlay hidden">
       <h1>SELECT FUN MODE</h1>
       <p class="subtitle">Choose your special gameplay variant vs AI</p>
 
       <div class="fun-grid">
-        <!-- 🎆 DIWALI CRACKER MODE (Featured Slot replacing Coin Breaker) -->
+        <!-- 🎆 DIWALI CRACKER MODE (19 Unique Crackers) -->
         <div class="fun-card fun-card-cracker" data-mode="crackers">
           <span class="diwali-badge">DIWALI SPECIAL 🪔</span>
           <div style="font-size: 2.4rem; margin-bottom: 4px;">🪔 🎆 🎇</div>
           <div style="font-size: 1.25rem; font-weight: bold; color: #ffd700;">Diwali Cracker Mode</div>
           <div style="font-size: 0.82rem; color: #ffe0b2; margin-top: 4px; line-height: 1.35; max-width: 520px;">
-            Coins are packed with <strong>Chakkar</strong>, <strong>Flower Pot</strong>, <strong>100-Wala</strong>, <strong>Rocket</strong> & <strong>Atom Bomb</strong>!<br>
-            Pocketing any coin activates the cracker right inside the pocket hole to pop with fireworks & score bonuses!
+            <strong>19 Unique Crackers!</strong><br>
+            9 for White coins (Chakkar, Anaar, Fuljhadi, Rocket, Bijli, Peacock, Saanp, Roman Candle, Twinkling Star)<br>
+            9 for Black coins (100-Wala, Atom Bomb, Bullet, Mirchi, Rolling Wheel, Dragon, 7-Shots, Gorilla, Kuruvi)<br>
+            1 Grand Maha Dhamaka for the Red Queen! Pocket coins to pop them in the holes!
           </div>
         </div>
 
@@ -830,14 +832,11 @@
             for (let i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
             ac.decodeAudioData(bytes.buffer, (buf) => {
               decodedBuffers[key] = buf;
-            }, (err) => {
-              // fallback gracefully
-            });
+            }, () => {});
           } catch(e) {}
         });
       }
 
-      // Preload on first click
       window.addEventListener('pointerdown', initDecoders, { once: true });
 
       function playSample(key, vol = 1.0, pitchVariation = 0.06) {
@@ -866,7 +865,6 @@
         setEnabled(val) { enabled = val; },
         isEnabled() { return enabled; },
 
-        // Play real carrom coin-to-coin or striker-to-coin strike
         playClack(velocity = 1.0, strikerId = null) {
           if (!enabled) return;
           const ac = getCtx();
@@ -874,14 +872,11 @@
 
           const vol = Math.min(Math.max(velocity / 11, 0.2), 1.0);
 
-          // If regular coin-coin hit or standard striker hit, use REAL recorded carrom MP3 sample!
           if (strikerId === null || strikerId === 0) {
             const randomSampleIdx = Math.floor(Math.random() * 5) + 1;
-            const played = playSample('coin_hit_' + randomSampleIdx, vol * 0.95, 0.1);
-            if (played) return;
+            if (playSample('coin_hit_' + randomSampleIdx, vol * 0.95, 0.1)) return;
           }
 
-          // Striker custom acoustic profile or synthesis fallback
           const now = ac.currentTime;
           const osc = ac.createOscillator();
           const gain = ac.createGain();
@@ -917,7 +912,6 @@
             gain.gain.setValueAtTime(vol * 0.38, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
           } else {
-            // Wood resonant clack fallback
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(700, now);
             osc.frequency.exponentialRampToValueAtTime(140, now + 0.05);
@@ -933,11 +927,9 @@
 
         playPocket() {
           if (!enabled) return;
-          // Play real recorded pocket drop sound if available
           const dropIdx = Math.random() < 0.5 ? 1 : 2;
           if (playSample('pocket_drop_' + dropIdx, 0.85, 0.08)) return;
 
-          // Synthesis fallback
           const ac = getCtx();
           if (!ac) return;
           const osc = ac.createOscillator();
@@ -972,53 +964,35 @@
           osc.stop(ac.currentTime + 0.07);
         },
 
-        /* =================== DIWALI CRACKER AUDIO =================== */
-
-        // 1. 🌀 CHAKKAR: Whistling high-speed spin with sparkling hiss
-        playChakkar() {
+        /* =================== 19 DIWALI CRACKER AUDIO PROFILES =================== */
+        playWhistleSpin(duration = 2.0, baseFreq = 700) {
           if (!enabled) return;
-          const ac = getCtx();
-          if (!ac) return;
+          const ac = getCtx(); if (!ac) return;
           const now = ac.currentTime;
 
           const osc = ac.createOscillator();
           const gain = ac.createGain();
           osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(750, now);
-          osc.frequency.linearRampToValueAtTime(1300, now + 0.8);
-          osc.frequency.exponentialRampToValueAtTime(480, now + 2.2);
+          osc.frequency.setValueAtTime(baseFreq, now);
+          osc.frequency.linearRampToValueAtTime(baseFreq * 1.8, now + duration * 0.4);
+          osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.6, now + duration);
 
           gain.gain.setValueAtTime(0.18, now);
-          gain.gain.linearRampToValueAtTime(0.3, now + 0.5);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 2.3);
+          gain.gain.linearRampToValueAtTime(0.3, now + 0.3);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
           osc.connect(gain);
           gain.connect(ac.destination);
           osc.start();
-          osc.stop(now + 2.3);
-
-          const bufferSize = ac.sampleRate * 1.8;
-          const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
-          const data = buffer.getChannelData(0);
-          for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.3;
-          const noise = ac.createBufferSource();
-          noise.buffer = buffer;
-          const nGain = ac.createGain();
-          nGain.gain.setValueAtTime(0.18, now);
-          nGain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
-          noise.connect(nGain);
-          nGain.connect(ac.destination);
-          noise.start();
+          osc.stop(now + duration);
         },
 
-        // 2. 🌋 FLOWER POT (ANAAR): Rising roaring sizzle & crackling fountain
-        playFlowerpot() {
+        playFountainSizzle(duration = 2.4, freq = 900) {
           if (!enabled) return;
-          const ac = getCtx();
-          if (!ac) return;
+          const ac = getCtx(); if (!ac) return;
           const now = ac.currentTime;
 
-          const bufferSize = ac.sampleRate * 2.2;
+          const bufferSize = ac.sampleRate * duration;
           const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
           const data = buffer.getChannelData(0);
           for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
@@ -1028,15 +1002,15 @@
 
           const filter = ac.createBiquadFilter();
           filter.type = 'bandpass';
-          filter.frequency.setValueAtTime(800, now);
-          filter.frequency.linearRampToValueAtTime(2400, now + 1.2);
-          filter.frequency.exponentialRampToValueAtTime(600, now + 2.2);
-          filter.Q.value = 3.0;
+          filter.frequency.setValueAtTime(freq, now);
+          filter.frequency.linearRampToValueAtTime(freq * 2.2, now + duration * 0.5);
+          filter.frequency.exponentialRampToValueAtTime(freq * 0.8, now + duration);
+          filter.Q.value = 2.5;
 
           const gain = ac.createGain();
-          gain.gain.setValueAtTime(0.1, now);
-          gain.gain.linearRampToValueAtTime(0.45, now + 0.8);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.linearRampToValueAtTime(0.35, now + 0.5);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
           noise.connect(filter);
           filter.connect(gain);
@@ -1044,20 +1018,18 @@
           noise.start();
         },
 
-        // 3. 🧨 100-WALA (LADI): Rapid-fire snappy chain pop
-        play100WalaSingle(intensity = 1.0) {
+        playSnappyPop(freq = 900, intensity = 1.0) {
           if (!enabled) return;
-          const ac = getCtx();
-          if (!ac) return;
+          const ac = getCtx(); if (!ac) return;
           const now = ac.currentTime;
 
           const osc = ac.createOscillator();
           const gain = ac.createGain();
           osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(800 + Math.random() * 400, now);
-          osc.frequency.exponentialRampToValueAtTime(100, now + 0.04);
+          osc.frequency.setValueAtTime(freq, now);
+          osc.frequency.exponentialRampToValueAtTime(90, now + 0.04);
 
-          gain.gain.setValueAtTime(0.4 * intensity, now);
+          gain.gain.setValueAtTime(0.38 * intensity, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
 
           osc.connect(gain);
@@ -1066,21 +1038,52 @@
           osc.stop(now + 0.05);
         },
 
-        // 4. 🚀 ROCKET: Ascending screech whistle then aerial burst
-        playRocketLaunch() {
+        playBassBoom(bassFreq = 160, duration = 0.6) {
           if (!enabled) return;
-          const ac = getCtx();
-          if (!ac) return;
+          const ac = getCtx(); if (!ac) return;
+          const now = ac.currentTime;
+
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(bassFreq, now);
+          osc.frequency.exponentialRampToValueAtTime(26, now + duration);
+
+          gain.gain.setValueAtTime(0.9, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(now + duration);
+
+          const bSize = ac.sampleRate * 0.3;
+          const buf = ac.createBuffer(1, bSize, ac.sampleRate);
+          const data = buf.getChannelData(0);
+          for (let i = 0; i < bSize; i++) data[i] = Math.random() * 2 - 1;
+          const noise = ac.createBufferSource();
+          noise.buffer = buf;
+          const nGain = ac.createGain();
+          nGain.gain.setValueAtTime(0.6, now);
+          nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          noise.connect(nGain);
+          nGain.connect(ac.destination);
+          noise.start();
+        },
+
+        playRocketScreech() {
+          if (!enabled) return;
+          const ac = getCtx(); if (!ac) return;
           const now = ac.currentTime;
 
           const osc = ac.createOscillator();
           const gain = ac.createGain();
           osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(350, now);
-          osc.frequency.exponentialRampToValueAtTime(2200, now + 0.65);
+          osc.frequency.setValueAtTime(320, now);
+          osc.frequency.exponentialRampToValueAtTime(2400, now + 0.65);
 
-          gain.gain.setValueAtTime(0.2, now);
-          gain.gain.linearRampToValueAtTime(0.4, now + 0.4);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.linearRampToValueAtTime(0.35, now + 0.4);
           gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
 
           osc.connect(gain);
@@ -1089,49 +1092,10 @@
           osc.stop(now + 0.7);
         },
 
-        // 5. 💥 ATOM BOMB / DHAMAKA: Deep booming bass detonation
-        playAtomBomb() {
-          if (!enabled) return;
-          const ac = getCtx();
-          if (!ac) return;
-          const now = ac.currentTime;
-
-          const osc = ac.createOscillator();
-          const gain = ac.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(180, now);
-          osc.frequency.exponentialRampToValueAtTime(28, now + 0.6);
-
-          gain.gain.setValueAtTime(1.0, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
-
-          osc.connect(gain);
-          gain.connect(ac.destination);
-          osc.start();
-          osc.stop(now + 0.65);
-
-          const bufferSize = ac.sampleRate * 0.4;
-          const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
-          const data = buffer.getChannelData(0);
-          for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-          const noise = ac.createBufferSource();
-          noise.buffer = buffer;
-          const nGain = ac.createGain();
-          nGain.gain.setValueAtTime(0.7, now);
-          nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-          noise.connect(nGain);
-          nGain.connect(ac.destination);
-          noise.start();
-        },
-
-        playExplosion() {
-          this.playAtomBomb();
-        },
-
+        playExplosion() { this.playBassBoom(180, 0.65); },
         playMagnetHum() {
           if (!enabled) return;
-          const ac = getCtx();
-          if (!ac) return;
+          const ac = getCtx(); if (!ac) return;
           const osc = ac.createOscillator();
           const gain = ac.createGain();
           osc.type = 'sawtooth';
@@ -1144,11 +1108,9 @@
           osc.start();
           osc.stop(ac.currentTime + 0.2);
         },
-
         playFoul() {
           if (!enabled) return;
-          const ac = getCtx();
-          if (!ac) return;
+          const ac = getCtx(); if (!ac) return;
           const osc = ac.createOscillator();
           const gain = ac.createGain();
           osc.type = 'sawtooth';
@@ -1162,28 +1124,6 @@
           osc.stop(ac.currentTime + 0.25);
         }
       };
-    })();
-
-    /* =========================================================================
-       YOUTUBE PLAYABLES INTEGRATION
-       ========================================================================= */
-    const YouTubePlayables = (() => {
-      let isYT = typeof window.ytgame !== 'undefined';
-      function init() {
-        if (isYT && window.ytgame.game && window.ytgame.game.firstFrameReady) window.ytgame.game.firstFrameReady();
-        if (isYT && window.ytgame.system) {
-          window.ytgame.system.onPause(() => Game.pause());
-          window.ytgame.system.onResume(() => Game.resume());
-          window.ytgame.system.onAudioEnabledChange((enabled) => {
-            Sound.setEnabled(enabled);
-            document.getElementById('sound-btn').textContent = enabled ? '🔊' : '🔇';
-          });
-        }
-      }
-      function gameReady() {
-        if (isYT && window.ytgame.game && window.ytgame.game.gameReady) window.ytgame.game.gameReady();
-      }
-      return { init, gameReady };
     })();
 
     /* =========================================================================
@@ -1344,10 +1284,41 @@
     let selectedCoinKey = 'classic';
 
     /* =========================================================================
+       19 UNIQUE DIWALI CRACKERS DEFINITION
+       (9 For White Coins, 9 For Black Coins, 1 Special For Red Queen)
+       ========================================================================= */
+    const CRACKER_DEFINITIONS = {
+      // 9 FOR WHITE COINS (Sparks, Fountains, Light, Spinners, Aerials)
+      'w_chakkar': { name: 'Zameen Chakkar', emoji: '🌀', desc: 'Ground Spinner', pts: 15, rim: '#ffd700', type: 'chakkar' },
+      'w_anaar': { name: 'Flower Pot (Anaar)', emoji: '🌋', desc: 'Sparkling Fountain', pts: 20, rim: '#ffca28', type: 'flowerpot' },
+      'w_fuljhadi': { name: 'Electric Fuljhadi', emoji: '✨', desc: 'Golden Sparkler', pts: 15, rim: '#fff59d', type: 'sparkler' },
+      'w_rocket': { name: 'Hawayi Rocket', emoji: '🚀', desc: 'Sky Rocket Starburst', pts: 25, rim: '#00e5ff', type: 'rocket' },
+      'w_bijli': { name: 'Bijli Pataka', emoji: '⚡', desc: 'Lightning Flash Snap', pts: 18, rim: '#ffee58', type: 'bijli' },
+      'w_peacock': { name: 'Peacock Fountain', emoji: '🦚', desc: 'Emerald & Gold Plume', pts: 22, rim: '#00e676', type: 'peacock' },
+      'w_snake': { name: 'Saanp Ki Goli', emoji: '🐍', desc: 'Black Serpent Sprout', pts: 20, rim: '#8d6e63', type: 'snake' },
+      'w_romancandle': { name: 'Roman Candle', emoji: '🌟', desc: 'Multi-Shot Fireballs', pts: 24, rim: '#ab47bc', type: 'romancandle' },
+      'w_twinkling': { name: 'Twinkling Star', emoji: '🌠', desc: 'Silver Strobe Glitter', pts: 18, rim: '#e0e0e0', type: 'twinkling' },
+
+      // 9 FOR BLACK COINS (Noise Makers, Bombs, Explosives, Rapid Chains)
+      'b_100wala': { name: '100-Wala Ladi', emoji: '🧨', desc: 'Garland Chain Pops', pts: 25, rim: '#ff1744', type: '100wala' },
+      'b_atombomb': { name: 'Atom Bomb', emoji: '💥', desc: 'Heavy Sub-Bass Blast', pts: 30, rim: '#ff3d00', type: 'bomb' },
+      'b_bullet': { name: 'Bullet Bomb', emoji: '💣', desc: 'Sharp High-Pressure Pop', pts: 22, rim: '#d50000', type: 'bullet' },
+      'b_mirchi': { name: 'Mirchi Pataka', emoji: '🌶️', desc: 'Rapid Fire Chilli String', pts: 20, rim: '#e53935', type: 'mirchi' },
+      'b_rolling': { name: 'Rolling Wheel', emoji: '🎡', desc: 'Whistling Fire Wheel', pts: 22, rim: '#ff6d00', type: 'rolling' },
+      'b_dragon': { name: 'Dragon Thunder', emoji: '🐉', desc: 'Roaring Sky Thunder', pts: 28, rim: '#c2185b', type: 'dragon' },
+      'b_sevenshot': { name: '7-Shots Thunder', emoji: '🎯', desc: '7 Consecutive Thuds', pts: 32, rim: '#ff5722', type: 'sevenshot' },
+      'b_gorilla': { name: 'Gorilla Bomb', emoji: '🦍', desc: 'Double Dhamaka Blast', pts: 35, rim: '#b71c1c', type: 'gorilla' },
+      'b_kuruvi': { name: 'Kuruvi Vedi', emoji: '🦅', desc: 'Sudden High-Pitch Snap', pts: 20, rim: '#f4511e', type: 'kuruvi' },
+
+      // 1 SPECIAL FOR RED QUEEN
+      'q_grand_finale': { name: '1000-Wala Rajah Maha Dhamaka', emoji: '🪔', desc: 'Grand Temple Showstopper', pts: 60, rim: '#ffd700', type: 'mega_diwali' }
+    };
+
+    /* =========================================================================
        PHOTOREALISTIC 3D CARROM COIN RENDERING
        (Lathe-Turned Rings, Bevel, Lacquer Sheen & Natural Grain)
        ========================================================================= */
-    function drawCarromCoin(ctx, x, y, radius, type, rotation, stonePercent = 0, taggedBy = 0, crackerType = null) {
+    function drawCarromCoin(ctx, x, y, radius, type, rotation, stonePercent = 0, taggedBy = 0, crackerKey = null) {
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(rotation);
@@ -1363,7 +1334,6 @@
       const isQueen = (type === 'queen');
       const cInfo = isP1 ? palette.p1 : (isQueen ? palette.queen : palette.p2);
 
-      // Handle Fun Mode: Stone Pulse petrification
       let fillCol = cInfo.fill;
       let midCol = cInfo.mid;
       let edgeCol = cInfo.edge;
@@ -1389,7 +1359,7 @@
       ctx.fillStyle = baseGrad;
       ctx.fill();
 
-      // 3. Outer Chamfered Bevel Edge (Highlights on top-left, shadows on bottom-right)
+      // 3. Outer Chamfered Bevel Edge
       ctx.beginPath();
       ctx.arc(0, 0, radius - 0.75, 0, Math.PI * 2);
       ctx.lineWidth = 1.5;
@@ -1406,21 +1376,18 @@
       ctx.restore();
 
       // 4. Authentic Concentric Lathe-Turned Ridge Grooves
-      // Outer groove ring
       ctx.beginPath();
       ctx.arc(0, 0, radius * 0.72, 0, Math.PI * 2);
       ctx.lineWidth = 1.4;
       ctx.strokeStyle = ringCol;
       ctx.stroke();
 
-      // Inner groove reflection lip (creates real depth!)
       ctx.beginPath();
       ctx.arc(0, 0, radius * 0.68, 0, Math.PI * 2);
       ctx.lineWidth = 1.0;
       ctx.strokeStyle = isQueen ? 'rgba(255, 215, 0, 0.5)' : (isP1 ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.2)');
       ctx.stroke();
 
-      // Middle concentric ring
       ctx.beginPath();
       ctx.arc(0, 0, radius * 0.44, 0, Math.PI * 2);
       ctx.lineWidth = 1.2;
@@ -1446,7 +1413,6 @@
         ctx.save();
         ctx.fillStyle = cInfo.gold || '#ffd700';
 
-        // 8-point gold starburst
         ctx.beginPath();
         for (let i = 0; i < 16; i++) {
           const r = (i % 2 === 0) ? radius * 0.64 : radius * 0.32;
@@ -1457,7 +1423,6 @@
         ctx.closePath();
         ctx.fill();
 
-        // Center ruby cabochon with white specular glint
         const rubyGrad = ctx.createRadialGradient(-1, -1, 0.5, 0, 0, radius * 0.22);
         rubyGrad.addColorStop(0, '#ff80ab');
         rubyGrad.addColorStop(0.4, '#c2185b');
@@ -1477,7 +1442,6 @@
         ctx.fill();
         ctx.restore();
       } else {
-        // Regular coins: Center lathe indentation dot
         ctx.beginPath();
         ctx.arc(0, 0, 2.2, 0, Math.PI * 2);
         ctx.fillStyle = cInfo.dot;
@@ -1490,34 +1454,25 @@
       ctx.fillStyle = isQueen ? 'rgba(255, 255, 255, 0.35)' : (isP1 ? 'rgba(255, 255, 255, 0.42)' : 'rgba(255, 255, 255, 0.18)');
       ctx.fill();
 
-      // 8. 🎆 DIWALI CRACKER BADGE ON COIN
-      if (crackerType) {
-        let badgeEmoji = '🌀';
-        let ringColor = '#ffd700';
-        if (crackerType === 'chakkar') { badgeEmoji = '🌀'; ringColor = '#ff9800'; }
-        else if (crackerType === 'flowerpot') { badgeEmoji = '🌋'; ringColor = '#ffca28'; }
-        else if (crackerType === '100wala') { badgeEmoji = '🧨'; ringColor = '#ff1744'; }
-        else if (crackerType === 'rocket') { badgeEmoji = '🚀'; ringColor = '#00e5ff'; }
-        else if (crackerType === 'bomb') { badgeEmoji = '💥'; ringColor = '#ff3d00'; }
-        else if (crackerType === 'mega_diwali') { badgeEmoji = '🪔'; ringColor = '#ffd700'; }
+      // 8. 🎆 19 DIWALI CRACKER BADGES ON COIN
+      if (crackerKey && CRACKER_DEFINITIONS[crackerKey]) {
+        const cDef = CRACKER_DEFINITIONS[crackerKey];
 
-        // Glowing festive rim
         ctx.beginPath();
         ctx.arc(0, 0, radius - 1, 0, Math.PI * 2);
         ctx.lineWidth = 1.8;
-        ctx.strokeStyle = ringColor;
-        ctx.shadowColor = ringColor;
+        ctx.strokeStyle = cDef.rim;
+        ctx.shadowColor = cDef.rim;
         ctx.shadowBlur = 6;
         ctx.stroke();
 
-        // Cracker icon
         ctx.font = '12px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(badgeEmoji, 0, 0);
+        ctx.fillText(cDef.emoji, 0, 0);
       }
 
-      // 9. Tagged Coins Badge (Fun Mode)
+      // 9. Tagged Coins Badge
       if (taggedBy > 0) {
         ctx.beginPath();
         ctx.arc(0, 0, radius * 0.45, 0, Math.PI * 2);
@@ -1550,14 +1505,13 @@
       ctx.translate(x, y);
       ctx.rotate(rotation);
 
-      // Soft drop shadow
       ctx.beginPath();
       ctx.arc(1.8, 2.8, radius, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
       ctx.fill();
 
       switch (strikerId) {
-        case 0: { // Striker 0: Classic Champion (Godot Ivory & Gold Rosette)
+        case 0: { // Striker 0: Classic Champion
           const grad0 = ctx.createRadialGradient(-radius*0.25, -radius*0.25, 2, 0, 0, radius);
           grad0.addColorStop(0, '#ffffff');
           grad0.addColorStop(0.5, '#f5efe0');
@@ -1568,14 +1522,12 @@
           ctx.fillStyle = grad0;
           ctx.fill();
 
-          // Outer gold rim
           ctx.beginPath();
           ctx.arc(0, 0, radius - 1, 0, Math.PI * 2);
           ctx.lineWidth = 3;
           ctx.strokeStyle = '#d4af37';
           ctx.stroke();
 
-          // Engraved notches around edge
           ctx.strokeStyle = '#b8860b';
           ctx.lineWidth = 1.2;
           for (let i = 0; i < 16; i++) {
@@ -1586,14 +1538,12 @@
             ctx.stroke();
           }
 
-          // Middle gold ring
           ctx.beginPath();
           ctx.arc(0, 0, radius * 0.65, 0, Math.PI * 2);
           ctx.lineWidth = 1.8;
           ctx.strokeStyle = '#c59b27';
           ctx.stroke();
 
-          // 8-point carrom rosette star
           ctx.fillStyle = '#d4af37';
           ctx.beginPath();
           for (let i = 0; i < 16; i++) {
@@ -1605,7 +1555,6 @@
           ctx.closePath();
           ctx.fill();
 
-          // Center ruby cabochon jewel
           const jewel = ctx.createRadialGradient(-1, -1, 1, 0, 0, radius * 0.2);
           jewel.addColorStop(0, '#ff6b6b');
           jewel.addColorStop(0.4, '#d32f2f');
@@ -1618,7 +1567,6 @@
           ctx.strokeStyle = '#ffd700';
           ctx.stroke();
 
-          // Specular highlight dot
           ctx.beginPath();
           ctx.arc(-radius * 0.08, -radius * 0.08, radius * 0.06, 0, Math.PI * 2);
           ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
@@ -1626,7 +1574,7 @@
           break;
         }
 
-        case 1: { // Striker 1: Amber Gold Cyber (High Rebound Energy Disc)
+        case 1: { // Striker 1: Amber Gold Cyber
           const grad1 = ctx.createRadialGradient(-radius*0.3, -radius*0.3, 3, 0, 0, radius);
           grad1.addColorStop(0, '#fff9c4');
           grad1.addColorStop(0.3, '#ffca28');
@@ -1637,14 +1585,12 @@
           ctx.fillStyle = grad1;
           ctx.fill();
 
-          // Cyber glow outer ring
           ctx.beginPath();
           ctx.arc(0, 0, radius - 1.5, 0, Math.PI * 2);
           ctx.lineWidth = 2.5;
           ctx.strokeStyle = '#ffe082';
           ctx.stroke();
 
-          // 4 circuit energy lines
           ctx.lineWidth = 1.5;
           ctx.strokeStyle = '#fff';
           for (let i = 0; i < 4; i++) {
@@ -1660,14 +1606,12 @@
             ctx.fill();
           }
 
-          // Inner pulsating plasma ring
           ctx.beginPath();
           ctx.arc(0, 0, radius * 0.4, 0, Math.PI * 2);
           ctx.strokeStyle = '#ffd54f';
           ctx.lineWidth = 2;
           ctx.stroke();
 
-          // Core plasma
           ctx.beginPath();
           ctx.arc(0, 0, radius * 0.22, 0, Math.PI * 2);
           ctx.fillStyle = '#ffffff';
@@ -1675,7 +1619,7 @@
           break;
         }
 
-        case 2: { // Striker 2: Emerald Jade Glass (Heavy Impact Translucent Green)
+        case 2: { // Striker 2: Emerald Jade Glass
           const grad2 = ctx.createRadialGradient(-radius*0.3, -radius*0.3, 2, 0, 0, radius);
           grad2.addColorStop(0, '#b9f6ca');
           grad2.addColorStop(0.35, '#00e676');
@@ -1686,21 +1630,18 @@
           ctx.fillStyle = grad2;
           ctx.fill();
 
-          // Outer glass rim with mint neon
           ctx.beginPath();
           ctx.arc(0, 0, radius - 1.5, 0, Math.PI * 2);
           ctx.lineWidth = 2.5;
           ctx.strokeStyle = '#69f0ae';
           ctx.stroke();
 
-          // Inner jade ring
           ctx.beginPath();
           ctx.arc(0, 0, radius * 0.65, 0, Math.PI * 2);
           ctx.lineWidth = 2;
           ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
           ctx.stroke();
 
-          // 6-petal jade lotus geometry
           ctx.strokeStyle = '#b9f6ca';
           ctx.lineWidth = 1.4;
           for (let i = 0; i < 6; i++) {
@@ -1710,7 +1651,6 @@
             ctx.stroke();
           }
 
-          // Glass specular reflection crescent
           ctx.beginPath();
           ctx.ellipse(-radius * 0.25, -radius * 0.25, radius * 0.45, radius * 0.2, -Math.PI / 4, 0, Math.PI * 2);
           ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
@@ -1718,7 +1658,7 @@
           break;
         }
 
-        case 3: { // Striker 3: Cobalt Sapphire Orb (Spherical Domed 3D Blue)
+        case 3: { // Striker 3: Cobalt Sapphire Orb
           const grad3 = ctx.createRadialGradient(-radius*0.35, -radius*0.35, 2, 0, 0, radius);
           grad3.addColorStop(0, '#bbdefb');
           grad3.addColorStop(0.25, '#42a5f5');
@@ -1730,27 +1670,23 @@
           ctx.fillStyle = grad3;
           ctx.fill();
 
-          // Dark chrome sapphire rim
           ctx.beginPath();
           ctx.arc(0, 0, radius - 1.5, 0, Math.PI * 2);
           ctx.lineWidth = 2.5;
           ctx.strokeStyle = '#64b5f6';
           ctx.stroke();
 
-          // Celestial planetary orbital ring
           ctx.beginPath();
           ctx.ellipse(0, 0, radius * 0.72, radius * 0.3, Math.PI / 6, 0, Math.PI * 2);
           ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
           ctx.lineWidth = 1.5;
           ctx.stroke();
 
-          // Intense spherical 3D light glint
           ctx.beginPath();
           ctx.arc(-radius * 0.32, -radius * 0.32, radius * 0.16, 0, Math.PI * 2);
           ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
           ctx.fill();
 
-          // 4-point diamond glint
           ctx.fillStyle = '#ffffff';
           const glintR = radius * 0.35;
           ctx.beginPath();
@@ -1763,7 +1699,7 @@
           break;
         }
 
-        case 4: { // Striker 4: Acid Lime Prism (Faceted Tactical Octagonal Striker)
+        case 4: { // Striker 4: Acid Lime Prism
           const grad4 = ctx.createRadialGradient(-radius*0.25, -radius*0.25, 2, 0, 0, radius);
           grad4.addColorStop(0, '#f4ff81');
           grad4.addColorStop(0.3, '#eeff41');
@@ -1774,7 +1710,6 @@
           ctx.fillStyle = grad4;
           ctx.fill();
 
-          // Faceted octagonal outer frame
           ctx.beginPath();
           for (let i = 0; i < 8; i++) {
             const a = (i * Math.PI) / 4;
@@ -1788,7 +1723,6 @@
           ctx.strokeStyle = '#1b5e20';
           ctx.stroke();
 
-          // 8 corner rivet dots
           ctx.fillStyle = '#ffffff';
           for (let i = 0; i < 8; i++) {
             const a = (i * Math.PI) / 4;
@@ -1797,7 +1731,6 @@
             ctx.fill();
           }
 
-          // Tactical reticle crosshair in center
           ctx.beginPath();
           ctx.arc(0, 0, radius * 0.42, 0, Math.PI * 2);
           ctx.lineWidth = 2;
@@ -1818,7 +1751,7 @@
           break;
         }
 
-        case 5: { // Striker 5: Titanium Mirror Chrome (Brushed Cyan Metallic)
+        case 5: { // Striker 5: Titanium Mirror Chrome
           const grad5 = ctx.createLinearGradient(-radius, -radius, radius, radius);
           grad5.addColorStop(0, '#e0f7fa');
           grad5.addColorStop(0.2, '#ffffff');
@@ -1831,7 +1764,6 @@
           ctx.fillStyle = grad5;
           ctx.fill();
 
-          // Dual titanium rims
           ctx.beginPath();
           ctx.arc(0, 0, radius - 1.5, 0, Math.PI * 2);
           ctx.lineWidth = 2.5;
@@ -1844,13 +1776,11 @@
           ctx.strokeStyle = '#00e5ff';
           ctx.stroke();
 
-          // Radial metallic brushed highlight bars
           ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
           ctx.beginPath();
           ctx.ellipse(0, 0, radius * 0.75, radius * 0.18, Math.PI / 4, 0, Math.PI * 2);
           ctx.fill();
 
-          // High-precision cyan center hub
           ctx.beginPath();
           ctx.arc(0, 0, radius * 0.28, 0, Math.PI * 2);
           ctx.fillStyle = '#006064';
@@ -1880,8 +1810,8 @@
     const POCKET_RADIUS = 30;
     const COIN_RADIUS = 16;
     const STRIKER_RADIUS = 22;
-    const FRICTION = 0.981; // Smooth Boris powder glide
-    const RESTITUTION = 0.88; // Realistic carrom coin rebound
+    const FRICTION = 0.981;
+    const RESTITUTION = 0.88;
 
     const BASELINE_OFFSET = 230;
     const BASELINE_HALF_LEN = 195;
@@ -1986,13 +1916,14 @@
     }
 
     /* =========================================================================
-       ACTIVE POCKET CRACKER SYSTEM (DIWALI FIREWORKS IN POCKET HOLE)
+       ACTIVE POCKET CRACKER SYSTEM (19 UNIQUE DIWALI CRACKERS)
        ========================================================================= */
     class ActivePocketCracker {
-      constructor(pocketX, pocketY, type, particlesArray, shockwavesArray, floatTextsArray) {
+      constructor(pocketX, pocketY, crackerKey, particlesArray, shockwavesArray, floatTextsArray) {
         this.x = pocketX;
         this.y = pocketY;
-        this.type = type;
+        this.key = crackerKey;
+        this.cDef = CRACKER_DEFINITIONS[crackerKey] || CRACKER_DEFINITIONS['w_chakkar'];
         this.particles = particlesArray;
         this.shockwaves = shockwavesArray;
         this.floatTexts = floatTextsArray;
@@ -2000,76 +1931,90 @@
         this.finished = false;
         this.rot = 0;
 
-        if (type === 'chakkar') {
+        // Custom duration & start sounds
+        const t = this.cDef.type;
+        if (t === 'chakkar' || t === 'rolling') {
           this.duration = 2.4;
-          Sound.playChakkar();
-          this.floatTexts.push(new FloatingText(pocketX, pocketY - 20, '🌀 CHAKKAR! +15', '#ff9800', 17));
-        } else if (type === 'flowerpot') {
+          Sound.playWhistleSpin(2.4, t === 'rolling' ? 900 : 700);
+        } else if (t === 'flowerpot' || t === 'peacock') {
           this.duration = 2.8;
-          Sound.playFlowerpot();
-          this.floatTexts.push(new FloatingText(pocketX, pocketY - 20, '🌋 ANAAR FOUNTAIN! +20', '#ffd700', 18));
-        } else if (type === '100wala') {
+          Sound.playFountainSizzle(2.8, t === 'peacock' ? 1200 : 800);
+        } else if (t === 'sparkler' || t === 'twinkling') {
+          this.duration = 2.2;
+          Sound.playFountainSizzle(2.2, 1600);
+        } else if (t === '100wala' || t === 'mirchi') {
           this.duration = 2.2;
           this.popCount = 0;
+          this.maxPops = t === 'mirchi' ? 24 : 16;
+          this.popInterval = t === 'mirchi' ? 0.08 : 0.12;
           this.nextPopTime = 0.05;
-          this.floatTexts.push(new FloatingText(pocketX, pocketY - 20, '🧨 100-WALA LADI! +25', '#ff1744', 18));
-        } else if (type === 'rocket') {
+        } else if (t === 'rocket') {
           this.duration = 2.0;
-          this.rocketFired = false;
           this.rocketExploded = false;
           this.rocketX = pocketX;
           this.rocketY = pocketY;
           this.targetX = HALF_SIZE + (Math.random() - 0.5) * 160;
           this.targetY = HALF_SIZE + (Math.random() - 0.5) * 160;
-          Sound.playRocketLaunch();
-          this.floatTexts.push(new FloatingText(pocketX, pocketY - 20, '🚀 ROCKET BURST! +30', '#00e5ff', 18));
-        } else if (type === 'bomb') {
+          Sound.playRocketScreech();
+        } else if (t === 'bomb' || t === 'gorilla') {
           this.duration = 1.6;
           this.detonated = false;
-          this.floatTexts.push(new FloatingText(pocketX, pocketY - 20, '💥 ATOM BOMB! +35', '#ff3d00', 19));
-        } else if (type === 'mega_diwali') {
-          this.duration = 3.4;
-          Sound.playFlowerpot();
-          Sound.playChakkar();
-          this.floatTexts.push(new FloatingText(pocketX, pocketY - 25, '🪔 SHUBH DIWALI DHAMAKA! +50', '#ffd700', 22));
+          this.secondDetonated = false;
+        } else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
+          this.duration = 1.2;
+          this.snapped = false;
+        } else if (t === 'romancandle' || t === 'sevenshot') {
+          this.duration = 2.8;
+          this.shotCount = 0;
+          this.maxShots = t === 'romancandle' ? 5 : 7;
+          this.nextShotTime = 0.2;
+        } else if (t === 'snake') {
+          this.duration = 2.6;
+          Sound.playFountainSizzle(2.6, 500);
+        } else if (t === 'mega_diwali') {
+          this.duration = 3.6;
+          Sound.playFountainSizzle(3.0, 900);
+          Sound.playWhistleSpin(2.6, 750);
         }
+
+        // Floating Title Popup
+        this.floatTexts.push(new FloatingText(
+          pocketX, pocketY - 22,
+          this.cDef.emoji + ' ' + this.cDef.name.toUpperCase() + '! +' + this.cDef.pts,
+          this.cDef.rim, 17
+        ));
       }
 
       update(dt) {
         this.time += dt;
+        const t = this.cDef.type;
+        const dirX = (HALF_SIZE - this.x) > 0 ? 1 : -1;
+        const dirY = (HALF_SIZE - this.y) > 0 ? 1 : -1;
 
-        // 1. 🌀 CHAKKAR
-        if (this.type === 'chakkar') {
+        // 1. Zameen Chakkar & Rolling Wheel
+        if (t === 'chakkar' || t === 'rolling') {
           this.rot += dt * 32;
           for (let i = 0; i < 3; i++) {
             const angle = this.rot + (i * Math.PI * 2 / 3);
             const speed = 3.5 + Math.random() * 4.5;
-            const p = new Particle(
-              this.x + Math.cos(angle) * 12,
-              this.y + Math.sin(angle) * 12,
-              Math.random() < 0.5 ? '#ffd700' : '#ff9800',
-              Math.random() * 3 + 2,
-              Math.cos(angle) * speed,
-              Math.sin(angle) * speed,
-              0.04
-            );
-            this.particles.push(p);
+            this.particles.push(new Particle(
+              this.x + Math.cos(angle) * 12, this.y + Math.sin(angle) * 12,
+              t === 'rolling' ? (Math.random() < 0.5 ? '#ff1744' : '#ffd700') : (Math.random() < 0.5 ? '#ffd700' : '#ff9800'),
+              Math.random() * 3 + 2, Math.cos(angle) * speed, Math.sin(angle) * speed, 0.04
+            ));
           }
         }
 
-        // 2. 🌋 FLOWER POT (ANAAR)
-        else if (this.type === 'flowerpot' || (this.type === 'mega_diwali' && this.time < 2.5)) {
-          const dirX = (HALF_SIZE - this.x) > 0 ? 1 : -1;
-          const dirY = (HALF_SIZE - this.y) > 0 ? 1 : -1;
-
+        // 2. Flower Pot & Peacock Fountain
+        else if (t === 'flowerpot' || t === 'peacock') {
+          const colors = t === 'peacock'
+            ? ['#00e676', '#00e5ff', '#ffd700', '#1de9b6']
+            : ['#ffffff', '#ffd700', '#ff6d00', '#ff1744'];
           for (let i = 0; i < 4; i++) {
-            const colors = ['#ffffff', '#ffd700', '#ff6d00', '#ff1744', '#00e676'];
             const col = colors[Math.floor(Math.random() * colors.length)];
             const p = new Particle(
-              this.x + (Math.random() - 0.5) * 8,
-              this.y + (Math.random() - 0.5) * 8,
-              col,
-              Math.random() * 3 + 2,
+              this.x + (Math.random() - 0.5) * 8, this.y + (Math.random() - 0.5) * 8,
+              col, Math.random() * 3 + 2,
               (dirX * (3 + Math.random() * 5)) + (Math.random() - 0.5) * 4,
               (dirY * (3 + Math.random() * 5)) + (Math.random() - 0.5) * 4,
               0.025
@@ -2079,37 +2024,45 @@
           }
         }
 
-        // 3. 🧨 100-WALA
-        else if (this.type === '100wala') {
-          if (this.time >= this.nextPopTime && this.popCount < 16) {
-            this.popCount++;
-            this.nextPopTime = this.time + 0.11;
-            Sound.play100WalaSingle(0.8 + (this.popCount / 20));
+        // 3. Electric Fuljhadi & Twinkling Star (Omni Sparklers)
+        else if (t === 'sparkler' || t === 'twinkling') {
+          for (let i = 0; i < 4; i++) {
+            const a = Math.random() * Math.PI * 2;
+            const spd = 2 + Math.random() * 5;
+            this.particles.push(new Particle(
+              this.x, this.y,
+              t === 'twinkling' ? '#ffffff' : (Math.random() < 0.6 ? '#fff59d' : '#ffd700'),
+              Math.random() * 3 + 1.5, Math.cos(a) * spd, Math.sin(a) * spd, 0.035
+            ));
+          }
+        }
 
-            for (let i = 0; i < 8; i++) {
+        // 4. 100-Wala & Mirchi Pataka (Rapid Chain Pops)
+        else if (t === '100wala' || t === 'mirchi') {
+          if (this.time >= this.nextPopTime && this.popCount < this.maxPops) {
+            this.popCount++;
+            this.nextPopTime = this.time + this.popInterval;
+            Sound.playSnappyPop(t === 'mirchi' ? 1200 : 850, 0.8 + (this.popCount / 25));
+
+            for (let i = 0; i < 6; i++) {
               const a = Math.random() * Math.PI * 2;
-              const spd = 2 + Math.random() * 6;
               this.particles.push(new Particle(
                 this.x, this.y,
                 Math.random() < 0.6 ? '#ff1744' : '#ffeb3b',
-                Math.random() * 3 + 2,
-                Math.cos(a) * spd,
-                Math.sin(a) * spd,
-                0.05
+                Math.random() * 3 + 2, Math.cos(a) * 4, Math.sin(a) * 4, 0.05
               ));
             }
+            this.particles.push(new Particle(this.x, this.y, '#9e9e9e', 5, (Math.random()-0.5)*2, (Math.random()-0.5)*2, 0.03));
 
-            this.particles.push(new Particle(this.x, this.y, '#9e9e9e', 6, (Math.random()-0.5)*2, (Math.random()-0.5)*2, 0.03));
-
-            if (this.popCount === 16) {
-              Sound.playAtomBomb();
+            if (this.popCount === this.maxPops) {
+              Sound.playBassBoom(220, 0.5);
               this.shockwaves.push(new Shockwave(this.x, this.y, 140, '#ffd700', 8));
             }
           }
         }
 
-        // 4. 🚀 ROCKET
-        else if (this.type === 'rocket') {
+        // 5. Hawayi Rocket
+        else if (t === 'rocket') {
           const travelRatio = Math.min(this.time / 0.7, 1.0);
           this.rocketX = this.x + (this.targetX - this.x) * travelRatio;
           this.rocketY = this.y + (this.targetY - this.y) * travelRatio;
@@ -2118,14 +2071,11 @@
             this.particles.push(new Particle(
               this.rocketX, this.rocketY,
               Math.random() < 0.5 ? '#ff9100' : '#ffff00',
-              3.5,
-              (Math.random() - 0.5) * 2,
-              (Math.random() - 0.5) * 2,
-              0.05
+              3.5, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 0.05
             ));
           } else if (!this.rocketExploded) {
             this.rocketExploded = true;
-            Sound.playAtomBomb();
+            Sound.playBassBoom(180, 0.6);
             this.shockwaves.push(new Shockwave(this.targetX, this.targetY, 180, '#00e5ff', 9));
 
             for (let i = 0; i < 36; i++) {
@@ -2133,59 +2083,104 @@
               const spd = 4 + Math.random() * 5;
               const cols = ['#00e5ff', '#ff007f', '#ffd700', '#76ff03', '#ffffff'];
               this.particles.push(new Particle(
-                this.targetX, this.targetY,
-                cols[i % cols.length],
-                3.5,
-                Math.cos(a) * spd,
-                Math.sin(a) * spd,
-                0.02
+                this.targetX, this.targetY, cols[i % cols.length], 3.5,
+                Math.cos(a) * spd, Math.sin(a) * spd, 0.02
               ));
             }
           }
         }
 
-        // 5. 💥 ATOM BOMB
-        else if (this.type === 'bomb') {
-          if (this.time < 0.4) {
+        // 6. Atom Bomb, Gorilla Bomb & Dragon Thunder
+        else if (t === 'bomb' || t === 'gorilla' || t === 'dragon') {
+          if (this.time < 0.35) {
             this.particles.push(new Particle(
-              this.x + (Math.random() - 0.5) * 6,
-              this.y + (Math.random() - 0.5) * 6,
-              '#ffd700', 2.5,
-              (Math.random() - 0.5) * 3,
-              (Math.random() - 0.5) * 3,
-              0.06
+              this.x + (Math.random() - 0.5) * 6, this.y + (Math.random() - 0.5) * 6,
+              '#ffd700', 2.5, (Math.random() - 0.5) * 3, (Math.random() - 0.5) * 3, 0.06
             ));
           } else if (!this.detonated) {
             this.detonated = true;
-            Sound.playAtomBomb();
-            this.shockwaves.push(new Shockwave(this.x, this.y, 220, '#ff1744', 10));
+            Sound.playBassBoom(t === 'dragon' ? 140 : 160, 0.7);
+            this.shockwaves.push(new Shockwave(this.x, this.y, 220, t === 'dragon' ? '#c2185b' : '#ff1744', 10));
 
             for (let i = 0; i < 40; i++) {
               const a = Math.random() * Math.PI * 2;
-              const spd = 3 + Math.random() * 9;
               this.particles.push(new Particle(
                 this.x, this.y,
                 Math.random() < 0.5 ? '#ff3d00' : '#ffd700',
-                Math.random() * 4 + 2,
-                Math.cos(a) * spd,
-                Math.sin(a) * spd,
-                0.025
+                Math.random() * 4 + 2, Math.cos(a) * (3 + Math.random() * 9), Math.sin(a) * (3 + Math.random() * 9), 0.025
+              ));
+            }
+          } else if (t === 'gorilla' && this.time > 0.8 && !this.secondDetonated) {
+            this.secondDetonated = true;
+            Sound.playBassBoom(110, 0.85); // MASSIVE 2nd blast!
+            this.shockwaves.push(new Shockwave(this.x, this.y, 260, '#ffd700', 12));
+          }
+        }
+
+        // 7. Bullet Bomb, Kuruvi Vedi & Bijli Pataka (Instant Sharp Snaps)
+        else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
+          if (!this.snapped) {
+            this.snapped = true;
+            Sound.playSnappyPop(t === 'kuruvi' ? 1400 : (t === 'bijli' ? 1600 : 700), 1.2);
+            this.shockwaves.push(new Shockwave(this.x, this.y, 110, t === 'bijli' ? '#fff' : '#ff5252', 12));
+
+            for (let i = 0; i < 18; i++) {
+              const a = Math.random() * Math.PI * 2;
+              this.particles.push(new Particle(
+                this.x, this.y,
+                t === 'bijli' ? '#ffffff' : '#ff1744',
+                3, Math.cos(a) * 6, Math.sin(a) * 6, 0.04
               ));
             }
           }
         }
 
-        // 6. 🪔 MEGA DIWALI FINALE
-        else if (this.type === 'mega_diwali') {
+        // 8. Roman Candle & 7-Shots Thunder (Successive Aerial Projectiles)
+        else if (t === 'romancandle' || t === 'sevenshot') {
+          if (this.time >= this.nextShotTime && this.shotCount < this.maxShots) {
+            this.shotCount++;
+            this.nextShotTime = this.time + 0.35;
+            Sound.playSnappyPop(600 + this.shotCount * 120, 1.0);
+
+            const shotColors = ['#ff1744', '#00e5ff', '#ffd700', '#00e676', '#d500f9', '#ff9100', '#fff'];
+            const shotCol = shotColors[this.shotCount % shotColors.length];
+
+            for (let i = 0; i < 12; i++) {
+              const a = Math.random() * Math.PI * 2;
+              this.particles.push(new Particle(
+                this.x + dirX * 20 * (this.shotCount / 2),
+                this.y + dirY * 20 * (this.shotCount / 2),
+                shotCol, 3.5, Math.cos(a) * 4, Math.sin(a) * 4, 0.03
+              ));
+            }
+          }
+        }
+
+        // 9. Saanp Ki Goli (Black Snake Pyrotechnic Coil)
+        else if (t === 'snake') {
+          for (let i = 0; i < 2; i++) {
+            this.particles.push(new Particle(
+              this.x + (Math.random() - 0.5) * 12,
+              this.y + (Math.random() - 0.5) * 12,
+              Math.random() < 0.7 ? '#3e2723' : '#795548',
+              Math.random() * 5 + 4,
+              dirX * (1 + Math.random() * 2), dirY * (1 + Math.random() * 2), 0.015
+            ));
+          }
+        }
+
+        // 10. 🪔 MEGA DIWALI QUEEN FINALE
+        else if (t === 'mega_diwali') {
           this.rot += dt * 30;
           if (this.time > 1.2 && !this.finaleFired) {
             this.finaleFired = true;
-            Sound.playAtomBomb();
-            this.shockwaves.push(new Shockwave(this.x, this.y, 260, '#ffd700', 11));
+            Sound.playBassBoom(120, 1.0);
+            this.shockwaves.push(new Shockwave(this.x, this.y, 280, '#ffd700', 11));
+
             POCKETS.forEach(p => {
-              for (let i = 0; i < 16; i++) {
+              for (let i = 0; i < 18; i++) {
                 const a = Math.random() * Math.PI * 2;
-                this.particles.push(new Particle(p.x, p.y, '#ffd700', 4, Math.cos(a)*6, Math.sin(a)*6, 0.03));
+                this.particles.push(new Particle(p.x, p.y, '#ffd700', 4.5, Math.cos(a)*6, Math.sin(a)*6, 0.025));
               }
             });
           }
@@ -2200,11 +2195,12 @@
         ctx.save();
         ctx.translate(this.x, this.y);
 
-        if (this.type === 'chakkar') {
+        const t = this.cDef.type;
+        if (t === 'chakkar' || t === 'rolling') {
           ctx.rotate(this.rot);
           ctx.beginPath();
           ctx.arc(0, 0, 16, 0, Math.PI * 2);
-          ctx.fillStyle = '#ff9800';
+          ctx.fillStyle = t === 'rolling' ? '#ff1744' : '#ff9800';
           ctx.shadowColor = '#ffd700';
           ctx.shadowBlur = 15;
           ctx.fill();
@@ -2216,23 +2212,14 @@
             ctx.ellipse(12, 0, 8, 4, 0, 0, Math.PI * 2);
             ctx.fill();
           }
-        } else if (this.type === 'flowerpot') {
+        } else if (t === 'flowerpot' || t === 'peacock') {
           ctx.beginPath();
           ctx.arc(0, 0, 14, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(255, 109, 0, 0.8)';
+          ctx.fillStyle = t === 'peacock' ? 'rgba(0, 230, 118, 0.85)' : 'rgba(255, 109, 0, 0.85)';
           ctx.shadowColor = '#ffd700';
           ctx.shadowBlur = 20;
           ctx.fill();
-        } else if (this.type === '100wala') {
-          if (Math.sin(this.time * 40) > 0) {
-            ctx.beginPath();
-            ctx.arc(0, 0, 20, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(255, 235, 59, 0.7)';
-            ctx.shadowColor = '#ff1744';
-            ctx.shadowBlur = 25;
-            ctx.fill();
-          }
-        } else if (this.type === 'rocket' && !this.rocketExploded) {
+        } else if (t === 'rocket' && !this.rocketExploded) {
           ctx.restore();
           ctx.save();
           ctx.translate(this.rocketX, this.rocketY);
@@ -2265,7 +2252,7 @@
         this.scale = 1.0;
         this.stonePercent = 0;
         this.taggedBy = 0;
-        this.crackerType = null;
+        this.crackerKey = null;
       }
 
       reset(x, y) {
@@ -2298,13 +2285,12 @@
         const currentFriction = this.type === 'striker' ? STRIKER_CONFIGS[selectedStrikerId].friction : FRICTION;
         this.vx *= currentFriction;
         this.vy *= currentFriction;
-        this.angularVelocity *= 0.95; // Natural spin deceleration
+        this.angularVelocity *= 0.95;
 
         if (Math.abs(this.vx) < 0.04) this.vx = 0;
         if (Math.abs(this.vy) < 0.04) this.vy = 0;
         if (Math.abs(this.angularVelocity) < 0.002) this.angularVelocity = 0;
 
-        // Square Cushion Boundaries
         const minX = FRAME_WIDTH + this.radius;
         const maxX = BOARD_SIZE - FRAME_WIDTH - this.radius;
         const minY = FRAME_WIDTH + this.radius;
@@ -2314,7 +2300,7 @@
 
         if (this.x < minX) {
           this.x = minX; this.vx = -this.vx * currentRestitution;
-          this.angularVelocity += this.vy * 0.02; // Cushion tangential roll
+          this.angularVelocity += this.vy * 0.02;
           Sound.playClack(Math.abs(this.vx), this.type === 'striker' ? selectedStrikerId : null);
         } else if (this.x > maxX) {
           this.x = maxX; this.vx = -this.vx * currentRestitution;
@@ -2343,7 +2329,7 @@
         if (this.type === 'striker') {
           drawStrikerArt(c, 0, 0, this.radius, selectedStrikerId, this.angle);
         } else {
-          drawCarromCoin(c, 0, 0, this.radius, this.type, this.angle, this.stonePercent, this.taggedBy, this.crackerType);
+          drawCarromCoin(c, 0, 0, this.radius, this.type, this.angle, this.stonePercent, this.taggedBy, this.crackerKey);
         }
 
         c.restore();
@@ -2444,27 +2430,43 @@
           coins.push(c); pieces.push(c);
         }
 
-        // 🎆 DIWALI CRACKER MODE: Randomly assign crackers to all coins
+        // 🎆 19 UNIQUE DIWALI CRACKERS ASSIGNMENT
+        // 9 for White, 9 for Black, 1 Special for Red Queen!
         if (isFunMode && funVariant === 'crackers') {
-          const crackerTypes = ['chakkar', 'flowerpot', '100wala', 'rocket', 'bomb'];
-          coins.forEach((c, idx) => {
-            if (c.type === 'queen') {
-              c.crackerType = 'mega_diwali';
-            } else {
-              c.crackerType = crackerTypes[idx % crackerTypes.length];
-            }
-          });
+          const whiteCrackers = [
+            'w_chakkar', 'w_anaar', 'w_fuljhadi', 'w_rocket', 'w_bijli',
+            'w_peacock', 'w_snake', 'w_romancandle', 'w_twinkling'
+          ];
+          const blackCrackers = [
+            'b_100wala', 'b_atombomb', 'b_bullet', 'b_mirchi', 'b_rolling',
+            'b_dragon', 'b_sevenshot', 'b_gorilla', 'b_kuruvi'
+          ];
 
-          for (let i = coins.length - 1; i > 0; i--) {
-            if (coins[i].type !== 'queen' && coins[0].type !== 'queen') {
-              const j = Math.floor(Math.random() * i);
-              if (coins[j].type !== 'queen') {
-                const temp = coins[i].crackerType;
-                coins[i].crackerType = coins[j].crackerType;
-                coins[j].crackerType = temp;
-              }
+          function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
             }
           }
+
+          const shuffledWhite = [...whiteCrackers];
+          shuffle(shuffledWhite);
+
+          const shuffledBlack = [...blackCrackers];
+          shuffle(shuffledBlack);
+
+          let wIdx = 0;
+          let bIdx = 0;
+
+          coins.forEach(c => {
+            if (c.type === 'queen') {
+              c.crackerKey = 'q_grand_finale';
+            } else if (c.type === 'p1') {
+              c.crackerKey = shuffledWhite[wIdx++];
+            } else if (c.type === 'p2') {
+              c.crackerKey = shuffledBlack[bIdx++];
+            }
+          });
         }
 
         updateHUD();
@@ -2497,8 +2499,8 @@
 
         if (isFunMode) {
           if (funVariant === 'crackers') {
-            modePill.textContent = '🪔 DIWALI CRACKER MODE';
-            subPill.textContent = '🎆 Pocket coins to pop crackers in the holes!';
+            modePill.textContent = '🪔 19 DIWALI CRACKERS';
+            subPill.textContent = '🎆 9 White, 9 Black & 1 Grand Queen Dhamaka!';
           } else {
             modePill.textContent = '🚀 ' + funVariant.toUpperCase().replace('_', ' ');
             if (funVariant === 'magnet') subPill.textContent = magnetEventActive ? '🧲 VORTEX ACTIVE!' : 'Cooldown: ' + Math.ceil(magnetEventTimer) + 's';
@@ -2516,7 +2518,6 @@
         if (!isFunMode) return;
         funMatchTimer += dt;
 
-        // Magnet Event
         if (funVariant === 'magnet') {
           magnetEventTimer -= dt;
           if (magnetEventTimer <= 0) {
@@ -2547,7 +2548,6 @@
           }
         }
 
-        // Stone Pulse
         if (funVariant === 'stone') {
           stonePulseTimer -= dt;
           if (stonePulseTimer <= 0) {
@@ -2563,7 +2563,6 @@
           }
         }
 
-        // Player Bomber
         if (funVariant === 'bomber') {
           if (turn === 1) {
             bomberTimerP1 -= dt;
@@ -2584,7 +2583,6 @@
           }
         }
 
-        // Tag Coins
         if (funVariant === 'tagcoins') {
           const cycle = Math.floor(funMatchTimer / 60) % 2;
           tagCoinPhase = cycle === 0 ? 'tagging' : 'pocketing';
@@ -2593,7 +2591,6 @@
         updateHUD();
       }
 
-      /* =================== REALISTIC COLLISIONS & ANGULAR SPIN =================== */
       function resolveCollisions() {
         for (let i = 0; i < pieces.length; i++) {
           for (let j = i + 1; j < pieces.length; j++) {
@@ -2611,29 +2608,24 @@
               const nx = dx / dist;
               const ny = dy / dist;
 
-              // Position correction
               p1.x -= nx * overlap * 0.5;
               p1.y -= ny * overlap * 0.5;
               p2.x += nx * overlap * 0.5;
               p2.y += ny * overlap * 0.5;
 
-              // Relative velocity
               const kx = p1.vx - p2.vx;
               const ky = p1.vy - p2.vy;
               const relSpeed = Math.hypot(kx, ky);
 
-              // Sound clack using REAL carrom sample
               const isStrikerInvolved = (p1.type === 'striker' || p2.type === 'striker');
               Sound.playClack(relSpeed, isStrikerInvolved ? selectedStrikerId : null);
 
-              // Impart Tangential Rotational Spin (eliminates artificial sliding feel!)
               const tx = -ny;
               const ty = nx;
               const tangentSpeed = kx * tx + ky * ty;
               p1.angularVelocity += (tangentSpeed / p1.radius) * 0.32;
               p2.angularVelocity -= (tangentSpeed / p2.radius) * 0.32;
 
-              // Fun Mode: Stone Pulse chipping
               if (isFunMode && funVariant === 'stone') {
                 [p1, p2].forEach(coin => {
                   if (coin.type !== 'striker' && coin.stonePercent > 0 && relSpeed > 4) {
@@ -2643,13 +2635,11 @@
                 });
               }
 
-              // Fun Mode: Tag Coins
               if (isFunMode && funVariant === 'tagcoins' && tagCoinPhase === 'tagging') {
                 if (p1.type === 'striker' && p2.type !== 'striker') p2.taggedBy = turn;
                 else if (p2.type === 'striker' && p1.type !== 'striker') p1.taggedBy = turn;
               }
 
-              // Elastic impulse physics
               const colRestitution = isStrikerInvolved ? STRIKER_CONFIGS[selectedStrikerId].restitution : RESTITUTION;
               const p = 2 * (nx * kx + ny * ky) / (p1.mass + p2.mass);
               p1.vx -= p * p2.mass * nx * colRestitution;
@@ -2661,7 +2651,6 @@
         }
       }
 
-      /* =================== POCKET CHECKING & CRACKER ACTIVATION =================== */
       function checkPockets() {
         pieces.forEach(p => {
           if (p.isPocketed) return;
@@ -2686,20 +2675,16 @@
                 else if (p.type === 'p2') pts = 5;
                 else if (p.type === 'queen') pts = 25;
 
-                // 🎆 DIWALI CRACKER MODE: Activate Cracker inside this pocket hole!
-                if (isFunMode && funVariant === 'crackers' && p.crackerType) {
+                // 🎆 ACTIVATE THE UNIQUE CRACKER IN THIS POCKET HOLE
+                if (isFunMode && funVariant === 'crackers' && p.crackerKey) {
+                  const cDef = CRACKER_DEFINITIONS[p.crackerKey];
                   activePocketCrackers.push(new ActivePocketCracker(
                     pocket.x, pocket.y,
-                    p.crackerType,
+                    p.crackerKey,
                     particles, shockwaves, floatingTexts
                   ));
 
-                  if (p.crackerType === 'chakkar') pts += 15;
-                  else if (p.crackerType === 'flowerpot') pts += 20;
-                  else if (p.crackerType === '100wala') pts += 25;
-                  else if (p.crackerType === 'rocket') pts += 30;
-                  else if (p.crackerType === 'bomb') pts += 35;
-                  else if (p.crackerType === 'mega_diwali') pts += 50;
+                  pts += (cDef ? cDef.pts : 20);
                 }
 
                 if (isFunMode && funVariant === 'tagcoins' && tagCoinPhase === 'pocketing') {
@@ -2714,7 +2699,6 @@
         });
       }
 
-      /* =================== TURN TRANSITIONS =================== */
       function checkTurnEnd() {
         const anyMoving = pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.04 || Math.abs(p.vy) > 0.04));
         const anyCrackersPopping = activePocketCrackers.some(c => !c.finished);
@@ -2766,7 +2750,6 @@
         document.getElementById('result-overlay').classList.remove('hidden');
       }
 
-      /* =================== AI LOGIC =================== */
       function runAITurn() {
         if (state !== 'aiming' || turn !== 2) return;
 
@@ -2779,7 +2762,7 @@
           POCKETS.forEach(pocket => {
             const dCoinToPocket = Math.hypot(pocket.x - coin.x, pocket.y - coin.y);
             let score = (coin.type === 'p2' ? 100 : (coin.type === 'queen' ? 150 : 20)) - dCoinToPocket * 0.2;
-            if (isFunMode && funVariant === 'crackers' && coin.crackerType) {
+            if (isFunMode && funVariant === 'crackers' && coin.crackerKey) {
               score += 25;
             }
             if (score > bestScore) {
@@ -2808,7 +2791,6 @@
         state = 'shooting';
       }
 
-      /* =================== BOARD RENDERING =================== */
       function drawBoard() {
         const theme = BOARD_THEMES[selectedBoardKey];
         ctx.clearRect(0, 0, BOARD_SIZE, BOARD_SIZE);
@@ -2821,7 +2803,6 @@
         ctx.fillStyle = theme.surface;
         ctx.fillRect(FRAME_WIDTH, FRAME_WIDTH, PLAY_AREA_SIZE, PLAY_AREA_SIZE);
 
-        // Center rings & pattern
         ctx.save();
         ctx.translate(HALF_SIZE, HALF_SIZE);
 
@@ -2863,7 +2844,6 @@
         }
         ctx.restore();
 
-        // 4 Baselines
         for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 2) {
           ctx.save();
           ctx.translate(HALF_SIZE, HALF_SIZE);
@@ -2903,7 +2883,6 @@
           ctx.restore();
         }
 
-        // Pockets
         POCKETS.forEach(p => {
           ctx.beginPath();
           ctx.arc(p.x, p.y, POCKET_RADIUS + 4, 0, Math.PI * 2);
@@ -2922,7 +2901,6 @@
           ctx.stroke();
         });
 
-        // Baseline highlight when positioning
         if (state === 'aiming' && turn === 1) {
           ctx.beginPath();
           ctx.rect(strikerMinX, strikerBaseY - 14, BASELINE_HALF_LEN * 2, 28);
@@ -2942,7 +2920,7 @@
           particles.push(new Particle(striker.x, striker.y, cfg.trailColor, 4, -striker.vx*0.1, -striker.vy*0.1));
         }
 
-        if (isFunMode && funVariant === 'crackers' && Math.random() < 0.2) {
+        if (isFunMode && funVariant === 'crackers' && Math.random() < 0.25) {
           const coin = coins[Math.floor(Math.random() * coins.length)];
           if (coin && !coin.isPocketed) {
             particles.push(new Particle(coin.x + (Math.random()-0.5)*14, coin.y + (Math.random()-0.5)*14, '#ffd700', 2, 0, -1, 0.04));
@@ -2972,7 +2950,6 @@
           if (ft.alpha <= 0) floatingTexts.splice(idx, 1);
         });
 
-        // Aiming Guideline
         if (isAiming && state === 'aiming' && turn === 1) {
           const dx = striker.x - aimCurrent.x;
           const dy = striker.y - aimCurrent.y;
@@ -3020,7 +2997,6 @@
         requestAnimationFrame(loop);
       }
 
-      /* =================== INPUT HANDLING =================== */
       function getCanvasCoords(e) {
         const rect = canvas.getBoundingClientRect();
         const scaleX = canvas.width / rect.width;
