@@ -54,16 +54,16 @@
     .overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(16, 8, 4, 0.92);
+      background: rgba(16, 8, 4, 0.94);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       z-index: 100;
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(8px);
       transition: opacity 0.3s ease;
       overflow-y: auto;
-      padding: 24px;
+      padding: 20px;
     }
 
     .hidden {
@@ -71,18 +71,18 @@
     }
 
     h1 {
-      font-size: 2.7rem;
+      font-size: 2.5rem;
       color: #f7ca48;
       text-shadow: 0 4px 15px rgba(247, 202, 72, 0.45), 0 2px 4px #000;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       letter-spacing: 2px;
       text-align: center;
     }
 
     p.subtitle {
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #d1b89d;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
       letter-spacing: 1px;
       text-align: center;
     }
@@ -90,10 +90,10 @@
     /* Primary Split Cards: Normal vs Fun Mode */
     .primary-mode-row {
       display: flex;
-      gap: 18px;
+      gap: 16px;
       width: 100%;
       max-width: 540px;
-      margin-bottom: 22px;
+      margin-bottom: 16px;
     }
 
     .big-card {
@@ -101,7 +101,7 @@
       background: linear-gradient(135deg, #3d2210 0%, #1e1008 100%);
       border: 2px solid #a07855;
       border-radius: 18px;
-      padding: 24px 16px;
+      padding: 20px 14px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -119,22 +119,97 @@
     }
 
     .big-card-icon {
-      font-size: 3.2rem;
-      margin-bottom: 12px;
+      font-size: 2.8rem;
+      margin-bottom: 8px;
     }
 
     .big-card-title {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: bold;
       color: #ffd700;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       letter-spacing: 1px;
     }
 
     .big-card-desc {
-      font-size: 0.84rem;
+      font-size: 0.8rem;
       color: #cbb49e;
       line-height: 1.3;
+    }
+
+    /* Striker Showcase Bar on Home Screen */
+    .striker-showcase-bar {
+      width: 100%;
+      max-width: 540px;
+      background: linear-gradient(135deg, #2b160b 0%, #170c06 100%);
+      border: 1.5px solid #d4af37;
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+      margin-bottom: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .striker-showcase-bar:hover {
+      border-color: #ffd700;
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    .striker-showcase-canvas-wrap {
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .striker-showcase-details {
+      flex: 1;
+      text-align: left;
+    }
+
+    .striker-showcase-tag {
+      font-size: 0.68rem;
+      font-weight: bold;
+      color: #e5a93b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .striker-showcase-title {
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    .striker-showcase-sub {
+      font-size: 0.78rem;
+      color: #bfa58a;
+    }
+
+    .btn-arsenal {
+      padding: 9px 16px;
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: #2b160b;
+      background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+      border: 1px solid #fff;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+    }
+
+    .btn-arsenal:hover {
+      transform: scale(1.05);
+      background: #fff;
     }
 
     /* Sub-grid for Fun Modes */
@@ -144,7 +219,7 @@
       gap: 12px;
       width: 100%;
       max-width: 580px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .fun-card {
@@ -165,6 +240,136 @@
       border-color: #f7ca48;
       box-shadow: 0 6px 18px rgba(247, 202, 72, 0.35);
       background: linear-gradient(135deg, #4d2b14 0%, #271407 100%);
+    }
+
+    /* Godot Striker Arsenal Grid Modal */
+    .striker-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 60vh;
+      overflow-y: auto;
+      padding: 6px;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 620px) {
+      .striker-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .striker-card {
+      background: linear-gradient(135deg, #2b170c 0%, #180d06 100%);
+      border: 2px solid #8c6747;
+      border-radius: 16px;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+    }
+
+    .striker-card:hover {
+      transform: translateY(-3px);
+      border-color: #ffd700;
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+      background: linear-gradient(135deg, #442413 0%, #221208 100%);
+    }
+
+    .striker-card.active {
+      border-color: #ffd700;
+      background: linear-gradient(135deg, #4d2b14 0%, #291407 100%);
+      box-shadow: 0 0 16px rgba(255, 215, 0, 0.45);
+    }
+
+    .striker-card-canvas-wrap {
+      width: 72px;
+      height: 72px;
+      margin-bottom: 8px;
+    }
+
+    .striker-card-title {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #ffd700;
+      margin-bottom: 2px;
+    }
+
+    .striker-card-sub {
+      font-size: 0.72rem;
+      color: #d1b89d;
+      margin-bottom: 8px;
+      min-height: 28px;
+    }
+
+    .stat-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .stat-row {
+      display: flex;
+      align-items: center;
+      font-size: 0.68rem;
+      color: #e0d1c1;
+    }
+
+    .stat-label {
+      width: 52px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .stat-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 3px;
+      overflow: hidden;
+      margin: 0 6px;
+    }
+
+    .stat-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+
+    .stat-val {
+      width: 24px;
+      text-align: right;
+      font-weight: bold;
+      color: #ffd700;
+    }
+
+    .btn-card-equip {
+      width: 100%;
+      padding: 7px 0;
+      font-size: 0.75rem;
+      font-weight: bold;
+      border-radius: 12px;
+      border: 1px solid #8c6747;
+      background: #3a1e0b;
+      color: #ecd5bf;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .striker-card.active .btn-card-equip {
+      background: #ffd700;
+      color: #2b160b;
+      border-color: #fff;
     }
 
     /* Customization Tabs & Grids */
@@ -218,13 +423,13 @@
     .btn-group {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       width: 270px;
     }
 
     .btn {
       padding: 12px 24px;
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       font-weight: bold;
       color: #fff;
       background: linear-gradient(135deg, #b8860b 0%, #8b6508 100%);
@@ -402,7 +607,7 @@
     <!-- 1. STARTING SCREEN: Split Normal Mode & Fun Mode -->
     <div id="menu-overlay" class="overlay">
       <h1>CARROM CHAMPIONS</h1>
-      <p class="subtitle">Player vs AI Edition</p>
+      <p class="subtitle">Player vs Intelligent AI Edition</p>
 
       <div class="primary-mode-row">
         <!-- Normal Mode Card -->
@@ -420,8 +625,21 @@
         </div>
       </div>
 
+      <!-- EQUIPPED STRIKER SHOWCASE (Godot Strikers 0 to 5) -->
+      <div id="equipped-striker-card" class="striker-showcase-bar">
+        <div class="striker-showcase-canvas-wrap">
+          <canvas id="home-striker-canvas" width="56" height="56"></canvas>
+        </div>
+        <div class="striker-showcase-details">
+          <div class="striker-showcase-tag">EQUIPPED STRIKER (GODOT ARSENAL)</div>
+          <div id="home-striker-name" class="striker-showcase-title">Striker 0 • Classic Champion</div>
+          <div id="home-striker-desc" class="striker-showcase-sub">Balanced Tournament Disc • Ivory & Gold</div>
+        </div>
+        <button id="btn-open-arsenal" class="btn-arsenal">Select Striker ⚡</button>
+      </div>
+
       <div class="btn-group">
-        <button id="btn-custom" class="btn btn-secondary" style="font-size: 0.95rem;">🎨 Customization</button>
+        <button id="btn-custom" class="btn btn-secondary" style="font-size: 0.92rem;">🎨 Board & Coin Themes</button>
       </div>
     </div>
 
@@ -467,31 +685,48 @@
       </div>
     </div>
 
-    <!-- 3. CUSTOMIZATION SCREEN (Strikers, Board, Coins) -->
+    <!-- 3. GODOT STRIKER ARSENAL MODAL -->
+    <div id="arsenal-overlay" class="overlay hidden">
+      <h1>⚡ GODOT STRIKER ARSENAL</h1>
+      <p class="subtitle">Select from the 6 authentic 3D strikers available in Godot</p>
+
+      <div class="striker-grid" id="arsenal-grid">
+        <!-- Injected dynamically via JavaScript -->
+      </div>
+
+      <div class="btn-group">
+        <button id="btn-arsenal-done" class="btn">Equip & Return</button>
+      </div>
+    </div>
+
+    <!-- 4. CUSTOMIZATION SCREEN (Board, Coins & Striker Shortcuts) -->
     <div id="custom-overlay" class="overlay hidden">
       <h1>CUSTOMIZATION</h1>
-      <p class="subtitle">Customize Striker, Board & Coin Aesthetics</p>
+      <p class="subtitle">Customize Board Style & Coin Aesthetics</p>
 
       <!-- Striker Selector (Godot Strikers 0 to 5) -->
       <div class="custom-section">
-        <div class="custom-title">⚡ Striker Model (From Godot Assets)</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div class="custom-title" style="margin-bottom: 0;">⚡ Striker Model (From Godot Assets)</div>
+          <button id="btn-custom-view-arsenal" style="background: none; border: none; color: #ffd700; font-size: 0.82rem; cursor: pointer; text-decoration: underline;">View Full Arsenal & Stats &rarr;</button>
+        </div>
         <div class="option-row" id="striker-options">
-          <div class="opt-chip active" data-striker="0">🟡 Striker 0: Classic Gold</div>
-          <div class="opt-chip" data-striker="1">🔵 Striker 1: Cyber Neon</div>
-          <div class="opt-chip" data-striker="2">🔴 Striker 2: Crimson Dragon</div>
-          <div class="opt-chip" data-striker="3">🟢 Striker 3: Jade Emperor</div>
-          <div class="opt-chip" data-striker="4">⚫ Striker 4: Obsidian Shadow</div>
-          <div class="opt-chip" data-striker="5">⚪ Striker 5: Titanium Silver</div>
+          <div class="opt-chip active" data-striker="0">🟡 Striker 0: Classic Champion</div>
+          <div class="opt-chip" data-striker="1">🟠 Striker 1: Amber Gold Cyber</div>
+          <div class="opt-chip" data-striker="2">🟢 Striker 2: Emerald Jade Glass</div>
+          <div class="opt-chip" data-striker="3">🔵 Striker 3: Cobalt Sapphire Orb</div>
+          <div class="opt-chip" data-striker="4">🟢 Striker 4: Acid Lime Prism</div>
+          <div class="opt-chip" data-striker="5">⚪ Striker 5: Titanium Mirror Chrome</div>
         </div>
       </div>
 
-      <!-- Board Style & Shape Selector -->
+      <!-- Board Style Selector: 100% Square Tournament Boards -->
       <div class="custom-section">
-        <div class="custom-title">🪵 Board Style & Color</div>
+        <div class="custom-title">🪵 Board Style (Square Tournament Boards)</div>
         <div class="option-row" id="board-options">
-          <div class="opt-chip active" data-board="square_wood">🟫 Classic Maple (Square)</div>
-          <div class="opt-chip" data-board="round_wood">⭕ Carrooka Round Board</div>
-          <div class="opt-chip" data-board="emerald">🟢 Tournament Emerald</div>
+          <div class="opt-chip active" data-board="square_wood">🟫 Classic Maple Tournament</div>
+          <div class="opt-chip" data-board="rosewood">🪵 Heritage Rosewood</div>
+          <div class="opt-chip" data-board="emerald">🌲 Tournament Emerald</div>
           <div class="opt-chip" data-board="midnight">⬛ Midnight Ebony Dark</div>
         </div>
       </div>
@@ -512,7 +747,7 @@
       </div>
     </div>
 
-    <!-- 4. RESULT OVERLAY -->
+    <!-- 5. RESULT OVERLAY -->
     <div id="result-overlay" class="overlay hidden">
       <div class="modal-box">
         <h1 id="winner-title" style="font-size: 2.3rem;">VICTORY!</h1>
@@ -527,7 +762,7 @@
 
   <script>
     /* =========================================================================
-       AUDIO SYNTHESIZER
+       AUDIO SYNTHESIZER WITH GODOT STRIKER PROFILES
        ========================================================================= */
     const Sound = (() => {
       let ctx = null;
@@ -543,26 +778,91 @@
       }
 
       return {
-        toggle() { enabled = !enabled; return enabled; },
-        isEnabled() { return enabled; },
         setEnabled(val) { enabled = val; },
+        isEnabled() { return enabled; },
 
-        playClack(speed) {
+        playClack(velocity = 1.0, strikerId = null) {
           if (!enabled) return;
           const ac = getCtx();
           if (!ac) return;
+
+          const vol = Math.min(Math.max(velocity / 12, 0.15), 1.0);
+          const now = ac.currentTime;
+
+          if (strikerId === null) {
+            // Standard Coin-Coin Clack
+            const osc = ac.createOscillator();
+            const gain = ac.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(650, now);
+            osc.frequency.exponentialRampToValueAtTime(140, now + 0.05);
+            gain.gain.setValueAtTime(vol * 0.45, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            osc.connect(gain);
+            gain.connect(ac.destination);
+            osc.start();
+            osc.stop(now + 0.05);
+            return;
+          }
+
+          // Authentic Acoustic Signatures per Godot Striker
           const osc = ac.createOscillator();
           const gain = ac.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(600 + Math.random() * 400, ac.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(120, ac.currentTime + 0.04);
-          const vol = Math.min(Math.max(speed / 15, 0.1), 0.8);
-          gain.gain.setValueAtTime(vol, ac.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.05);
+
+          switch (strikerId) {
+            case 1: // Striker 1: Amber Gold Cyber (High-pitch resonant harmonic chime)
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(880, now);
+              osc.frequency.exponentialRampToValueAtTime(320, now + 0.08);
+              gain.gain.setValueAtTime(vol * 0.5, now);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+              break;
+
+            case 2: // Striker 2: Emerald Jade Glass (Deep heavy sub-punch)
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(420, now);
+              osc.frequency.exponentialRampToValueAtTime(80, now + 0.1);
+              gain.gain.setValueAtTime(vol * 0.75, now);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+              break;
+
+            case 3: // Striker 3: Cobalt Sapphire Orb (Crystal ping)
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(1120, now);
+              osc.frequency.exponentialRampToValueAtTime(450, now + 0.07);
+              gain.gain.setValueAtTime(vol * 0.45, now);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+              break;
+
+            case 4: // Striker 4: Acid Lime Prism (Tactical crisp snap)
+              osc.type = 'sawtooth';
+              osc.frequency.setValueAtTime(580, now);
+              osc.frequency.exponentialRampToValueAtTime(180, now + 0.05);
+              gain.gain.setValueAtTime(vol * 0.42, now);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+              break;
+
+            case 5: // Striker 5: Titanium Mirror Chrome (Metallic ping with ringing overtone)
+              osc.type = 'square';
+              osc.frequency.setValueAtTime(940, now);
+              osc.frequency.exponentialRampToValueAtTime(410, now + 0.08);
+              gain.gain.setValueAtTime(vol * 0.38, now);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+              break;
+
+            default: // Striker 0: Classic Champion (Wooden lacquer carrom clack)
+              osc.type = 'triangle';
+              osc.frequency.setValueAtTime(700, now);
+              osc.frequency.exponentialRampToValueAtTime(160, now + 0.06);
+              gain.gain.setValueAtTime(vol * 0.55, now);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+              break;
+          }
+
           osc.connect(gain);
           gain.connect(ac.destination);
           osc.start();
-          osc.stop(ac.currentTime + 0.05);
+          osc.stop(now + 0.11);
         },
 
         playPocket() {
@@ -722,35 +1022,126 @@
     })();
 
     /* =========================================================================
-       CUSTOMIZATION DEFINITIONS (STRIKERS, BOARDS, COINS)
+       CUSTOMIZATION DEFINITIONS (6 GODOT STRIKERS, 4 SQUARE BOARDS, 4 COINS)
        ========================================================================= */
     const STRIKER_CONFIGS = {
-      0: { name: 'Classic Gold', color: '#ffea75', border: '#d4af37', inner: '#ffd700', emblem: '⚡' },
-      1: { name: 'Cyber Neon', color: '#00e5ff', border: '#0097a7', inner: '#18ffff', emblem: '💠' },
-      2: { name: 'Crimson Dragon', color: '#ff5252', border: '#c62828', inner: '#ff1744', emblem: '🐉' },
-      3: { name: 'Jade Emperor', color: '#69f0ae', border: '#2e7d32', inner: '#00e676', emblem: '🌿' },
-      4: { name: 'Obsidian Shadow', color: '#424242', border: '#212121', inner: '#616161', emblem: '🔮' },
-      5: { name: 'Titanium Silver', color: '#e0e0e0', border: '#9e9e9e', inner: '#ffffff', emblem: '⭐' }
+      0: {
+        id: 0,
+        modelName: 'Striker0',
+        name: 'Striker 0 • Classic Champion',
+        subtitle: 'Standard Tournament Balance',
+        desc: 'Traditional ivory lacquer striker with 8-point gold carrom star & ruby jewel.',
+        mass: 3.2,
+        restitution: 0.88,
+        friction: 0.980,
+        forceMul: 1.00,
+        power: 80,
+        rebound: 85,
+        control: 95,
+        glide: 85,
+        trailColor: 'rgba(212, 175, 55, 0.45)'
+      },
+      1: {
+        id: 1,
+        modelName: 'Striker1',
+        name: 'Striker 1 • Amber Gold Cyber',
+        subtitle: 'High Rebound & Bank Shots',
+        desc: 'Futuristic amber disc with rapid rebound energy conduits for sharp bank shots.',
+        mass: 2.9,
+        restitution: 0.96,
+        friction: 0.981,
+        forceMul: 1.05,
+        power: 85,
+        rebound: 98,
+        control: 80,
+        glide: 88,
+        trailColor: 'rgba(255, 179, 0, 0.5)'
+      },
+      2: {
+        id: 2,
+        modelName: 'Striker2',
+        name: 'Striker 2 • Emerald Jade Glass',
+        subtitle: 'Heavy Impact Cluster Breaker',
+        desc: 'Translucent glowing jade glass disc with high mass to blast clusters apart.',
+        mass: 3.7,
+        restitution: 0.82,
+        friction: 0.978,
+        forceMul: 1.10,
+        power: 96,
+        rebound: 75,
+        control: 85,
+        glide: 80,
+        trailColor: 'rgba(0, 230, 118, 0.5)'
+      },
+      3: {
+        id: 3,
+        modelName: 'Striker3',
+        name: 'Striker 3 • Cobalt Sapphire Orb',
+        subtitle: 'Silky Low-Friction Glide',
+        desc: 'Spherical 3D domed sapphire with ultra-smooth surface for effortless gliding.',
+        mass: 3.1,
+        restitution: 0.90,
+        friction: 0.987,
+        forceMul: 0.98,
+        power: 75,
+        rebound: 88,
+        control: 90,
+        glide: 99,
+        trailColor: 'rgba(33, 150, 243, 0.5)'
+      },
+      4: {
+        id: 4,
+        modelName: 'Striker4',
+        name: 'Striker 4 • Acid Lime Prism',
+        subtitle: 'Razor Precision Cut Shots',
+        desc: 'Tactical faceted chartreuse striker with high edge traction for razor cut angles.',
+        mass: 3.3,
+        restitution: 0.86,
+        friction: 0.979,
+        forceMul: 1.02,
+        power: 82,
+        rebound: 84,
+        control: 99,
+        glide: 84,
+        trailColor: 'rgba(118, 255, 3, 0.5)'
+      },
+      5: {
+        id: 5,
+        modelName: 'Striker5',
+        name: 'Striker 5 • Titanium Mirror Chrome',
+        subtitle: 'Hyper-Velocity Metallic Punch',
+        desc: 'Aerospace titanium mirror alloy with cyan sheen delivering explosive punch.',
+        mass: 3.4,
+        restitution: 0.92,
+        friction: 0.983,
+        forceMul: 1.12,
+        power: 95,
+        rebound: 92,
+        control: 86,
+        glide: 90,
+        trailColor: 'rgba(0, 229, 255, 0.55)'
+      }
     };
 
+    // 100% SQUARE BOARDS ONLY - NO ROUND BOARDS
     const BOARD_THEMES = {
       square_wood: {
-        isRound: false,
+        name: 'Classic Maple Tournament',
         frame: '#3a1e0b', frameBorder: '#4e280e',
         surface: '#e8bc82', pattern: '#9c2424', line: '#222'
       },
-      round_wood: {
-        isRound: true,
-        frame: '#44230d', frameBorder: '#5c3114',
-        surface: '#dfb279', pattern: '#8e24aa', line: '#222'
+      rosewood: {
+        name: 'Heritage Rosewood',
+        frame: '#260c07', frameBorder: '#3d160f',
+        surface: '#dca368', pattern: '#7a1919', line: '#1a0d05'
       },
       emerald: {
-        isRound: false,
+        name: 'Tournament Emerald',
         frame: '#1a3321', frameBorder: '#274b32',
         surface: '#2d6a4f', pattern: '#d8f3dc', line: '#1b4332'
       },
       midnight: {
-        isRound: false,
+        name: 'Midnight Ebony Dark',
         frame: '#18181c', frameBorder: '#2b2b36',
         surface: '#24242e', pattern: '#ffd700', line: '#4a4a5a'
       }
@@ -784,24 +1175,348 @@
     let selectedCoinKey = 'classic';
 
     /* =========================================================================
-       PHYSICS CONSTANTS & CANVAS SETUP
+       HIGH-FIDELITY VECTOR STRIKER RENDERER (ALL 6 GODOT STRIKERS)
        ========================================================================= */
-    const canvas = document.getElementById('carromCanvas');
-    const ctx = canvas.getContext('2d');
+    function drawStrikerArt(ctx, x, y, radius, strikerId, rotation = 0) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
 
+      // Soft drop shadow
+      ctx.beginPath();
+      ctx.arc(1.5, 2.5, radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+      ctx.fill();
+
+      switch (strikerId) {
+        case 0: { // Striker 0: Classic Champion (Godot Ivory & Gold Rosette)
+          const grad0 = ctx.createRadialGradient(-radius*0.25, -radius*0.25, 2, 0, 0, radius);
+          grad0.addColorStop(0, '#ffffff');
+          grad0.addColorStop(0.5, '#f5efe0');
+          grad0.addColorStop(0.85, '#e4d8be');
+          grad0.addColorStop(1, '#c5b593');
+          ctx.beginPath();
+          ctx.arc(0, 0, radius, 0, Math.PI * 2);
+          ctx.fillStyle = grad0;
+          ctx.fill();
+
+          // Outer gold rim
+          ctx.beginPath();
+          ctx.arc(0, 0, radius - 1, 0, Math.PI * 2);
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = '#d4af37';
+          ctx.stroke();
+
+          // Engraved notches around edge
+          ctx.strokeStyle = '#b8860b';
+          ctx.lineWidth = 1.2;
+          for (let i = 0; i < 16; i++) {
+            const a = (i * Math.PI) / 8;
+            ctx.beginPath();
+            ctx.moveTo(Math.cos(a) * (radius - 4), Math.sin(a) * (radius - 4));
+            ctx.lineTo(Math.cos(a) * (radius - 1), Math.sin(a) * (radius - 1));
+            ctx.stroke();
+          }
+
+          // Middle gold ring
+          ctx.beginPath();
+          ctx.arc(0, 0, radius * 0.65, 0, Math.PI * 2);
+          ctx.lineWidth = 1.8;
+          ctx.strokeStyle = '#c59b27';
+          ctx.stroke();
+
+          // 8-point carrom rosette star
+          ctx.fillStyle = '#d4af37';
+          ctx.beginPath();
+          for (let i = 0; i < 16; i++) {
+            const r = (i % 2 === 0) ? radius * 0.48 : radius * 0.22;
+            const a = (i * Math.PI) / 8;
+            if (i === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+            else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+          }
+          ctx.closePath();
+          ctx.fill();
+
+          // Center ruby cabochon jewel
+          const jewel = ctx.createRadialGradient(-1, -1, 1, 0, 0, radius * 0.2);
+          jewel.addColorStop(0, '#ff6b6b');
+          jewel.addColorStop(0.4, '#d32f2f');
+          jewel.addColorStop(1, '#7f0000');
+          ctx.beginPath();
+          ctx.arc(0, 0, radius * 0.2, 0, Math.PI * 2);
+          ctx.fillStyle = jewel;
+          ctx.fill();
+          ctx.lineWidth = 1.2;
+          ctx.strokeStyle = '#ffd700';
+          ctx.stroke();
+
+          // Specular highlight dot
+          ctx.beginPath();
+          ctx.arc(-radius * 0.08, -radius * 0.08, radius * 0.06, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+          ctx.fill();
+          break;
+        }
+
+        case 1: { // Striker 1: Amber Gold Cyber (High Rebound Energy Disc)
+          const grad1 = ctx.createRadialGradient(-radius*0.3, -radius*0.3, 3, 0, 0, radius);
+          grad1.addColorStop(0, '#fff9c4');
+          grad1.addColorStop(0.3, '#ffca28');
+          grad1.addColorStop(0.7, '#ff8f00');
+          grad1.addColorStop(1, '#bf360c');
+          ctx.beginPath();
+          ctx.arc(0, 0, radius, 0, Math.PI * 2);
+          ctx.fillStyle = grad1;
+          ctx.fill();
+
+          // Cyber glow outer ring
+          ctx.beginPath();
+          ctx.arc(0, 0, radius - 1.5, 0, Math.PI * 2);
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#ffe082';
+          ctx.stroke();
+
+          // 4 circuit energy lines
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = '#fff';
+          for (let i = 0; i < 4; i++) {
+            const a = (i * Math.PI) / 2 + Math.PI / 4;
+            ctx.beginPath();
+            ctx.moveTo(Math.cos(a) * (radius * 0.3), Math.sin(a) * (radius * 0.3));
+            ctx.lineTo(Math.cos(a) * (radius * 0.75), Math.sin(a) * (radius * 0.75));
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(Math.cos(a) * (radius * 0.75), Math.sin(a) * (radius * 0.75), 2.2, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+          }
+
+          // Inner pulsating plasma ring
+          ctx.beginPath();
+          ctx.arc(0, 0, radius * 0.4, 0, Math.PI * 2);
+          ctx.strokeStyle = '#ffd54f';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Core plasma
+          ctx.beginPath();
+          ctx.arc(0, 0, radius * 0.22, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+          break;
+        }
+
+        case 2: { // Striker 2: Emerald Jade Glass (Heavy Impact Translucent Green)
+          const grad2 = ctx.createRadialGradient(-radius*0.3, -radius*0.3, 2, 0, 0, radius);
+          grad2.addColorStop(0, '#b9f6ca');
+          grad2.addColorStop(0.35, '#00e676');
+          grad2.addColorStop(0.7, '#00a152');
+          grad2.addColorStop(1, '#004d25');
+          ctx.beginPath();
+          ctx.arc(0, 0, radius, 0, Math.PI * 2);
+          ctx.fillStyle = grad2;
+          ctx.fill();
+
+          // Outer glass rim with mint neon
+          ctx.beginPath();
+          ctx.arc(0, 0, radius - 1.5, 0, Math.PI * 2);
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#69f0ae';
+          ctx.stroke();
+
+          // Inner jade ring
+          ctx.beginPath();
+          ctx.arc(0, 0, radius * 0.65, 0, Math.PI * 2);
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+          ctx.stroke();
+
+          // 6-petal jade lotus geometry
+          ctx.strokeStyle = '#b9f6ca';
+          ctx.lineWidth = 1.4;
+          for (let i = 0; i < 6; i++) {
+            const a = (i * Math.PI) / 3;
+            ctx.beginPath();
+            ctx.arc(Math.cos(a) * (radius * 0.35), Math.sin(a) * (radius * 0.35), radius * 0.26, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+
+          // Glass specular reflection crescent
+          ctx.beginPath();
+          ctx.ellipse(-radius * 0.25, -radius * 0.25, radius * 0.45, radius * 0.2, -Math.PI / 4, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+          ctx.fill();
+          break;
+        }
+
+        case 3: { // Striker 3: Cobalt Sapphire Orb (Spherical Domed 3D Blue)
+          const grad3 = ctx.createRadialGradient(-radius*0.35, -radius*0.35, 2, 0, 0, radius);
+          grad3.addColorStop(0, '#bbdefb');
+          grad3.addColorStop(0.25, '#42a5f5');
+          grad3.addColorStop(0.65, '#1565c0');
+          grad3.addColorStop(0.9, '#0d47a1');
+          grad3.addColorStop(1, '#051b44');
+          ctx.beginPath();
+          ctx.arc(0, 0, radius, 0, Math.PI * 2);
+          ctx.fillStyle = grad3;
+          ctx.fill();
+
+          // Dark chrome sapphire rim
+          ctx.beginPath();
+          ctx.arc(0, 0, radius - 1.5, 0, Math.PI * 2);
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#64b5f6';
+          ctx.stroke();
+
+          // Celestial planetary orbital ring
+          ctx.beginPath();
+          ctx.ellipse(0, 0, radius * 0.72, radius * 0.3, Math.PI / 6, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          // Intense spherical 3D light glint
+          ctx.beginPath();
+          ctx.arc(-radius * 0.32, -radius * 0.32, radius * 0.16, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+          ctx.fill();
+
+          // 4-point diamond glint
+          ctx.fillStyle = '#ffffff';
+          const glintR = radius * 0.35;
+          ctx.beginPath();
+          ctx.moveTo(-radius*0.32, -radius*0.32 - glintR*0.5);
+          ctx.lineTo(-radius*0.32 + glintR*0.15, -radius*0.32);
+          ctx.lineTo(-radius*0.32, -radius*0.32 + glintR*0.5);
+          ctx.lineTo(-radius*0.32 - glintR*0.15, -radius*0.32);
+          ctx.closePath();
+          ctx.fill();
+          break;
+        }
+
+        case 4: { // Striker 4: Acid Lime Prism (Faceted Tactical Octagonal Striker)
+          const grad4 = ctx.createRadialGradient(-radius*0.25, -radius*0.25, 2, 0, 0, radius);
+          grad4.addColorStop(0, '#f4ff81');
+          grad4.addColorStop(0.3, '#eeff41');
+          grad4.addColorStop(0.65, '#76ff03');
+          grad4.addColorStop(1, '#2e7d32');
+          ctx.beginPath();
+          ctx.arc(0, 0, radius, 0, Math.PI * 2);
+          ctx.fillStyle = grad4;
+          ctx.fill();
+
+          // Faceted octagonal outer frame
+          ctx.beginPath();
+          for (let i = 0; i < 8; i++) {
+            const a = (i * Math.PI) / 4;
+            const px = Math.cos(a) * (radius - 2);
+            const py = Math.sin(a) * (radius - 2);
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#1b5e20';
+          ctx.stroke();
+
+          // 8 corner rivet dots
+          ctx.fillStyle = '#ffffff';
+          for (let i = 0; i < 8; i++) {
+            const a = (i * Math.PI) / 4;
+            ctx.beginPath();
+            ctx.arc(Math.cos(a) * (radius - 4), Math.sin(a) * (radius - 4), 1.8, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // Tactical reticle crosshair in center
+          ctx.beginPath();
+          ctx.arc(0, 0, radius * 0.42, 0, Math.PI * 2);
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#2e7d32';
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.moveTo(-radius * 0.55, 0); ctx.lineTo(radius * 0.55, 0);
+          ctx.moveTo(0, -radius * 0.55); ctx.lineTo(0, radius * 0.55);
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = '#2e7d32';
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(0, 0, radius * 0.15, 0, Math.PI * 2);
+          ctx.fillStyle = '#ccff90';
+          ctx.fill();
+          break;
+        }
+
+        case 5: { // Striker 5: Titanium Mirror Chrome (Brushed Cyan Metallic)
+          const grad5 = ctx.createLinearGradient(-radius, -radius, radius, radius);
+          grad5.addColorStop(0, '#e0f7fa');
+          grad5.addColorStop(0.2, '#ffffff');
+          grad5.addColorStop(0.45, '#80deea');
+          grad5.addColorStop(0.65, '#00bcd4');
+          grad5.addColorStop(0.85, '#00838f');
+          grad5.addColorStop(1, '#004d40');
+          ctx.beginPath();
+          ctx.arc(0, 0, radius, 0, Math.PI * 2);
+          ctx.fillStyle = grad5;
+          ctx.fill();
+
+          // Dual titanium rims
+          ctx.beginPath();
+          ctx.arc(0, 0, radius - 1.5, 0, Math.PI * 2);
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#ffffff';
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(0, 0, radius - 4.5, 0, Math.PI * 2);
+          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = '#00e5ff';
+          ctx.stroke();
+
+          // Radial metallic brushed highlight bars
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+          ctx.beginPath();
+          ctx.ellipse(0, 0, radius * 0.75, radius * 0.18, Math.PI / 4, 0, Math.PI * 2);
+          ctx.fill();
+
+          // High-precision cyan center hub
+          ctx.beginPath();
+          ctx.arc(0, 0, radius * 0.28, 0, Math.PI * 2);
+          ctx.fillStyle = '#006064';
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = '#00e5ff';
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(0, 0, radius * 0.12, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+          break;
+        }
+      }
+
+      ctx.restore();
+    }
+
+    /* =========================================================================
+       GAME CONSTANTS & CARROM ENGINE
+       ========================================================================= */
     const BOARD_SIZE = 800;
     const FRAME_WIDTH = 48;
-    const PLAY_AREA_SIZE = BOARD_SIZE - FRAME_WIDTH * 2;
+    const PLAY_AREA_SIZE = BOARD_SIZE - (FRAME_WIDTH * 2);
     const HALF_SIZE = BOARD_SIZE / 2;
-
     const POCKET_RADIUS = 30;
-    const COIN_RADIUS = 15;
-    const STRIKER_RADIUS = 21;
-    const BASELINE_OFFSET = 240;
-    const BASELINE_HALF_LEN = 160;
+    const COIN_RADIUS = 16;
+    const STRIKER_RADIUS = 22;
+    const FRICTION = 0.980;
+    const RESTITUTION = 0.92;
 
-    const FRICTION = 0.985;
-    const RESTITUTION = 0.93;
+    const BASELINE_OFFSET = 230;
+    const BASELINE_HALF_LEN = 195;
 
     const POCKETS = [
       { x: FRAME_WIDTH + 26, y: FRAME_WIDTH + 26 },
@@ -810,77 +1525,86 @@
       { x: BOARD_SIZE - FRAME_WIDTH - 26, y: BOARD_SIZE - FRAME_WIDTH - 26 }
     ];
 
-    let particles = [];
-    let shockwaves = [];
-
     class Particle {
-      constructor(x, y, color) {
+      constructor(x, y, color = '#f7ca48', size = 3, vx = null, vy = null) {
         this.x = x; this.y = y;
-        const angle = Math.random() * Math.PI * 2;
-        const speed = Math.random() * 8 + 2;
-        this.vx = Math.cos(angle) * speed;
-        this.vy = Math.sin(angle) * speed;
         this.color = color;
+        this.size = size;
+        this.vx = vx !== null ? vx : (Math.random() - 0.5) * 6;
+        this.vy = vy !== null ? vy : (Math.random() - 0.5) * 6;
         this.alpha = 1.0;
-        this.radius = Math.random() * 4 + 2;
+        this.decay = 0.02 + Math.random() * 0.03;
       }
       update() {
         this.x += this.vx; this.y += this.vy;
         this.vx *= 0.95; this.vy *= 0.95;
-        this.alpha -= 0.025;
+        this.alpha -= this.decay;
       }
-      draw(c) {
-        c.save();
-        c.globalAlpha = Math.max(0, this.alpha);
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        c.fillStyle = this.color;
-        c.fill();
-        c.restore();
+      draw(ctx) {
+        if (this.alpha <= 0) return;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.restore();
       }
     }
 
     class Shockwave {
-      constructor(x, y) {
+      constructor(x, y, maxRadius = 120, color = '#ffd700') {
         this.x = x; this.y = y;
-        this.radius = 10;
+        this.radius = 5;
+        this.maxRadius = maxRadius;
+        this.color = color;
         this.alpha = 1.0;
       }
       update() {
-        this.radius += 10;
-        this.alpha -= 0.04;
+        this.radius += 7;
+        this.alpha = Math.max(0, 1 - (this.radius / this.maxRadius));
       }
-      draw(c) {
-        c.save();
-        c.globalAlpha = Math.max(0, this.alpha);
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        c.strokeStyle = '#ff9800';
-        c.lineWidth = 6;
-        c.stroke();
-        c.restore();
+      draw(ctx) {
+        if (this.alpha <= 0) return;
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        ctx.restore();
       }
     }
 
     class Piece {
-      constructor(x, y, radius, type, points = 0) {
+      constructor(x, y, type, radius = COIN_RADIUS) {
         this.x = x; this.y = y;
-        this.vx = 0; this.vy = 0;
+        this.type = type; // 'p1' (white), 'p2' (black), 'queen' (red), 'striker'
         this.radius = radius;
-        this.mass = radius === STRIKER_RADIUS ? 3.0 : 1.0;
-        this.type = type; // 'striker', 'p1', 'p2', 'queen'
-        this.points = points;
+        this.mass = radius === STRIKER_RADIUS ? 3.2 : 1.0;
+        this.vx = 0; this.vy = 0;
         this.isPocketed = false;
         this.scale = 1.0;
-
         this.stonePercent = 0;
-        this.stoneLastHit = 0;
         this.taggedBy = 0;
         this.isHalf = false;
-        this.isGlued = false;
+        this.halfPairId = null;
+        this.rotation = Math.random() * Math.PI * 2;
       }
 
-      update(isRoundBoard) {
+      reset(x, y) {
+        this.x = x; this.y = y;
+        this.vx = 0; this.vy = 0;
+        this.isPocketed = false;
+        this.scale = 1.0;
+        this.stonePercent = 0;
+        this.taggedBy = 0;
+        this.isHalf = false;
+        this.halfPairId = null;
+      }
+
+      update() {
         if (this.isPocketed) {
           if (this.scale > 0) this.scale = Math.max(0, this.scale - 0.1);
           return;
@@ -893,89 +1617,49 @@
 
         this.x += this.vx;
         this.y += this.vy;
-        this.vx *= FRICTION;
-        this.vy *= FRICTION;
+
+        const currentFriction = this.type === 'striker' ? STRIKER_CONFIGS[selectedStrikerId].friction : FRICTION;
+        this.vx *= currentFriction;
+        this.vy *= currentFriction;
 
         if (Math.abs(this.vx) < 0.05) this.vx = 0;
         if (Math.abs(this.vy) < 0.05) this.vy = 0;
 
-        if (isRoundBoard) {
-          // Circular Cushion boundary bounce
-          const distFromCenter = Math.hypot(this.x - HALF_SIZE, this.y - HALF_SIZE);
-          const maxRadius = (PLAY_AREA_SIZE / 2) - this.radius;
+        // Square Cushion Boundaries ONLY
+        const minX = FRAME_WIDTH + this.radius;
+        const maxX = BOARD_SIZE - FRAME_WIDTH - this.radius;
+        const minY = FRAME_WIDTH + this.radius;
+        const maxY = BOARD_SIZE - FRAME_WIDTH - this.radius;
 
-          if (distFromCenter > maxRadius) {
-            const angle = Math.atan2(this.y - HALF_SIZE, this.x - HALF_SIZE);
-            this.x = HALF_SIZE + Math.cos(angle) * maxRadius;
-            this.y = HALF_SIZE + Math.sin(angle) * maxRadius;
+        const currentRestitution = this.type === 'striker' ? STRIKER_CONFIGS[selectedStrikerId].restitution : RESTITUTION;
 
-            // Reflect velocity along normal
-            const nx = Math.cos(angle);
-            const ny = Math.sin(angle);
-            const dot = this.vx * nx + this.vy * ny;
-            this.vx = (this.vx - 2 * dot * nx) * RESTITUTION;
-            this.vy = (this.vy - 2 * dot * ny) * RESTITUTION;
-            Sound.playClack(Math.abs(dot));
-          }
-        } else {
-          // Standard Square Cushions
-          const minX = FRAME_WIDTH + this.radius;
-          const maxX = BOARD_SIZE - FRAME_WIDTH - this.radius;
-          const minY = FRAME_WIDTH + this.radius;
-          const maxY = BOARD_SIZE - FRAME_WIDTH - this.radius;
+        if (this.x < minX) {
+          this.x = minX; this.vx = -this.vx * currentRestitution;
+          Sound.playClack(Math.abs(this.vx), this.type === 'striker' ? selectedStrikerId : null);
+        } else if (this.x > maxX) {
+          this.x = maxX; this.vx = -this.vx * currentRestitution;
+          Sound.playClack(Math.abs(this.vx), this.type === 'striker' ? selectedStrikerId : null);
+        }
 
-          if (this.x < minX) {
-            this.x = minX; this.vx = -this.vx * RESTITUTION;
-            Sound.playClack(Math.abs(this.vx));
-          } else if (this.x > maxX) {
-            this.x = maxX; this.vx = -this.vx * RESTITUTION;
-            Sound.playClack(Math.abs(this.vx));
-          }
-
-          if (this.y < minY) {
-            this.y = minY; this.vy = -this.vy * RESTITUTION;
-            Sound.playClack(Math.abs(this.vy));
-          } else if (this.y > maxY) {
-            this.y = maxY; this.vy = -this.vy * RESTITUTION;
-            Sound.playClack(Math.abs(this.vy));
-          }
+        if (this.y < minY) {
+          this.y = minY; this.vy = -this.vy * currentRestitution;
+          Sound.playClack(Math.abs(this.vy), this.type === 'striker' ? selectedStrikerId : null);
+        } else if (this.y > maxY) {
+          this.y = maxY; this.vy = -this.vy * currentRestitution;
+          Sound.playClack(Math.abs(this.vy), this.type === 'striker' ? selectedStrikerId : null);
         }
       }
 
       draw(c) {
         if (this.isPocketed && this.scale <= 0) return;
+
         c.save();
         c.translate(this.x, this.y);
         c.scale(this.scale, this.scale);
 
-        // Shadow
-        c.beginPath();
-        c.arc(2, 3, this.radius, 0, Math.PI * 2);
-        c.fillStyle = 'rgba(0,0,0,0.35)';
-        c.fill();
-
-        // Check if Striker
+        // Striker Rendering via drawStrikerArt
         if (this.type === 'striker') {
-          const cfg = STRIKER_CONFIGS[selectedStrikerId];
-          c.beginPath();
-          c.arc(0, 0, this.radius, 0, Math.PI * 2);
-          const grad = c.createRadialGradient(-this.radius*0.3, -this.radius*0.3, 2, 0, 0, this.radius);
-          grad.addColorStop(0, '#ffffff');
-          grad.addColorStop(0.35, cfg.color);
-          grad.addColorStop(1, cfg.border);
-          c.fillStyle = grad;
-          c.fill();
-          c.lineWidth = 2.5;
-          c.strokeStyle = cfg.border;
-          c.stroke();
-
-          // Inner emblem
-          c.fillStyle = cfg.inner;
-          c.font = 'bold 13px sans-serif';
-          c.textAlign = 'center';
-          c.textBaseline = 'middle';
-          c.fillText(cfg.emblem, 0, 0);
-
+          drawStrikerArt(c, 0, 0, this.radius, selectedStrikerId, this.rotation);
           c.restore();
           return;
         }
@@ -1011,6 +1695,7 @@
         c.strokeStyle = borderColor;
         c.stroke();
 
+        // Tagged Coins Badge
         if (this.taggedBy > 0) {
           c.beginPath();
           c.arc(0, 0, this.radius * 0.45, 0, Math.PI * 2);
@@ -1020,29 +1705,16 @@
           c.font = 'bold 9px sans-serif';
           c.textAlign = 'center';
           c.textBaseline = 'middle';
-          c.fillText('P' + this.taggedBy, 0, 0);
-        } else if (this.stonePercent > 0) {
-          c.fillStyle = '#fff';
-          c.font = 'bold 10px sans-serif';
+          c.fillText(this.taggedBy === 1 ? 'P1' : 'AI', 0, 0);
+        }
+
+        // Stone percent badge
+        if (this.stonePercent > 0) {
+          c.fillStyle = '#ffeb3b';
+          c.font = 'bold 8px sans-serif';
           c.textAlign = 'center';
           c.textBaseline = 'middle';
           c.fillText(this.stonePercent + '%', 0, 0);
-        } else if (this.isGlued) {
-          c.fillStyle = '#4caf50';
-          c.font = 'bold 11px sans-serif';
-          c.textAlign = 'center';
-          c.textBaseline = 'middle';
-          c.fillText('🔗', 0, 0);
-        } else if (this.type === 'queen') {
-          c.beginPath();
-          c.arc(0, 0, this.radius * 0.28, 0, Math.PI * 2);
-          c.fillStyle = '#ffd700';
-          c.fill();
-        } else if (!this.isHalf) {
-          c.beginPath();
-          c.arc(0, 0, this.radius * 0.55, 0, Math.PI * 2);
-          c.strokeStyle = pInfo.dot || 'rgba(0,0,0,0.2)';
-          c.stroke();
         }
 
         c.restore();
@@ -1050,397 +1722,266 @@
     }
 
     /* =========================================================================
-       GAME STATE CONTROLLER (PLAYER VS AI ONLY)
+       MAIN GAME CONTROLLER
        ========================================================================= */
     const Game = (() => {
+      const canvas = document.getElementById('carromCanvas');
+      const ctx = canvas.getContext('2d');
+
+      let state = 'menu'; // 'menu', 'aiming', 'shooting', 'paused', 'gameover'
       let isFunMode = false;
-      let funVariant = 'classic'; // 'classic', 'magnet', 'stone', 'bomber', 'tagcoins', 'coin_breaker'
-      let turn = 1; // 1 = Human Player, 2 = AI Bot
-      let p1Score = 0;
-      let p2Score = 0;
-      let state = 'aiming'; // 'aiming', 'shooting', 'evaluating'
-      let paused = false;
+      let funVariant = 'magnet'; // 'magnet', 'stone', 'bomber', 'tagcoins', 'coin_breaker'
 
+      let turn = 1; // 1 = Player, 2 = AI
+      let scores = { 1: 0, 2: 0 };
+      let queenPocketedBy = null;
+      let queenNeedsCover = false;
+      let piecesPocketedThisTurn = [];
+
+      let striker;
+      let coins = [];
       let pieces = [];
-      let striker = null;
+      let shockwaves = [];
+      let particles = [];
 
-      let isDraggingStriker = false;
       let isAiming = false;
+      let isDraggingStriker = false;
       let aimStart = { x: 0, y: 0 };
       let aimCurrent = { x: 0, y: 0 };
-      let strikerBaseY = HALF_SIZE + BASELINE_OFFSET;
-      let strikerMinX = HALF_SIZE - BASELINE_HALF_LEN;
-      let strikerMaxX = HALF_SIZE + BASELINE_HALF_LEN;
 
-      let pocketedThisTurn = [];
+      const strikerMinX = HALF_SIZE - BASELINE_HALF_LEN;
+      const strikerMaxX = HALF_SIZE + BASELINE_HALF_LEN;
+      const strikerBaseY = HALF_SIZE + BASELINE_OFFSET;
+      const aiStrikerBaseY = HALF_SIZE - BASELINE_OFFSET;
 
       // Fun mode states
+      let funMatchTimer = 0;
       let magnetEventActive = false;
-      let magnetTimer = 120.0;
-      let stoneModeTimer = 180.0;
-      let activeStonePulseTimer = 0.0;
-      let playerBombTimers = { 1: 120.0, 2: 120.0 };
-      let playerBombPenalties = { 1: 0, 2: 0 };
-      let tagcoinsTimer = 240.0;
-      let tagcoinsPhase = 0;
-      let coinBreakerTimer = 120.0;
-      let coinBreakerPhase = 0;
-      let coinsHitThisTurn = [];
+      let magnetEventTimer = 0;
+      let stonePulseTimer = 0;
+      let bomberTimerP1 = 120;
+      let bomberTimerAI = 120;
+      let isGluePhase = false;
+      let tagCoinPhase = 'tagging'; // 'tagging' or 'pocketing'
 
-      function resetPieces() {
+      let lastTime = 0;
+
+      function initBoard() {
         pieces = [];
-        particles = [];
+        coins = [];
         shockwaves = [];
-        coinsHitThisTurn = [];
+        particles = [];
+        scores = { 1: 0, 2: 0 };
+        turn = 1;
+        queenPocketedBy = null;
+        queenNeedsCover = false;
+        piecesPocketedThisTurn = [];
+
+        // Reset fun timers
+        funMatchTimer = 0;
+        magnetEventActive = false;
+        magnetEventTimer = 120;
+        stonePulseTimer = 15;
+        bomberTimerP1 = 120;
+        bomberTimerAI = 120;
+        isGluePhase = false;
+        tagCoinPhase = 'tagging';
+
+        // Strikers
+        striker = new Piece(HALF_SIZE, strikerBaseY, 'striker', STRIKER_RADIUS);
+        const cfg = STRIKER_CONFIGS[selectedStrikerId];
+        striker.mass = cfg.mass;
+        pieces.push(striker);
 
         // Center Queen
-        pieces.push(new Piece(HALF_SIZE, HALF_SIZE, COIN_RADIUS, 'queen', 3));
+        const queen = new Piece(HALF_SIZE, HALF_SIZE, 'queen');
+        coins.push(queen); pieces.push(queen);
 
-        // Inner 6 coins
-        const r1 = COIN_RADIUS * 2.05;
+        // Standard Carrom Circle (9 White, 9 Black)
+        const innerRadius = 35;
+        const outerRadius = 70;
+
         for (let i = 0; i < 6; i++) {
           const angle = (i * Math.PI) / 3;
-          pieces.push(new Piece(
-            HALF_SIZE + Math.cos(angle) * r1,
-            HALF_SIZE + Math.sin(angle) * r1,
-            COIN_RADIUS,
-            i % 2 === 0 ? 'p1' : 'p2',
-            1
-          ));
+          const type = (i % 2 === 0) ? 'p1' : 'p2';
+          const c = new Piece(HALF_SIZE + Math.cos(angle) * innerRadius, HALF_SIZE + Math.sin(angle) * innerRadius, type);
+          coins.push(c); pieces.push(c);
         }
 
-        // Outer 12 coins
-        const r2 = COIN_RADIUS * 4.08;
         for (let i = 0; i < 12; i++) {
-          const angle = (i * Math.PI) / 6 + Math.PI / 12;
-          pieces.push(new Piece(
-            HALF_SIZE + Math.cos(angle) * r2,
-            HALF_SIZE + Math.sin(angle) * r2,
-            COIN_RADIUS,
-            i % 2 === 1 ? 'p1' : 'p2',
-            1
-          ));
-        }
-
-        // Striker
-        striker = new Piece(HALF_SIZE, strikerBaseY, STRIKER_RADIUS, 'striker', 0);
-        pieces.push(striker);
-      }
-
-      function startMatch(fun = false, variant = 'classic') {
-        isFunMode = fun;
-        funVariant = variant;
-        turn = 1;
-        p1Score = 0;
-        p2Score = 0;
-
-        magnetEventActive = false;
-        magnetTimer = 120.0;
-        stoneModeTimer = 180.0;
-        activeStonePulseTimer = 0.0;
-        playerBombTimers = { 1: 120.0, 2: 120.0 };
-        playerBombPenalties = { 1: 0, 2: 0 };
-        tagcoinsTimer = 240.0;
-        tagcoinsPhase = 0;
-        coinBreakerTimer = 120.0;
-        coinBreakerPhase = 0;
-
-        resetPieces();
-        updateHUD();
-        setTurnState();
-
-        // Update badge coin colors to match palette
-        const palette = COIN_PALETTES[selectedCoinKey];
-        document.getElementById('p1-badge-coin').style.background = palette.p1.fill;
-        document.getElementById('p2-badge-coin').style.background = palette.p2.fill;
-
-        document.getElementById('hud').classList.remove('hidden');
-        document.getElementById('turn-msg').classList.remove('hidden');
-        document.getElementById('menu-overlay').classList.add('hidden');
-        document.getElementById('fun-menu-overlay').classList.add('hidden');
-        document.getElementById('custom-overlay').classList.add('hidden');
-        document.getElementById('result-overlay').classList.add('hidden');
-
-        YouTubePlayables.gameReady();
-      }
-
-      function setTurnState() {
-        state = 'aiming';
-        pocketedThisTurn = [];
-        coinsHitThisTurn = [];
-
-        striker.isPocketed = false;
-        striker.scale = 1.0;
-        striker.vx = 0;
-        striker.vy = 0;
-
-        if (turn === 1) {
-          strikerBaseY = HALF_SIZE + BASELINE_OFFSET;
-          striker.x = HALF_SIZE;
-          striker.y = strikerBaseY;
-          setTurnMsg("Your Turn - Slide striker & drag to shoot");
-        } else {
-          strikerBaseY = HALF_SIZE - BASELINE_OFFSET;
-          striker.x = HALF_SIZE;
-          striker.y = strikerBaseY;
-          setTurnMsg("AI Bot's Turn...");
-          setTimeout(executeAIShot, 900);
+          const angle = (i * Math.PI) / 6;
+          const type = (i % 2 === 0) ? 'p2' : 'p1';
+          const c = new Piece(HALF_SIZE + Math.cos(angle) * outerRadius, HALF_SIZE + Math.sin(angle) * outerRadius, type);
+          coins.push(c); pieces.push(c);
         }
 
         updateHUD();
-      }
-
-      function setTurnMsg(txt) {
-        document.getElementById('turn-msg').textContent = txt;
       }
 
       function updateHUD() {
-        document.getElementById('p1-score').textContent = p1Score;
-        document.getElementById('p2-score').textContent = p2Score;
-        document.getElementById('p1-badge').className = 'player-badge ' + (turn === 1 ? 'active-turn' : '');
-        document.getElementById('p2-badge').className = 'player-badge ' + (turn === 2 ? 'active-turn' : '');
+        document.getElementById('p1-score').textContent = scores[1];
+        document.getElementById('p2-score').textContent = scores[2];
 
-        const pill = document.getElementById('mode-pill');
-        const subPill = document.getElementById('mode-sub-pill');
+        const p1Badge = document.getElementById('p1-badge');
+        const p2Badge = document.getElementById('p2-badge');
+        const p1Dot = document.getElementById('p1-badge-coin');
+        const p2Dot = document.getElementById('p2-badge-coin');
 
-        if (!isFunMode) {
-          pill.textContent = '🌟 NORMAL MODE';
-          pill.style.borderColor = '#ffd700';
-          subPill.textContent = 'Player vs AI';
-        } else if (funVariant === 'magnet') {
-          if (magnetEventActive) {
-            pill.textContent = '🧲 VORTEX ACTIVE!';
-            pill.style.borderColor = '#e91e63';
-            subPill.textContent = Math.ceil(magnetTimer) + 's remaining';
-          } else {
-            pill.textContent = '🧲 MAGNET EVENT';
-            pill.style.borderColor = '#2196f3';
-            subPill.textContent = 'Event in: ' + Math.ceil(magnetTimer) + 's';
-          }
-        } else if (funVariant === 'stone') {
-          pill.textContent = '🪨 STONE PULSE';
-          pill.style.borderColor = '#b0bec5';
-          subPill.textContent = stoneModeTimer > 0 ? 'Stone in: ' + Math.ceil(stoneModeTimer) + 's' : 'Pulse active (+5%)';
-        } else if (funVariant === 'bomber') {
-          pill.textContent = '💣 BOMBER';
-          pill.style.borderColor = '#ff5722';
-          subPill.textContent = `You: ${Math.ceil(playerBombTimers[1])}s | AI: ${Math.ceil(playerBombTimers[2])}s`;
-        } else if (funVariant === 'tagcoins') {
-          pill.textContent = tagcoinsPhase === 0 ? '🏷️ TAGGING PHASE' : '🏷️ POCKETING PHASE';
-          pill.style.borderColor = tagcoinsPhase === 0 ? '#00e5ff' : '#ff9800';
-          subPill.textContent = Math.ceil(tagcoinsTimer) + 's remaining';
-        } else if (funVariant === 'coin_breaker') {
-          const names = ['NORMAL', 'BREAKER MODE', 'NORMAL', 'GLUE MODE'];
-          pill.textContent = '🔨 ' + names[coinBreakerPhase];
-          pill.style.borderColor = coinBreakerPhase === 1 ? '#f44336' : (coinBreakerPhase === 3 ? '#4caf50' : '#ffd700');
-          subPill.textContent = Math.ceil(coinBreakerTimer) + 's';
-        }
-      }
+        const palette = COIN_PALETTES[selectedCoinKey];
+        p1Dot.style.background = palette.p1.fill;
+        p2Dot.style.background = palette.p2.fill;
 
-      /* =================== AI SHOT LOGIC =================== */
-      function executeAIShot() {
-        if (turn !== 2 || state !== 'aiming') return;
-
-        let targets = pieces.filter(p => !p.isPocketed && p !== striker && p.stonePercent < 100);
-
-        if (isFunMode && funVariant === 'tagcoins' && tagcoinsPhase === 1) {
-          const aiTagged = targets.filter(p => p.taggedBy === 2);
-          if (aiTagged.length > 0) targets = aiTagged;
+        if (turn === 1) {
+          p1Badge.classList.add('active-turn');
+          p2Badge.classList.remove('active-turn');
         } else {
-          const aiCoins = targets.filter(p => p.type === 'p2' || p.type === 'queen');
-          if (aiCoins.length > 0) targets = aiCoins;
+          p2Badge.classList.add('active-turn');
+          p1Badge.classList.remove('active-turn');
         }
 
-        if (targets.length === 0) return;
+        const modePill = document.getElementById('mode-pill');
+        const subPill = document.getElementById('mode-sub-pill');
+        const strCfg = STRIKER_CONFIGS[selectedStrikerId];
 
-        let bestTarget = targets[0];
-        let bestPocket = POCKETS[2];
-        let minScore = Infinity;
-
-        for (const t of targets) {
-          for (const p of POCKETS) {
-            const d = Math.hypot(p.x - t.x, p.y - t.y);
-            if (d < minScore) {
-              minScore = d;
-              bestTarget = t;
-              bestPocket = p;
-            }
-          }
+        if (isFunMode) {
+          modePill.textContent = '🚀 ' + funVariant.toUpperCase().replace('_', ' ');
+          if (funVariant === 'magnet') subPill.textContent = magnetEventActive ? '🧲 VORTEX ACTIVE!' : 'Cooldown: ' + Math.ceil(magnetEventTimer) + 's';
+          else if (funVariant === 'stone') subPill.textContent = 'Next Pulse: ' + Math.ceil(stonePulseTimer) + 's';
+          else if (funVariant === 'bomber') subPill.textContent = '💣 P1: ' + Math.ceil(bomberTimerP1) + 's | AI: ' + Math.ceil(bomberTimerAI) + 's';
+          else if (funVariant === 'tagcoins') subPill.textContent = 'Phase: ' + tagCoinPhase.toUpperCase() + ' (' + Math.ceil(funMatchTimer) + 's)';
+          else if (funVariant === 'coin_breaker') subPill.textContent = isGluePhase ? '✨ GLUE PHASE ACTIVE!' : 'Normal Phase';
+        } else {
+          modePill.textContent = '🌟 NORMAL MODE • ' + strCfg.name.split('•')[0].trim();
+          subPill.textContent = 'Tournament Rules';
         }
-
-        const pocketAngle = Math.atan2(bestPocket.y - bestTarget.y, bestPocket.x - bestTarget.x);
-        const hitX = bestTarget.x - Math.cos(pocketAngle) * (bestTarget.radius + STRIKER_RADIUS);
-        const hitY = bestTarget.y - Math.sin(pocketAngle) * (bestTarget.radius + STRIKER_RADIUS);
-
-        striker.x = Math.max(strikerMinX, Math.min(strikerMaxX, hitX));
-        striker.y = strikerBaseY;
-
-        const aimAngle = Math.atan2(hitY - striker.y, hitX - striker.x);
-        const power = Math.min(22, Math.max(12, Math.hypot(hitX - striker.x, hitY - striker.y) * 0.055));
-
-        Sound.playFlick();
-        striker.vx = Math.cos(aimAngle) * power;
-        striker.vy = Math.sin(aimAngle) * power;
-        state = 'shooting';
       }
 
-      /* =================== TIMER UPDATES =================== */
-      let lastTime = performance.now();
-
-      function updateTimers(delta) {
+      /* =================== FUN MODE MECHANICS =================== */
+      function updateFunMechanics(dt) {
         if (!isFunMode) return;
+        funMatchTimer += dt;
 
+        // 1. Magnet Event (120s cooldown, 20s vortex)
         if (funVariant === 'magnet') {
-          magnetTimer -= delta;
-          if (magnetTimer <= 0) {
-            if (!magnetEventActive) {
-              magnetEventActive = true;
-              magnetTimer = 20.0;
+          magnetEventTimer -= dt;
+          if (magnetEventTimer <= 0) {
+            magnetEventActive = !magnetEventActive;
+            magnetEventTimer = magnetEventActive ? 20 : 120;
+            if (magnetEventActive) {
               Sound.playMagnetHum();
-              setTurnMsg("🧲 CENTER VORTEX ACTIVATED (20s)!");
-            } else {
-              magnetEventActive = false;
-              magnetTimer = 120.0;
-              setTurnMsg("Magnet Vortex Ended.");
+              shockwaves.push(new Shockwave(HALF_SIZE, HALF_SIZE, 300, '#ba68c8'));
             }
           }
-        } else if (funVariant === 'stone') {
-          if (stoneModeTimer > 0) {
-            stoneModeTimer -= delta;
-          } else {
-            activeStonePulseTimer += delta;
-            if (activeStonePulseTimer >= 15.0) {
-              activeStonePulseTimer = 0.0;
-              pieces.forEach(p => {
-                if (p !== striker && !p.isPocketed) {
-                  p.stonePercent = Math.min(100, p.stonePercent + 5);
-                  p.mass = 1.0 + (p.stonePercent / 100) * 15.0;
-                }
-              });
-              setTurnMsg("🪨 Stone Pulse! Coins petrified +5%!");
-            }
-          }
-        } else if (funVariant === 'bomber' && state === 'aiming') {
-          playerBombTimers[turn] -= delta;
-          if (playerBombTimers[turn] <= 0) {
-            playerBombTimers[turn] = 90.0;
-            playerBombPenalties[turn] += 10;
 
-            const spawnX = striker.x;
-            const spawnY = striker.y;
-            Sound.playExplosion();
-            shockwaves.push(new Shockwave(spawnX, spawnY));
-            for (let i = 0; i < 35; i++) particles.push(new Particle(spawnX, spawnY, '#ff5722'));
-
-            pieces.forEach(p => {
-              if (p !== striker && !p.isPocketed) {
-                const dist = Math.hypot(p.x - spawnX, p.y - spawnY);
-                if (dist < 220) {
-                  const angle = Math.atan2(p.y - spawnY, p.x - spawnX);
-                  const force = (220 - dist) * 0.12;
-                  p.vx += Math.cos(angle) * force;
-                  p.vy += Math.sin(angle) * force;
-                }
+          if (magnetEventActive) {
+            coins.forEach(coin => {
+              if (coin.isPocketed) return;
+              const dx = HALF_SIZE - coin.x;
+              const dy = HALF_SIZE - coin.y;
+              const dist = Math.hypot(dx, dy);
+              if (dist > 15 && dist < 280) {
+                const pull = (1 - dist / 280) * 1.6;
+                coin.vx += (dx / dist) * pull;
+                coin.vy += (dy / dist) * pull;
               }
             });
-
-            setTurnMsg(`💥 BOMB DETONATED! +10 Penalty!`);
-          }
-        } else if (funVariant === 'tagcoins') {
-          tagcoinsTimer -= delta;
-          if (tagcoinsTimer <= 0) {
-            tagcoinsTimer = 240.0;
-            tagcoinsPhase = tagcoinsPhase === 0 ? 1 : 0;
-            setTurnMsg(tagcoinsPhase === 0 ? "🏷️ TAGGING PHASE - Hit coins to tag!" : "🏷️ POCKETING PHASE - Pocket your tagged coins!");
-          }
-        } else if (funVariant === 'coin_breaker') {
-          coinBreakerTimer -= delta;
-          if (coinBreakerTimer <= 0) {
-            coinBreakerPhase = (coinBreakerPhase + 1) % 4;
-            if (coinBreakerPhase === 0 || coinBreakerPhase === 2) coinBreakerTimer = 120.0;
-            else if (coinBreakerPhase === 1) {
-              coinBreakerTimer = 60.0;
-              setTurnMsg("🔨 BREAKER MODE: Heavy striker hits shatter coins!");
-            } else if (coinBreakerPhase === 3) {
-              coinBreakerTimer = 60.0;
-              setTurnMsg("🔗 GLUE MODE: Colliding coins fuse together!");
+            if (Math.random() < 0.3) {
+              const a = Math.random() * Math.PI * 2;
+              particles.push(new Particle(HALF_SIZE + Math.cos(a) * 120, HALF_SIZE + Math.sin(a) * 120, '#e1bee7', 3, -Math.cos(a)*2, -Math.sin(a)*2));
             }
           }
+        }
+
+        // 2. Stone Pulse (+5% every 15s)
+        if (funVariant === 'stone') {
+          stonePulseTimer -= dt;
+          if (stonePulseTimer <= 0) {
+            stonePulseTimer = 15;
+            coins.forEach(p => {
+              if (!p.isPocketed && p.stonePercent < 50) {
+                p.stonePercent = Math.min(50, p.stonePercent + 5);
+                p.mass = 1.0 + (p.stonePercent / 100) * 15.0;
+                particles.push(new Particle(p.x, p.y, '#9e9e9e', 4));
+              }
+            });
+            shockwaves.push(new Shockwave(HALF_SIZE, HALF_SIZE, 250, '#9e9e9e'));
+          }
+        }
+
+        // 3. Player Bomber (120s countdown)
+        if (funVariant === 'bomber') {
+          if (turn === 1) {
+            bomberTimerP1 -= dt;
+            if (bomberTimerP1 <= 0) {
+              bomberTimerP1 = 120;
+              scores[1] = Math.max(0, scores[1] - 10);
+              Sound.playExplosion();
+              shockwaves.push(new Shockwave(striker.x, striker.y, 250, '#ff1744'));
+            }
+          } else {
+            bomberTimerAI -= dt;
+            if (bomberTimerAI <= 0) {
+              bomberTimerAI = 120;
+              scores[2] = Math.max(0, scores[2] - 10);
+              Sound.playExplosion();
+              shockwaves.push(new Shockwave(striker.x, striker.y, 250, '#ff1744'));
+            }
+          }
+        }
+
+        // 4. Tag Coins (240s total match, phases toggle every 60s)
+        if (funVariant === 'tagcoins') {
+          const cycle = Math.floor(funMatchTimer / 60) % 2;
+          tagCoinPhase = cycle === 0 ? 'tagging' : 'pocketing';
+        }
+
+        // 5. Coin Breaker & Glue Phase
+        if (funVariant === 'coin_breaker') {
+          const glueCycle = Math.floor(funMatchTimer / 60) % 2;
+          isGluePhase = glueCycle === 1;
         }
 
         updateHUD();
       }
 
-      /* =================== FUN MODE PHYSICS & EVENTS =================== */
-      function applyFunModePhysics() {
-        if (isFunMode && funVariant === 'magnet' && magnetEventActive) {
-          pieces.forEach(p => {
-            if (!p.isPocketed && p !== striker) {
-              const dx = HALF_SIZE - p.x;
-              const dy = HALF_SIZE - p.y;
-              const dist = Math.hypot(dx, dy);
-              if (dist > 15) {
-                const force = 0.16;
-                p.vx += (dx / dist) * force;
-                p.vy += (dy / dist) * force;
-              }
-            }
-          });
-        }
-      }
+      function handleCoinBreak(coin) {
+        if (coin.isHalf || coin.type === 'queen') return;
+        coin.isHalf = true;
+        coin.radius = COIN_RADIUS * 0.75;
+        coin.mass = 0.5;
+        const pairId = Date.now() + Math.random();
+        coin.halfPairId = pairId;
 
-      function breakCoin(coin) {
-        if (coin.isHalf) return;
+        const half2 = new Piece(coin.x + 10, coin.y + 10, coin.type, COIN_RADIUS * 0.75);
+        half2.isHalf = true;
+        half2.mass = 0.5;
+        half2.halfPairId = pairId;
+        half2.vx = -coin.vx * 0.6;
+        half2.vy = -coin.vy * 0.6;
+
+        coins.push(half2); pieces.push(half2);
         Sound.playShatter();
-        coin.isPocketed = true;
-
-        for (let i = 0; i < 2; i++) {
-          const half = new Piece(
-            coin.x + (i === 0 ? -6 : 6),
-            coin.y + (i === 0 ? -6 : 6),
-            COIN_RADIUS * 0.8,
-            coin.type,
-            0.5
-          );
-          half.isHalf = true;
-          half.mass = 0.5;
-          half.vx = (Math.random() - 0.5) * 6;
-          half.vy = (Math.random() - 0.5) * 6;
-          pieces.push(half);
-        }
-        setTurnMsg("🔨 Coin Shattered into 2 Halves!");
+        shockwaves.push(new Shockwave(coin.x, coin.y, 80, '#00e5ff'));
       }
 
-      function glueCoins(c1, c2) {
-        Sound.playGlue();
-        c1.isPocketed = true;
+      function handleCoinGlue(c1, c2) {
+        if (!c1.isHalf || !c2.isHalf || c1.type !== c2.type) return;
+        c1.isHalf = false;
+        c1.radius = COIN_RADIUS;
+        c1.mass = 1.0;
         c2.isPocketed = true;
-
-        const merged = new Piece(
-          (c1.x + c2.x) / 2,
-          (c1.y + c2.y) / 2,
-          COIN_RADIUS * 1.35,
-          c1.type,
-          c1.points + c2.points
-        );
-        merged.mass = c1.mass + c2.mass;
-        merged.isGlued = true;
-        pieces.push(merged);
-        setTurnMsg("🔗 Coins Fused Together!");
+        c2.scale = 0;
+        Sound.playGlue();
+        shockwaves.push(new Shockwave(c1.x, c1.y, 100, '#69f0ae'));
       }
 
-      /* =================== COLLISIONS & INTERACTIONS =================== */
+      /* =================== PIECE-TO-PIECE COLLISIONS =================== */
       function resolveCollisions() {
-        applyFunModePhysics();
-        const isRound = BOARD_THEMES[selectedBoardKey].isRound;
-
         for (let i = 0; i < pieces.length; i++) {
-          const p1 = pieces[i];
-          if (p1.isPocketed) continue;
-
           for (let j = i + 1; j < pieces.length; j++) {
+            const p1 = pieces[i];
             const p2 = pieces[j];
-            if (p2.isPocketed) continue;
+            if (p1.isPocketed || p2.isPocketed) continue;
 
             const dx = p2.x - p1.x;
             const dy = p2.y - p1.y;
@@ -1448,178 +1989,213 @@
             const minDist = p1.radius + p2.radius;
 
             if (dist < minDist && dist > 0) {
-              if (p1 === striker || p2 === striker) {
-                const coin = p1 === striker ? p2 : p1;
-                const strikerSpeed = Math.hypot(striker.vx, striker.vy);
-
-                if (isFunMode && funVariant === 'tagcoins' && tagcoinsPhase === 0) {
-                  coin.taggedBy = turn;
-                }
-
-                if (isFunMode && funVariant === 'stone' && coin.stonePercent >= 100) {
-                  if (coin.stoneLastHit !== 0 && coin.stoneLastHit !== turn) {
-                    coin.stonePercent = 50;
-                    coin.mass = 1.0 + (50 / 100) * 15.0;
-                    setTurnMsg("🪨 Double hit reduced stone to 50%!");
-                  }
-                  coin.stoneLastHit = turn;
-                }
-
-                if (isFunMode && funVariant === 'coin_breaker' && coinBreakerPhase === 1) {
-                  const targetOpponentType = turn === 1 ? 'p2' : 'p1';
-                  if (coin.type === targetOpponentType && strikerSpeed > 4.5) {
-                    breakCoin(coin);
-                    continue;
-                  }
-                }
-
-                if (isFunMode && funVariant === 'coin_breaker' && coinBreakerPhase === 3) {
-                  if (!coinsHitThisTurn.includes(coin)) coinsHitThisTurn.push(coin);
-                }
-              }
-
-              if (isFunMode && funVariant === 'coin_breaker' && coinBreakerPhase === 3) {
-                if (p1 !== striker && p2 !== striker) {
-                  if ((p1.isHalf && p2.isHalf && p1.type === p2.type) ||
-                      (!p1.isGlued && !p2.isGlued && p1.type === p2.type && p1.type !== 'queen')) {
-                    glueCoins(p1, p2);
-                    continue;
-                  }
-                }
-              }
-
-              const overlap = (minDist - dist) / 2;
+              const overlap = minDist - dist;
               const nx = dx / dist;
               const ny = dy / dist;
 
-              if (p1.stonePercent < 100) { p1.x -= nx * overlap; p1.y -= ny * overlap; }
-              if (p2.stonePercent < 100) { p2.x += nx * overlap; p2.y += ny * overlap; }
+              // Position correction
+              p1.x -= nx * overlap * 0.5;
+              p1.y -= ny * overlap * 0.5;
+              p2.x += nx * overlap * 0.5;
+              p2.y += ny * overlap * 0.5;
 
+              // Relative velocity
               const kx = p1.vx - p2.vx;
               const ky = p1.vy - p2.vy;
-              const p = 2 * (nx * kx + ny * ky) / (p1.mass + p2.mass);
-
-              if (p1.stonePercent < 100) {
-                p1.vx -= p * p2.mass * nx * RESTITUTION;
-                p1.vy -= p * p2.mass * ny * RESTITUTION;
-              }
-              if (p2.stonePercent < 100) {
-                p2.vx += p * p1.mass * nx * RESTITUTION;
-                p2.vy += p * p1.mass * ny * RESTITUTION;
-              }
-
               const relSpeed = Math.hypot(kx, ky);
-              if (relSpeed > 1.2) Sound.playClack(relSpeed);
-            }
-          }
 
-          // Pocket check
-          for (const pocket of POCKETS) {
-            const d = Math.hypot(pocket.x - p1.x, pocket.y - p1.y);
-            if (d < POCKET_RADIUS - 2) {
-              if (isFunMode && funVariant === 'tagcoins' && tagcoinsPhase === 1 && p1 !== striker) {
-                if (p1.taggedBy !== turn) {
-                  p1.vx = -p1.vx * 1.5;
-                  p1.vy = -p1.vy * 1.5;
-                  setTurnMsg(`Cannot pocket untagged coin!`);
-                  break;
-                }
+              // Sound clack with striker profile
+              const isStrikerInvolved = (p1.type === 'striker' || p2.type === 'striker');
+              Sound.playClack(relSpeed, isStrikerInvolved ? selectedStrikerId : null);
+
+              // Fun Mode: Stone Pulse chipping
+              if (isFunMode && funVariant === 'stone') {
+                [p1, p2].forEach(coin => {
+                  if (coin.type !== 'striker' && coin.stonePercent > 0 && relSpeed > 4) {
+                    coin.stonePercent = Math.max(0, coin.stonePercent - 25);
+                    coin.mass = 1.0 + (coin.stonePercent / 100) * 15.0;
+                  }
+                });
               }
 
-              p1.isPocketed = true;
-              p1.vx = 0; p1.vy = 0;
-              pocketedThisTurn.push(p1);
-              Sound.playPocket();
-              break;
+              // Fun Mode: Coin Breaker (Shatter on heavy striker impact)
+              if (isFunMode && funVariant === 'coin_breaker' && !isGluePhase) {
+                if (p1.type === 'striker' && relSpeed > 8.5) handleCoinBreak(p2);
+                else if (p2.type === 'striker' && relSpeed > 8.5) handleCoinBreak(p1);
+              }
+
+              // Fun Mode: Glue Phase (Fuse matching halves)
+              if (isFunMode && funVariant === 'coin_breaker' && isGluePhase) {
+                if (p1.isHalf && p2.isHalf && p1.type === p2.type) handleCoinGlue(p1, p2);
+              }
+
+              // Fun Mode: Tag Coins
+              if (isFunMode && funVariant === 'tagcoins' && tagCoinPhase === 'tagging') {
+                if (p1.type === 'striker' && p2.type !== 'striker') p2.taggedBy = turn;
+                else if (p2.type === 'striker' && p1.type !== 'striker') p1.taggedBy = turn;
+              }
+
+              // Elastic impulse physics
+              const colRestitution = isStrikerInvolved ? STRIKER_CONFIGS[selectedStrikerId].restitution : RESTITUTION;
+              const p = 2 * (nx * kx + ny * ky) / (p1.mass + p2.mass);
+              p1.vx -= p * p2.mass * nx * colRestitution;
+              p1.vy -= p * p2.mass * ny * colRestitution;
+              p2.vx += p * p1.mass * nx * colRestitution;
+              p2.vy += p * p1.mass * ny * colRestitution;
             }
           }
         }
       }
 
-      function isMoving() {
-        return pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.05 || Math.abs(p.vy) > 0.05)) ||
-               particles.length > 0 || shockwaves.length > 0;
+      /* =================== POCKET CHECKING =================== */
+      function checkPockets() {
+        pieces.forEach(p => {
+          if (p.isPocketed) return;
+
+          POCKETS.forEach(pocket => {
+            const dist = Math.hypot(p.x - pocket.x, p.y - pocket.y);
+            if (dist < POCKET_RADIUS + 4) {
+              p.isPocketed = true;
+              p.vx = 0; p.vy = 0;
+              Sound.playPocket();
+
+              if (p.type === 'striker') {
+                // Striker Foul
+                Sound.playFoul();
+                scores[turn] = Math.max(0, scores[turn] - 5);
+                document.getElementById('turn-msg').textContent = '⚠️ FOUL! Striker Pocketed (-5)';
+              } else {
+                piecesPocketedThisTurn.push(p);
+
+                // Scoring
+                let pts = 0;
+                if (p.type === 'p1') pts = 10;
+                else if (p.type === 'p2') pts = 5;
+                else if (p.type === 'queen') pts = 25;
+
+                // Tag Coins multiplier
+                if (isFunMode && funVariant === 'tagcoins' && tagCoinPhase === 'pocketing') {
+                  if (p.taggedBy === turn) pts *= 2;
+                }
+
+                scores[turn] += pts;
+                particles.push(new Particle(pocket.x, pocket.y, '#ffd700', 5));
+              }
+            }
+          });
+        });
       }
 
-      function evaluateTurn() {
-        let strikerFouled = striker.isPocketed;
-        let whiteSunk = pocketedThisTurn.filter(p => p.type === 'p1').length;
-        let blackSunk = pocketedThisTurn.filter(p => p.type === 'p2').length;
+      /* =================== TURN TRANSITIONS =================== */
+      function checkTurnEnd() {
+        const anyMoving = pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.05 || Math.abs(p.vy) > 0.05));
+        if (anyMoving) return;
 
-        p1Score += whiteSunk;
-        p2Score += blackSunk;
+        state = 'aiming';
 
-        if (isFunMode && funVariant === 'bomber') {
-          if (turn === 1 && whiteSunk > 0 && playerBombPenalties[1] > 0) playerBombPenalties[1] -= 1;
-          if (turn === 2 && blackSunk > 0 && playerBombPenalties[2] > 0) playerBombPenalties[2] -= 1;
-        }
+        const strikerPocketed = striker.isPocketed;
+        let p1PocketedCount = coins.filter(c => c.type === 'p1' && c.isPocketed).length;
+        let p2PocketedCount = coins.filter(c => c.type === 'p2' && c.isPocketed).length;
+        let queen = coins.find(c => c.type === 'queen');
 
-        let extraTurn = false;
-        if (turn === 1 && whiteSunk > 0) extraTurn = true;
-        if (turn === 2 && blackSunk > 0) extraTurn = true;
-
-        if (strikerFouled) {
-          Sound.playFoul();
-          extraTurn = false;
-          setTurnMsg("Foul! Striker pocketed.");
-          if (turn === 1 && p1Score > 0) p1Score--;
-          if (turn === 2 && p2Score > 0) p2Score--;
-        }
-
-        const remainingWhite = pieces.filter(p => !p.isPocketed && p.type === 'p1').length;
-        const remainingBlack = pieces.filter(p => !p.isPocketed && p.type === 'p2').length;
-
-        if (remainingWhite === 0) {
-          endGame("Victory!", "You pocketed all your coins!");
-          return;
-        }
-        if (remainingBlack === 0) {
-          endGame("Defeat!", "AI Bot cleared all their coins!");
+        // Check Victory
+        if (p1PocketedCount === 9 || p2PocketedCount === 9) {
+          endGame();
           return;
         }
 
-        if (!extraTurn) turn = turn === 1 ? 2 : 1;
-        setTurnState();
+        // Next Turn determination
+        const scoredValidThisTurn = piecesPocketedThisTurn.length > 0 && !strikerPocketed;
+        if (!scoredValidThisTurn) turn = (turn === 1) ? 2 : 1;
+
+        piecesPocketedThisTurn = [];
+
+        // Reset Striker to baseline
+        striker.reset(HALF_SIZE, turn === 1 ? strikerBaseY : aiStrikerBaseY);
+        striker.mass = STRIKER_CONFIGS[selectedStrikerId].mass;
+
+        updateHUD();
+
+        const msg = document.getElementById('turn-msg');
+        if (turn === 1) {
+          msg.textContent = 'Your Turn! Drag slider to position striker.';
+        } else {
+          msg.textContent = 'AI is calculating shot...';
+          setTimeout(runAITurn, 900);
+        }
       }
 
-      function endGame(title, desc) {
-        document.getElementById('winner-title').textContent = title;
-        document.getElementById('winner-desc').textContent = desc;
+      function endGame() {
+        state = 'gameover';
+        const winTitle = document.getElementById('winner-title');
+        const winDesc = document.getElementById('winner-desc');
+
+        if (scores[1] >= scores[2]) {
+          winTitle.textContent = '🏆 VICTORY!';
+          winDesc.textContent = 'You defeated the AI Bot with ' + scores[1] + ' points!';
+        } else {
+          winTitle.textContent = 'DEFEAT!';
+          winDesc.textContent = 'AI Bot won with ' + scores[2] + ' points. Better luck next time!';
+        }
+
         document.getElementById('result-overlay').classList.remove('hidden');
       }
 
-      /* =================== BOARD RENDERING =================== */
+      /* =================== AI LOGIC =================== */
+      function runAITurn() {
+        if (state !== 'aiming' || turn !== 2) return;
+
+        // Smart AI: Find best pocketable coin
+        const activeCoins = coins.filter(c => !c.isPocketed);
+        let bestTarget = null;
+        let bestPocket = null;
+        let bestScore = -999;
+
+        activeCoins.forEach(coin => {
+          POCKETS.forEach(pocket => {
+            const dCoinToPocket = Math.hypot(pocket.x - coin.x, pocket.y - coin.y);
+            const score = (coin.type === 'p2' ? 100 : (coin.type === 'queen' ? 150 : 20)) - dCoinToPocket * 0.2;
+            if (score > bestScore) {
+              bestScore = score;
+              bestTarget = coin;
+              bestPocket = pocket;
+            }
+          });
+        });
+
+        if (!bestTarget) bestTarget = coins[0];
+        if (!bestPocket) bestPocket = POCKETS[0];
+
+        // Position AI striker near target X
+        striker.x = Math.max(strikerMinX, Math.min(strikerMaxX, bestTarget.x + (Math.random() - 0.5) * 40));
+
+        // Aim angle from target to pocket
+        const angleToPocket = Math.atan2(bestPocket.y - bestTarget.y, bestPocket.x - bestTarget.x);
+        const ghostX = bestTarget.x - Math.cos(angleToPocket) * (COIN_RADIUS + STRIKER_RADIUS);
+        const ghostY = bestTarget.y - Math.sin(angleToPocket) * (COIN_RADIUS + STRIKER_RADIUS);
+
+        const shootAngle = Math.atan2(ghostY - striker.y, ghostX - striker.x) + (Math.random() - 0.5) * 0.08;
+        const speed = (14 + Math.random() * 6) * STRIKER_CONFIGS[selectedStrikerId].forceMul;
+
+        Sound.playFlick();
+        striker.vx = Math.cos(shootAngle) * speed;
+        striker.vy = Math.sin(shootAngle) * speed;
+        state = 'shooting';
+      }
+
+      /* =================== BOARD RENDERING (100% SQUARE) =================== */
       function drawBoard() {
         const theme = BOARD_THEMES[selectedBoardKey];
         ctx.clearRect(0, 0, BOARD_SIZE, BOARD_SIZE);
 
-        if (theme.isRound) {
-          // ⭕ ROUND BOARD (Carrooka style)
-          ctx.beginPath();
-          ctx.arc(HALF_SIZE, HALF_SIZE, HALF_SIZE - 2, 0, Math.PI * 2);
-          ctx.fillStyle = theme.frame;
-          ctx.fill();
+        // 🟫 SQUARE TOURNAMENT BOARD
+        ctx.fillStyle = theme.frame;
+        ctx.fillRect(0, 0, BOARD_SIZE, BOARD_SIZE);
+        ctx.fillStyle = theme.frameBorder;
+        ctx.fillRect(8, 8, BOARD_SIZE - 16, BOARD_SIZE - 16);
 
-          ctx.beginPath();
-          ctx.arc(HALF_SIZE, HALF_SIZE, HALF_SIZE - 12, 0, Math.PI * 2);
-          ctx.fillStyle = theme.frameBorder;
-          ctx.fill();
-
-          // Round Surface
-          ctx.beginPath();
-          ctx.arc(HALF_SIZE, HALF_SIZE, (PLAY_AREA_SIZE / 2) + 10, 0, Math.PI * 2);
-          ctx.fillStyle = theme.surface;
-          ctx.fill();
-        } else {
-          // 🟫 SQUARE BOARD
-          ctx.fillStyle = theme.frame;
-          ctx.fillRect(0, 0, BOARD_SIZE, BOARD_SIZE);
-          ctx.fillStyle = theme.frameBorder;
-          ctx.fillRect(8, 8, BOARD_SIZE - 16, BOARD_SIZE - 16);
-
-          ctx.fillStyle = theme.surface;
-          ctx.fillRect(FRAME_WIDTH, FRAME_WIDTH, PLAY_AREA_SIZE, PLAY_AREA_SIZE);
-        }
+        ctx.fillStyle = theme.surface;
+        ctx.fillRect(FRAME_WIDTH, FRAME_WIDTH, PLAY_AREA_SIZE, PLAY_AREA_SIZE);
 
         // Center rings & pattern
         ctx.save();
@@ -1635,7 +2211,7 @@
           const pulse = Math.sin(Date.now() * 0.01) * 0.5 + 0.5;
           ctx.beginPath();
           ctx.arc(0, 0, COIN_RADIUS * 5.0, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(156, 39, 176, ${0.2 + pulse * 0.35})`;
+          ctx.fillStyle = 'rgba(156, 39, 176, ' + (0.2 + pulse * 0.35) + ')';
           ctx.fill();
         }
 
@@ -1714,7 +2290,7 @@
           ctx.stroke();
         });
 
-        // Baseline highlight
+        // Baseline highlight when positioning
         if (state === 'aiming' && turn === 1) {
           ctx.beginPath();
           ctx.rect(strikerMinX, strikerBaseY - 14, BASELINE_HALF_LEN * 2, 28);
@@ -1728,7 +2304,12 @@
 
       function render() {
         drawBoard();
-        const isRound = BOARD_THEMES[selectedBoardKey].isRound;
+
+        // Striker Particle Trail
+        if (state === 'shooting' && Math.hypot(striker.vx, striker.vy) > 4) {
+          const cfg = STRIKER_CONFIGS[selectedStrikerId];
+          particles.push(new Particle(striker.x, striker.y, cfg.trailColor, 4, -striker.vx*0.1, -striker.vy*0.1));
+        }
 
         pieces.forEach(p => p.draw(ctx));
 
@@ -1742,71 +2323,63 @@
           if (pt.alpha <= 0) particles.splice(idx, 1);
         });
 
+        // Aiming Guideline
         if (isAiming && state === 'aiming' && turn === 1) {
           const dx = striker.x - aimCurrent.x;
           const dy = striker.y - aimCurrent.y;
           const dist = Math.hypot(dx, dy);
 
           if (dist > 8) {
-            const pullAngle = Math.atan2(dy, dx);
-            const power = Math.min(dist * 0.16, 24);
+            const angle = Math.atan2(dy, dx);
+            const powerLen = Math.min(dist * 1.5, 220);
 
             ctx.save();
-            ctx.setLineDash([6, 6]);
             ctx.beginPath();
             ctx.moveTo(striker.x, striker.y);
-            ctx.lineTo(striker.x + Math.cos(pullAngle) * dist * 3.5, striker.y + Math.sin(pullAngle) * dist * 3.5);
-            ctx.strokeStyle = 'rgba(255, 235, 59, 0.85)';
-            ctx.lineWidth = 2.5;
+            ctx.lineTo(striker.x + Math.cos(angle) * powerLen, striker.y + Math.sin(angle) * powerLen);
+            ctx.strokeStyle = '#ffd700';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([8, 6]);
             ctx.stroke();
             ctx.restore();
 
+            // Pull back drag line
             ctx.beginPath();
             ctx.moveTo(striker.x, striker.y);
             ctx.lineTo(aimCurrent.x, aimCurrent.y);
-            ctx.strokeStyle = 'rgba(244, 67, 54, 0.85)';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.arc(striker.x, striker.y, STRIKER_RADIUS + power * 1.2, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(247, 202, 72, 0.5)';
+            ctx.strokeStyle = 'rgba(255, 87, 34, 0.7)';
             ctx.lineWidth = 2;
             ctx.stroke();
           }
         }
       }
 
-      function loop(now) {
-        if (!paused) {
-          const delta = Math.min((now - lastTime) / 1000, 0.1);
-          lastTime = now;
+      function loop(timestamp) {
+        const dt = Math.min((timestamp - lastTime) / 1000, 0.1);
+        lastTime = timestamp;
 
-          updateTimers(delta);
-
-          if (state === 'shooting') {
-            const isRound = BOARD_THEMES[selectedBoardKey].isRound;
-            pieces.forEach(p => p.update(isRound));
-            resolveCollisions();
-
-            if (!isMoving()) {
-              state = 'evaluating';
-              setTimeout(evaluateTurn, 400);
-            }
-          }
-          render();
+        if (state === 'shooting') {
+          updateFunMechanics(dt);
+          pieces.forEach(p => p.update());
+          resolveCollisions();
+          checkPockets();
+          checkTurnEnd();
+        } else if (state === 'aiming') {
+          updateFunMechanics(dt);
         }
+
+        render();
         requestAnimationFrame(loop);
       }
 
+      /* =================== INPUT HANDLING =================== */
       function getCanvasCoords(e) {
         const rect = canvas.getBoundingClientRect();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        const scale = BOARD_SIZE / rect.width;
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
         return {
-          x: (clientX - rect.left) * scale,
-          y: (clientY - rect.top) * scale
+          x: (e.clientX - rect.left) * scaleX,
+          y: (e.clientY - rect.top) * scaleY
         };
       }
 
@@ -1845,7 +2418,8 @@
           if (dist > 14) {
             Sound.playFlick();
             const angle = Math.atan2(dy, dx);
-            const speed = Math.min(dist * 0.16, 24);
+            const cfg = STRIKER_CONFIGS[selectedStrikerId];
+            const speed = Math.min(dist * 0.16, 24) * cfg.forceMul;
             striker.vx = Math.cos(angle) * speed;
             striker.vy = Math.sin(angle) * speed;
             state = 'shooting';
@@ -1868,103 +2442,216 @@
           YouTubePlayables.init();
           requestAnimationFrame((t) => { lastTime = t; loop(t); });
         },
-        startMatch,
-        pause() { paused = true; },
-        resume() { paused = false; lastTime = performance.now(); }
+
+        launchMatch(isFun, variant = 'normal') {
+          isFunMode = isFun;
+          funVariant = variant;
+          initBoard();
+          state = 'aiming';
+
+          document.getElementById('menu-overlay').classList.add('hidden');
+          document.getElementById('fun-menu-overlay').classList.add('hidden');
+          document.getElementById('arsenal-overlay').classList.add('hidden');
+          document.getElementById('custom-overlay').classList.add('hidden');
+          document.getElementById('result-overlay').classList.add('hidden');
+
+          document.getElementById('hud').classList.remove('hidden');
+          document.getElementById('turn-msg').classList.remove('hidden');
+
+          YouTubePlayables.gameReady();
+        },
+
+        pause() {
+          if (state === 'shooting' || state === 'aiming') state = 'paused';
+        },
+
+        resume() {
+          if (state === 'paused') state = 'aiming';
+        }
       };
     })();
 
     /* =========================================================================
-       UI SCREEN NAVIGATION & EVENTS
+       UI BUILDERS & EVENT LISTENERS
        ========================================================================= */
 
-    // 1. Normal Mode Button -> Starts Player vs AI directly!
+    // Refresh Equipped Striker Bar on Home Screen
+    function updateEquippedStrikerCard() {
+      const cfg = STRIKER_CONFIGS[selectedStrikerId];
+      const cvs = document.getElementById('home-striker-canvas');
+      if (cvs) {
+        const c = cvs.getContext('2d');
+        c.clearRect(0, 0, cvs.width, cvs.height);
+        drawStrikerArt(c, cvs.width/2, cvs.height/2, cvs.width*0.42, selectedStrikerId, 0);
+      }
+      document.getElementById('home-striker-name').textContent = cfg.name;
+      document.getElementById('home-striker-desc').textContent = cfg.subtitle + ' • ' + cfg.desc;
+
+      // Update Customization chip active state
+      document.querySelectorAll('#striker-options .opt-chip').forEach(c => {
+        const id = parseInt(c.getAttribute('data-striker'));
+        c.classList.toggle('active', id === selectedStrikerId);
+      });
+    }
+
+    // Build the 6-Card Godot Striker Arsenal
+    function buildStrikerArsenalUI() {
+      const grid = document.getElementById('arsenal-grid');
+      grid.innerHTML = '';
+
+      Object.values(STRIKER_CONFIGS).forEach(cfg => {
+        const card = document.createElement('div');
+        card.className = 'striker-card' + (cfg.id === selectedStrikerId ? ' active' : '');
+        card.setAttribute('data-id', cfg.id);
+
+        card.innerHTML = `
+          <div class="striker-card-canvas-wrap">
+            <canvas id="arsenal-canvas-${cfg.id}" width="72" height="72"></canvas>
+          </div>
+          <div class="striker-card-title">${cfg.name}</div>
+          <div class="striker-card-sub">${cfg.subtitle}</div>
+          
+          <div class="stat-list">
+            <div class="stat-row">
+              <span class="stat-label">Power</span>
+              <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${cfg.power}%; background: #ff5252;"></div></div>
+              <span class="stat-val">${cfg.power}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Rebound</span>
+              <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${cfg.rebound}%; background: #ffd700;"></div></div>
+              <span class="stat-val">${cfg.rebound}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Control</span>
+              <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${cfg.control}%; background: #69f0ae;"></div></div>
+              <span class="stat-val">${cfg.control}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Glide</span>
+              <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${cfg.glide}%; background: #00e5ff;"></div></div>
+              <span class="stat-val">${cfg.glide}</span>
+            </div>
+          </div>
+
+          <button class="btn-card-equip">${cfg.id === selectedStrikerId ? '✓ Equipped' : 'Equip Striker'}</button>
+        `;
+
+        card.addEventListener('click', () => {
+          selectedStrikerId = cfg.id;
+          Sound.playClack(8, cfg.id);
+          updateEquippedStrikerCard();
+          buildStrikerArsenalUI();
+        });
+
+        grid.appendChild(card);
+      });
+
+      // Render mini canvas artwork for each striker card
+      setTimeout(() => {
+        Object.values(STRIKER_CONFIGS).forEach(cfg => {
+          const cvs = document.getElementById('arsenal-canvas-' + cfg.id);
+          if (cvs) {
+            const c = cvs.getContext('2d');
+            c.clearRect(0, 0, cvs.width, cvs.height);
+            drawStrikerArt(c, cvs.width/2, cvs.height/2, cvs.width*0.42, cfg.id, 0);
+          }
+        });
+      }, 20);
+    }
+
+    // Setup Home Screen buttons
     document.getElementById('card-normal').addEventListener('click', () => {
-      Sound.playClack(8);
-      Game.startMatch(false, 'classic');
+      Sound.playPocket();
+      Game.launchMatch(false, 'normal');
     });
 
-    // 2. Fun Mode Button -> Opens Fun Mode Selector
     document.getElementById('card-fun').addEventListener('click', () => {
-      Sound.playClack(8);
+      Sound.playFlick();
       document.getElementById('menu-overlay').classList.add('hidden');
       document.getElementById('fun-menu-overlay').classList.remove('hidden');
     });
 
-    // Back from Fun Menu
     document.getElementById('btn-fun-back').addEventListener('click', () => {
-      Sound.playClack(8);
+      Sound.playFlick();
       document.getElementById('fun-menu-overlay').classList.add('hidden');
       document.getElementById('menu-overlay').classList.remove('hidden');
     });
 
-    // Click on individual Fun Mode card -> Starts that Fun Mode vs AI!
+    // Fun Mode Cards
     document.querySelectorAll('.fun-card').forEach(card => {
       card.addEventListener('click', () => {
         const mode = card.getAttribute('data-mode');
-        Sound.playClack(10);
-        Game.startMatch(true, mode);
+        Sound.playPocket();
+        Game.launchMatch(true, mode);
       });
     });
 
-    // 3. Customization Screen
+    // Striker Arsenal Modal
+    document.getElementById('btn-open-arsenal').addEventListener('click', () => {
+      Sound.playFlick();
+      buildStrikerArsenalUI();
+      document.getElementById('arsenal-overlay').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-custom-view-arsenal').addEventListener('click', () => {
+      Sound.playFlick();
+      document.getElementById('custom-overlay').classList.add('hidden');
+      buildStrikerArsenalUI();
+      document.getElementById('arsenal-overlay').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-arsenal-done').addEventListener('click', () => {
+      Sound.playFlick();
+      document.getElementById('arsenal-overlay').classList.add('hidden');
+      updateEquippedStrikerCard();
+    });
+
+    // Customization Screen
     document.getElementById('btn-custom').addEventListener('click', () => {
-      Sound.playClack(8);
-      document.getElementById('menu-overlay').classList.add('hidden');
+      Sound.playFlick();
       document.getElementById('custom-overlay').classList.remove('hidden');
     });
 
     document.getElementById('btn-custom-done').addEventListener('click', () => {
-      Sound.playClack(8);
+      Sound.playFlick();
       document.getElementById('custom-overlay').classList.add('hidden');
-      document.getElementById('menu-overlay').classList.remove('hidden');
+      updateEquippedStrikerCard();
     });
 
-    // Striker Selection Chips
+    // Striker quick-options in customization
     document.querySelectorAll('#striker-options .opt-chip').forEach(chip => {
       chip.addEventListener('click', () => {
-        document.querySelectorAll('#striker-options .opt-chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
         selectedStrikerId = parseInt(chip.getAttribute('data-striker'));
-        Sound.playClack(10);
+        Sound.playClack(8, selectedStrikerId);
+        updateEquippedStrikerCard();
       });
     });
 
-    // Board Selection Chips
+    // Board options (100% square)
     document.querySelectorAll('#board-options .opt-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         document.querySelectorAll('#board-options .opt-chip').forEach(c => c.classList.remove('active'));
         chip.classList.add('active');
         selectedBoardKey = chip.getAttribute('data-board');
-        Sound.playClack(10);
+        Sound.playFlick();
       });
     });
 
-    // Coin Palette Chips
+    // Coin palette options
     document.querySelectorAll('#coin-options .opt-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         document.querySelectorAll('#coin-options .opt-chip').forEach(c => c.classList.remove('active'));
         chip.classList.add('active');
         selectedCoinKey = chip.getAttribute('data-coin');
-        Sound.playClack(10);
+        Sound.playFlick();
       });
     });
 
-    // In-game Pause & Result buttons
-    document.getElementById('sound-btn').addEventListener('click', () => {
-      const isMuted = !Sound.toggle();
-      document.getElementById('sound-btn').textContent = isMuted ? '🔇' : '🔊';
-    });
-
-    document.getElementById('pause-btn').addEventListener('click', () => {
-      document.getElementById('hud').classList.add('hidden');
-      document.getElementById('turn-msg').classList.add('hidden');
-      document.getElementById('menu-overlay').classList.remove('hidden');
-    });
-
+    // Result buttons
     document.getElementById('btn-rematch').addEventListener('click', () => {
       document.getElementById('result-overlay').classList.add('hidden');
-      Game.startMatch(false, 'classic');
+      Game.launchMatch(isFunMode, funVariant);
     });
 
     document.getElementById('btn-home').addEventListener('click', () => {
@@ -1972,9 +2659,26 @@
       document.getElementById('hud').classList.add('hidden');
       document.getElementById('turn-msg').classList.add('hidden');
       document.getElementById('menu-overlay').classList.remove('hidden');
+      updateEquippedStrikerCard();
     });
 
-    // Launch Engine
+    // Sound toggle button
+    document.getElementById('sound-btn').addEventListener('click', () => {
+      const next = !Sound.isEnabled();
+      Sound.setEnabled(next);
+      document.getElementById('sound-btn').textContent = next ? '🔊' : '🔇';
+    });
+
+    // Pause/Menu button
+    document.getElementById('pause-btn').addEventListener('click', () => {
+      document.getElementById('hud').classList.add('hidden');
+      document.getElementById('turn-msg').classList.add('hidden');
+      document.getElementById('menu-overlay').classList.remove('hidden');
+      updateEquippedStrikerCard();
+    });
+
+    // Initial load
+    updateEquippedStrikerCard();
     Game.start();
   </script>
 </body>
