@@ -1,4 +1,4 @@
-name: Deploy Game to GitHub Pages & Package YouTube Playables
+name: Deploy Game to GitHub Pages
 
 on:
   push:
@@ -38,22 +38,22 @@ jobs:
           unzip -q Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz
           mv templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/
 
-      - name: Export Web Project (YouTube Playables)
+      - name: Export Web Project (HTML5)
         run: |
-          mkdir -p export/playables
-          godot --headless --export-release "YouTubePlayables" export/playables/index.html
+          mkdir -p export/web
+          godot --headless --export-release "Web" export/web/index.html
 
-      - name: Create YouTube Playables Zip Package
+      - name: Package Web HTML5 Zip
         run: |
-          cd export/playables
-          zip -r ../CarromChampions_YouTubePlayables.zip .
+          cd export/web
+          zip -r ../CarromChampions_Web.zip .
           cd ../..
 
-      - name: Upload YouTube Playables Zip Artifact
+      - name: Upload Web Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CarromChampions_YouTubePlayables
-          path: export/CarromChampions_YouTubePlayables.zip
+          name: CarromChampions_Web
+          path: export/CarromChampions_Web.zip
 
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
@@ -61,7 +61,7 @@ jobs:
       - name: Upload GitHub Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: export/playables
+          path: export/web
 
       - name: Deploy to GitHub Pages
         id: deployment

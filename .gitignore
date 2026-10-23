@@ -15,6 +15,7 @@ CarromChampions_update_v4.apk.idsig
 
 # Exported bundles
 export/playables/
+export/web/
 export/*.zip
 *.zip
 
