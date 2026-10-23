@@ -1127,6 +1127,35 @@
     })();
 
     /* =========================================================================
+       YOUTUBE PLAYABLES SDK INTEGRATION & LIFECYCLE
+       ========================================================================= */
+    const YouTubePlayables = (() => {
+      let isYT = typeof window !== 'undefined' && typeof window.ytgame !== 'undefined';
+      function init() {
+        if (isYT && window.ytgame && window.ytgame.game && window.ytgame.game.firstFrameReady) {
+          try { window.ytgame.game.firstFrameReady(); } catch(e) {}
+        }
+        if (isYT && window.ytgame && window.ytgame.system) {
+          try {
+            window.ytgame.system.onPause(() => Game.pause());
+            window.ytgame.system.onResume(() => Game.resume());
+            window.ytgame.system.onAudioEnabledChange((enabled) => {
+              Sound.setEnabled(enabled);
+              const sBtn = document.getElementById('sound-btn');
+              if (sBtn) sBtn.textContent = enabled ? '🔊' : '🔇';
+            });
+          } catch(e) {}
+        }
+      }
+      function gameReady() {
+        if (isYT && window.ytgame && window.ytgame.game && window.ytgame.game.gameReady) {
+          try { window.ytgame.game.gameReady(); } catch(e) {}
+        }
+      }
+      return { init, gameReady };
+    })();
+
+    /* =========================================================================
        CUSTOMIZATION DEFINITIONS (6 GODOT STRIKERS, 4 SQUARE BOARDS, 4 COINS)
        ========================================================================= */
     const STRIKER_CONFIGS = {
