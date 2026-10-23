@@ -2701,6 +2701,8 @@
 
       function checkTurnEnd() {
         const anyMoving = pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.04 || Math.abs(p.vy) > 0.04));
+        // Failsafe: mark finished if time exceeds duration
+        activePocketCrackers.forEach(c => { if (c.time >= (c.duration || 2.0)) c.finished = true; });
         const anyCrackersPopping = activePocketCrackers.some(c => !c.finished);
         if (anyMoving || anyCrackersPopping) return;
 
@@ -2929,26 +2931,30 @@
 
         pieces.forEach(p => p.draw(ctx));
 
-        activePocketCrackers.forEach((crk, idx) => {
+        for (let i = activePocketCrackers.length - 1; i >= 0; i--) {
+          const crk = activePocketCrackers[i];
           crk.update(dt);
           crk.draw(ctx);
-          if (crk.finished) activePocketCrackers.splice(idx, 1);
-        });
+          if (crk.finished) activePocketCrackers.splice(i, 1);
+        }
 
-        shockwaves.forEach((s, idx) => {
-          s.update(); s.draw(ctx);
-          if (s.alpha <= 0) shockwaves.splice(idx, 1);
-        });
+        for (let i = shockwaves.length - 1; i >= 0; i--) {
+          shockwaves[i].update();
+          shockwaves[i].draw(ctx);
+          if (shockwaves[i].alpha <= 0) shockwaves.splice(i, 1);
+        }
 
-        particles.forEach((pt, idx) => {
-          pt.update(); pt.draw(ctx);
-          if (pt.alpha <= 0) particles.splice(idx, 1);
-        });
+        for (let i = particles.length - 1; i >= 0; i--) {
+          particles[i].update();
+          particles[i].draw(ctx);
+          if (particles[i].alpha <= 0) particles.splice(i, 1);
+        }
 
-        floatingTexts.forEach((ft, idx) => {
-          ft.update(); ft.draw(ctx);
-          if (ft.alpha <= 0) floatingTexts.splice(idx, 1);
-        });
+        for (let i = floatingTexts.length - 1; i >= 0; i--) {
+          floatingTexts[i].update();
+          floatingTexts[i].draw(ctx);
+          if (floatingTexts[i].alpha <= 0) floatingTexts.splice(i, 1);
+        }
 
         if (isAiming && state === 'aiming' && turn === 1) {
           const dx = striker.x - aimCurrent.x;
@@ -2991,6 +2997,12 @@
           checkTurnEnd();
         } else if (state === 'aiming') {
           updateFunMechanics(dt);
+          const anyMoving = pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.04 || Math.abs(p.vy) > 0.04));
+          if (anyMoving) {
+            pieces.forEach(p => p.update());
+            resolveCollisions();
+            checkPockets();
+          }
         }
 
         render(dt);
@@ -3091,7 +3103,10 @@
 
         resume() {
           if (state === 'paused') state = 'aiming';
-        }
+        },
+
+        getIsFunMode() { return isFunMode; },
+        getFunVariant() { return funVariant; }
       };
     })();
 
@@ -3263,7 +3278,7 @@
 
     document.getElementById('btn-rematch').addEventListener('click', () => {
       document.getElementById('result-overlay').classList.add('hidden');
-      Game.launchMatch(isFunMode, funVariant);
+      Game.launchMatch(Game.getIsFunMode(), Game.getFunVariant());
     });
 
     document.getElementById('btn-home').addEventListener('click', () => {
