@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Carrom Champions - Player vs AI</title>
+  <title>Carrom Champions - Diwali Cracker Edition</title>
   
   <script src="https://www.youtube.com/game_api/v1" onerror="console.log('[Playables] Standalone mode')"></script>
 
@@ -218,7 +218,10 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
       width: 100%;
-      max-width: 580px;
+      max-width: 620px;
+      max-height: 65vh;
+      overflow-y: auto;
+      padding: 6px;
       margin-bottom: 16px;
     }
 
@@ -240,6 +243,36 @@
       border-color: #f7ca48;
       box-shadow: 0 6px 18px rgba(247, 202, 72, 0.35);
       background: linear-gradient(135deg, #4d2b14 0%, #271407 100%);
+    }
+
+    /* Cracker Highlight Card in Fun Grid */
+    .fun-card-cracker {
+      grid-column: span 2;
+      background: linear-gradient(135deg, #4a1508 0%, #290a03 100%) !important;
+      border: 2px solid #ff9100 !important;
+      box-shadow: 0 4px 20px rgba(255, 109, 0, 0.45) !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fun-card-cracker:hover {
+      border-color: #ffd700 !important;
+      box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6) !important;
+      transform: translateY(-3px) scale(1.01) !important;
+    }
+
+    .diwali-badge {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      background: linear-gradient(135deg, #ff3d00 0%, #d50000 100%);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 10px;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
     }
 
     /* Godot Striker Arsenal Grid Modal */
@@ -621,7 +654,7 @@
         <div id="card-fun" class="big-card">
           <div class="big-card-icon">🚀</div>
           <div class="big-card-title">FUN MODE</div>
-          <div class="big-card-desc">Magnet vortex, stone pulse, time bombs, tag coins & coin breakers!</div>
+          <div class="big-card-desc">Diwali crackers, magnet vortex, stone pulse, bombs & coin breakers!</div>
         </div>
       </div>
 
@@ -649,34 +682,45 @@
       <p class="subtitle">Choose your special gameplay variant vs AI</p>
 
       <div class="fun-grid">
+        <!-- 🎆 DIWALI CRACKER MODE -->
+        <div class="fun-card fun-card-cracker" data-mode="crackers">
+          <span class="diwali-badge">DIWALI SPECIAL 🪔</span>
+          <div style="font-size: 2.3rem; margin-bottom: 4px;">🪔 🎆 🎇</div>
+          <div style="font-size: 1.18rem; font-weight: bold; color: #ffd700;">Diwali Cracker Mode</div>
+          <div style="font-size: 0.8rem; color: #ffe0b2; margin-top: 3px; line-height: 1.35;">
+            Coins are randomly packed with <strong>Chakkar</strong>, <strong>Flower Pot</strong>, <strong>100-Wala</strong>, <strong>Rocket</strong> & <strong>Atom Bomb</strong>!<br>
+            Pocketing a coin activates the cracker inside the pocket hole to pop with fireworks & extra score!
+          </div>
+        </div>
+
         <div class="fun-card" data-mode="magnet">
-          <div style="font-size: 2rem; margin-bottom: 4px;">🧲</div>
-          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Magnet Event</div>
-          <div style="font-size: 0.76rem; color: #cbb49e;">120s timer triggers 20s center vortex pulling coins!</div>
+          <div style="font-size: 1.8rem; margin-bottom: 4px;">🧲</div>
+          <div style="font-size: 1.02rem; font-weight: bold; color: #ffd700;">Magnet Event</div>
+          <div style="font-size: 0.74rem; color: #cbb49e;">120s timer triggers 20s center vortex pulling coins!</div>
         </div>
 
         <div class="fun-card" data-mode="stone">
-          <div style="font-size: 2rem; margin-bottom: 4px;">🪨</div>
-          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Stone Pulse</div>
-          <div style="font-size: 0.76rem; color: #cbb49e;">Coins petrify +5% every 15s. Double-hit reduces to 50%!</div>
+          <div style="font-size: 1.8rem; margin-bottom: 4px;">🪨</div>
+          <div style="font-size: 1.02rem; font-weight: bold; color: #ffd700;">Stone Pulse</div>
+          <div style="font-size: 0.74rem; color: #cbb49e;">Coins petrify +5% every 15s. Double-hit reduces to 50%!</div>
         </div>
 
         <div class="fun-card" data-mode="bomber">
-          <div style="font-size: 2rem; margin-bottom: 4px;">💣</div>
-          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Player Bomber</div>
-          <div style="font-size: 0.76rem; color: #cbb49e;">120s countdown. Timeout triggers blast & +10 penalty!</div>
+          <div style="font-size: 1.8rem; margin-bottom: 4px;">💣</div>
+          <div style="font-size: 1.02rem; font-weight: bold; color: #ffd700;">Player Bomber</div>
+          <div style="font-size: 0.74rem; color: #cbb49e;">120s countdown. Timeout triggers blast & +10 penalty!</div>
         </div>
 
         <div class="fun-card" data-mode="tagcoins">
-          <div style="font-size: 2rem; margin-bottom: 4px;">🏷️</div>
-          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Tag Coins</div>
-          <div style="font-size: 0.76rem; color: #cbb49e;">240s phases: Tag coins first, then pocket only your tags!</div>
+          <div style="font-size: 1.8rem; margin-bottom: 4px;">🏷️</div>
+          <div style="font-size: 1.02rem; font-weight: bold; color: #ffd700;">Tag Coins</div>
+          <div style="font-size: 0.74rem; color: #cbb49e;">240s phases: Tag coins first, then pocket only your tags!</div>
         </div>
 
         <div class="fun-card" data-mode="coin_breaker" style="grid-column: span 2;">
-          <div style="font-size: 2rem; margin-bottom: 4px;">🔨</div>
-          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Coin Breaker & Glue</div>
-          <div style="font-size: 0.76rem; color: #cbb49e;">Power shots shatter coins into halves; Glue phase fuses them!</div>
+          <div style="font-size: 1.8rem; margin-bottom: 4px;">🔨</div>
+          <div style="font-size: 1.02rem; font-weight: bold; color: #ffd700;">Coin Breaker & Glue</div>
+          <div style="font-size: 0.74rem; color: #cbb49e;">Power shots shatter coins into halves; Glue phase fuses them!</div>
         </div>
       </div>
 
@@ -762,7 +806,7 @@
 
   <script>
     /* =========================================================================
-       AUDIO SYNTHESIZER WITH GODOT STRIKER PROFILES
+       AUDIO SYNTHESIZER WITH GODOT STRIKER & DIWALI CRACKER PROFILES
        ========================================================================= */
     const Sound = (() => {
       let ctx = null;
@@ -899,34 +943,164 @@
           osc.stop(ac.currentTime + 0.07);
         },
 
-        playExplosion() {
+        /* =================== DIWALI CRACKER AUDIO =================== */
+
+        // 1. 🌀 CHAKKAR: Whistling high-speed spin with sparkling hiss
+        playChakkar() {
           if (!enabled) return;
           const ac = getCtx();
           if (!ac) return;
+          const now = ac.currentTime;
+
+          // Whistle oscillator
           const osc = ac.createOscillator();
           const gain = ac.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(140, ac.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(25, ac.currentTime + 0.5);
-          gain.gain.setValueAtTime(1.0, ac.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.55);
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(750, now);
+          osc.frequency.linearRampToValueAtTime(1250, now + 0.8);
+          osc.frequency.exponentialRampToValueAtTime(500, now + 2.2);
+
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.linearRampToValueAtTime(0.3, now + 0.5);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 2.3);
+
           osc.connect(gain);
           gain.connect(ac.destination);
           osc.start();
-          osc.stop(ac.currentTime + 0.55);
+          osc.stop(now + 2.3);
 
-          const bufferSize = ac.sampleRate * 0.3;
+          // Fiery hiss noise
+          const bufferSize = ac.sampleRate * 1.8;
+          const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.3;
+          const noise = ac.createBufferSource();
+          noise.buffer = buffer;
+          const nGain = ac.createGain();
+          nGain.gain.setValueAtTime(0.18, now);
+          nGain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
+          noise.connect(nGain);
+          nGain.connect(ac.destination);
+          noise.start();
+        },
+
+        // 2. 🌋 FLOWER POT (ANAAR): Rising roaring sizzle & crackling fountain
+        playFlowerpot() {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const now = ac.currentTime;
+
+          const bufferSize = ac.sampleRate * 2.2;
+          const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+          const noise = ac.createBufferSource();
+          noise.buffer = buffer;
+
+          // Bandpass filter to simulate fountain plume whoosh
+          const filter = ac.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(800, now);
+          filter.frequency.linearRampToValueAtTime(2400, now + 1.2);
+          filter.frequency.exponentialRampToValueAtTime(600, now + 2.2);
+          filter.Q.value = 3.0;
+
+          const gain = ac.createGain();
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.linearRampToValueAtTime(0.45, now + 0.8);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
+
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(ac.destination);
+          noise.start();
+        },
+
+        // 3. 🧨 100-WALA (LADI): Rapid-fire snappy chain pop
+        play100WalaSingle(intensity = 1.0) {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const now = ac.currentTime;
+
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(800 + Math.random() * 400, now);
+          osc.frequency.exponentialRampToValueAtTime(100, now + 0.04);
+
+          gain.gain.setValueAtTime(0.4 * intensity, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(now + 0.05);
+        },
+
+        // 4. 🚀 ROCKET: Ascending screech whistle then aerial burst
+        playRocketLaunch() {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const now = ac.currentTime;
+
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(350, now);
+          osc.frequency.exponentialRampToValueAtTime(2200, now + 0.65);
+
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.linearRampToValueAtTime(0.4, now + 0.4);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(now + 0.7);
+        },
+
+        // 5. 💥 ATOM BOMB / DHAMAKA: Deep booming bass detonation
+        playAtomBomb() {
+          if (!enabled) return;
+          const ac = getCtx();
+          if (!ac) return;
+          const now = ac.currentTime;
+
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.exponentialRampToValueAtTime(28, now + 0.6);
+
+          gain.gain.setValueAtTime(1.0, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start();
+          osc.stop(now + 0.65);
+
+          // Punchy noise layer
+          const bufferSize = ac.sampleRate * 0.4;
           const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
           const data = buffer.getChannelData(0);
           for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
           const noise = ac.createBufferSource();
           noise.buffer = buffer;
-          const noiseGain = ac.createGain();
-          noiseGain.gain.setValueAtTime(0.6, ac.currentTime);
-          noiseGain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.3);
-          noise.connect(noiseGain);
-          noiseGain.connect(ac.destination);
+          const nGain = ac.createGain();
+          nGain.gain.setValueAtTime(0.7, now);
+          nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          noise.connect(nGain);
+          nGain.connect(ac.destination);
           noise.start();
+        },
+
+        playExplosion() {
+          this.playAtomBomb();
         },
 
         playMagnetHum() {
@@ -1519,25 +1693,27 @@
     const BASELINE_HALF_LEN = 195;
 
     const POCKETS = [
-      { x: FRAME_WIDTH + 26, y: FRAME_WIDTH + 26 },
-      { x: BOARD_SIZE - FRAME_WIDTH - 26, y: FRAME_WIDTH + 26 },
-      { x: FRAME_WIDTH + 26, y: BOARD_SIZE - FRAME_WIDTH - 26 },
-      { x: BOARD_SIZE - FRAME_WIDTH - 26, y: BOARD_SIZE - FRAME_WIDTH - 26 }
+      { id: 0, x: FRAME_WIDTH + 26, y: FRAME_WIDTH + 26 },
+      { id: 1, x: BOARD_SIZE - FRAME_WIDTH - 26, y: FRAME_WIDTH + 26 },
+      { id: 2, x: FRAME_WIDTH + 26, y: BOARD_SIZE - FRAME_WIDTH - 26 },
+      { id: 3, x: BOARD_SIZE - FRAME_WIDTH - 26, y: BOARD_SIZE - FRAME_WIDTH - 26 }
     ];
 
     class Particle {
-      constructor(x, y, color = '#f7ca48', size = 3, vx = null, vy = null) {
+      constructor(x, y, color = '#f7ca48', size = 3, vx = null, vy = null, decay = null) {
         this.x = x; this.y = y;
         this.color = color;
         this.size = size;
         this.vx = vx !== null ? vx : (Math.random() - 0.5) * 6;
         this.vy = vy !== null ? vy : (Math.random() - 0.5) * 6;
         this.alpha = 1.0;
-        this.decay = 0.02 + Math.random() * 0.03;
+        this.decay = decay !== null ? decay : (0.02 + Math.random() * 0.03);
+        this.gravity = 0;
       }
       update() {
         this.x += this.vx; this.y += this.vy;
-        this.vx *= 0.95; this.vy *= 0.95;
+        this.vy += this.gravity;
+        this.vx *= 0.96; this.vy *= 0.96;
         this.alpha -= this.decay;
       }
       draw(ctx) {
@@ -1547,21 +1723,57 @@
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 6;
         ctx.fill();
         ctx.restore();
       }
     }
 
+    class FloatingText {
+      constructor(x, y, text, color = '#ffd700', size = 16) {
+        this.x = x; this.y = y;
+        this.text = text;
+        this.color = color;
+        this.size = size;
+        this.alpha = 1.0;
+        this.scale = 0.6;
+      }
+      update() {
+        this.y -= 1.2;
+        if (this.scale < 1.1) this.scale += 0.05;
+        this.alpha -= 0.015;
+      }
+      draw(ctx) {
+        if (this.alpha <= 0) return;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.translate(this.x, this.y);
+        ctx.scale(this.scale, this.scale);
+        ctx.font = 'bold ' + this.size + 'px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#000';
+        ctx.fillText(this.text, 2, 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 10;
+        ctx.fillText(this.text, 0, 0);
+        ctx.restore();
+      }
+    }
+
     class Shockwave {
-      constructor(x, y, maxRadius = 120, color = '#ffd700') {
+      constructor(x, y, maxRadius = 120, color = '#ffd700', speed = 7) {
         this.x = x; this.y = y;
         this.radius = 5;
         this.maxRadius = maxRadius;
         this.color = color;
+        this.speed = speed;
         this.alpha = 1.0;
       }
       update() {
-        this.radius += 7;
+        this.radius += this.speed;
         this.alpha = Math.max(0, 1 - (this.radius / this.maxRadius));
       }
       draw(ctx) {
@@ -1572,7 +1784,292 @@
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 4;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 8;
         ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    /* =========================================================================
+       ACTIVE POCKET CRACKER SYSTEM (DIWALI FIREWORKS IN POCKET HOLE)
+       ========================================================================= */
+    class ActivePocketCracker {
+      constructor(pocketX, pocketY, type, particlesArray, shockwavesArray, floatTextsArray) {
+        this.x = pocketX;
+        this.y = pocketY;
+        this.type = type; // 'chakkar', 'flowerpot', '100wala', 'rocket', 'bomb', 'mega_diwali'
+        this.particles = particlesArray;
+        this.shockwaves = shockwavesArray;
+        this.floatTexts = floatTextsArray;
+        this.time = 0;
+        this.finished = false;
+        this.rot = 0;
+
+        // Configuration
+        if (type === 'chakkar') {
+          this.duration = 2.4;
+          Sound.playChakkar();
+          this.floatTexts.push(new FloatingText(pocketX, pocketY - 20, '🌀 CHAKKAR! +15', '#ff9800', 17));
+        } else if (type === 'flowerpot') {
+          this.duration = 2.8;
+          Sound.playFlowerpot();
+          this.floatTexts.push(new FloatingText(pocketX, pocketY - 20, '🌋 ANAAR FOUNTAIN! +20', '#ffd700', 18));
+        } else if (type === '100wala') {
+          this.duration = 2.2;
+          this.popCount = 0;
+          this.nextPopTime = 0.05;
+          this.floatTexts.push(new FloatingText(pocketX, pocketY - 20, '🧨 100-WALA LADI! +25', '#ff1744', 18));
+        } else if (type === 'rocket') {
+          this.duration = 2.0;
+          this.rocketFired = false;
+          this.rocketExploded = false;
+          this.rocketX = pocketX;
+          this.rocketY = pocketY;
+          this.targetX = HALF_SIZE + (Math.random() - 0.5) * 160;
+          this.targetY = HALF_SIZE + (Math.random() - 0.5) * 160;
+          Sound.playRocketLaunch();
+          this.floatTexts.push(new FloatingText(pocketX, pocketY - 20, '🚀 ROCKET BURST! +30', '#00e5ff', 18));
+        } else if (type === 'bomb') {
+          this.duration = 1.6;
+          this.detonated = false;
+          this.floatTexts.push(new FloatingText(pocketX, pocketY - 20, '💥 ATOM BOMB! +35', '#ff3d00', 19));
+        } else if (type === 'mega_diwali') {
+          this.duration = 3.4;
+          Sound.playFlowerpot();
+          Sound.playChakkar();
+          this.floatTexts.push(new FloatingText(pocketX, pocketY - 25, '🪔 SHUBH DIWALI DHAMAKA! +50', '#ffd700', 22));
+        }
+      }
+
+      update(dt) {
+        this.time += dt;
+
+        // 1. 🌀 CHAKKAR: Spinning sparkling disc in pocket
+        if (this.type === 'chakkar') {
+          this.rot += dt * 32;
+          // Spawn swirling sparks
+          for (let i = 0; i < 3; i++) {
+            const angle = this.rot + (i * Math.PI * 2 / 3);
+            const speed = 3.5 + Math.random() * 4.5;
+            const p = new Particle(
+              this.x + Math.cos(angle) * 12,
+              this.y + Math.sin(angle) * 12,
+              Math.random() < 0.5 ? '#ffd700' : '#ff9800',
+              Math.random() * 3 + 2,
+              Math.cos(angle) * speed,
+              Math.sin(angle) * speed,
+              0.04
+            );
+            this.particles.push(p);
+          }
+        }
+
+        // 2. 🌋 FLOWER POT (ANAAR): High fountain plume of sparks shooting upwards
+        else if (this.type === 'flowerpot' || (this.type === 'mega_diwali' && this.time < 2.5)) {
+          // Fountain direction points towards center of board from corner pocket
+          const dirX = (HALF_SIZE - this.x) > 0 ? 1 : -1;
+          const dirY = (HALF_SIZE - this.y) > 0 ? 1 : -1;
+
+          for (let i = 0; i < 4; i++) {
+            const colors = ['#ffffff', '#ffd700', '#ff6d00', '#ff1744', '#00e676'];
+            const col = colors[Math.floor(Math.random() * colors.length)];
+            const p = new Particle(
+              this.x + (Math.random() - 0.5) * 8,
+              this.y + (Math.random() - 0.5) * 8,
+              col,
+              Math.random() * 3 + 2,
+              (dirX * (3 + Math.random() * 5)) + (Math.random() - 0.5) * 4,
+              (dirY * (3 + Math.random() * 5)) + (Math.random() - 0.5) * 4,
+              0.025
+            );
+            p.gravity = 0.12 * dirY;
+            this.particles.push(p);
+          }
+        }
+
+        // 3. 🧨 100-WALA: Consecutive chain popping explosions in pocket hole
+        else if (this.type === '100wala') {
+          if (this.time >= this.nextPopTime && this.popCount < 16) {
+            this.popCount++;
+            this.nextPopTime = this.time + 0.11;
+            Sound.play100WalaSingle(0.8 + (this.popCount / 20));
+
+            // Mini flash & pop sparks in pocket
+            for (let i = 0; i < 8; i++) {
+              const a = Math.random() * Math.PI * 2;
+              const spd = 2 + Math.random() * 6;
+              this.particles.push(new Particle(
+                this.x, this.y,
+                Math.random() < 0.6 ? '#ff1744' : '#ffeb3b',
+                Math.random() * 3 + 2,
+                Math.cos(a) * spd,
+                Math.sin(a) * spd,
+                0.05
+              ));
+            }
+
+            // Smoke puff
+            this.particles.push(new Particle(this.x, this.y, '#9e9e9e', 6, (Math.random()-0.5)*2, (Math.random()-0.5)*2, 0.03));
+
+            // Final BIG POP at end of 100-wala!
+            if (this.popCount === 16) {
+              Sound.playAtomBomb();
+              this.shockwaves.push(new Shockwave(this.x, this.y, 140, '#ffd700', 8));
+            }
+          }
+        }
+
+        // 4. 🚀 ROCKET: Launches out of pocket toward center & explodes
+        else if (this.type === 'rocket') {
+          const travelRatio = Math.min(this.time / 0.7, 1.0);
+          this.rocketX = this.x + (this.targetX - this.x) * travelRatio;
+          this.rocketY = this.y + (this.targetY - this.y) * travelRatio;
+
+          // Rocket flame trail
+          if (travelRatio < 1.0) {
+            this.particles.push(new Particle(
+              this.rocketX, this.rocketY,
+              Math.random() < 0.5 ? '#ff9100' : '#ffff00',
+              3.5,
+              (Math.random() - 0.5) * 2,
+              (Math.random() - 0.5) * 2,
+              0.05
+            ));
+          } else if (!this.rocketExploded) {
+            this.rocketExploded = true;
+            Sound.playAtomBomb();
+            this.shockwaves.push(new Shockwave(this.targetX, this.targetY, 180, '#00e5ff', 9));
+
+            // Majestic aerial burst with 36 colorful sparkles!
+            for (let i = 0; i < 36; i++) {
+              const a = (i * Math.PI * 2) / 36;
+              const spd = 4 + Math.random() * 5;
+              const cols = ['#00e5ff', '#ff007f', '#ffd700', '#76ff03', '#ffffff'];
+              this.particles.push(new Particle(
+                this.targetX, this.targetY,
+                cols[i % cols.length],
+                3.5,
+                Math.cos(a) * spd,
+                Math.sin(a) * spd,
+                0.02
+              ));
+            }
+          }
+        }
+
+        // 5. 💥 ATOM BOMB / DHAMAKA: Brief fuse then massive blast
+        else if (this.type === 'bomb') {
+          if (this.time < 0.4) {
+            // Sizzling fuse
+            this.particles.push(new Particle(
+              this.x + (Math.random() - 0.5) * 6,
+              this.y + (Math.random() - 0.5) * 6,
+              '#ffd700', 2.5,
+              (Math.random() - 0.5) * 3,
+              (Math.random() - 0.5) * 3,
+              0.06
+            ));
+          } else if (!this.detonated) {
+            this.detonated = true;
+            Sound.playAtomBomb();
+            this.shockwaves.push(new Shockwave(this.x, this.y, 220, '#ff1744', 10));
+
+            for (let i = 0; i < 40; i++) {
+              const a = Math.random() * Math.PI * 2;
+              const spd = 3 + Math.random() * 9;
+              this.particles.push(new Particle(
+                this.x, this.y,
+                Math.random() < 0.5 ? '#ff3d00' : '#ffd700',
+                Math.random() * 4 + 2,
+                Math.cos(a) * spd,
+                Math.sin(a) * spd,
+                0.025
+              ));
+            }
+          }
+        }
+
+        // 6. 🪔 MEGA DIWALI QUEEN FINALE
+        else if (this.type === 'mega_diwali') {
+          this.rot += dt * 30;
+          if (this.time > 1.2 && !this.finaleFired) {
+            this.finaleFired = true;
+            Sound.playAtomBomb();
+            this.shockwaves.push(new Shockwave(this.x, this.y, 260, '#ffd700', 11));
+            // Multi-pocket synchronized celebration
+            POCKETS.forEach(p => {
+              for (let i = 0; i < 16; i++) {
+                const a = Math.random() * Math.PI * 2;
+                this.particles.push(new Particle(p.x, p.y, '#ffd700', 4, Math.cos(a)*6, Math.sin(a)*6, 0.03));
+              }
+            });
+          }
+        }
+
+        if (this.time >= this.duration) {
+          this.finished = true;
+        }
+      }
+
+      draw(ctx) {
+        // Draw pocket glow and active cracker visual on top of pocket hole
+        ctx.save();
+        ctx.translate(this.x, this.y);
+
+        if (this.type === 'chakkar') {
+          ctx.rotate(this.rot);
+          // Glowing center spinner
+          ctx.beginPath();
+          ctx.arc(0, 0, 16, 0, Math.PI * 2);
+          ctx.fillStyle = '#ff9800';
+          ctx.shadowColor = '#ffd700';
+          ctx.shadowBlur = 15;
+          ctx.fill();
+
+          // 4 spinning chakra wings
+          ctx.fillStyle = '#ffd700';
+          for (let i = 0; i < 4; i++) {
+            ctx.rotate(Math.PI / 2);
+            ctx.beginPath();
+            ctx.ellipse(12, 0, 8, 4, 0, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        } else if (this.type === 'flowerpot') {
+          // Fiery cone inside pocket
+          ctx.beginPath();
+          ctx.arc(0, 0, 14, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 109, 0, 0.8)';
+          ctx.shadowColor = '#ffd700';
+          ctx.shadowBlur = 20;
+          ctx.fill();
+        } else if (this.type === '100wala') {
+          // Rapid flash in pocket
+          if (Math.sin(this.time * 40) > 0) {
+            ctx.beginPath();
+            ctx.arc(0, 0, 20, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 235, 59, 0.7)';
+            ctx.shadowColor = '#ff1744';
+            ctx.shadowBlur = 25;
+            ctx.fill();
+          }
+        } else if (this.type === 'rocket' && !this.rocketExploded) {
+          // Draw rocket projectile moving on board
+          ctx.restore();
+          ctx.save();
+          ctx.translate(this.rocketX, this.rocketY);
+          const angle = Math.atan2(this.targetY - this.y, this.targetX - this.x);
+          ctx.rotate(angle);
+          ctx.fillStyle = '#ff1744';
+          ctx.fillRect(-12, -4, 16, 8);
+          ctx.beginPath();
+          ctx.moveTo(4, -6); ctx.lineTo(12, 0); ctx.lineTo(4, 6);
+          ctx.fillStyle = '#ffd700';
+          ctx.fill();
+          ctx.restore();
+          return;
+        }
+
         ctx.restore();
       }
     }
@@ -1590,6 +2087,7 @@
         this.taggedBy = 0;
         this.isHalf = false;
         this.halfPairId = null;
+        this.crackerType = null; // 'chakkar', 'flowerpot', '100wala', 'rocket', 'bomb', 'mega_diwali'
         this.rotation = Math.random() * Math.PI * 2;
       }
 
@@ -1695,6 +2193,31 @@
         c.strokeStyle = borderColor;
         c.stroke();
 
+        // 🎆 DIWALI CRACKER BADGE ON COIN
+        if (this.crackerType) {
+          let badgeEmoji = '🌀';
+          let ringColor = '#ffd700';
+          if (this.crackerType === 'chakkar') { badgeEmoji = '🌀'; ringColor = '#ff9800'; }
+          else if (this.crackerType === 'flowerpot') { badgeEmoji = '🌋'; ringColor = '#ffca28'; }
+          else if (this.crackerType === '100wala') { badgeEmoji = '🧨'; ringColor = '#ff1744'; }
+          else if (this.crackerType === 'rocket') { badgeEmoji = '🚀'; ringColor = '#00e5ff'; }
+          else if (this.crackerType === 'bomb') { badgeEmoji = '💥'; ringColor = '#ff3d00'; }
+          else if (this.crackerType === 'mega_diwali') { badgeEmoji = '🪔'; ringColor = '#ffd700'; }
+
+          // Glowing festive rim
+          c.beginPath();
+          c.arc(0, 0, this.radius - 1, 0, Math.PI * 2);
+          c.lineWidth = 1.8;
+          c.strokeStyle = ringColor;
+          c.stroke();
+
+          // Cracker icon
+          c.font = '12px sans-serif';
+          c.textAlign = 'center';
+          c.textBaseline = 'middle';
+          c.fillText(badgeEmoji, 0, 0);
+        }
+
         // Tagged Coins Badge
         if (this.taggedBy > 0) {
           c.beginPath();
@@ -1730,7 +2253,7 @@
 
       let state = 'menu'; // 'menu', 'aiming', 'shooting', 'paused', 'gameover'
       let isFunMode = false;
-      let funVariant = 'magnet'; // 'magnet', 'stone', 'bomber', 'tagcoins', 'coin_breaker'
+      let funVariant = 'crackers'; // 'crackers', 'magnet', 'stone', 'bomber', 'tagcoins', 'coin_breaker'
 
       let turn = 1; // 1 = Player, 2 = AI
       let scores = { 1: 0, 2: 0 };
@@ -1743,6 +2266,8 @@
       let pieces = [];
       let shockwaves = [];
       let particles = [];
+      let floatingTexts = [];
+      let activePocketCrackers = [];
 
       let isAiming = false;
       let isDraggingStriker = false;
@@ -1771,6 +2296,8 @@
         coins = [];
         shockwaves = [];
         particles = [];
+        floatingTexts = [];
+        activePocketCrackers = [];
         scores = { 1: 0, 2: 0 };
         turn = 1;
         queenPocketedBy = null;
@@ -1787,7 +2314,7 @@
         isGluePhase = false;
         tagCoinPhase = 'tagging';
 
-        // Strikers
+        // Striker
         striker = new Piece(HALF_SIZE, strikerBaseY, 'striker', STRIKER_RADIUS);
         const cfg = STRIKER_CONFIGS[selectedStrikerId];
         striker.mass = cfg.mass;
@@ -1813,6 +2340,30 @@
           const type = (i % 2 === 0) ? 'p2' : 'p1';
           const c = new Piece(HALF_SIZE + Math.cos(angle) * outerRadius, HALF_SIZE + Math.sin(angle) * outerRadius, type);
           coins.push(c); pieces.push(c);
+        }
+
+        // 🎆 DIWALI CRACKER MODE: Assign crackers to all coins
+        if (isFunMode && funVariant === 'crackers') {
+          const crackerTypes = ['chakkar', 'flowerpot', '100wala', 'rocket', 'bomb'];
+          coins.forEach((c, idx) => {
+            if (c.type === 'queen') {
+              c.crackerType = 'mega_diwali';
+            } else {
+              c.crackerType = crackerTypes[idx % crackerTypes.length];
+            }
+          });
+
+          // Shuffle cracker assignments across the coins
+          for (let i = coins.length - 1; i > 0; i--) {
+            if (coins[i].type !== 'queen' && coins[0].type !== 'queen') {
+              const j = Math.floor(Math.random() * i);
+              if (coins[j].type !== 'queen') {
+                const temp = coins[i].crackerType;
+                coins[i].crackerType = coins[j].crackerType;
+                coins[j].crackerType = temp;
+              }
+            }
+          }
         }
 
         updateHUD();
@@ -1844,12 +2395,17 @@
         const strCfg = STRIKER_CONFIGS[selectedStrikerId];
 
         if (isFunMode) {
-          modePill.textContent = '🚀 ' + funVariant.toUpperCase().replace('_', ' ');
-          if (funVariant === 'magnet') subPill.textContent = magnetEventActive ? '🧲 VORTEX ACTIVE!' : 'Cooldown: ' + Math.ceil(magnetEventTimer) + 's';
-          else if (funVariant === 'stone') subPill.textContent = 'Next Pulse: ' + Math.ceil(stonePulseTimer) + 's';
-          else if (funVariant === 'bomber') subPill.textContent = '💣 P1: ' + Math.ceil(bomberTimerP1) + 's | AI: ' + Math.ceil(bomberTimerAI) + 's';
-          else if (funVariant === 'tagcoins') subPill.textContent = 'Phase: ' + tagCoinPhase.toUpperCase() + ' (' + Math.ceil(funMatchTimer) + 's)';
-          else if (funVariant === 'coin_breaker') subPill.textContent = isGluePhase ? '✨ GLUE PHASE ACTIVE!' : 'Normal Phase';
+          if (funVariant === 'crackers') {
+            modePill.textContent = '🪔 DIWALI CRACKER MODE';
+            subPill.textContent = '🎆 Pocket coins to pop crackers in the holes!';
+          } else {
+            modePill.textContent = '🚀 ' + funVariant.toUpperCase().replace('_', ' ');
+            if (funVariant === 'magnet') subPill.textContent = magnetEventActive ? '🧲 VORTEX ACTIVE!' : 'Cooldown: ' + Math.ceil(magnetEventTimer) + 's';
+            else if (funVariant === 'stone') subPill.textContent = 'Next Pulse: ' + Math.ceil(stonePulseTimer) + 's';
+            else if (funVariant === 'bomber') subPill.textContent = '💣 P1: ' + Math.ceil(bomberTimerP1) + 's | AI: ' + Math.ceil(bomberTimerAI) + 's';
+            else if (funVariant === 'tagcoins') subPill.textContent = 'Phase: ' + tagCoinPhase.toUpperCase() + ' (' + Math.ceil(funMatchTimer) + 's)';
+            else if (funVariant === 'coin_breaker') subPill.textContent = isGluePhase ? '✨ GLUE PHASE ACTIVE!' : 'Normal Phase';
+          }
         } else {
           modePill.textContent = '🌟 NORMAL MODE • ' + strCfg.name.split('•')[0].trim();
           subPill.textContent = 'Tournament Rules';
@@ -1956,6 +2512,7 @@
         half2.isHalf = true;
         half2.mass = 0.5;
         half2.halfPairId = pairId;
+        half2.crackerType = coin.crackerType;
         half2.vx = -coin.vx * 0.6;
         half2.vy = -coin.vy * 0.6;
 
@@ -2047,7 +2604,7 @@
         }
       }
 
-      /* =================== POCKET CHECKING =================== */
+      /* =================== POCKET CHECKING & CRACKER ACTIVATION =================== */
       function checkPockets() {
         pieces.forEach(p => {
           if (p.isPocketed) return;
@@ -2073,6 +2630,24 @@
                 else if (p.type === 'p2') pts = 5;
                 else if (p.type === 'queen') pts = 25;
 
+                // 🎆 DIWALI CRACKER MODE: Activate Cracker in this pocket!
+                if (isFunMode && funVariant === 'crackers' && p.crackerType) {
+                  // Register pocket cracker effect
+                  activePocketCrackers.push(new ActivePocketCracker(
+                    pocket.x, pocket.y,
+                    p.crackerType,
+                    particles, shockwaves, floatingTexts
+                  ));
+
+                  // Extra bonus points for cracker explosion!
+                  if (p.crackerType === 'chakkar') pts += 15;
+                  else if (p.crackerType === 'flowerpot') pts += 20;
+                  else if (p.crackerType === '100wala') pts += 25;
+                  else if (p.crackerType === 'rocket') pts += 30;
+                  else if (p.crackerType === 'bomb') pts += 35;
+                  else if (p.crackerType === 'mega_diwali') pts += 50;
+                }
+
                 // Tag Coins multiplier
                 if (isFunMode && funVariant === 'tagcoins' && tagCoinPhase === 'pocketing') {
                   if (p.taggedBy === turn) pts *= 2;
@@ -2089,14 +2664,14 @@
       /* =================== TURN TRANSITIONS =================== */
       function checkTurnEnd() {
         const anyMoving = pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.05 || Math.abs(p.vy) > 0.05));
-        if (anyMoving) return;
+        const anyCrackersPopping = activePocketCrackers.some(c => !c.finished);
+        if (anyMoving || anyCrackersPopping) return;
 
         state = 'aiming';
 
         const strikerPocketed = striker.isPocketed;
         let p1PocketedCount = coins.filter(c => c.type === 'p1' && c.isPocketed).length;
         let p2PocketedCount = coins.filter(c => c.type === 'p2' && c.isPocketed).length;
-        let queen = coins.find(c => c.type === 'queen');
 
         // Check Victory
         if (p1PocketedCount === 9 || p2PocketedCount === 9) {
@@ -2131,7 +2706,7 @@
         const winDesc = document.getElementById('winner-desc');
 
         if (scores[1] >= scores[2]) {
-          winTitle.textContent = '🏆 VICTORY!';
+          winTitle.textContent = isFunMode && funVariant === 'crackers' ? '🪔 DIWALI DHAMAKA VICTORY!' : '🏆 VICTORY!';
           winDesc.textContent = 'You defeated the AI Bot with ' + scores[1] + ' points!';
         } else {
           winTitle.textContent = 'DEFEAT!';
@@ -2154,7 +2729,10 @@
         activeCoins.forEach(coin => {
           POCKETS.forEach(pocket => {
             const dCoinToPocket = Math.hypot(pocket.x - coin.x, pocket.y - coin.y);
-            const score = (coin.type === 'p2' ? 100 : (coin.type === 'queen' ? 150 : 20)) - dCoinToPocket * 0.2;
+            let score = (coin.type === 'p2' ? 100 : (coin.type === 'queen' ? 150 : 20)) - dCoinToPocket * 0.2;
+            if (isFunMode && funVariant === 'crackers' && coin.crackerType) {
+              score += 25; // AI loves pocketing crackers!
+            }
             if (score > bestScore) {
               bestScore = score;
               bestTarget = coin;
@@ -2212,6 +2790,15 @@
           ctx.beginPath();
           ctx.arc(0, 0, COIN_RADIUS * 5.0, 0, Math.PI * 2);
           ctx.fillStyle = 'rgba(156, 39, 176, ' + (0.2 + pulse * 0.35) + ')';
+          ctx.fill();
+        }
+
+        // Cracker Mode ambient festive glow in center rosette
+        if (isFunMode && funVariant === 'crackers') {
+          const glow = Math.sin(Date.now() * 0.005) * 0.5 + 0.5;
+          ctx.beginPath();
+          ctx.arc(0, 0, COIN_RADIUS * 4.8, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 152, 0, ' + (0.12 + glow * 0.15) + ')';
           ctx.fill();
         }
 
@@ -2302,7 +2889,7 @@
         }
       }
 
-      function render() {
+      function render(dt) {
         drawBoard();
 
         // Striker Particle Trail
@@ -2311,16 +2898,40 @@
           particles.push(new Particle(striker.x, striker.y, cfg.trailColor, 4, -striker.vx*0.1, -striker.vy*0.1));
         }
 
+        // Ambient Diya/Cracker Sparkles in Diwali mode
+        if (isFunMode && funVariant === 'crackers' && Math.random() < 0.2) {
+          const coin = coins[Math.floor(Math.random() * coins.length)];
+          if (coin && !coin.isPocketed) {
+            particles.push(new Particle(coin.x + (Math.random()-0.5)*14, coin.y + (Math.random()-0.5)*14, '#ffd700', 2, 0, -1, 0.04));
+          }
+        }
+
+        // Pieces
         pieces.forEach(p => p.draw(ctx));
 
+        // Active Pocket Crackers
+        activePocketCrackers.forEach((crk, idx) => {
+          crk.update(dt);
+          crk.draw(ctx);
+          if (crk.finished) activePocketCrackers.splice(idx, 1);
+        });
+
+        // Shockwaves
         shockwaves.forEach((s, idx) => {
           s.update(); s.draw(ctx);
           if (s.alpha <= 0) shockwaves.splice(idx, 1);
         });
 
+        // Particles
         particles.forEach((pt, idx) => {
           pt.update(); pt.draw(ctx);
           if (pt.alpha <= 0) particles.splice(idx, 1);
+        });
+
+        // Floating Score & Cracker Texts
+        floatingTexts.forEach((ft, idx) => {
+          ft.update(); ft.draw(ctx);
+          if (ft.alpha <= 0) floatingTexts.splice(idx, 1);
         });
 
         // Aiming Guideline
@@ -2368,7 +2979,7 @@
           updateFunMechanics(dt);
         }
 
-        render();
+        render(dt);
         requestAnimationFrame(loop);
       }
 
