@@ -603,6 +603,355 @@
       max-width: 420px;
       width: 90%;
     }
+
+    /* =========================================================================
+       🪔 DIWALI CRACKER BAZAAR & CRACKER ARSENAL MODAL
+       ========================================================================= */
+    #bazaar-overlay {
+      background: radial-gradient(circle at center, rgba(35, 14, 5, 0.98) 0%, rgba(12, 4, 1, 0.99) 100%);
+      z-index: 120;
+    }
+
+    .bazaar-header {
+      width: 100%;
+      max-width: 820px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .bazaar-title-group h1 {
+      font-size: 1.7rem;
+      margin: 0;
+      color: #ffd700;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      text-align: left;
+    }
+
+    .bazaar-title-group p {
+      font-size: 0.8rem;
+      color: #ffe0b2;
+      margin: 2px 0 0 0;
+    }
+
+    .credits-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #4a2800 0%, #201000 100%);
+      border: 2px solid #ffd700;
+      border-radius: 24px;
+      padding: 6px 16px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #ffd700;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
+
+    /* 9-Slot Arsenal Equip Tray */
+    .bazaar-tray {
+      width: 100%;
+      max-width: 820px;
+      background: rgba(20, 8, 3, 0.85);
+      border: 1.5px solid #d4af37;
+      border-radius: 14px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .tray-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #ffd54f;
+      letter-spacing: 0.5px;
+    }
+
+    .tray-slots-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 4px 0;
+    }
+
+    .tray-slot {
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      background: rgba(40, 20, 10, 0.8);
+      border: 1.5px dashed #8d6e63;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tray-slot.filled {
+      border: 1.5px solid #ffd700;
+      background: linear-gradient(135deg, #3e2210 0%, #1e0d04 100%);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.25);
+    }
+
+    .tray-slot .slot-label {
+      font-size: 0.52rem;
+      color: #bfa58a;
+      position: absolute;
+      bottom: 2px;
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      padding: 0 2px;
+    }
+
+    /* Category Filter Tabs */
+    .bazaar-tabs {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 820px;
+      margin-bottom: 10px;
+    }
+
+    .bazaar-tab {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: bold;
+      text-align: center;
+      color: #d7ccc8;
+      background: rgba(30, 15, 8, 0.8);
+      border: 1.5px solid #5d4037;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .bazaar-tab:hover {
+      border-color: #ffd700;
+      color: #fff;
+    }
+
+    .bazaar-tab.active {
+      background: linear-gradient(135deg, #e65100 0%, #bf360c 100%);
+      border-color: #ffd700;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(230, 81, 0, 0.5);
+    }
+
+    /* Cracker Items Grid (100 Varieties) */
+    .cracker-store-grid {
+      width: 100%;
+      max-width: 820px;
+      max-height: 44vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+      padding-right: 4px;
+      margin-bottom: 10px;
+    }
+
+    .store-item-card {
+      background: linear-gradient(135deg, #2c160a 0%, #150904 100%);
+      border: 1.5px solid #6d4c41;
+      border-radius: 12px;
+      padding: 9px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.2s ease;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+    }
+
+    .store-item-card:hover {
+      transform: translateY(-2px);
+      border-color: #ffd700;
+      box-shadow: 0 6px 16px rgba(255, 215, 0, 0.3);
+    }
+
+    .store-item-card.equipped {
+      border-color: #00e676;
+      background: linear-gradient(135deg, #1b381e 0%, #0c1a0e 100%);
+      box-shadow: 0 0 12px rgba(0, 230, 118, 0.3);
+    }
+
+    .item-top-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .item-emoji {
+      font-size: 1.7rem;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .item-title-col {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .item-name {
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-pts {
+      font-size: 0.68rem;
+      font-weight: bold;
+      color: #ffd700;
+    }
+
+    .item-desc {
+      font-size: 0.70rem;
+      color: #bfa58a;
+      line-height: 1.25;
+      margin-bottom: 6px;
+      flex: 1;
+    }
+
+    .item-btn-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .btn-preview-sound {
+      padding: 5px 8px;
+      font-size: 0.72rem;
+      background: #3e2723;
+      color: #ffd54f;
+      border: 1px solid #8d6e63;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-preview-sound:hover {
+      background: #5d4037;
+      color: #fff;
+      border-color: #ffd700;
+    }
+
+    .btn-action-buy {
+      flex: 1;
+      padding: 6px 8px;
+      font-size: 0.74rem;
+      font-weight: bold;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .btn-buy {
+      background: linear-gradient(135deg, #ffd700 0%, #ff8f00 100%);
+      color: #211202;
+    }
+
+    .btn-buy:hover {
+      background: linear-gradient(135deg, #fff 0%, #ffd700 100%);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+    }
+
+    .btn-equip {
+      background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+      color: #fff;
+      border: 1px solid #81c784;
+    }
+
+    .btn-equip:hover {
+      background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+      box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+    }
+
+    .btn-equipped {
+      background: rgba(0, 230, 118, 0.18);
+      color: #69f0ae;
+      border: 1px solid #00e676;
+      cursor: default;
+    }
+
+    .bazaar-action-bar {
+      width: 100%;
+      max-width: 820px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1.5px solid rgba(255, 215, 0, 0.25);
+      padding-top: 8px;
+    }
+
+    .bazaar-quick-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-bazaar-aux {
+      padding: 8px 12px;
+      font-size: 0.76rem;
+      font-weight: bold;
+      color: #ffe0b2;
+      background: rgba(50, 25, 12, 0.85);
+      border: 1px solid #8d6e63;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-bazaar-aux:hover {
+      background: rgba(80, 40, 20, 0.95);
+      border-color: #ffd700;
+      color: #fff;
+    }
+
+    .btn-bazaar-play {
+      padding: 9px 22px;
+      font-size: 0.92rem;
+      font-weight: bold;
+      color: #1a0a00;
+      background: linear-gradient(135deg, #ffd700 0%, #ff6f00 100%);
+      border: 1.5px solid #fff;
+      border-radius: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(255, 111, 0, 0.5);
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-bazaar-play:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 24px rgba(255, 215, 0, 0.8);
+      background: linear-gradient(135deg, #fff9c4 0%, #ffd700 100%);
+    }
   </style>
 </head>
 <body>
@@ -688,11 +1037,9 @@
           <div style="font-size: 2.4rem; margin-bottom: 4px;">🪔 🎆 🎇</div>
           <div style="font-size: 1.25rem; font-weight: bold; color: #ffd700;">Diwali Cracker Mode</div>
           <div style="font-size: 0.82rem; color: #ffe0b2; margin-top: 4px; line-height: 1.35; max-width: 520px;">
-            <strong>19 Unique Crackers!</strong><br>
-            9 for White coins (Chakkar, Anaar, Fuljhadi, Rocket, Bijli, Peacock, Saanp, Roman Candle, Twinkling Star)<br>
-            9 for Black coins (100-Wala, Atom Bomb, Bullet, Mirchi, Rolling Wheel, Dragon, 7-Shots, Gorilla, Kuruvi)<br>
-            1 Grand Maha Dhamaka for the Red Queen! Pocket coins to pop them in the holes!
-          </div>
+            <strong>🪔 100 Varieties Diwali Cracker Bazaar!</strong><br>
+            <strong>Step 1:</strong> Select Diwali Mode &bull; <strong>Step 2:</strong> Open Store &bull; <strong>Step 3:</strong> Buy 9 White, 9 Black & 1 Queen &bull; <strong>Step 4:</strong> Apply & Play!<br>
+            <span style="color:#ffd700;">💰 1500 Starting Credits included! Audio preview for all 100 crackers!</span></div>
         </div>
 
         <div class="fun-card" data-mode="magnet">
@@ -796,6 +1143,53 @@
           <button id="btn-rematch" class="btn">Play Again</button>
           <button id="btn-home" class="btn btn-secondary">Main Menu</button>
         </div>
+      </div>
+    </div>
+
+    <!-- 🪔 DIWALI CRACKER BAZAAR STORE MODAL (100 Varieties) -->
+    <div id="bazaar-overlay" class="overlay hidden">
+      <div class="bazaar-header">
+        <div class="bazaar-title-group">
+          <h1>🪔 DIWALI CRACKER BAZAAR</h1>
+          <p>Step 2: Store • Step 3: Purchase (9 White, 9 Black, 1 Queen) • Step 4: Apply & Play</p>
+        </div>
+        <div class="credits-badge">
+          <span>💰 Credits:</span>
+          <span id="bazaar-credits-val">1500</span>
+        </div>
+      </div>
+
+      <!-- Current 9-Slot Selection Tray -->
+      <div class="bazaar-tray">
+        <div class="tray-header">
+          <span id="tray-category-title">⚪ White Coins Arsenal (9 Slots)</span>
+          <span id="tray-count-indicator">Equipped: 9 / 9</span>
+        </div>
+        <div id="bazaar-tray-slots" class="tray-slots-row">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <div class="bazaar-tabs">
+        <button id="tab-white" class="bazaar-tab active" data-cat="white">⚪ White Coins (45)</button>
+        <button id="tab-black" class="bazaar-tab" data-cat="black">⚫ Black Coins (45)</button>
+        <button id="tab-queen" class="bazaar-tab" data-cat="queen">🔴 Red Queen (10 Special)</button>
+      </div>
+
+      <!-- Store Items Grid (100 Varieties) -->
+      <div id="bazaar-grid" class="cracker-store-grid">
+        <!-- 100 items populated dynamically via JS -->
+      </div>
+
+      <!-- Bottom Action Bar -->
+      <div class="bazaar-action-bar">
+        <div class="bazaar-quick-btns">
+          <button id="btn-bazaar-bundle" class="btn-bazaar-aux">🎁 Buy 9 Bundle (20% Off)</button>
+          <button id="btn-bazaar-random" class="btn-bazaar-aux">🎲 Surprise Mix</button>
+          <button id="btn-bazaar-back" class="btn-bazaar-aux">Back</button>
+        </div>
+        <button id="btn-bazaar-play" class="btn-bazaar-play">Apply & Play Match 🪔</button>
       </div>
     </div>
   </div>
@@ -1313,36 +1707,202 @@
     let selectedCoinKey = 'classic';
 
     /* =========================================================================
-       19 UNIQUE DIWALI CRACKERS DEFINITION
-       (9 For White Coins, 9 For Black Coins, 1 Special For Red Queen)
+       🪔 100 UNIQUE DIWALI CRACKERS CATALOG & BAZAAR STORE ENGINE
        ========================================================================= */
-    const CRACKER_DEFINITIONS = {
-      // 9 FOR WHITE COINS (Sparks, Fountains, Light, Spinners, Aerials)
-      'w_chakkar': { name: 'Zameen Chakkar', emoji: '🌀', desc: 'Ground Spinner', pts: 15, rim: '#ffd700', type: 'chakkar' },
-      'w_anaar': { name: 'Flower Pot (Anaar)', emoji: '🌋', desc: 'Sparkling Fountain', pts: 20, rim: '#ffca28', type: 'flowerpot' },
-      'w_fuljhadi': { name: 'Electric Fuljhadi', emoji: '✨', desc: 'Golden Sparkler', pts: 15, rim: '#fff59d', type: 'sparkler' },
-      'w_rocket': { name: 'Hawayi Rocket', emoji: '🚀', desc: 'Sky Rocket Starburst', pts: 25, rim: '#00e5ff', type: 'rocket' },
-      'w_bijli': { name: 'Bijli Pataka', emoji: '⚡', desc: 'Lightning Flash Snap', pts: 18, rim: '#ffee58', type: 'bijli' },
-      'w_peacock': { name: 'Peacock Fountain', emoji: '🦚', desc: 'Emerald & Gold Plume', pts: 22, rim: '#00e676', type: 'peacock' },
-      'w_snake': { name: 'Saanp Ki Goli', emoji: '🐍', desc: 'Black Serpent Sprout', pts: 20, rim: '#8d6e63', type: 'snake' },
-      'w_romancandle': { name: 'Roman Candle', emoji: '🌟', desc: 'Multi-Shot Fireballs', pts: 24, rim: '#ab47bc', type: 'romancandle' },
-      'w_twinkling': { name: 'Twinkling Star', emoji: '🌠', desc: 'Silver Strobe Glitter', pts: 18, rim: '#e0e0e0', type: 'twinkling' },
+    const CRACKER_CATALOG = [{"id":"w_01","cat":"white","name":"Zameen Chakkar Classic","emoji":"🌀","desc":"Fast ground starburst spinner","cost":30,"pts":15,"rim":"#ffd700","type":"chakkar"},{"id":"w_02","cat":"white","name":"Deluxe Special Chakkar","emoji":"💫","desc":"Dual-ring golden spinner","cost":45,"pts":20,"rim":"#ffeb3b","type":"chakkar"},{"id":"w_03","cat":"white","name":"Disco Wheel Chakkar","emoji":"🎡","desc":"Neon multi-color spinning disc","cost":55,"pts":22,"rim":"#00e5ff","type":"chakkar"},{"id":"w_04","cat":"white","name":"Super Jumbo Chakkar","emoji":"⚡","desc":"Giant high-RPM roaring wheel","cost":75,"pts":26,"rim":"#ff9100","type":"chakkar"},{"id":"w_05","cat":"white","name":"Whistling Chakkar","emoji":"🌪️","desc":"High-pitch banshee spin whirl","cost":80,"pts":28,"rim":"#76ff03","type":"chakkar"},{"id":"w_06","cat":"white","name":"Flower Pot (Anaar) Classic","emoji":"🌋","desc":"Golden spark fountain geyser","cost":35,"pts":18,"rim":"#ff9800","type":"flowerpot"},{"id":"w_07","cat":"white","name":"Super Anaar Deluxe","emoji":"✨","desc":"High-pressure golden shower","cost":50,"pts":22,"rim":"#ffd54f","type":"flowerpot"},{"id":"w_08","cat":"white","name":"Colour Koti Fountain","emoji":"🌈","desc":"Tricolor glowing spark geyser","cost":65,"pts":25,"rim":"#e91e63","type":"flowerpot"},{"id":"w_09","cat":"white","name":"Emerald Green Fountain","emoji":"🌲","desc":"Vibrant jade green ember burst","cost":70,"pts":26,"rim":"#00e676","type":"flowerpot"},{"id":"w_10","cat":"white","name":"Royal Crimson Anaar","emoji":"🏮","desc":"Ruby spark fountain tower","cost":75,"pts":28,"rim":"#ff1744","type":"flowerpot"},{"id":"w_11","cat":"white","name":"Peacock Feather Fountain","emoji":"🦚","desc":"Majestic emerald & gold plumage","cost":85,"pts":30,"rim":"#1de9b6","type":"peacock"},{"id":"w_12","cat":"white","name":"Golden Peacock Glory","emoji":"🦚","desc":"Shimmering golden fan plume","cost":95,"pts":32,"rim":"#ffd700","type":"peacock"},{"id":"w_13","cat":"white","name":"Electric Fuljhadi (Sparkler)","emoji":"🪄","desc":"Classic golden needle sizzler","cost":25,"pts":15,"rim":"#fff59d","type":"sparkler"},{"id":"w_14","cat":"white","name":"Silver Strobe Sparkler","emoji":"⭐","desc":"Crisp pulsating silver strobe","cost":40,"pts":18,"rim":"#e0e0e0","type":"sparkler"},{"id":"w_15","cat":"white","name":"Color Sparkler Bouquet","emoji":"💐","desc":"Rainbow needle spark spray","cost":50,"pts":20,"rim":"#f48fb1","type":"sparkler"},{"id":"w_16","cat":"white","name":"Hawayi Rocket Classic","emoji":"🚀","desc":"Screaming upward rocket starburst","cost":50,"pts":24,"rim":"#00e5ff","type":"rocket"},{"id":"w_17","cat":"white","name":"Whistling Sky Rocket","emoji":"🛰️","desc":"Piercing ascending whistle & flash","cost":70,"pts":28,"rim":"#00b0ff","type":"rocket"},{"id":"w_18","cat":"white","name":"Parachute Flash Rocket","emoji":"🪂","desc":"Mid-air canopy flare burst","cost":85,"pts":30,"rim":"#ff4081","type":"rocket"},{"id":"w_19","cat":"white","name":"Bijli Pataka Flash","emoji":"⚡","desc":"Sudden electric lightning snap","cost":30,"pts":18,"rim":"#ffee58","type":"bijli"},{"id":"w_20","cat":"white","name":"Mega Bijli Striker","emoji":"🌩️","desc":"High-voltage staccato thunder snap","cost":45,"pts":20,"rim":"#fff176","type":"bijli"},{"id":"w_21","cat":"white","name":"Roman Candle 5-Shots","emoji":"🌟","desc":"Rhythmic ascending glowing comets","cost":60,"pts":24,"rim":"#ab47bc","type":"romancandle"},{"id":"w_22","cat":"white","name":"Roman Candle 10-Shots","emoji":"🌠","desc":"Ten dazzling color fireball bursts","cost":85,"pts":30,"rim":"#ce93d8","type":"romancandle"},{"id":"w_23","cat":"white","name":"Twinkling Star Glimmer","emoji":"✨","desc":"Silver starlight glitter envelope","cost":35,"pts":18,"rim":"#e0e0e0","type":"twinkling"},{"id":"w_24","cat":"white","name":"Golden Glitter Chime","emoji":"🔔","desc":"Crystalline golden bell sparkles","cost":55,"pts":22,"rim":"#ffecb3","type":"twinkling"},{"id":"w_25","cat":"white","name":"Saanp Ki Goli (Black Serpent)","emoji":"🐍","desc":"Writhing tower of volcanic ember ash","cost":30,"pts":18,"rim":"#8d6e63","type":"snake"},{"id":"w_26","cat":"white","name":"King Cobra Serpent Tablet","emoji":"🐉","desc":"Thick smoking fiery coil column","cost":50,"pts":22,"rim":"#5d4037","type":"snake"},{"id":"w_27","cat":"white","name":"Silver Rain Waterfall","emoji":"🌊","desc":"Cascading curtain of white embers","cost":65,"pts":25,"rim":"#b0bec5","type":"flowerpot"},{"id":"w_28","cat":"white","name":"Golden Shower Cascade","emoji":"🚿","desc":"Overhead rain of luminous sparks","cost":65,"pts":25,"rim":"#ffd54f","type":"flowerpot"},{"id":"w_29","cat":"white","name":"Butterfly Spinner","emoji":"🦋","desc":"Fluttering fluttering twin spark wings","cost":55,"pts":22,"rim":"#80d8ff","type":"chakkar"},{"id":"w_30","cat":"white","name":"Dragonfly Twirler","emoji":"🪰","desc":"High-speed erratic glittering swirl","cost":60,"pts":24,"rim":"#b388ff","type":"chakkar"},{"id":"w_31","cat":"white","name":"Starlight Aerial Comet","emoji":"☄️","desc":"Brilliant blazing white streak shot","cost":75,"pts":28,"rim":"#ffffff","type":"rocket"},{"id":"w_32","cat":"white","name":"Phoenix Fire Feather","emoji":"🪶","desc":"Orange-crimson feathered fountain","cost":85,"pts":30,"rim":"#ff6e40","type":"peacock"},{"id":"w_33","cat":"white","name":"Magic Crystal Wand","emoji":"🪄","desc":"Sizzling pastel rainbow sparks","cost":45,"pts":20,"rim":"#ea80fc","type":"sparkler"},{"id":"w_34","cat":"white","name":"Laser Flash Strobe","emoji":"🔦","desc":"Rapid 10Hz blinding strobe pops","cost":65,"pts":25,"rim":"#00e5ff","type":"bijli"},{"id":"w_35","cat":"white","name":"Moonlight Silver Fountain","emoji":"🌙","desc":"Cool pearl-white tranquil geyser","cost":70,"pts":26,"rim":"#cfd8dc","type":"flowerpot"},{"id":"w_36","cat":"white","name":"Sunbeam Gold Fountain","emoji":"☀️","desc":"Blinding warm solar ray eruption","cost":75,"pts":28,"rim":"#ffab00","type":"flowerpot"},{"id":"w_37","cat":"white","name":"Sky Lantern Ascent","emoji":"🏮","desc":"Slow floating golden flame ember","cost":60,"pts":24,"rim":"#ff9e80","type":"rocket"},{"id":"w_38","cat":"white","name":"Whistling Siren Spinner","emoji":"🚨","desc":"High-frequency Doppler whine","cost":80,"pts":28,"rim":"#ff5252","type":"chakkar"},{"id":"w_39","cat":"white","name":"Jumping Frog Popper","emoji":"🐸","desc":"Erratic jumping ground snaps","cost":40,"pts":18,"rim":"#69f0ae","type":"bijli"},{"id":"w_40","cat":"white","name":"Diamond Dust Sparkler","emoji":"💎","desc":"Ultra-pure white diamond glitter","cost":70,"pts":26,"rim":"#b2ebf2","type":"twinkling"},{"id":"w_41","cat":"white","name":"Ruby Ring Chakkar","emoji":"💍","desc":"Spinning ruby flame perimeter","cost":65,"pts":25,"rim":"#ff1744","type":"chakkar"},{"id":"w_42","cat":"white","name":"Sapphire Glow Fountain","emoji":"🔷","desc":"Deep cobalt blue pyrotechnic flare","cost":80,"pts":28,"rim":"#2979ff","type":"flowerpot"},{"id":"w_43","cat":"white","name":"Topaz Fire Fountain","emoji":"🔶","desc":"Warm amber sparkling geyser","cost":60,"pts":24,"rim":"#ff9100","type":"flowerpot"},{"id":"w_44","cat":"white","name":"Aurora Sky Burst","emoji":"🌌","desc":"Pastel purple-teal sky bloom","cost":90,"pts":32,"rim":"#b388ff","type":"rocket"},{"id":"w_45","cat":"white","name":"Crown Jewel Showpiece","emoji":"👑","desc":"Golden tiara sparkler burst","cost":100,"pts":35,"rim":"#ffd700","type":"peacock"},{"id":"b_01","cat":"black","name":"100-Wala Ladi Classic","emoji":"🧨","desc":"Fast rhythmic red machine-gun snaps","cost":40,"pts":22,"rim":"#ff1744","type":"100wala"},{"id":"b_02","cat":"black","name":"200-Wala Super Ladi","emoji":"🧨","desc":"Continuous 24-shot rapid fire string","cost":60,"pts":26,"rim":"#d50000","type":"100wala"},{"id":"b_03","cat":"black","name":"500-Wala Grand Ladi","emoji":"🧨","desc":"Heavy smoke & non-stop crackle barrage","cost":85,"pts":32,"rim":"#b71c1c","type":"100wala"},{"id":"b_04","cat":"black","name":"Atom Bomb Standard","emoji":"💥","desc":"Deep resonant sub-bass blast","cost":50,"pts":26,"rim":"#ff3d00","type":"bomb"},{"id":"b_05","cat":"black","name":"Classic Green Bomb","emoji":"💣","desc":"Traditional twine jute paper blast","cost":45,"pts":24,"rim":"#2e7d32","type":"bomb"},{"id":"b_06","cat":"black","name":"Hydro Bomb Dhamaka","emoji":"🌊","desc":"High-pressure shockwave percussion","cost":70,"pts":28,"rim":"#0277bd","type":"bomb"},{"id":"b_07","cat":"black","name":"Agni Bomb Heavy","emoji":"🔥","desc":"Blazing fireball blast with smoke","cost":80,"pts":30,"rim":"#dd2c00","type":"bomb"},{"id":"b_08","cat":"black","name":"Bullet Bomb Piercer","emoji":"🎯","desc":"Sharp high-pressure gunshot report","cost":40,"pts":22,"rim":"#d50000","type":"bullet"},{"id":"b_09","cat":"black","name":"Super Bullet Dhamaka","emoji":"💥","desc":"Ultra-loud instantaneous paper crack","cost":55,"pts":25,"rim":"#c62828","type":"bullet"},{"id":"b_10","cat":"black","name":"Mirchi Pataka String","emoji":"🌶️","desc":"Ultra-fast high-pitch chili sizzle pops","cost":35,"pts":20,"rim":"#e53935","type":"mirchi"},{"id":"b_11","cat":"black","name":"Red Hot Chili Bomb","emoji":"🌶️","desc":"Staccato firecracker string with smoke","cost":50,"pts":24,"rim":"#b71c1c","type":"mirchi"},{"id":"b_12","cat":"black","name":"Rolling Wheel Spinner","emoji":"🎡","desc":"Fiery roaring wheel along cushion edges","cost":50,"pts":24,"rim":"#ff6d00","type":"rolling"},{"id":"b_13","cat":"black","name":"Fire Tornado Wheel","emoji":"🌪️","desc":"High-speed gyroscopic droning firewheel","cost":75,"pts":28,"rim":"#ff3d00","type":"rolling"},{"id":"b_14","cat":"black","name":"Dragon Thunder Roar","emoji":"🐉","desc":"Golden serpentine banshee sky blast","cost":65,"pts":28,"rim":"#c2185b","type":"dragon"},{"id":"b_15","cat":"black","name":"Mega Dragon Blast","emoji":"🐲","desc":"Dual-stage banshee screech into boom","cost":85,"pts":32,"rim":"#880e4f","type":"dragon"},{"id":"b_16","cat":"black","name":"7-Shots Thunder Aerial","emoji":"🎯","desc":"Seven distinct timed aerial detonations","cost":75,"pts":30,"rim":"#ff5722","type":"sevenshot"},{"id":"b_17","cat":"black","name":"12-Shots Sky Salvo","emoji":"🎆","desc":"Twelve successive aerial thunder thuds","cost":100,"pts":36,"rim":"#e64a19","type":"sevenshot"},{"id":"b_18","cat":"black","name":"Gorilla Bomb Double","emoji":"🦍","desc":"Low-frequency dual-stage ground thunder","cost":80,"pts":32,"rim":"#b71c1c","type":"gorilla"},{"id":"b_19","cat":"black","name":"King Kong Mega Bomb","emoji":"🦍","desc":"Massive double dhamaka shockwave","cost":110,"pts":38,"rim":"#880e4f","type":"gorilla"},{"id":"b_20","cat":"black","name":"Kuruvi Vedi Classic","emoji":"🦅","desc":"Sharp traditional Indian paper-bomb crack","cost":30,"pts":18,"rim":"#f4511e","type":"kuruvi"},{"id":"b_21","cat":"black","name":"Falcon Speed Pop","emoji":"🦅","desc":"High-frequency supersonic sparrow snap","cost":45,"pts":22,"rim":"#d84315","type":"kuruvi"},{"id":"b_22","cat":"black","name":"Thunderbolt Sound King","emoji":"⚡","desc":"Sharp metallic clap echoing outward","cost":60,"pts":26,"rim":"#ffd600","type":"bomb"},{"id":"b_23","cat":"black","name":"Dynamite Stick Classic","emoji":"🧨","desc":"Thick red tube subterranean rumble","cost":75,"pts":28,"rim":"#b71c1c","type":"bomb"},{"id":"b_24","cat":"black","name":"Grenade Shell Cracker","emoji":"💣","desc":"Heavy cast-iron shrapnel spark burst","cost":80,"pts":30,"rim":"#37474f","type":"bomb"},{"id":"b_25","cat":"black","name":"Volcano Blast Mortar","emoji":"🌋","desc":"Upward geyser of smoke and deafening boom","cost":90,"pts":32,"rim":"#ff3d00","type":"bomb"},{"id":"b_26","cat":"black","name":"Gunpowder Barrel","emoji":"🛢️","desc":"Heavy black powder explosive thump","cost":95,"pts":34,"rim":"#424242","type":"gorilla"},{"id":"b_27","cat":"black","name":"Sonic Boom Wave","emoji":"🔊","desc":"Distorting air-pulse expansion ring","cost":70,"pts":28,"rim":"#00e5ff","type":"bullet"},{"id":"b_28","cat":"black","name":"Sholay Goli Blast","emoji":"🔫","desc":"Fiery pistol shot with instant muzzle flash","cost":45,"pts":22,"rim":"#ff6f00","type":"bullet"},{"id":"b_29","cat":"black","name":"Cracker String 50-Wala","emoji":"🧨","desc":"Quick 12-shot rapid staccato burst","cost":30,"pts":18,"rim":"#ff5252","type":"100wala"},{"id":"b_30","cat":"black","name":"Bappi Lahiri Disco Bomb","emoji":"🪩","desc":"Funky rhythmic multi-pop thunder","cost":65,"pts":26,"rim":"#ff4081","type":"100wala"},{"id":"b_31","cat":"black","name":"Lion Roar Mortar","emoji":"🦁","desc":"Guttural deep acoustic shockwave","cost":85,"pts":32,"rim":"#ff6d00","type":"bomb"},{"id":"b_32","cat":"black","name":"Tiger Claw Bomb","emoji":"🐯","desc":"Aggressive triple-strike spark snap","cost":75,"pts":30,"rim":"#f57c00","type":"gorilla"},{"id":"b_33","cat":"black","name":"Panther Shadow Burst","emoji":"🐆","desc":"Dark smoke cloud with sudden bright blast","cost":80,"pts":30,"rim":"#212121","type":"bomb"},{"id":"b_34","cat":"black","name":"Thunderstorm Salvo","emoji":"⛈️","desc":"Rolling thunder acoustics across board","cost":95,"pts":34,"rim":"#5c6bc0","type":"sevenshot"},{"id":"b_35","cat":"black","name":"Earthquake Thud","emoji":"🌍","desc":"Sub-bass rumble vibrating board cushions","cost":100,"pts":35,"rim":"#4e342e","type":"bomb"},{"id":"b_36","cat":"black","name":"Cobra Venom Strike","emoji":"🐍","desc":"Sharp sizzling hiss ending in sharp snap","cost":50,"pts":24,"rim":"#388e3c","type":"kuruvi"},{"id":"b_37","cat":"black","name":"Iron Fist Dhamaka","emoji":"✊","desc":"Heavy solid punch acoustic impulse","cost":65,"pts":26,"rim":"#78909c","type":"bullet"},{"id":"b_38","cat":"black","name":"Golden Cannon Shell","emoji":"🪙","desc":"Heavy brass artillery boom with golden smoke","cost":85,"pts":32,"rim":"#ffd700","type":"bomb"},{"id":"b_39","cat":"black","name":"Screaming Banshee Bomb","emoji":"😱","desc":"High siren whistle culminating in thunder","cost":80,"pts":30,"rim":"#ec407a","type":"dragon"},{"id":"b_40","cat":"black","name":"Black Pepper String","emoji":"🧂","desc":"Pungent smoky crackle carpet string","cost":40,"pts":20,"rim":"#616161","type":"mirchi"},{"id":"b_41","cat":"black","name":"Vulcan Hammer Thud","emoji":"🔨","desc":"Industrial metal strike shockwave","cost":75,"pts":28,"rim":"#455a64","type":"bomb"},{"id":"b_42","cat":"black","name":"Red Fort Salvo","emoji":"🏰","desc":"Ceremonial gun salute detonation","cost":90,"pts":34,"rim":"#c62828","type":"sevenshot"},{"id":"b_43","cat":"black","name":"Ghost Rider Wheel","emoji":"💀","desc":"Blazing skull flame rolling wheel","cost":85,"pts":32,"rim":"#ff3d00","type":"rolling"},{"id":"b_44","cat":"black","name":"Blaster Grenade Pro","emoji":"💥","desc":"Concentrated high-energy kinetic blast","cost":95,"pts":35,"rim":"#d50000","type":"bomb"},{"id":"b_45","cat":"black","name":"Titanium Thunder Strike","emoji":"🛡️","desc":"Supreme armor-piercing sonic crack","cost":110,"pts":38,"rim":"#cfd8dc","type":"gorilla"},{"id":"q_01","cat":"queen","name":"1000-Wala Rajah Maha Dhamaka","emoji":"🪔","desc":"All 4 pockets ignite with golden temple celebration","cost":120,"pts":60,"rim":"#ffd700","type":"mega_diwali"},{"id":"q_02","cat":"queen","name":"Diwali Queen Golden Palace","emoji":"👑","desc":"Synchronized golden geysers in all pockets","cost":140,"pts":65,"rim":"#ffea00","type":"mega_diwali"},{"id":"q_03","cat":"queen","name":"5000-Wala Maharaja Finale","emoji":"🎆","desc":"Ultra-chain salvo across all pockets simultaneously","cost":160,"pts":70,"rim":"#ff1744","type":"mega_diwali"},{"id":"q_04","cat":"queen","name":"Golden Temple Showstopper","emoji":"🛕","desc":"Ceremonial bells, bass booms & four-pocket starbursts","cost":180,"pts":75,"rim":"#ffd54f","type":"mega_diwali"},{"id":"q_05","cat":"queen","name":"Royal Peacock Symphony","emoji":"🦚","desc":"Four emerald & gold plumes lighting up the table","cost":190,"pts":80,"rim":"#00e676","type":"mega_diwali"},{"id":"q_06","cat":"queen","name":"Dragon Emperor Quad Roar","emoji":"🐲","desc":"Four screaming whistling sky rockets launched together","cost":200,"pts":85,"rim":"#c2185b","type":"mega_diwali"},{"id":"q_07","cat":"queen","name":"Rainbow Symphony Fireworks","emoji":"🌈","desc":"Multi-color synchronized aerial cascades","cost":220,"pts":90,"rim":"#00e5ff","type":"mega_diwali"},{"id":"q_08","cat":"queen","name":"Atom Thunder God Explosion","emoji":"⚡","desc":"Four-corner earthquake sub-bass blast","cost":230,"pts":95,"rim":"#ff6d00","type":"mega_diwali"},{"id":"q_09","cat":"queen","name":"Starlight Celestial Shower","emoji":"🌠","desc":"Shimmering four-corner diamond rain burst","cost":240,"pts":100,"rim":"#ffffff","type":"mega_diwali"},{"id":"q_10","cat":"queen","name":"Crown of Jewels Grand Dhamaka","emoji":"💎","desc":"Ultimate Diwali showstopper +110 points bonus!","cost":250,"pts":110,"rim":"#ff4081","type":"mega_diwali"}];
 
-      // 9 FOR BLACK COINS (Noise Makers, Bombs, Explosives, Rapid Chains)
-      'b_100wala': { name: '100-Wala Ladi', emoji: '🧨', desc: 'Garland Chain Pops', pts: 25, rim: '#ff1744', type: '100wala' },
-      'b_atombomb': { name: 'Atom Bomb', emoji: '💥', desc: 'Heavy Sub-Bass Blast', pts: 30, rim: '#ff3d00', type: 'bomb' },
-      'b_bullet': { name: 'Bullet Bomb', emoji: '💣', desc: 'Sharp High-Pressure Pop', pts: 22, rim: '#d50000', type: 'bullet' },
-      'b_mirchi': { name: 'Mirchi Pataka', emoji: '🌶️', desc: 'Rapid Fire Chilli String', pts: 20, rim: '#e53935', type: 'mirchi' },
-      'b_rolling': { name: 'Rolling Wheel', emoji: '🎡', desc: 'Whistling Fire Wheel', pts: 22, rim: '#ff6d00', type: 'rolling' },
-      'b_dragon': { name: 'Dragon Thunder', emoji: '🐉', desc: 'Roaring Sky Thunder', pts: 28, rim: '#c2185b', type: 'dragon' },
-      'b_sevenshot': { name: '7-Shots Thunder', emoji: '🎯', desc: '7 Consecutive Thuds', pts: 32, rim: '#ff5722', type: 'sevenshot' },
-      'b_gorilla': { name: 'Gorilla Bomb', emoji: '🦍', desc: 'Double Dhamaka Blast', pts: 35, rim: '#b71c1c', type: 'gorilla' },
-      'b_kuruvi': { name: 'Kuruvi Vedi', emoji: '🦅', desc: 'Sudden High-Pitch Snap', pts: 20, rim: '#f4511e', type: 'kuruvi' },
+    const CRACKER_DEFINITIONS = {};
+    CRACKER_CATALOG.forEach(c => { CRACKER_DEFINITIONS[c.id] = c; });
 
-      // 1 SPECIAL FOR RED QUEEN
-      'q_grand_finale': { name: '1000-Wala Rajah Maha Dhamaka', emoji: '🪔', desc: 'Grand Temple Showstopper', pts: 60, rim: '#ffd700', type: 'mega_diwali' }
-    };
+    let userCredits = 1500; // Minimum starting credits for user to purchase
+    let unlockedCrackers = new Set([
+      // Starter unlocked collection
+      'w_01', 'w_02', 'w_06', 'w_07', 'w_13', 'w_16', 'w_19', 'w_21', 'w_23',
+      'b_01', 'b_02', 'b_04', 'b_05', 'b_08', 'b_10', 'b_12', 'b_14', 'b_20',
+      'q_01'
+    ]);
 
+    let equippedWhite = ['w_01', 'w_02', 'w_06', 'w_07', 'w_13', 'w_16', 'w_19', 'w_21', 'w_23'];
+    let equippedBlack = ['b_01', 'b_02', 'b_04', 'b_05', 'b_08', 'b_10', 'b_12', 'b_14', 'b_20'];
+    let equippedQueen = 'q_01';
+    let currentBazaarCat = 'white';
+
+    function previewCrackerSound(c) {
+      if (!Sound.isEnabled()) return;
+      const t = c.type;
+      if (t === 'chakkar' || t === 'rolling') Sound.playWhistleSpin(1.5, t === 'rolling' ? 900 : 700);
+      else if (t === 'flowerpot' || t === 'peacock') Sound.playFountainSizzle(1.8, t === 'peacock' ? 1200 : 800);
+      else if (t === 'sparkler' || t === 'twinkling') Sound.playFountainSizzle(1.5, 1600);
+      else if (t === '100wala' || t === 'mirchi') {
+        Sound.playSnappyPop(1000, 1.0);
+        setTimeout(() => Sound.playSnappyPop(1200, 1.2), 120);
+        setTimeout(() => Sound.playSnappyPop(900, 1.1), 240);
+        setTimeout(() => Sound.playBassBoom(200, 0.4), 380);
+      } else if (t === 'rocket') {
+        Sound.playRocketScreech();
+        setTimeout(() => Sound.playBassBoom(180, 0.5), 650);
+      } else if (t === 'bomb' || t === 'gorilla' || t === 'dragon') {
+        Sound.playBassBoom(150, 0.8);
+      } else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
+        Sound.playSnappyPop(1400, 1.2);
+      } else if (t === 'romancandle' || t === 'sevenshot') {
+        Sound.playSnappyPop(700, 1.0);
+        setTimeout(() => Sound.playSnappyPop(850, 1.1), 180);
+        setTimeout(() => Sound.playSnappyPop(1000, 1.2), 360);
+      } else if (t === 'snake') {
+        Sound.playFountainSizzle(1.8, 500);
+      } else if (t === 'mega_diwali') {
+        Sound.playBassBoom(120, 1.0);
+        setTimeout(() => Sound.playWhistleSpin(1.5, 800), 200);
+      }
+    }
+
+    function renderBazaarUI() {
+      const crEl = document.getElementById('bazaar-credits-val');
+      if (crEl) crEl.textContent = userCredits;
+
+      const titleEl = document.getElementById('tray-category-title');
+      const countEl = document.getElementById('tray-count-indicator');
+      const traySlotsEl = document.getElementById('bazaar-tray-slots');
+
+      if (currentBazaarCat === 'white') {
+        titleEl.textContent = '⚪ White Coins Arsenal (9 Slots)';
+        countEl.textContent = 'Equipped: ' + equippedWhite.length + ' / 9';
+        traySlotsEl.innerHTML = '';
+        for (let i = 0; i < 9; i++) {
+          const id = equippedWhite[i];
+          const cDef = id ? CRACKER_DEFINITIONS[id] : null;
+          const slot = document.createElement('div');
+          slot.className = 'tray-slot' + (cDef ? ' filled' : '');
+          slot.innerHTML = cDef ? '<span>' + cDef.emoji + '</span><div class="slot-label">' + cDef.name + '</div>' : '<span style="opacity:0.3;">+</span>';
+          if (cDef) {
+            slot.title = 'Click to unequip';
+            slot.addEventListener('click', () => {
+              if (equippedWhite.length > 1) {
+                equippedWhite.splice(i, 1);
+                renderBazaarUI();
+              }
+            });
+          }
+          traySlotsEl.appendChild(slot);
+        }
+      } else if (currentBazaarCat === 'black') {
+        titleEl.textContent = '⚫ Black Coins Arsenal (9 Slots)';
+        countEl.textContent = 'Equipped: ' + equippedBlack.length + ' / 9';
+        traySlotsEl.innerHTML = '';
+        for (let i = 0; i < 9; i++) {
+          const id = equippedBlack[i];
+          const cDef = id ? CRACKER_DEFINITIONS[id] : null;
+          const slot = document.createElement('div');
+          slot.className = 'tray-slot' + (cDef ? ' filled' : '');
+          slot.innerHTML = cDef ? '<span>' + cDef.emoji + '</span><div class="slot-label">' + cDef.name + '</div>' : '<span style="opacity:0.3;">+</span>';
+          if (cDef) {
+            slot.title = 'Click to unequip';
+            slot.addEventListener('click', () => {
+              if (equippedBlack.length > 1) {
+                equippedBlack.splice(i, 1);
+                renderBazaarUI();
+              }
+            });
+          }
+          traySlotsEl.appendChild(slot);
+        }
+      } else if (currentBazaarCat === 'queen') {
+        titleEl.textContent = '🔴 Red Queen Grand Finale (1 Slot)';
+        countEl.textContent = 'Equipped: 1 / 1';
+        traySlotsEl.innerHTML = '';
+        const cDef = CRACKER_DEFINITIONS[equippedQueen];
+        const slot = document.createElement('div');
+        slot.className = 'tray-slot filled';
+        slot.style.width = '70px';
+        slot.style.height = '60px';
+        slot.innerHTML = cDef ? '<span style="font-size:1.6rem;">' + cDef.emoji + '</span><div class="slot-label" style="font-size:0.65rem;">' + cDef.name + '</div>' : '';
+        traySlotsEl.appendChild(slot);
+      }
+
+      const gridEl = document.getElementById('bazaar-grid');
+      gridEl.innerHTML = '';
+
+      const items = CRACKER_CATALOG.filter(c => c.cat === currentBazaarCat);
+      items.forEach(c => {
+        const isUnlocked = unlockedCrackers.has(c.id);
+        const isEquipped = (currentBazaarCat === 'white' && equippedWhite.includes(c.id)) ||
+                           (currentBazaarCat === 'black' && equippedBlack.includes(c.id)) ||
+                           (currentBazaarCat === 'queen' && equippedQueen === c.id);
+
+        const card = document.createElement('div');
+        card.className = 'store-item-card' + (isEquipped ? ' equipped' : '');
+        card.innerHTML = `
+          <div class="item-top-row">
+            <div class="item-emoji">${c.emoji}</div>
+            <div class="item-title-col">
+              <div class="item-name" title="${c.name}">${c.name}</div>
+              <div class="item-pts">+${c.pts} Pts Bonus</div>
+            </div>
+          </div>
+          <div class="item-desc">${c.desc}</div>
+          <div class="item-btn-row">
+            <button class="btn-preview-sound" title="Preview Sound">🔊</button>
+            <button class="btn-action-buy ${isEquipped ? 'btn-equipped' : (isUnlocked ? 'btn-equip' : 'btn-buy')}">
+              ${isEquipped ? '✓ Equipped' : (isUnlocked ? 'Equip' : '💰 ' + c.cost)}
+            </button>
+          </div>
+        `;
+
+        card.querySelector('.btn-preview-sound').addEventListener('click', (e) => {
+          e.stopPropagation();
+          previewCrackerSound(c);
+        });
+
+        const actionBtn = card.querySelector('.btn-action-buy');
+        actionBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (isEquipped) return;
+
+          if (!isUnlocked) {
+            if (userCredits >= c.cost) {
+              userCredits -= c.cost;
+              unlockedCrackers.add(c.id);
+              Sound.playPocket();
+              equipItem(c);
+              renderBazaarUI();
+            } else {
+              alert('Not enough credits! Win matches or score points to earn more credits.');
+            }
+          } else {
+            equipItem(c);
+            Sound.playClack(8, 0);
+            renderBazaarUI();
+          }
+        });
+
+        gridEl.appendChild(card);
+      });
+    }
+
+    function equipItem(c) {
+      if (c.cat === 'white') {
+        if (!equippedWhite.includes(c.id)) {
+          if (equippedWhite.length >= 9) equippedWhite.shift();
+          equippedWhite.push(c.id);
+        }
+      } else if (c.cat === 'black') {
+        if (!equippedBlack.includes(c.id)) {
+          if (equippedBlack.length >= 9) equippedBlack.shift();
+          equippedBlack.push(c.id);
+        }
+      } else if (c.cat === 'queen') {
+        equippedQueen = c.id;
+      }
+    }
+
+    function openBazaarModal() {
+      document.getElementById('menu-overlay').classList.add('hidden');
+      document.getElementById('fun-menu-overlay').classList.add('hidden');
+      document.getElementById('bazaar-overlay').classList.remove('hidden');
+      renderBazaarUI();
+    }
+    
     /* =========================================================================
        PHOTOREALISTIC 3D CARROM COIN RENDERING
        (Lathe-Turned Rings, Bevel, Lacquer Sheen & Natural Grain)
@@ -2459,17 +3019,19 @@
           coins.push(c); pieces.push(c);
         }
 
-        // 🎆 19 UNIQUE DIWALI CRACKERS ASSIGNMENT
-        // 9 for White, 9 for Black, 1 Special for Red Queen!
+        // 🎆 100 DIWALI CRACKERS ARSENAL ASSIGNMENT
         if (isFunMode && funVariant === 'crackers') {
-          const whiteCrackers = [
-            'w_chakkar', 'w_anaar', 'w_fuljhadi', 'w_rocket', 'w_bijli',
-            'w_peacock', 'w_snake', 'w_romancandle', 'w_twinkling'
-          ];
-          const blackCrackers = [
-            'b_100wala', 'b_atombomb', 'b_bullet', 'b_mirchi', 'b_rolling',
-            'b_dragon', 'b_sevenshot', 'b_gorilla', 'b_kuruvi'
-          ];
+          // Fill missing slots if user equipped less than 9
+          while (equippedWhite.length < 9) {
+            const avail = CRACKER_CATALOG.filter(c => c.cat === 'white' && !equippedWhite.includes(c.id));
+            if (avail.length > 0) equippedWhite.push(avail[0].id);
+            else break;
+          }
+          while (equippedBlack.length < 9) {
+            const avail = CRACKER_CATALOG.filter(c => c.cat === 'black' && !equippedBlack.includes(c.id));
+            if (avail.length > 0) equippedBlack.push(avail[0].id);
+            else break;
+          }
 
           function shuffle(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
@@ -2478,10 +3040,10 @@
             }
           }
 
-          const shuffledWhite = [...whiteCrackers];
+          const shuffledWhite = [...equippedWhite];
           shuffle(shuffledWhite);
 
-          const shuffledBlack = [...blackCrackers];
+          const shuffledBlack = [...equippedBlack];
           shuffle(shuffledBlack);
 
           let wIdx = 0;
@@ -2489,11 +3051,11 @@
 
           coins.forEach(c => {
             if (c.type === 'queen') {
-              c.crackerKey = 'q_grand_finale';
+              c.crackerKey = equippedQueen || 'q_01';
             } else if (c.type === 'p1') {
-              c.crackerKey = shuffledWhite[wIdx++];
+              c.crackerKey = shuffledWhite[wIdx++ % shuffledWhite.length];
             } else if (c.type === 'p2') {
-              c.crackerKey = shuffledBlack[bIdx++];
+              c.crackerKey = shuffledBlack[bIdx++ % shuffledBlack.length];
             }
           });
         }
@@ -2528,8 +3090,8 @@
 
         if (isFunMode) {
           if (funVariant === 'crackers') {
-            modePill.textContent = '🪔 19 DIWALI CRACKERS';
-            subPill.textContent = '🎆 9 White, 9 Black & 1 Grand Queen Dhamaka!';
+            modePill.textContent = '🪔 100 CRACKER BAZAAR';
+            subPill.textContent = '🎆 Custom 9 White, 9 Black & 1 Queen Arsenal Equipped!';
           } else {
             modePill.textContent = '🚀 ' + funVariant.toUpperCase().replace('_', ' ');
             if (funVariant === 'magnet') subPill.textContent = magnetEventActive ? '🧲 VORTEX ACTIVE!' : 'Cooldown: ' + Math.ceil(magnetEventTimer) + 's';
@@ -2771,9 +3333,12 @@
         const winDesc = document.getElementById('winner-desc');
 
         if (scores[1] >= scores[2]) {
+          const reward = isFunMode && funVariant === 'crackers' ? 350 : 200;
+          userCredits += reward;
           winTitle.textContent = isFunMode && funVariant === 'crackers' ? '🪔 DIWALI DHAMAKA VICTORY!' : '🏆 VICTORY!';
-          winDesc.textContent = 'You defeated the AI Bot with ' + scores[1] + ' points!';
+          winDesc.textContent = 'You defeated the AI Bot with ' + scores[1] + ' points! Earned +' + reward + ' Cracker Credits! 💰';
         } else {
+          userCredits += 50; // Consolation credits
           winTitle.textContent = 'DEFEAT!';
           winDesc.textContent = 'AI Bot won with ' + scores[2] + ' points. Better luck next time!';
         }
@@ -3245,8 +3810,71 @@
       card.addEventListener('click', () => {
         const mode = card.getAttribute('data-mode');
         Sound.playPocket();
-        Game.launchMatch(true, mode);
+        if (mode === 'crackers') {
+          // Flow: 1. Click Diwali Mode -> 2. Open Store -> 3. Purchase/Equip -> 4. Apply & Play!
+          openBazaarModal();
+        } else {
+          Game.launchMatch(true, mode);
+        }
       });
+    });
+
+    // Bazaar Tabs & Buttons
+    document.querySelectorAll('.bazaar-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.bazaar-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentBazaarCat = tab.getAttribute('data-cat');
+        Sound.playFlick();
+        renderBazaarUI();
+      });
+    });
+
+    document.getElementById('btn-bazaar-back').addEventListener('click', () => {
+      Sound.playFlick();
+      document.getElementById('bazaar-overlay').classList.add('hidden');
+      document.getElementById('fun-menu-overlay').classList.remove('hidden');
+    });
+
+    document.getElementById('btn-bazaar-play').addEventListener('click', () => {
+      Sound.playPocket();
+      document.getElementById('bazaar-overlay').classList.add('hidden');
+      Game.launchMatch(true, 'crackers');
+    });
+
+    document.getElementById('btn-bazaar-bundle').addEventListener('click', () => {
+      // 9-cracker bundle purchase for current category
+      const unbought = CRACKER_CATALOG.filter(c => c.cat === currentBazaarCat && !unlockedCrackers.has(c.id));
+      if (unbought.length === 0) {
+        alert('You have already unlocked all crackers in this category!');
+        return;
+      }
+      const toBuy = unbought.slice(0, 9);
+      const totalCost = Math.floor(toBuy.reduce((sum, c) => sum + c.cost, 0) * 0.8);
+      if (userCredits >= totalCost) {
+        userCredits -= totalCost;
+        toBuy.forEach(c => unlockedCrackers.add(c.id));
+        Sound.playPocket();
+        alert('🎉 Bundle Purchased! 9 crackers added to your inventory with 20% discount.');
+        renderBazaarUI();
+      } else {
+        alert('Need ' + totalCost + ' credits for this 9-cracker bundle! You have ' + userCredits + '.');
+      }
+    });
+
+    document.getElementById('btn-bazaar-random').addEventListener('click', () => {
+      Sound.playFlick();
+      const allCat = CRACKER_CATALOG.filter(c => c.cat === currentBazaarCat);
+      const shuffled = [...allCat].sort(() => Math.random() - 0.5);
+      if (currentBazaarCat === 'white') {
+        equippedWhite = shuffled.slice(0, 9).map(c => { unlockedCrackers.add(c.id); return c.id; });
+      } else if (currentBazaarCat === 'black') {
+        equippedBlack = shuffled.slice(0, 9).map(c => { unlockedCrackers.add(c.id); return c.id; });
+      } else if (currentBazaarCat === 'queen') {
+        equippedQueen = shuffled[0].id;
+        unlockedCrackers.add(equippedQueen);
+      }
+      renderBazaarUI();
     });
 
     document.getElementById('btn-open-arsenal').addEventListener('click', () => {
