@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://cdlcho48elusu"]
+
+[ext_resource type="Script" path="res://scenes/game/Coin.gd" id="99_coin"]
+[ext_resource type="PackedScene" uid="uid://d1lrf10jyij4e" path="res://assets/3dmodel/white.glb" id="1_model"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_coin"]
+friction = 0.3
+bounce = 0.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_coin"]
+radius = 0.09179
+
+[node name="WhiteCoin" type="RigidBody3D" script=ExtResource("99_coin") groups=["white_coins"] unique_id=420274436]
+physics_material_override = SubResource("PhysicsMaterial_coin")
+continuous_cd = true
+axis_lock_linear_y = true
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+linear_damp = 1.0
+angular_damp = 1.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1863255077]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01503, 0)
+shape = SubResource("SphereShape3D_coin")
+
+[node name="Model" parent="." unique_id=600555797 instance=ExtResource("1_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.079855, 0)

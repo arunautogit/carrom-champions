@@ -1,0 +1,68 @@
+name: Deploy Game to GitHub Pages & Package YouTube Playables
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Godot 4.3
+        run: |
+          GODOT_VERSION="4.3"
+          GODOT_RELEASE="stable"
+          wget -q https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64.zip
+          unzip -q Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64.zip
+          mv Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64 /usr/local/bin/godot
+          chmod +x /usr/local/bin/godot
+          
+          # Install export templates
+          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}
+          wget -q https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz
+          unzip -q Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz
+          mv templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/
+
+      - name: Export Web Project (YouTube Playables)
+        run: |
+          mkdir -p export/playables
+          godot --headless --export-release "YouTubePlayables" export/playables/index.html
+
+      - name: Create YouTube Playables Zip Package
+        run: |
+          cd export/playables
+          zip -r ../CarromChampions_YouTubePlayables.zip .
+          cd ../..
+
+      - name: Upload YouTube Playables Zip Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CarromChampions_YouTubePlayables
+          path: export/CarromChampions_YouTubePlayables.zip
+
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: export/playables
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

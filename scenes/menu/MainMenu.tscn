@@ -1,0 +1,185 @@
+[gd_scene load_steps=8 format=3 uid="uid://mainmenu123"]
+
+[ext_resource type="Script" path="res://scenes/menu/MainMenu.gd" id="1_c"]
+[ext_resource type="PackedScene" uid="uid://board3d123" path="res://scenes/game/CarromBoard3D.tscn" id="2_board3d"]
+[ext_resource type="PackedScene" uid="uid://herotab123" path="res://scenes/ui/MainScreenHeroTab.tscn" id="hero_tab_scn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_HeroBg"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.8, 1)
+corner_radius_top_left = 16
+corner_radius_bottom_right = 16
+shadow_color = Color(0, 1, 0.8, 0.2)
+shadow_size = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_SubBg"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.8, 1)
+corner_radius_top_right = 16
+corner_radius_bottom_left = 16
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_c")
+
+[node name="BackgroundContainer" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+modulate = Color(0.3, 0.3, 0.3, 1)
+
+[node name="SubViewport" type="SubViewport" parent="BackgroundContainer"]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="CarromBoard3D" parent="BackgroundContainer/SubViewport" instance=ExtResource("2_board3d")]
+
+[node name="OverlayBg" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0666667, 0.0705882, 0.0823529, 0.8)
+
+[node name="MainScreenHeroTab" parent="." instance=ExtResource("hero_tab_scn")]
+layout_mode = 1
+offset_left = 60.0
+offset_top = 60.0
+offset_right = 460.0
+offset_bottom = 180.0
+
+[node name="DashboardMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 120
+theme_override_constants/margin_top = 260
+theme_override_constants/margin_right = 120
+theme_override_constants/margin_bottom = 120
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DashboardMargin"]
+layout_mode = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="PlayBtnContainer" type="Control" parent="DashboardMargin/HBoxContainer"]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+
+[node name="PlayNowBtn" type="Button" parent="DashboardMargin/HBoxContainer/PlayBtnContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_HeroBg")
+theme_override_styles/hover = SubResource("StyleBoxFlat_HeroBg")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_HeroBg")
+theme_override_styles/focus = SubResource("StyleBoxFlat_HeroBg")
+pivot_offset = Vector2(250, 350)
+
+[node name="Label" type="Label" parent="DashboardMargin/HBoxContainer/PlayBtnContainer/PlayNowBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 64
+text = "PLAY
+NOW"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DashboardMargin/HBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="BoardsBtnContainer" type="Control" parent="DashboardMargin/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BoardsBtn" type="Button" parent="DashboardMargin/HBoxContainer/VBoxContainer/BoardsBtnContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_SubBg")
+theme_override_styles/hover = SubResource("StyleBoxFlat_SubBg")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_SubBg")
+theme_override_styles/focus = SubResource("StyleBoxFlat_SubBg")
+pivot_offset = Vector2(200, 165)
+
+[node name="Label" type="Label" parent="DashboardMargin/HBoxContainer/VBoxContainer/BoardsBtnContainer/BoardsBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 48
+text = "BOARDS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ExitBtnContainer" type="Control" parent="DashboardMargin/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ExitBtn" type="Button" parent="DashboardMargin/HBoxContainer/VBoxContainer/ExitBtnContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_SubBg")
+theme_override_styles/hover = SubResource("StyleBoxFlat_SubBg")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_SubBg")
+theme_override_styles/focus = SubResource("StyleBoxFlat_SubBg")
+pivot_offset = Vector2(200, 165)
+
+[node name="Label" type="Label" parent="DashboardMargin/HBoxContainer/VBoxContainer/ExitBtnContainer/ExitBtn"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 48
+text = "EXIT"
+horizontal_alignment = 1
+vertical_alignment = 1

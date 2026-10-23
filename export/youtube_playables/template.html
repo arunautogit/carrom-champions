@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>$GODOT_PROJECT_NAME</title>
+	
+	<!-- YouTube Playables Official SDK -->
+	<script src="https://www.youtube.com/game_api/v1"></script>
+	
+	<!-- Fallback mock for standalone browser testing / GitHub Pages testing -->
+	<script>
+		if (typeof window.ytgame === 'undefined') {
+			console.log('[YouTubePlayables] SDK not found in host environment. Initializing local sandbox mock.');
+			window.ytgame = {
+				game: {
+					firstFrameReady: function() {
+						console.log('[Mock ytgame] firstFrameReady()');
+					},
+					gameReady: function() {
+						console.log('[Mock ytgame] gameReady()');
+					},
+					saveData: function(data) {
+						console.log('[Mock ytgame] saveData()');
+						localStorage.setItem('carrom_champions_save', data);
+						return Promise.resolve();
+					},
+					loadData: function() {
+						console.log('[Mock ytgame] loadData()');
+						return Promise.resolve(localStorage.getItem('carrom_champions_save') || '');
+					}
+				},
+				system: {
+					isAudioEnabled: function() {
+						return true;
+					},
+					onPause: function(cb) {
+						window._yt_mock_onPause = cb;
+					},
+					onResume: function(cb) {
+						window._yt_mock_onResume = cb;
+					},
+					onAudioEnabledChange: function(cb) {
+						window._yt_mock_onAudio = cb;
+					}
+				},
+				engagement: {
+					sendScore: function(obj) {
+						console.log('[Mock ytgame] sendScore:', obj);
+					}
+				}
+			};
+		}
+	</script>
+
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			border: 0;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+			background-color: #241711;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			touch-action: none;
+			-webkit-touch-callout: none;
+			user-select: none;
+		}
+
+		#canvas {
+			display: block;
+			width: 100%;
+			height: 100%;
+			outline: none;
+		}
+
+		#status {
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			background-color: #241711;
+			color: #e6b800;
+			font-family: sans-serif;
+			z-index: 10;
+			transition: opacity 0.4s ease;
+		}
+
+		#status-notice {
+			margin-top: 16px;
+			font-size: 16px;
+			font-weight: bold;
+			letter-spacing: 1px;
+		}
+
+		.spinner {
+			width: 48px;
+			height: 48px;
+			border: 4px solid rgba(230, 184, 0, 0.2);
+			border-top-color: #e6b800;
+			border-radius: 50%;
+			animation: spin 0.8s linear infinite;
+		}
+
+		@keyframes spin {
+			to { transform: rotate(360deg); }
+		}
+	</style>
+	$GODOT_HEAD_INCLUDE
+</head>
+<body>
+	<canvas id="canvas">
+		Your browser does not support HTML5 Canvas.
+	</canvas>
+
+	<div id="status">
+		<div class="spinner"></div>
+		<div id="status-notice">Loading Carrom Champions...</div>
+	</div>
+
+	<script src="$GODOT_URL"></script>
+	<script>
+		const GODOT_CONFIG = $GODOT_CONFIG;
+		const engine = new Engine(GODOT_CONFIG);
+
+		(function () {
+			const statusElement = document.getElementById('status');
+			const noticeElement = document.getElementById('status-notice');
+
+			function setStatusNotice(text) {
+				if (noticeElement) noticeElement.textContent = text;
+			}
+
+			engine.startGame({
+				'onProgress': function (current, total) {
+					if (total > 0) {
+						setStatusNotice('Loading: ' + Math.floor((current / total) * 100) + '%');
+					}
+				}
+			}).then(() => {
+				if (statusElement) {
+					statusElement.style.opacity = '0';
+					setTimeout(() => {
+						statusElement.remove();
+					}, 400);
+				}
+			}).catch((err) => {
+				console.error('Godot engine error:', err);
+				setStatusNotice('Error loading game: ' + err.message);
+			});
+		})();
+	</script>
+</body>
+</html>

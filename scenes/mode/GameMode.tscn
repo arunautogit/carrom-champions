@@ -1,0 +1,202 @@
+[gd_scene load_steps=5 format=3 uid="uid://gamemode123"]
+
+[ext_resource type="Script" path="res://scenes/mode/GameMode.gd" id="1_a"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Card"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.8, 0.5)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_CardFocus"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.8, 0, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(1, 0.8, 0, 0.3)
+shadow_size = 15
+
+[node name="GameMode" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0666667, 0.0705882, 0.0823529, 1)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 80.0
+offset_right = 300.0
+offset_bottom = 150.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 64
+text = "SELECT MODE"
+horizontal_alignment = 1
+
+[node name="SafeMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 200
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 60
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SafeMargin"]
+layout_mode = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="CenterWrapper" type="CenterContainer" parent="SafeMargin/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SafeMargin/ScrollContainer/CenterWrapper"]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="BtnPlayerMatch" type="Button" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer"]
+custom_minimum_size = Vector2(240, 380)
+layout_mode = 2
+focus_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_Card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_CardFocus")
+pivot_offset = Vector2(120, 190)
+
+[node name="VBox" type="VBoxContainer" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer/BtnPlayerMatch"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Icon" type="ColorRect" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer/BtnPlayerMatch/VBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+color = Color(0, 1, 0.8, 1)
+
+[node name="Label" type="Label" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer/BtnPlayerMatch/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "PLAYER
+MATCH"
+horizontal_alignment = 1
+
+[node name="BtnAILevels" type="Button" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer"]
+custom_minimum_size = Vector2(240, 380)
+layout_mode = 2
+focus_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_Card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_CardFocus")
+pivot_offset = Vector2(120, 190)
+
+[node name="VBox" type="VBoxContainer" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer/BtnAILevels"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Icon" type="ColorRect" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer/BtnAILevels/VBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+color = Color(1, 0.8, 0, 1)
+
+[node name="Label" type="Label" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer/BtnAILevels/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "AI
+LEVELS"
+horizontal_alignment = 1
+
+[node name="BtnFunMode" type="Button" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer"]
+custom_minimum_size = Vector2(240, 380)
+layout_mode = 2
+focus_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_Card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_CardFocus")
+pivot_offset = Vector2(120, 190)
+
+[node name="VBox" type="VBoxContainer" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer/BtnFunMode"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Icon" type="ColorRect" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer/BtnFunMode/VBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+color = Color(1, 0.333333, 0, 1)
+
+[node name="Label" type="Label" parent="SafeMargin/ScrollContainer/CenterWrapper/HBoxContainer/BtnFunMode/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "FUN
+MODE"
+horizontal_alignment = 1
+
+[node name="BackBtn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 60.0
+offset_right = 260.0
+offset_bottom = 140.0
+theme_override_font_sizes/font_size = 32
+text = "BACK"

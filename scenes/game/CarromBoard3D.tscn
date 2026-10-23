@@ -1,0 +1,120 @@
+[gd_scene format=3 uid="uid://board3d123"]
+
+[ext_resource type="PackedScene" uid="uid://c25ns87xecn28" path="res://scenes/game/Board.tscn" id="1_board"]
+[ext_resource type="PackedScene" uid="uid://bnxxb4p1kpt73" path="res://scenes/game/Striker.tscn" id="2_striker"]
+[ext_resource type="PackedScene" uid="uid://bp64p84dflc55" path="res://scenes/game/BlackCoin.tscn" id="3_black"]
+[ext_resource type="PackedScene" uid="uid://cdlcho48elusu" path="res://scenes/game/WhiteCoin.tscn" id="4_white"]
+[ext_resource type="Script" uid="uid://y5n14c6jw5tl" path="res://scenes/game/BoardCamera.gd" id="5_cam"]
+[ext_resource type="Script" uid="uid://b0jd84rsa6ht7" path="res://scenes/game/CarromBoard3D.gd" id="6_board"]
+[ext_resource type="Script" uid="uid://bj5b0v84c67uc" path="res://scenes/game/Pocket.gd" id="7_pocket"]
+[ext_resource type="PackedScene" path="res://scenes/game/RedCoin.tscn" id="8_red"]
+[ext_resource type="Texture2D" path="res://assets/env/room_env_1k.hdr" id="HDR_env"]
+
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_table"]
+panorama = ExtResource("HDR_env")
+
+[sub_resource type="Sky" id="Sky_table"]
+sky_material = SubResource("PanoramaSkyMaterial_table")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_table"]
+albedo_color = Color(0.18, 0.12, 0.08, 1)
+roughness = 0.7
+specular = 0.15
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_table"]
+material = SubResource("StandardMaterial3D_table")
+size = Vector2(10, 10)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pocket"]
+radius = 0.13
+
+[sub_resource type="Environment" id="Environment_hud_glow"]
+background_mode = 2
+sky = SubResource("Sky_table")
+sky_energy_multiplier = 0.75
+ambient_light_source = 3
+ambient_light_energy = 0.35
+ambient_light_sky_contribution = 0.45
+tonemap_mode = 3
+tonemap_exposure = 1.0
+tonemap_white = 1.1
+
+[node name="CarromBoard3D" type="Node3D" unique_id=505714834]
+script = ExtResource("6_board")
+white_coin_scene = ExtResource("4_white")
+black_coin_scene = ExtResource("3_black")
+queen_coin_scene = ExtResource("8_red")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hud_glow")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.965926, 0.0669873, -0.249999, 0, 0.965926, 0.258819, 0.258819, -0.249999, 0.933013, 0.5, 4.5, 1.2)
+light_color = Color(1, 0.96, 0.9, 1)
+light_energy = 1.6
+shadow_enabled = true
+shadow_bias = 0.04
+shadow_blur = 1.4
+
+[node name="RimLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.766045, 0.413176, -0.492404, 0, 0.766044, 0.642788, 0.642788, 0.492404, -0.586824, -2, 3, -3)
+light_color = Color(0.85, 0.92, 1, 1)
+light_energy = 0.85
+
+[node name="SoftFill" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+light_energy = 0.4
+omni_range = 6.0
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.98058, 0, 0.19611, 0.10731, 0.83701, -0.53655, -0.16415, 0.54717, 0.82076, -1.5, 5, 7.5)
+current = true
+fov = 45.0
+script = ExtResource("5_cam")
+
+[node name="board" parent="." unique_id=235893427 instance=ExtResource("1_board")]
+
+[node name="Striker" parent="." unique_id=414846313 instance=ExtResource("2_striker")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0.081, 1.3712977)
+
+[node name="Pockets" type="Node3D" parent="." unique_id=622854063]
+
+[node name="PocketTopLeft" type="Area3D" parent="Pockets" unique_id=1510679992]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0, -1.85)
+script = ExtResource("7_pocket")
+pocket_name = "top_left"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pockets/PocketTopLeft" unique_id=1557119161]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08260846, 0, -0.08583546)
+shape = SubResource("SphereShape3D_pocket")
+
+[node name="PocketTopRight" type="Area3D" parent="Pockets" unique_id=7529235]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85, 0, -1.85)
+script = ExtResource("7_pocket")
+pocket_name = "top_right"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pockets/PocketTopRight" unique_id=546046652]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.061779022, 0, -0.09267032)
+shape = SubResource("SphereShape3D_pocket")
+
+[node name="PocketBottomLeft" type="Area3D" parent="Pockets" unique_id=1767772276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.85, 0, 1.85)
+script = ExtResource("7_pocket")
+pocket_name = "bottom_left"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pockets/PocketBottomLeft" unique_id=1293516045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08433378, 0, 0.060525417)
+shape = SubResource("SphereShape3D_pocket")
+
+[node name="PocketBottomRight" type="Area3D" parent="Pockets" unique_id=983254407]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.85, 0, 1.85)
+script = ExtResource("7_pocket")
+pocket_name = "bottom_right"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pockets/PocketBottomRight" unique_id=1810126524]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06829858, 0, 0.08939314)
+shape = SubResource("SphereShape3D_pocket")
+
+[node name="VisualTableSurface" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0)
+mesh = SubResource("PlaneMesh_table")

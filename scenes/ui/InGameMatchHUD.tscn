@@ -1,0 +1,324 @@
+[gd_scene load_steps=10 format=3 uid="uid://ingamematchhud123"]
+
+[ext_resource type="Script" path="res://scripts/ui/in_game_match_hud.gd" id="1_m"]
+[ext_resource type="Shader" path="res://scenes/ui/blur_shader.gdshader" id="2_blur"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BannerP1"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.85)
+border_width_bottom = 2
+border_color = Color(0, 1, 0.8, 1)
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+skew = Vector2(0.2, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BannerP2"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.85)
+border_width_bottom = 2
+border_color = Color(1, 0.333333, 0, 1)
+corner_radius_top_left = 24
+corner_radius_bottom_left = 24
+skew = Vector2(-0.2, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_Blur"]
+shader = ExtResource("2_blur")
+shader_parameter/blur_amount = 2.5
+shader_parameter/tint_color = Color(0.067, 0.071, 0.082, 0.6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Btn"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.5)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BtnHover"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.8, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 1, 0.8, 0.4)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_RailSlider"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_top = 4.0
+expand_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_RailSliderGrabber"]
+bg_color = Color(0, 1, 0.8, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="InGameMatchHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_m")
+
+[node name="SafeMarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="TopLeftBanner" type="Control" parent="SafeMarginContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="TrapezoidBg" type="Panel" parent="SafeMarginContainer/TopLeftBanner"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_BannerP1")
+
+[node name="HBox" type="HBoxContainer" parent="SafeMarginContainer/TopLeftBanner"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="AvatarWrapper" type="Control" parent="SafeMarginContainer/TopLeftBanner/HBox"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="AvatarIcon" type="TextureRect" parent="SafeMarginContainer/TopLeftBanner/HBox/AvatarWrapper"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBox" type="VBoxContainer" parent="SafeMarginContainer/TopLeftBanner/HBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="P1_NameLabel" type="Label" parent="SafeMarginContainer/TopLeftBanner/HBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "PLAYER 1"
+
+[node name="P1_ScoreLabel" type="Label" parent="SafeMarginContainer/TopLeftBanner/HBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 28
+text = "00"
+
+[node name="TopRightBanner" type="Control" parent="SafeMarginContainer"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+
+[node name="TrapezoidBg" type="Panel" parent="SafeMarginContainer/TopRightBanner"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_BannerP2")
+
+[node name="HBox" type="HBoxContainer" parent="SafeMarginContainer/TopRightBanner"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="SafeMarginContainer/TopRightBanner/HBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="P2_NameLabel" type="Label" parent="SafeMarginContainer/TopRightBanner/HBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "PLAYER 2"
+horizontal_alignment = 2
+
+[node name="P2_ScoreLabel" type="Label" parent="SafeMarginContainer/TopRightBanner/HBox/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.333333, 0, 1)
+theme_override_font_sizes/font_size = 28
+text = "00"
+horizontal_alignment = 2
+
+[node name="AI_StateHBox" type="HBoxContainer" parent="SafeMarginContainer/TopRightBanner/HBox/VBox"]
+layout_mode = 2
+
+[node name="LearningIndicator" type="ColorRect" parent="SafeMarginContainer/TopRightBanner/HBox/VBox/AI_StateHBox"]
+visible = false
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_vertical = 4
+color = Color(1, 0.2, 0.2, 1)
+
+[node name="StatusLabel" type="Label" parent="SafeMarginContainer/TopRightBanner/HBox/VBox/AI_StateHBox"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 12
+text = "Idle"
+
+[node name="AvatarWrapper" type="Control" parent="SafeMarginContainer/TopRightBanner/HBox"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="AvatarIcon" type="TextureRect" parent="SafeMarginContainer/TopRightBanner/HBox/AvatarWrapper"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TopCenterTimerBar" type="VBoxContainer" parent="SafeMarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_constants/separation = 10
+
+[node name="ActiveModesStack" type="VBoxContainer" parent="SafeMarginContainer/TopCenterTimerBar"]
+layout_mode = 2
+alignment = 1
+
+[node name="CenterFieldZone" type="CenterContainer" parent="SafeMarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TurnTransitionBanner" type="PanelContainer" parent="SafeMarginContainer/CenterFieldZone"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="SafeMarginContainer/CenterFieldZone/TurnTransitionBanner"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+theme_override_colors/font_shadow_color = Color(0, 0.8, 0.6, 0.5)
+theme_override_constants/shadow_outline_size = 15
+theme_override_font_sizes/font_size = 72
+text = "P1'S TURN"
+
+[node name="BottomDashboard" type="VBoxContainer" parent="SafeMarginContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+alignment = 2
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="SafeMarginContainer/BottomDashboard"]
+copy_mode = 2
+
+[node name="BlurPanel" type="ColorRect" parent="SafeMarginContainer/BottomDashboard/BackBufferCopy"]
+material = SubResource("ShaderMaterial_Blur")
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -120.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="DashHBox" type="HBoxContainer" parent="SafeMarginContainer/BottomDashboard"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 40
+
+[node name="ChangeStrikerButton" type="Button" parent="SafeMarginContainer/BottomDashboard/DashHBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+focus_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_Btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_BtnHover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_BtnHover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_BtnHover")
+text = "S"
+
+[node name="PauseButton" type="Button" parent="SafeMarginContainer/BottomDashboard/DashHBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+focus_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_Btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_BtnHover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_BtnHover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_BtnHover")
+text = "||"
+
+[node name="EndMatchButton" type="Button" parent="SafeMarginContainer/BottomDashboard/DashHBox"]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+focus_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_Btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_BtnHover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_BtnHover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_BtnHover")
+text = "X"
+
+[node name="LeftControlZone" type="VBoxContainer" parent="SafeMarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="ZoomSliderContainer" type="MarginContainer" parent="SafeMarginContainer/LeftControlZone"]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+
+[node name="VSlider" type="VSlider" parent="SafeMarginContainer/LeftControlZone/ZoomSliderContainer"]
+custom_minimum_size = Vector2(40, 300)
+layout_mode = 2
+focus_mode = 2
