@@ -7,7 +7,7 @@ A high-performance 3D Carrom board game built with **Godot 4.3**, fully optimize
 ## 🎮 Play Online
 
 Once deployed to GitHub Pages, the game is playable directly in any browser:
-- **Live URL**: `https://<your-username>.github.io/<repo-name>/` (e.g., [https://arunautogit.github.io/my-game/](https://arunautogit.github.io/my-game/))
+- **Live URL**: [https://arunvlb.github.io/carrom-champions/](https://arunvlb.github.io/carrom-champions/)
 
 ---
 
