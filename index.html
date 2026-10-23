@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Carrom Champions - Diwali Cracker Edition</title>
+  <title>Carrom Champions - Authentic Physical Edition</title>
   
   <script src="https://www.youtube.com/game_api/v1" onerror="console.log('[Playables] Standalone mode')"></script>
 
@@ -44,7 +44,7 @@
     canvas {
       display: block;
       background: #dfb279;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 100px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.85), 0 0 100px rgba(0,0,0,0.5);
       border-radius: 14px;
       touch-action: none;
       cursor: default;
@@ -245,7 +245,7 @@
       background: linear-gradient(135deg, #4d2b14 0%, #271407 100%);
     }
 
-    /* Cracker Highlight Card in Fun Grid */
+    /* Cracker Highlight Card in Fun Grid (Replacing Coin Breaker) */
     .fun-card-cracker {
       grid-column: span 2;
       background: linear-gradient(135deg, #4a1508 0%, #290a03 100%) !important;
@@ -654,7 +654,7 @@
         <div id="card-fun" class="big-card">
           <div class="big-card-icon">🚀</div>
           <div class="big-card-title">FUN MODE</div>
-          <div class="big-card-desc">Diwali crackers, magnet vortex, stone pulse, bombs & coin breakers!</div>
+          <div class="big-card-desc">Diwali crackers, magnet vortex, stone pulse & time bombs!</div>
         </div>
       </div>
 
@@ -676,51 +676,45 @@
       </div>
     </div>
 
-    <!-- 2. FUN MODE SELECTION SUB-SCREEN -->
+    <!-- 2. FUN MODE SELECTION SUB-SCREEN (With Diwali Mode occupying the prominent featured slot) -->
     <div id="fun-menu-overlay" class="overlay hidden">
       <h1>SELECT FUN MODE</h1>
       <p class="subtitle">Choose your special gameplay variant vs AI</p>
 
       <div class="fun-grid">
-        <!-- 🎆 DIWALI CRACKER MODE -->
+        <!-- 🎆 DIWALI CRACKER MODE (Featured Slot replacing Coin Breaker) -->
         <div class="fun-card fun-card-cracker" data-mode="crackers">
           <span class="diwali-badge">DIWALI SPECIAL 🪔</span>
-          <div style="font-size: 2.3rem; margin-bottom: 4px;">🪔 🎆 🎇</div>
-          <div style="font-size: 1.18rem; font-weight: bold; color: #ffd700;">Diwali Cracker Mode</div>
-          <div style="font-size: 0.8rem; color: #ffe0b2; margin-top: 3px; line-height: 1.35;">
-            Coins are randomly packed with <strong>Chakkar</strong>, <strong>Flower Pot</strong>, <strong>100-Wala</strong>, <strong>Rocket</strong> & <strong>Atom Bomb</strong>!<br>
-            Pocketing a coin activates the cracker inside the pocket hole to pop with fireworks & extra score!
+          <div style="font-size: 2.4rem; margin-bottom: 4px;">🪔 🎆 🎇</div>
+          <div style="font-size: 1.25rem; font-weight: bold; color: #ffd700;">Diwali Cracker Mode</div>
+          <div style="font-size: 0.82rem; color: #ffe0b2; margin-top: 4px; line-height: 1.35; max-width: 520px;">
+            Coins are packed with <strong>Chakkar</strong>, <strong>Flower Pot</strong>, <strong>100-Wala</strong>, <strong>Rocket</strong> & <strong>Atom Bomb</strong>!<br>
+            Pocketing any coin activates the cracker right inside the pocket hole to pop with fireworks & score bonuses!
           </div>
         </div>
 
         <div class="fun-card" data-mode="magnet">
-          <div style="font-size: 1.8rem; margin-bottom: 4px;">🧲</div>
-          <div style="font-size: 1.02rem; font-weight: bold; color: #ffd700;">Magnet Event</div>
-          <div style="font-size: 0.74rem; color: #cbb49e;">120s timer triggers 20s center vortex pulling coins!</div>
+          <div style="font-size: 2rem; margin-bottom: 4px;">🧲</div>
+          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Magnet Event</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">120s timer triggers 20s center vortex pulling coins!</div>
         </div>
 
         <div class="fun-card" data-mode="stone">
-          <div style="font-size: 1.8rem; margin-bottom: 4px;">🪨</div>
-          <div style="font-size: 1.02rem; font-weight: bold; color: #ffd700;">Stone Pulse</div>
-          <div style="font-size: 0.74rem; color: #cbb49e;">Coins petrify +5% every 15s. Double-hit reduces to 50%!</div>
+          <div style="font-size: 2rem; margin-bottom: 4px;">🪨</div>
+          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Stone Pulse</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">Coins petrify +5% every 15s. Double-hit reduces to 50%!</div>
         </div>
 
         <div class="fun-card" data-mode="bomber">
-          <div style="font-size: 1.8rem; margin-bottom: 4px;">💣</div>
-          <div style="font-size: 1.02rem; font-weight: bold; color: #ffd700;">Player Bomber</div>
-          <div style="font-size: 0.74rem; color: #cbb49e;">120s countdown. Timeout triggers blast & +10 penalty!</div>
+          <div style="font-size: 2rem; margin-bottom: 4px;">💣</div>
+          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Player Bomber</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">120s countdown. Timeout triggers blast & +10 penalty!</div>
         </div>
 
         <div class="fun-card" data-mode="tagcoins">
-          <div style="font-size: 1.8rem; margin-bottom: 4px;">🏷️</div>
-          <div style="font-size: 1.02rem; font-weight: bold; color: #ffd700;">Tag Coins</div>
-          <div style="font-size: 0.74rem; color: #cbb49e;">240s phases: Tag coins first, then pocket only your tags!</div>
-        </div>
-
-        <div class="fun-card" data-mode="coin_breaker" style="grid-column: span 2;">
-          <div style="font-size: 1.8rem; margin-bottom: 4px;">🔨</div>
-          <div style="font-size: 1.02rem; font-weight: bold; color: #ffd700;">Coin Breaker & Glue</div>
-          <div style="font-size: 0.74rem; color: #cbb49e;">Power shots shatter coins into halves; Glue phase fuses them!</div>
+          <div style="font-size: 2rem; margin-bottom: 4px;">🏷️</div>
+          <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Tag Coins</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">240s phases: Tag coins first, then pocket only your tags!</div>
         </div>
       </div>
 
@@ -779,7 +773,7 @@
       <div class="custom-section">
         <div class="custom-title">🪙 Coin Color Palette</div>
         <div class="option-row" id="coin-options">
-          <div class="opt-chip active" data-coin="classic">⚪ Classic Ivory & Ebony</div>
+          <div class="opt-chip active" data-coin="classic">⚪ Boxwood & Rosewood (Authentic)</div>
           <div class="opt-chip" data-coin="cyber">🟦 Cyber Cyan & Magenta</div>
           <div class="opt-chip" data-coin="royale">🪙 Royal Gold & Platinum</div>
           <div class="opt-chip" data-coin="wood">🪵 Birch & Dark Walnut</div>
@@ -806,11 +800,14 @@
 
   <script>
     /* =========================================================================
-       AUDIO SYNTHESIZER WITH GODOT STRIKER & DIWALI CRACKER PROFILES
+       AUDIO SYSTEM: EMBEDDED REAL GODOT SAMPLES + WEB AUDIO SYNTHESIS
        ========================================================================= */
+    const AUDIO_DATA = {"coin_hit_1":"data:audio/mp3;base64,SUQzAwAAAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/+3DAAAAOdW9P1MQAAaGLcfse8AK7vKp0QxarvwAx/HgAQAhYL4jwGatimnd7+7veiVKJzoiaCiVJYvZALw/sgynLFwaGSLi7EChlwgoklnwLn/JYufAKwXi9wiU4olTfCI/pXN7v//pVe73/7u9kC4vaJu+7vwiU4oZUu/CO/Fbvy73oiSKGIzs7O7u8MyqiGoABorSQhcivDzHcdRNxwEnRhYE8d6bH+0iBmshxJC8bISwK9xUkdxUaRSa4y6jqyE50arQ4soqBxAsaPaHnF7YYQ5z87+cKGWjLt3Lo9Y8XdLkxAECKHUIbl9LOp73ptASxAAAgXwAAGId4m3qnmXdzRutVVUKhNR3ChilpgvQ7ZCQokfJcRujxNO4/ifLcYcheEuu3KdlZC5o5le4zmLBxK1d+8e0v//twwB8AC6iBkdj3glFjIy37niADNAjfMnzf0vqM9lmINDSnMxy55ttaOr2/d/6/3ft9RBgmHZkMhUBVhirP5BjIVyGqyK5Llsuy4zQqHaqPpuqWarLs9as63dp0SbZ7aU6GfRzW0d2RyGVGNX+uXfXK0x0UgM1gYN6iWSik/ORbRbS59q/9ZX7N/8TdiIh3VTIQFVYV0+pSfFUxn8aCvrGbwhxSirWcn6dGf3Rt//uRSB095FZYVT55MnI5U1MnNHlZaSGjzlzLLSyrPhnAZwKwegbCnEgxiAkAM0baRHu0kuOCvxyId3ZVQyFVWqFYmCsAUTB2KA7IR4lc5ctCoxMalf4fn9WlGNWbv927VWuPpYZtfnuTV+Yrrvnv//2iU61br/+1tZmGSDSw5GsPGljA6khQaByEAf/7cMBWAAsxF2fHiGuRpChsOMGhssyITsGhE+79FKmXFQkJAMLzz516LK6ge+yqt0IlFVYzC2DoOYhaHqpDVfPRghwI5BaWUqUX2PZ+2Zdu6lrpZWuba1WXn/hmuagleWqpi44+6lpqPq4ilVG9li33aLDmRKINK4AWChCUG5wSiKNBYgCoVQQDxyxMHMU1wsUozX6KeWK37/nYIFVNQyEKtX+YYxfzhNpC2Civa308WKMxTYAIdDdGNpEAGgARTjWrDqr9BSVOvZ5671e3JNUmLX3b6meIm6c7ZMd7ZlrTtKJS125lORUNmk8QygdxBl4DQ7B+MnlgCy5AkorYXlBfwSTznH7cbaZtk01QUP2y7tR0WCbq1PSs60XpeXiIVREVqv8dKBLeQsvTefzk1MDM69GFFr3Kq57/+3DAhoAN5U9Nx4kNigOsKTjwrbB1ZXcjhyUg2yjpS5ne2/1V1Zq1h5qJ2tzt1/U/yls/+J288O5az/bXE22qitq7ri7cxzkHPEV1yQw+EKCUqKBIHaZmFnjI3QOF1nZX0WO3Na51qczqAgKNO/vBDmu/LIimYSqkQCtUxVDcHGxEIepXf7O7fZiBEEKCxuChJnOTZlhYYVIW3qtfet/jfziuswYWZI2dwc0z641jFvvdfqtq5rutrYx8719Xk3qtIMHW2yA3tTKicqNdypo3nkRC0cSJFGXEVBbX7AecaeNamY+YVcW3LLG3D3um86rBUEgdCgJlULcL/rBHUxh4ZDq6ZiTKk0iAFjLYjf8vfEzCOBtDclXPKSdUqpWcZv/yl61pjeLUpGrX+28XriXFq38tJ951X4p9//twwKCAD41XR8eZbYocq2c48L2w7riDX4z9fX+cVmtbP+9ZhPldRygXY4bMhCpyRgQJTwSDH+rYJ9nCfp5UVzA/evWxXQ3+IUO1svoe4bkMA4aCJUwQC6mCi6ZLS6mNK6xUyqvRYxwiuHSVSEKp3AXrOEWDNhT6T2FJNsv4RS/P98ocXxj/Wfn1x6/7tW9K7x/rWPiv1vH///3u3//9rf/5z7b+4sr2WFKumQv58HOQlhGKQlIqItgLElIuqQLkjmRGqQ9mlKuNp6P3rNGeV7i6pSPSNi9LvtQaz1BQrBN0yE/rv5/dgAVNrESiSko0UBCC6FwL+spByUWWaeDEhCTkSj3R52frOtie2+rTf/9fe/X/OLfMm/Wuvj4xbfr95+P94xb/Vv/vG7V3TXtb+0jlKroERcsC7P/7cMCwgBDhSzvHje2iIKwlsPG9sbwIcrCzWlGPsIOToTQ8RUFyQlnQ1nUytXnSvQqkbMtHJ7GhXfd9A3LCfViy4CgGKjUJPMGB31xUxNppJJtpqNjLOFKjyQCGnQsubkwVcoktTaZk1CZkrTIH0qzDUkwgmIEpBkyBjkkCZhqSCDbXfSFrnL5X+3OpvZ+Xzuvm3pe1Yr0vnZ2/nfm50/kzScr/5Hne66hvSVi8kKYFSgdvCCUC6wenqJSuXQQmjf4/8zNs2eZCQWJFwLadsrcQVoC7lBUkUkpDXJIO8tiHn0rj9XokZ6su5qKUNisdYPmVkmzJEIRgnHQ0Fi+YGw6jkJ4kDuMhFEognCs9PkrcTzOX61dp9cv1q7T65vWrDT3WoaWZZYXqFSldWnPM4OCbNw0RKGiJTQj/+3DAuoARGVsrp4ntghco5fTzMbBwaE2VOvvvbf3+/6j5ciUNUG4bIm245I220wD0VAHoCCqWwuT/X8LereiKDV0Kj7IiRR8UjSQqFQqQkIIhUDLKEsqIUAOhFcEUIVMlgqq3zM0SJUSSpKv2OJUSCiRFHO25VTJGSMyVRpEiRIkSJEidVU8zM1v7VXqZkjh1ckKHOxqMzn7z3me3an///9V//9////3/P3n/95mZqqqiRIkSFcCg//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwMUADwTPOUeli0pBs+P09Jmx///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMDSgBlAAS4AAAAgAAAlwAAABP////////////////////////////////////////////////////////////////////////////////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/+3DA/4AkgAEuAAAAIAAAJcAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA","coin_hit_2":"data:audio/mp3;base64,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5NNNLQiliE52B+tHdnhCABJSaSUAGDgWAEAxq4SlxXP4HRSSmXw5KZO0FWChJxJ1HJHDjSNVOEmi0lMUwjPklxKpcd5p5a6ypaeZUko2KqoqiKkA8rEEslaI6VMuwPMrb1s9WtL1tq3rfXrVm2z/+3DAsoAP6Ucvh4ltigshp3zzJXDmfX5202rX6M057qJucSUbaswaUxerlZY8WYRJvRYMt9BcbSSSrqui1SRIycSykW0GC4vDtXPfdbxA0nj30qKU6myhhu9Ii3LVtmysU2VVpkIhFAyjpGtQzWz1tnP2uXgZz7x+6t7c/sza8y66cufA1W0M939P99Lbm87bEbNTqi944eQNPSQDNwpIRtrzhaWPKmfn11PpajmMzPTbPm172o9oaNDxQwKBUGVHy74VFRg1H0/7EaBONJIlVKsqSiYIhGlYXiZuwOPTc1Z4JIrc5Ct99/SBFM6kbLnWNxPK05NhpxYgHh6xINRNjr0a/p0ieEntdOVlu7tUiWl1mv5ieIq11eHv4h0ooapllHs4QCGEwTMo/hCvOGiGgqq0e+4d7N+Z//twwMOAEH0PL+YZi4JXqyOxhLGwfyHq45LR7Fv93HEkSSTAimMjERwVmHZ+Xy2Bb2PVYCAnMmNHnTeXZy9zv7H7cpe5n9v/+3X26y//fX6LKiHZaWdDreYUbKG5axTGe9ywjaKRIICApmYmth9oKIBVjXo53////////TXr///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMDIgA7hIRmMGQuJDiJi7YGJcP///////////////////////////////////////////////////////////////////////////////////0SAAAAIRKCAhTj/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA/QAioA0bZ70gACaBopCRCAT///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwP+AJIABLgAAACAAACXAAAAE/////////////////////////////////////////////////////////////////////////////////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/7cMD/gCSAAS4AAAAgAAAlwAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=","coin_hit_3":"data:audio/mp3;base64,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gB4AiCgDCADJ+KA5jQVG2qO+JpMMzAwLJ4TTkzA7ep9M9P5bH9b8Zqv5DUz79qO8OSeh3t0pVeZ3hw/5W2nwyb5Z/mTyt2Q+ssP0q/UYEbynSaBo8hs4sxQK04LFMDfFw5db6Tujf8f7v+Lz9u79/9X/////////////////////////////////////////////////////////////t6qaVVVC5BFAKiHbwWS29cKvobRCOL08Cc6vPrb/+3DA5gARUVsVDCTNifcq4yT1jbArUFqs4us/jszV3nsjPKfIhnG51ush8OZdLbM3hqZ9nMuNPu1hfzInI/Oftnc0WXRCtQwYBM16qkiWr7kqKvnsiEnf/2OZYh/QbqVWgkrh5yFrH0ZYMZHVgF+ZRDMxnxRSMgdVs6aGf1/q0J7/Wv54rtmfKZEbX1Ttorb17byaV/5nfb9TqSnR2Mxb+lvNahDizg856CodGlhhvTsCdD9sdWn///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwPOAFME1GWeYbYmXpmMk8w2x///////3GUSSTIDvDI1ADHVL5088c5U7QeD7bjGr1YSVnTa3uc5MvtnaMpQip5mPFGP9KdU4u8zY6/tyekZ34/RYxGGLfyP0JJG0UiV0QXEvZHVMqIy4FxNP2zBrhTuwAKkVstsus/6tdH/////YkJX/r//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMD/gBwRMxcMGE2BDQ5i7YGNIP/////////////////////////////////////////////////////////////////////////////////////9IAAAAHAI8Ar/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA/4AjeCcbbCBEgCEBYtBjBAT///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwP+AJIABLgAAACAAACXAAAAE/////////////////////////////////////////////////////////////////////////////////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/7cMD/gCSAAS4AAAAgAAAlwAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=","coin_hit_4":"data:audio/mp3;base64,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////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DAvwAQUUsjJ6ENiWqoYzD0CbD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwOIAHSABLgAAACAAACXAAAAE/////////////////////////////////////////////////////////////////////////////////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/7cMD/gCSAAS4AAAAgAAAlwAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=","coin_hit_5":"data:audio/mp3;base64,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jnS5faynsK4OgK7VGi1Wv/T6wKFZVvkUACyAgnn4Zr1/RiiT7s/rbW9Q/Glw1x4KQaHpfxaTyLqTYIhICMhKgFgNWBf4DgYUOL8Bg4DjA3MBtgEABOgasFrJo6Ogmx0EkmMoSzk2UDRRgYn00EEKlVfVoWQUtOt6DOnekzsy3dNJlXTZk6BrMzY8s4ec8mYFiK6v9VX/+3DA1wASWSUfh74NgmIkI7T34XBSRolEG0YTRm73Zv49vD6l7Pa4tfGpLxqPtp0sMchRxAtgFoJMEDayGDoXY4xsAAvAFkBMgGOICA3QG4C1CyH4AfiYHkR4+pDaXjAlhgjA1MVF50DYtQo7s7vsytNF1qquur//VVagtSklMtexsHwUBzXrd55AVFFa/UAuRbLr+4e96990j0prNIl3NrOdVpxQN6jiE0S7EC7iYjFHtaerXHkf3WL2IBHTQlswMiAURNwBAS9BJwg7DlNGcsPcx23fs2Pt9xw/PeGH5/3WG+/h/fz5Yw7X4cBBO5u6ruSK6TP///////////////////////////////////////////////////////////////////////////////////////////twwNMAD/UdFyS+a4ngIqNox7Vw//////////SM1acZBAA2D8hdujChGIirh6cqhzl6yxdRZE8hyHLR+kJRz1SD1CxJ8cJ+Amhil2DVD+XaEthzKKngvTO//5XR0KBVVWQAAJBRfW9YjFhiZVuqTQ1Oqh5wzlCkzOA0KsL////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMDpABasxRcjPwtBBhDjaBC9IP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA/4AkgHMZIQRpCAAAJcAAAAT/////////////////////////////////////////////////////////////////////////////////////////////////ID//4j6IVfjmgAlDvmeAZn7///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwP+AJIABLgAAACAAACXAAAAE/////////////////////////////////////////////////////////////////////////////////9wP//5YOlTusFR4Kv/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMD/gCMIaxQgAGkILoAjBAAAAP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA/4AkgAEuAAAAIAAAJcAAAAT///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwP+AJIABLgAAACAAACXAAAAE///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMD/gCSAAS4AAAAgAAAlwAAABP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA/4AkgAEuAAAAIAAAJcAAAAT/////////////////////////////////////////////////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//twwP+AJIABLgAAACAAACXAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==","pocket_drop_1":"data:audio/mp3;base64,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qZioMYq4pjG+h6uc22K5PXjuLBbm6JtuFyXjykWUJbp413rNBaFUvnSXBMoerWG23tGiJRzZWoyfHs+84s1pwcl4yjYIROcXLKpXaMFZQPads4GRdOH34q3NXEJ5EB12w4mhkvq42hHOtunBkWz85pbfy2Xv00ykXbM5VbWkdqbBtsbg2H/+M3BI+TBsk0Y+mX1PASj/+3DA3YARBW8rh6DNil4xJTD0JbHxBTExxlFEqqqVHs+bLAFlRSYWFIfioh3KZ35i01djIFDbwNTxcTrJzEgnw0gqPpR48Jx9FOHl/eeEKJ01jJmSCTqkgan0IyTtI4NzIU5TA8GTSJoiXjA43M8Q2hDKARHx1ijqJpcwSsGVSXYMtvl4ZKayuf19xeW7q237u/08v7kFYKkW2pzuYtiVxISkwaYKAKplmZWQDcgk8sGKJKBEhMFcSBOunVLyRuO8vrW2ZeOaIOSEwXgs0lVTAbh1KUqjzcThWnsGZ8yYi1hvShAjgM0ulCbCxMlBGXXlokKBg1HBsFQuPCNA8gC7icNAuUisTLpUeThuFJK7CrZGUDLmkurH+r+/d2q2Xhv+f/1nvPWTjbtLtPLVW0KM3bVLe8y0bV1X//twwN+AE80/H4e9jYI3J2OwxiWw1VUoOKzjFCAQPoEShMpXUFVSyvCYrTAfw5WOKxRY8Zu1vceMzXhrLAh6zDzEhKNzkSEAoPMrxI06DI5a9MFfBUb0WWRScZZnbRCWRKTkRMQTd0RthvpbaF6Fa+wUjLFa0XakXQoFZF7WyubCDB5IqlqnLKKqdqWUEErV+cSihqnYqrUJ7bTpIAsWlP/7uOZCWF5+AEDsQObPpjsYNggUnlT0Xzv4yPuPS8zedSbIoFkcOv1Ny8mudMIb3fdDl0r/6Z9+f//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMDbABH1QRcmPS2B1J4jJJelcP/////////////////////////////////////////9VFUsqoCEYAhCIReFJDXcrGSNt9HBiQEZ5Wby1YVoZoUBB5itP31f20D06f//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA6oAaFMsZIzDLSKQN42QRiSD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwP+AJIADFgAAACAAACXAAAAE///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMD/gCSAAS4AAAAgAAAlwAAABP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA/4AkgAEuAAAAIAAAJcAAAAT///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwP+AJIABLgAAACAAACXAAAAE/////////////////////////////////////////////////////////////////////////////////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/7cMD/gCSAAS4AAAAgAAAlwAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=","pocket_drop_2":"data:audio/mp3;base64,SUQzAwAAAAAAFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAD/+3DAAAAOSX05xgTNgYQgqnzxDXCat2llMhFq+xYAsMwQAIFA9kcweUQOJ4wAMEZIyNjEBDg/khx8jGSkDQsEmpWnFmOxZIYgmQPrNjtl7HZ9TbH1svT9IOnHaULbtltEYeUpNs8PSiZk3/9b/22/vsPuN/v/fb////f/9n3P//4ekwiQC2NyIeXVTECQCSnDNG4SAsCsLgwpKVTNcIOoGZg7IRCN2dd+7Lp4n+hkTKCv2TQxEGDLQWgIoUMrLCeJwtLMv58Lzz/ckJqbuLBDBlI599L0BkBXHAwUT2PQaIA/oHIAupFiwLQEsQAAQEwAAA2rh6h0MSoGWkeQYcA7CWrzChCsbJXtm+BJxQ8PrERIjMOuEr+Ega5t7wCCwNA0FEoALcDMFHZSoMBMwZFwVCZJzRAn9dcc//twwCMAClQjVdTwAAGVji+/HsACkdh9gWLjRATYt9GNW8O7K6KiKRkQkAQCAgWCyoW8uZcRlNpsF4FiIaoC/lGIYoE+UpdSKEgRCaAsri7iYyXBJJq+hWP2/omq0t85itSkzMFrzsCKSDA0ppPfKOMdTaXF3jlD9zjso71ez/IIbrfiLt0ruqZmMQEQSQSZGsTw/RZD9PRvQxycrPqwpbxrfxggexjF0j205ITd3r0FIGgxQrpui9JrLKrRSDZ02WEyhcVfatZpB9XR0pSC1JlxI0RKud5SxnergcKoRZRW7Fg8oCzcqyEIgIBJIMlCZElkMFZSLirGKgm6HJEUKWyeFo2ShaawWA0bErBwhpAJnopk3IhU0Kl8LE3Sk+waHIaJQ0VEQdGCosH0jg6EwVEpUFgpHA0Nsv/7cMBZAAvUd2/89IAhn46svPMlJJvK2oFXuV1L+VGRo9F2be3QSMTpoIdjUjEREaZbiDQKUv6CLCu0a8YXCJFARkJ2CJeJaPNz6BCFcZUVQHVyQEh/RMKjcSFg0JS2R0FSyWFRaymtUa5gYVze8Tx8XVW3F26XU88ST1PPXe03ELM0svcQWjtbf71cw92fO6/5SSJlcq4J+Lr9xZfb1MIYkQiJNVNa2LclxJVAT9To56rnrD3FNmRROsE54GjPJUKxKZRaRCILIF2RcoRClCgGigCWKh6IgyoCISjg6Ec1ypUw3uC2yrN5tVJMvlalKhuUiZbidZ/9p774Y5q5f+EhBjNY0wx8ke1lioCSHJ5lYUWyMnp7fQD2klNppNtpuJUYJKy+I441OhsyGuTyjLDgqGIqRELiRAH/+3DAh4AOlQdZx6ULqeMiqnj0oXQwoREw+OCg15MLmI2IUB+cBQWEQMB8gjCpgLiw8fFGHjBsszJ2Oxlmwt2XVnQ1oM1XGPMaw8NP9XXFt8szYqwsXUUOEQ1XHKIl4u8n7/+539Z7jWE+UmSz8tSO1lj23y+5kpNOv+7ekYFjMgkSiP/E6nSydnNmKrkTh4ixZRknswhkiLkjQnibTVc4yqpJphc8VVafGFrNU+mcyW3s6TgvDafLyj4d8I3s4Xu+6rxuquNVCOpXOs25wtvCQD0AXQEMyyEnUQMRfAuStGyY4apNaDagiDpu+LrvWcoAhVIxISI0kkklEcLaXIupokyY0CppWlhqdHrk2JxzETiy+0ZkgQE7IjCKA9cOZMLJlqGkP3I1jhMZqeXK28zf4bn/++vl5KeS//twwKKAEBUPTaelC6nuoukw9KV024ZU41v++UaleSnKOS+eSb1UnoVGlYM00mwiOngscNBUPHyVZpDFhEioKimCwZFMcSTRSpJLMVYm//x3/P3/9kZJJJRKbabsEoxxuBJHA/46GbanSTW2BEO1XFjtReSaOpHBGLztTyGwfESVgQ+aIf5c46kZLyq+MwQWNn1BOQBhY++SeT4PqDsOJuNKPnUz8R9d7+r//9kzviN9xU9f8f7L3nlIObHLrvPw+6r7vuEGPP2yTQ4mbqGlG5+Pgj4gt/uP/fOZ8cfPJvSpEkkkjVNCeKg9y0elUu0q0NsNPOR0n62HOzMjGmjiOw52UzETQ3jzOUxW5jVKdWk8pkOPsV1ZSDmu4qhgFufRW9IMpcZmaeSdtTtYtIWXsCFGk3BexdZrX//7cMC2ABD5D0/nsSuqLKipNPettY3//n/HzX/59fj5r//8ev9s61/mu8ZxqufC3B8tcY3Dg1xWj6NeuLYfRpYsj62d1iuQ4o1anEkEQiETCYSyYkT9BBuqYv5mCKjfHoXRBy9D4D8P0g5BSoWOgXsWg5hJx7ql8tHicEmE1KKZu5TGDHwlBAB2CKEpZGmkNhTNByHQdIggK2S4vPfm5vqWIoTIeoyxMgvKtubm6F8YYRofxwGBfMNWpm/7nETdM0cwH8vd/Wq//kwk1ImyJdMlooPpf/st9N9/Mzc8fHsPUlh7F04ZA4n////8V80AlzpSJJJSbjh+lCcA8R+sukIspXN9uHFml33ze9drXVuWOlTWMQRnS46PicVjZMlWtHRs2ySXoUpVPYrfK662vVmWXpmZet+vTNf/+3DAvoARXUs/lPeAIp0yKjce0AInMx61prWtXbWtZpdbazWdy2167KJoejoKiQcARMTiA+J2tWn/dGgEFg8p5U3N62rlQ0sFRMt1eWxLpHEySRVRIhRLCYKYoVLFRyhcnkdGo0xcfblqcpW80AzuWaiJGCkwizqKqrRZmaG2NeaaNeDlW0i2zXGc2xjGWWNTW5Yer4vnEKu62g01WFG3X/OM4t/nwZIMT1wnxuphaVK4OlXs751CxFasePJfT5GkTsgx7irFfhTv3fZrqbqf/33/QFHEWSSSkm42uRxCZoaZbbU3Z1yybkgjDUeV6JCSKOQrE5QUMZUIT84QYgXRvLjxAGDB0nUC+kEECjGz6M0oSOXnS7dZnrYxueQdNG+aOUId+1Pf5bd/xlKvSU3yg2mjcoIBonXK//twwLcAEH0XRbz2AAIRo2dw8z11uYVh1zo4UfsoZnx52cyqo8Arv//nyTf4GeHjnfX+2dW8kUtMzkCMa1DyVUBN2XLr0bc/pKxpZZNDADQlSJphWElvqsEpTQ4sCJKFhU2CI6FgSg1issNUoVD0Og+Gg1D0o6oO3WuF4KOUkcLGsLWSbMXFx9f/8axC2MJqiBBFXBTD5KpD7OpKHPTN69tDNzXa8rDWqwo5jYky7kY8rQxohumeJx2zMvE0MLfq2QANV/lntBjfXY9ajTs6yuojqBNk10CBASCggFBASCsVhsVgmCYrJ0aAwwgQIIQg2b2co7GahBgoKA0BoCwFgLwXg3BuHYuHYuWKCgoYYKECiO//p3fd3MuiIiIifzPp1d8zbXSsQ8JSc9T/N//EEGTeut064Hr/tv/7cMDEgBBpEzmnpSuKKjRoMPShtM7TLntuGFt4OMXWk/+u0OykIiI1SsSkhA/qsw3na6yolxeTRaUtVVjkVUKoZFQJBYVBYNBYEhUKQMikUkopDJKmTIp+BCSkIVFQJCoLAkFhUTIkKqGLMfqyqFlCqhZQoUSJEiRIkSJqMYx/+/xzIxjFCFBQ0K/DmQU4FmQ/9mcq/yCe4xe8mEzHEu8yg2Kfr3f1x+/8oG4iUilVTVIgjAmLetFxUJvsCcT3V06xAZM32LUis5HFZ5oqHcW+6Vhc8fNQomlxlV6F3li4tK1v3IBhqJSVo31vl3yYW5uz59ffT///7mvL/9v/27/a3fm2d26kt0iWl35133+ul/KJxxjaWYxm5zjKOJzCVwyZ6Ow6vjPO47ZhUl7CkJhsnvJtwU8G00v/+3DAz4ARDTU5h6UNiiEbJ7j0pW3HKezRL7niiG/6qZlVVpJ/iA6IaFqtDwMSddDN+G1lMHc0VFoJmE5FjplCCqwWnrasasmbSIT0yHPUM3wjkSiIiBRAScWIorNYyZWQSdkM9rzdlu2pfzNepnUtmMdmERS4igkerlRDxJxodlJlaaoqg90VhFA8ZUPERJyjnJKYrbq5e62KyCKkIKQnfaKDLiooqKac//O+LKCWNtJF0qiqRrSQjAGe3JrcalrYpdNPZW1rO5d/M+yZIgsvjNnQ4JwVDRJtVODNje9Nz13//5WePEW6/VUbXyA5Yxb3PF7yVBUWqe9g4an///////////////////////////////////////////////////////////////////////////////////twwNkAEsGjJYewzYJBseMlhJWx//////////////////////////////////////////////////////////////////caaSILOco9AtzOq4nGAzPHKdEz4a/roGkiSQAoCjhNzh1D1FTT9//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMDXgBeQRxuMMSbAXQTjUPSMlP///////////////////////////////////////////////////////////////////////////////////okkkAAOJG+jvRAkAkAAQa5H////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA/4AjPBkYh4xCaCgA4xAhAAX////////////////////////////////////////////////////////////////////////////////////////////////8//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwP+AJHgDGICAACAAACXAAAAE///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMD/gCSAAS4AAAAgAAAlwAAABP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA/4AkgAEuAAAAIAAAJcAAAAT/////////////////////////////////////////////////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//twwP+AJIABLgAAACAAACXAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==","striker_shoot":"data:audio/mp3;base64,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6+Pi2vmHlYSebaYG9oziswjogyBxbDkg8g6kPhL7708I+rQ9z/i3+kBmmu+pVUHKTWaUvU5lZYrlfimsqUDehpaG8sU2LmxtYjsuaqWN4R5EYRgImokogxIvmwZylZJa3BULjhogmIIvm1VKwpsmq8mGCovJbqiU9N1Cptm3bTtrfum1Zme/tm2f+9az1pXezqbW4c/UqIc/MPFhRRy+O/GfwdK+kSJvEfLDGnc/n++0vXf3/62k5JHI2iT/+3DA4QASfVspp70NommrI6WMIbGUVXIUtuAgGcyvA5DEFPoQDBUf0DUl2ukgS8RQV/WdMmYtSPrdUxYOMoKPo9Lza8sd4FgW9jG4rN5/ajkNRFwZDcqzOFamokqDIRBqEYzt67tc3evvTJsWia5tP07OktmmQiyv1Vzpxk6DgaOrSHRgkBg1op+sTRkcbn8yqPML9csuGGno2l6WgqtCgAUimU9De2knE5S50EtfpIy9MXkTQgcwCIDsNoCqaDPAH+xLiA2K95VcKVXt7NqNakJyUldUuyT7zbGo0XGF8kLJcBROPMFRtj+31fAUVlFnLbWVI3ln9vKbrvT/////////////////////////////////////////////////+UnJI3P5FQtLKmnlogcRMV/YogaIQAsL//twwNuAEYzPGyxhi0nxpiN1jBWwESKSyIUsKPGaTATgVJU1rCzJjhBvEQthHTKa5ll+k37/DZVIpxUK1oi6iP4Ttwgvt797/EnjYYWefyv/IWzu+7/rq3I9Q88LUm3JJG59KiCQmTLDihhCZLxvk5k+05kF0tCYEBuo44clZ0sh+7I5M88qZWLmh5rHYWFHJxRl+lYV58ysTMxVgbXtavLHkgRn95IWLV8CFUIyyFJXWrHJjSavq//6/TWn/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////jkkbbn0oP/7cMDpABLUhxuM4ekBgRDjcYw9IAjklBTl8GFgWDZUvk6lYBQiyptSI9PuSQTbA+dq4415WGqOoLthRUynq2qyBdhX22OxJ5DorfNCzWmo0Sn1fVra1DD22x667qxtyNtt/ygEigeAiAiNiUQgAm8vNS42VGkWKLHRVnbThXvXNkG+rhuMSaXZiOTpV3rt4+mY2FscDnS0SNpqe0y2TYziBgDgwD+c+1r3ueK/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA/4AamIUbjGHpATwQY3GHvSD///8kkbbb6VAE/mPYAGySaGaABciOafYSJ4HD0qCCYLj2GMfy4ZNsJ6iVWHFXQH64ti9u5VmgxIOtf6nktMswMNpY5qeymq6sSjLTSVKAAdPwWQBmFWElbMaGaptql2pVEw5i2fI9k2iBpU9M7j5yySsrZ8kY41oVx+7dx3////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwP+AG7x7G4w96QEXjeNxhj0g////////////////////////////////////////////X1VXANbZFW0QiR1H8XZD5ReLkNioq1njJQPmCUl8PbNxkOKXbmLP2I420ilKAAD2EoymYSFEIU2HApxHRFdA22ZIwgDEQylOM9lNH//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMD/gB98WxmHvScInwjjIPSk2f/////////////////////////////////////////////////////////////////////kpEkgFnwggCEBjCjIhcFN9sBCuJhFIkkkgNlwVUvU661f////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA/4Ah7Ekbh5imwFEHItAxiNn////////////////////////////////////////////////////////////////////////////////////////////////4//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwP+AJHQDGoCAACAAACXAAAAE///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////7cMD/gCSAAS4AAAAgAAAlwAAABP//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3DA/4AkgAEuAAAAIAAAJcAAAAT///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////twwP+AJIABLgAAACAAACXAAAAE/////////////////////////////////////////////////////////////////////////////////////////////////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/7cMD/gCSAAS4AAAAgAAAlwAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="};
+
     const Sound = (() => {
       let ctx = null;
       let enabled = true;
+      let decodedBuffers = {};
 
       function getCtx() {
         if (!ctx) {
@@ -821,96 +818,126 @@
         return ctx;
       }
 
+      function initDecoders() {
+        const ac = getCtx();
+        if (!ac) return;
+        Object.keys(AUDIO_DATA).forEach(key => {
+          if (decodedBuffers[key]) return;
+          try {
+            const b64 = AUDIO_DATA[key].split(',')[1];
+            const binStr = atob(b64);
+            const bytes = new Uint8Array(binStr.length);
+            for (let i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
+            ac.decodeAudioData(bytes.buffer, (buf) => {
+              decodedBuffers[key] = buf;
+            }, (err) => {
+              // fallback gracefully
+            });
+          } catch(e) {}
+        });
+      }
+
+      // Preload on first click
+      window.addEventListener('pointerdown', initDecoders, { once: true });
+
+      function playSample(key, vol = 1.0, pitchVariation = 0.06) {
+        if (!enabled) return false;
+        const ac = getCtx();
+        if (!ac || !decodedBuffers[key]) return false;
+
+        try {
+          const source = ac.createBufferSource();
+          source.buffer = decodedBuffers[key];
+          source.playbackRate.value = 1.0 + (Math.random() - 0.5) * pitchVariation;
+
+          const gain = ac.createGain();
+          gain.gain.value = Math.min(Math.max(vol, 0.05), 1.0);
+
+          source.connect(gain);
+          gain.connect(ac.destination);
+          source.start();
+          return true;
+        } catch(e) {
+          return false;
+        }
+      }
+
       return {
         setEnabled(val) { enabled = val; },
         isEnabled() { return enabled; },
 
+        // Play real carrom coin-to-coin or striker-to-coin strike
         playClack(velocity = 1.0, strikerId = null) {
           if (!enabled) return;
           const ac = getCtx();
           if (!ac) return;
 
-          const vol = Math.min(Math.max(velocity / 12, 0.15), 1.0);
-          const now = ac.currentTime;
+          const vol = Math.min(Math.max(velocity / 11, 0.2), 1.0);
 
-          if (strikerId === null) {
-            // Standard Coin-Coin Clack
-            const osc = ac.createOscillator();
-            const gain = ac.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(650, now);
-            osc.frequency.exponentialRampToValueAtTime(140, now + 0.05);
-            gain.gain.setValueAtTime(vol * 0.45, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-            osc.connect(gain);
-            gain.connect(ac.destination);
-            osc.start();
-            osc.stop(now + 0.05);
-            return;
+          // If regular coin-coin hit or standard striker hit, use REAL recorded carrom MP3 sample!
+          if (strikerId === null || strikerId === 0) {
+            const randomSampleIdx = Math.floor(Math.random() * 5) + 1;
+            const played = playSample('coin_hit_' + randomSampleIdx, vol * 0.95, 0.1);
+            if (played) return;
           }
 
-          // Authentic Acoustic Signatures per Godot Striker
+          // Striker custom acoustic profile or synthesis fallback
+          const now = ac.currentTime;
           const osc = ac.createOscillator();
           const gain = ac.createGain();
 
-          switch (strikerId) {
-            case 1: // Striker 1: Amber Gold Cyber (High-pitch resonant harmonic chime)
-              osc.type = 'sine';
-              osc.frequency.setValueAtTime(880, now);
-              osc.frequency.exponentialRampToValueAtTime(320, now + 0.08);
-              gain.gain.setValueAtTime(vol * 0.5, now);
-              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-              break;
-
-            case 2: // Striker 2: Emerald Jade Glass (Deep heavy sub-punch)
-              osc.type = 'triangle';
-              osc.frequency.setValueAtTime(420, now);
-              osc.frequency.exponentialRampToValueAtTime(80, now + 0.1);
-              gain.gain.setValueAtTime(vol * 0.75, now);
-              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-              break;
-
-            case 3: // Striker 3: Cobalt Sapphire Orb (Crystal ping)
-              osc.type = 'sine';
-              osc.frequency.setValueAtTime(1120, now);
-              osc.frequency.exponentialRampToValueAtTime(450, now + 0.07);
-              gain.gain.setValueAtTime(vol * 0.45, now);
-              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
-              break;
-
-            case 4: // Striker 4: Acid Lime Prism (Tactical crisp snap)
-              osc.type = 'sawtooth';
-              osc.frequency.setValueAtTime(580, now);
-              osc.frequency.exponentialRampToValueAtTime(180, now + 0.05);
-              gain.gain.setValueAtTime(vol * 0.42, now);
-              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-              break;
-
-            case 5: // Striker 5: Titanium Mirror Chrome (Metallic ping with ringing overtone)
-              osc.type = 'square';
-              osc.frequency.setValueAtTime(940, now);
-              osc.frequency.exponentialRampToValueAtTime(410, now + 0.08);
-              gain.gain.setValueAtTime(vol * 0.38, now);
-              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-              break;
-
-            default: // Striker 0: Classic Champion (Wooden lacquer carrom clack)
-              osc.type = 'triangle';
-              osc.frequency.setValueAtTime(700, now);
-              osc.frequency.exponentialRampToValueAtTime(160, now + 0.06);
-              gain.gain.setValueAtTime(vol * 0.55, now);
-              gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-              break;
+          if (strikerId === 1) { // Amber Gold Cyber
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now);
+            osc.frequency.exponentialRampToValueAtTime(320, now + 0.08);
+            gain.gain.setValueAtTime(vol * 0.5, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          } else if (strikerId === 2) { // Emerald Jade Glass
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(380, now);
+            osc.frequency.exponentialRampToValueAtTime(75, now + 0.1);
+            gain.gain.setValueAtTime(vol * 0.75, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          } else if (strikerId === 3) { // Cobalt Sapphire Orb
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1120, now);
+            osc.frequency.exponentialRampToValueAtTime(450, now + 0.07);
+            gain.gain.setValueAtTime(vol * 0.45, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+          } else if (strikerId === 4) { // Acid Lime Prism
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(580, now);
+            osc.frequency.exponentialRampToValueAtTime(180, now + 0.05);
+            gain.gain.setValueAtTime(vol * 0.42, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          } else if (strikerId === 5) { // Titanium Mirror Chrome
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(940, now);
+            osc.frequency.exponentialRampToValueAtTime(410, now + 0.08);
+            gain.gain.setValueAtTime(vol * 0.38, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          } else {
+            // Wood resonant clack fallback
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(700, now);
+            osc.frequency.exponentialRampToValueAtTime(140, now + 0.05);
+            gain.gain.setValueAtTime(vol * 0.6, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
           }
 
           osc.connect(gain);
           gain.connect(ac.destination);
           osc.start();
-          osc.stop(now + 0.11);
+          osc.stop(now + 0.1);
         },
 
         playPocket() {
           if (!enabled) return;
+          // Play real recorded pocket drop sound if available
+          const dropIdx = Math.random() < 0.5 ? 1 : 2;
+          if (playSample('pocket_drop_' + dropIdx, 0.85, 0.08)) return;
+
+          // Synthesis fallback
           const ac = getCtx();
           if (!ac) return;
           const osc = ac.createOscillator();
@@ -928,6 +955,8 @@
 
         playFlick() {
           if (!enabled) return;
+          if (playSample('striker_shoot', 0.8, 0.05)) return;
+
           const ac = getCtx();
           if (!ac) return;
           const osc = ac.createOscillator();
@@ -952,13 +981,12 @@
           if (!ac) return;
           const now = ac.currentTime;
 
-          // Whistle oscillator
           const osc = ac.createOscillator();
           const gain = ac.createGain();
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(750, now);
-          osc.frequency.linearRampToValueAtTime(1250, now + 0.8);
-          osc.frequency.exponentialRampToValueAtTime(500, now + 2.2);
+          osc.frequency.linearRampToValueAtTime(1300, now + 0.8);
+          osc.frequency.exponentialRampToValueAtTime(480, now + 2.2);
 
           gain.gain.setValueAtTime(0.18, now);
           gain.gain.linearRampToValueAtTime(0.3, now + 0.5);
@@ -969,7 +997,6 @@
           osc.start();
           osc.stop(now + 2.3);
 
-          // Fiery hiss noise
           const bufferSize = ac.sampleRate * 1.8;
           const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
           const data = buffer.getChannelData(0);
@@ -999,7 +1026,6 @@
           const noise = ac.createBufferSource();
           noise.buffer = buffer;
 
-          // Bandpass filter to simulate fountain plume whoosh
           const filter = ac.createBiquadFilter();
           filter.type = 'bandpass';
           filter.frequency.setValueAtTime(800, now);
@@ -1084,7 +1110,6 @@
           osc.start();
           osc.stop(now + 0.65);
 
-          // Punchy noise layer
           const bufferSize = ac.sampleRate * 0.4;
           const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
           const data = buffer.getChannelData(0);
@@ -1118,40 +1143,6 @@
           gain.connect(ac.destination);
           osc.start();
           osc.stop(ac.currentTime + 0.2);
-        },
-
-        playShatter() {
-          if (!enabled) return;
-          const ac = getCtx();
-          if (!ac) return;
-          const osc = ac.createOscillator();
-          const gain = ac.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(900, ac.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(300, ac.currentTime + 0.08);
-          gain.gain.setValueAtTime(0.7, ac.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.1);
-          osc.connect(gain);
-          gain.connect(ac.destination);
-          osc.start();
-          osc.stop(ac.currentTime + 0.1);
-        },
-
-        playGlue() {
-          if (!enabled) return;
-          const ac = getCtx();
-          if (!ac) return;
-          const osc = ac.createOscillator();
-          const gain = ac.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(260, ac.currentTime);
-          osc.frequency.linearRampToValueAtTime(540, ac.currentTime + 0.15);
-          gain.gain.setValueAtTime(0.4, ac.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.18);
-          osc.connect(gain);
-          gain.connect(ac.destination);
-          osc.start();
-          osc.stop(ac.currentTime + 0.18);
         },
 
         playFoul() {
@@ -1297,7 +1288,7 @@
       }
     };
 
-    // 100% SQUARE BOARDS ONLY - NO ROUND BOARDS
+    // 100% SQUARE BOARDS ONLY
     const BOARD_THEMES = {
       square_wood: {
         name: 'Classic Maple Tournament',
@@ -1323,30 +1314,233 @@
 
     const COIN_PALETTES = {
       classic: {
-        p1: { fill: '#f7f4ed', border: '#c7beaf', dot: '#222' },
-        p2: { fill: '#221e1b', border: '#0d0c0a', dot: '#eee' },
-        queen: { fill: '#e63946', border: '#9b111e' }
+        name: 'Authentic Boxwood & Rosewood',
+        p1: { fill: '#fdfbf7', mid: '#f3ebd9', edge: '#c4ad8e', ring: '#a89270', dot: '#4a3b2c' },
+        p2: { fill: '#423630', mid: '#251c17', edge: '#18120e', ring: '#0d0907', dot: '#d6c7b2' },
+        queen: { fill: '#ff4d6d', mid: '#c91834', edge: '#800f22', ring: '#4a0410', gold: '#ffd700' }
       },
       cyber: {
-        p1: { fill: '#00e5ff', border: '#00838f', dot: '#fff' },
-        p2: { fill: '#d500f9', border: '#8e0000', dot: '#fff' },
-        queen: { fill: '#ffd600', border: '#ff8f00' }
+        name: 'Cyber Cyan & Magenta',
+        p1: { fill: '#e0f7fa', mid: '#00e5ff', edge: '#00838f', ring: '#006064', dot: '#ffffff' },
+        p2: { fill: '#f3e5f5', mid: '#d500f9', edge: '#8e00a8', ring: '#4a148c', dot: '#ffffff' },
+        queen: { fill: '#fff9c4', mid: '#ffd600', edge: '#ff8f00', ring: '#e65100', gold: '#ffffff' }
       },
       royale: {
-        p1: { fill: '#ffffff', border: '#b0bec5', dot: '#37474f' },
-        p2: { fill: '#ffd54f', border: '#b78103', dot: '#4e342e' },
-        queen: { fill: '#c2185b', border: '#880e4f' }
+        name: 'Royal Gold & Platinum',
+        p1: { fill: '#ffffff', mid: '#eceff1', edge: '#cfd8dc', ring: '#90a4ae', dot: '#37474f' },
+        p2: { fill: '#fff8e1', mid: '#ffd54f', edge: '#ffb300', ring: '#b78103', dot: '#4e342e' },
+        queen: { fill: '#fce4ec', mid: '#e91e63', edge: '#ad1457', ring: '#880e4f', gold: '#ffd700' }
       },
       wood: {
-        p1: { fill: '#f5deb3', border: '#d2b48c', dot: '#8b4513' },
-        p2: { fill: '#5c3818', border: '#3b220d', dot: '#f5deb3' },
-        queen: { fill: '#b71c1c', border: '#7f0000' }
+        name: 'Birch & Dark Walnut',
+        p1: { fill: '#fff8e7', mid: '#f5deb3', edge: '#deb887', ring: '#c49a6c', dot: '#5c3818' },
+        p2: { fill: '#6d4c41', mid: '#4e342e', edge: '#3e2723', ring: '#21130d', dot: '#f5deb3' },
+        queen: { fill: '#ef5350', mid: '#c62828', edge: '#8e0000', ring: '#500000', gold: '#ffb300' }
       }
     };
 
     let selectedStrikerId = 0;
     let selectedBoardKey = 'square_wood';
     let selectedCoinKey = 'classic';
+
+    /* =========================================================================
+       PHOTOREALISTIC 3D CARROM COIN RENDERING
+       (Lathe-Turned Rings, Bevel, Lacquer Sheen & Natural Grain)
+       ========================================================================= */
+    function drawCarromCoin(ctx, x, y, radius, type, rotation, stonePercent = 0, taggedBy = 0, crackerType = null) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+
+      // 1. Realistic Drop Shadow (Offset to bottom-right)
+      ctx.beginPath();
+      ctx.arc(1.8, 2.8, radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+      ctx.fill();
+
+      const palette = COIN_PALETTES[selectedCoinKey];
+      const isP1 = (type === 'p1');
+      const isQueen = (type === 'queen');
+      const cInfo = isP1 ? palette.p1 : (isQueen ? palette.queen : palette.p2);
+
+      // Handle Fun Mode: Stone Pulse petrification
+      let fillCol = cInfo.fill;
+      let midCol = cInfo.mid;
+      let edgeCol = cInfo.edge;
+      let ringCol = cInfo.ring;
+
+      if (stonePercent > 0) {
+        const t = stonePercent / 100;
+        fillCol = t >= 1 ? '#756d66' : '#9e948a';
+        midCol = '#5c544d';
+        edgeCol = '#3e3834';
+        ringCol = '#252220';
+      }
+
+      // 2. Base Turned-Wood Disc with Cylindrical Depth Gradient
+      const baseGrad = ctx.createRadialGradient(-radius * 0.32, -radius * 0.32, 1, 0, 0, radius);
+      baseGrad.addColorStop(0, fillCol);
+      baseGrad.addColorStop(0.35, midCol);
+      baseGrad.addColorStop(0.82, edgeCol);
+      baseGrad.addColorStop(1, ringCol);
+
+      ctx.beginPath();
+      ctx.arc(0, 0, radius, 0, Math.PI * 2);
+      ctx.fillStyle = baseGrad;
+      ctx.fill();
+
+      // 3. Outer Chamfered Bevel Edge (Highlights on top-left, shadows on bottom-right)
+      ctx.beginPath();
+      ctx.arc(0, 0, radius - 0.75, 0, Math.PI * 2);
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = ringCol;
+      ctx.stroke();
+
+      // Top-left specular rim reflection
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(0, 0, radius - 1, -Math.PI * 0.85, -Math.PI * 0.15);
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = isQueen ? 'rgba(255, 255, 255, 0.65)' : (isP1 ? 'rgba(255, 255, 255, 0.75)' : 'rgba(255, 255, 255, 0.32)');
+      ctx.stroke();
+      ctx.restore();
+
+      // 4. Authentic Concentric Lathe-Turned Ridge Grooves
+      // Outer groove ring
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 0.72, 0, Math.PI * 2);
+      ctx.lineWidth = 1.4;
+      ctx.strokeStyle = ringCol;
+      ctx.stroke();
+
+      // Inner groove reflection lip (creates real depth!)
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 0.68, 0, Math.PI * 2);
+      ctx.lineWidth = 1.0;
+      ctx.strokeStyle = isQueen ? 'rgba(255, 215, 0, 0.5)' : (isP1 ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.2)');
+      ctx.stroke();
+
+      // Middle concentric ring
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 0.44, 0, Math.PI * 2);
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = ringCol;
+      ctx.stroke();
+
+      // 5. Center Turned Wood Hub / Pip
+      const centerGrad = ctx.createRadialGradient(-radius * 0.1, -radius * 0.1, 0.5, 0, 0, radius * 0.26);
+      centerGrad.addColorStop(0, fillCol);
+      centerGrad.addColorStop(0.6, midCol);
+      centerGrad.addColorStop(1, edgeCol);
+
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 0.26, 0, Math.PI * 2);
+      ctx.fillStyle = centerGrad;
+      ctx.fill();
+      ctx.lineWidth = 1.0;
+      ctx.strokeStyle = ringCol;
+      ctx.stroke();
+
+      // 6. Distinctive Queen Ornate Gold Mandala Star
+      if (isQueen) {
+        ctx.save();
+        ctx.fillStyle = cInfo.gold || '#ffd700';
+
+        // 8-point gold starburst
+        ctx.beginPath();
+        for (let i = 0; i < 16; i++) {
+          const r = (i % 2 === 0) ? radius * 0.64 : radius * 0.32;
+          const a = (i * Math.PI) / 8;
+          if (i === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+          else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+        }
+        ctx.closePath();
+        ctx.fill();
+
+        // Center ruby cabochon with white specular glint
+        const rubyGrad = ctx.createRadialGradient(-1, -1, 0.5, 0, 0, radius * 0.22);
+        rubyGrad.addColorStop(0, '#ff80ab');
+        rubyGrad.addColorStop(0.4, '#c2185b');
+        rubyGrad.addColorStop(1, '#880e4f');
+
+        ctx.beginPath();
+        ctx.arc(0, 0, radius * 0.22, 0, Math.PI * 2);
+        ctx.fillStyle = rubyGrad;
+        ctx.fill();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#ffd700';
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(-radius * 0.08, -radius * 0.08, 1.8, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+        ctx.fill();
+        ctx.restore();
+      } else {
+        // Regular coins: Center lathe indentation dot
+        ctx.beginPath();
+        ctx.arc(0, 0, 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = cInfo.dot;
+        ctx.fill();
+      }
+
+      // 7. Lacquer Gloss Specular Reflection Arc
+      ctx.beginPath();
+      ctx.ellipse(-radius * 0.28, -radius * 0.28, radius * 0.45, radius * 0.18, -Math.PI / 4, 0, Math.PI * 2);
+      ctx.fillStyle = isQueen ? 'rgba(255, 255, 255, 0.35)' : (isP1 ? 'rgba(255, 255, 255, 0.42)' : 'rgba(255, 255, 255, 0.18)');
+      ctx.fill();
+
+      // 8. 🎆 DIWALI CRACKER BADGE ON COIN
+      if (crackerType) {
+        let badgeEmoji = '🌀';
+        let ringColor = '#ffd700';
+        if (crackerType === 'chakkar') { badgeEmoji = '🌀'; ringColor = '#ff9800'; }
+        else if (crackerType === 'flowerpot') { badgeEmoji = '🌋'; ringColor = '#ffca28'; }
+        else if (crackerType === '100wala') { badgeEmoji = '🧨'; ringColor = '#ff1744'; }
+        else if (crackerType === 'rocket') { badgeEmoji = '🚀'; ringColor = '#00e5ff'; }
+        else if (crackerType === 'bomb') { badgeEmoji = '💥'; ringColor = '#ff3d00'; }
+        else if (crackerType === 'mega_diwali') { badgeEmoji = '🪔'; ringColor = '#ffd700'; }
+
+        // Glowing festive rim
+        ctx.beginPath();
+        ctx.arc(0, 0, radius - 1, 0, Math.PI * 2);
+        ctx.lineWidth = 1.8;
+        ctx.strokeStyle = ringColor;
+        ctx.shadowColor = ringColor;
+        ctx.shadowBlur = 6;
+        ctx.stroke();
+
+        // Cracker icon
+        ctx.font = '12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(badgeEmoji, 0, 0);
+      }
+
+      // 9. Tagged Coins Badge (Fun Mode)
+      if (taggedBy > 0) {
+        ctx.beginPath();
+        ctx.arc(0, 0, radius * 0.45, 0, Math.PI * 2);
+        ctx.fillStyle = taggedBy === 1 ? '#e53935' : '#43a047';
+        ctx.fill();
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 9px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(taggedBy === 1 ? 'P1' : 'AI', 0, 0);
+      }
+
+      // 10. Stone percent badge
+      if (stonePercent > 0) {
+        ctx.fillStyle = '#ffeb3b';
+        ctx.font = 'bold 8px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(stonePercent + '%', 0, 0);
+      }
+
+      ctx.restore();
+    }
 
     /* =========================================================================
        HIGH-FIDELITY VECTOR STRIKER RENDERER (ALL 6 GODOT STRIKERS)
@@ -1358,7 +1552,7 @@
 
       // Soft drop shadow
       ctx.beginPath();
-      ctx.arc(1.5, 2.5, radius, 0, Math.PI * 2);
+      ctx.arc(1.8, 2.8, radius, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
       ctx.fill();
 
@@ -1686,8 +1880,8 @@
     const POCKET_RADIUS = 30;
     const COIN_RADIUS = 16;
     const STRIKER_RADIUS = 22;
-    const FRICTION = 0.980;
-    const RESTITUTION = 0.92;
+    const FRICTION = 0.981; // Smooth Boris powder glide
+    const RESTITUTION = 0.88; // Realistic carrom coin rebound
 
     const BASELINE_OFFSET = 230;
     const BASELINE_HALF_LEN = 195;
@@ -1798,7 +1992,7 @@
       constructor(pocketX, pocketY, type, particlesArray, shockwavesArray, floatTextsArray) {
         this.x = pocketX;
         this.y = pocketY;
-        this.type = type; // 'chakkar', 'flowerpot', '100wala', 'rocket', 'bomb', 'mega_diwali'
+        this.type = type;
         this.particles = particlesArray;
         this.shockwaves = shockwavesArray;
         this.floatTexts = floatTextsArray;
@@ -1806,7 +2000,6 @@
         this.finished = false;
         this.rot = 0;
 
-        // Configuration
         if (type === 'chakkar') {
           this.duration = 2.4;
           Sound.playChakkar();
@@ -1845,10 +2038,9 @@
       update(dt) {
         this.time += dt;
 
-        // 1. 🌀 CHAKKAR: Spinning sparkling disc in pocket
+        // 1. 🌀 CHAKKAR
         if (this.type === 'chakkar') {
           this.rot += dt * 32;
-          // Spawn swirling sparks
           for (let i = 0; i < 3; i++) {
             const angle = this.rot + (i * Math.PI * 2 / 3);
             const speed = 3.5 + Math.random() * 4.5;
@@ -1865,9 +2057,8 @@
           }
         }
 
-        // 2. 🌋 FLOWER POT (ANAAR): High fountain plume of sparks shooting upwards
+        // 2. 🌋 FLOWER POT (ANAAR)
         else if (this.type === 'flowerpot' || (this.type === 'mega_diwali' && this.time < 2.5)) {
-          // Fountain direction points towards center of board from corner pocket
           const dirX = (HALF_SIZE - this.x) > 0 ? 1 : -1;
           const dirY = (HALF_SIZE - this.y) > 0 ? 1 : -1;
 
@@ -1888,14 +2079,13 @@
           }
         }
 
-        // 3. 🧨 100-WALA: Consecutive chain popping explosions in pocket hole
+        // 3. 🧨 100-WALA
         else if (this.type === '100wala') {
           if (this.time >= this.nextPopTime && this.popCount < 16) {
             this.popCount++;
             this.nextPopTime = this.time + 0.11;
             Sound.play100WalaSingle(0.8 + (this.popCount / 20));
 
-            // Mini flash & pop sparks in pocket
             for (let i = 0; i < 8; i++) {
               const a = Math.random() * Math.PI * 2;
               const spd = 2 + Math.random() * 6;
@@ -1909,10 +2099,8 @@
               ));
             }
 
-            // Smoke puff
             this.particles.push(new Particle(this.x, this.y, '#9e9e9e', 6, (Math.random()-0.5)*2, (Math.random()-0.5)*2, 0.03));
 
-            // Final BIG POP at end of 100-wala!
             if (this.popCount === 16) {
               Sound.playAtomBomb();
               this.shockwaves.push(new Shockwave(this.x, this.y, 140, '#ffd700', 8));
@@ -1920,13 +2108,12 @@
           }
         }
 
-        // 4. 🚀 ROCKET: Launches out of pocket toward center & explodes
+        // 4. 🚀 ROCKET
         else if (this.type === 'rocket') {
           const travelRatio = Math.min(this.time / 0.7, 1.0);
           this.rocketX = this.x + (this.targetX - this.x) * travelRatio;
           this.rocketY = this.y + (this.targetY - this.y) * travelRatio;
 
-          // Rocket flame trail
           if (travelRatio < 1.0) {
             this.particles.push(new Particle(
               this.rocketX, this.rocketY,
@@ -1941,7 +2128,6 @@
             Sound.playAtomBomb();
             this.shockwaves.push(new Shockwave(this.targetX, this.targetY, 180, '#00e5ff', 9));
 
-            // Majestic aerial burst with 36 colorful sparkles!
             for (let i = 0; i < 36; i++) {
               const a = (i * Math.PI * 2) / 36;
               const spd = 4 + Math.random() * 5;
@@ -1958,10 +2144,9 @@
           }
         }
 
-        // 5. 💥 ATOM BOMB / DHAMAKA: Brief fuse then massive blast
+        // 5. 💥 ATOM BOMB
         else if (this.type === 'bomb') {
           if (this.time < 0.4) {
-            // Sizzling fuse
             this.particles.push(new Particle(
               this.x + (Math.random() - 0.5) * 6,
               this.y + (Math.random() - 0.5) * 6,
@@ -1990,14 +2175,13 @@
           }
         }
 
-        // 6. 🪔 MEGA DIWALI QUEEN FINALE
+        // 6. 🪔 MEGA DIWALI FINALE
         else if (this.type === 'mega_diwali') {
           this.rot += dt * 30;
           if (this.time > 1.2 && !this.finaleFired) {
             this.finaleFired = true;
             Sound.playAtomBomb();
             this.shockwaves.push(new Shockwave(this.x, this.y, 260, '#ffd700', 11));
-            // Multi-pocket synchronized celebration
             POCKETS.forEach(p => {
               for (let i = 0; i < 16; i++) {
                 const a = Math.random() * Math.PI * 2;
@@ -2013,13 +2197,11 @@
       }
 
       draw(ctx) {
-        // Draw pocket glow and active cracker visual on top of pocket hole
         ctx.save();
         ctx.translate(this.x, this.y);
 
         if (this.type === 'chakkar') {
           ctx.rotate(this.rot);
-          // Glowing center spinner
           ctx.beginPath();
           ctx.arc(0, 0, 16, 0, Math.PI * 2);
           ctx.fillStyle = '#ff9800';
@@ -2027,7 +2209,6 @@
           ctx.shadowBlur = 15;
           ctx.fill();
 
-          // 4 spinning chakra wings
           ctx.fillStyle = '#ffd700';
           for (let i = 0; i < 4; i++) {
             ctx.rotate(Math.PI / 2);
@@ -2036,7 +2217,6 @@
             ctx.fill();
           }
         } else if (this.type === 'flowerpot') {
-          // Fiery cone inside pocket
           ctx.beginPath();
           ctx.arc(0, 0, 14, 0, Math.PI * 2);
           ctx.fillStyle = 'rgba(255, 109, 0, 0.8)';
@@ -2044,7 +2224,6 @@
           ctx.shadowBlur = 20;
           ctx.fill();
         } else if (this.type === '100wala') {
-          // Rapid flash in pocket
           if (Math.sin(this.time * 40) > 0) {
             ctx.beginPath();
             ctx.arc(0, 0, 20, 0, Math.PI * 2);
@@ -2054,7 +2233,6 @@
             ctx.fill();
           }
         } else if (this.type === 'rocket' && !this.rocketExploded) {
-          // Draw rocket projectile moving on board
           ctx.restore();
           ctx.save();
           ctx.translate(this.rocketX, this.rocketY);
@@ -2077,29 +2255,28 @@
     class Piece {
       constructor(x, y, type, radius = COIN_RADIUS) {
         this.x = x; this.y = y;
-        this.type = type; // 'p1' (white), 'p2' (black), 'queen' (red), 'striker'
+        this.type = type;
         this.radius = radius;
         this.mass = radius === STRIKER_RADIUS ? 3.2 : 1.0;
         this.vx = 0; this.vy = 0;
+        this.angle = Math.random() * Math.PI * 2;
+        this.angularVelocity = 0;
         this.isPocketed = false;
         this.scale = 1.0;
         this.stonePercent = 0;
         this.taggedBy = 0;
-        this.isHalf = false;
-        this.halfPairId = null;
-        this.crackerType = null; // 'chakkar', 'flowerpot', '100wala', 'rocket', 'bomb', 'mega_diwali'
-        this.rotation = Math.random() * Math.PI * 2;
+        this.crackerType = null;
       }
 
       reset(x, y) {
         this.x = x; this.y = y;
         this.vx = 0; this.vy = 0;
+        this.angle = Math.random() * Math.PI * 2;
+        this.angularVelocity = 0;
         this.isPocketed = false;
         this.scale = 1.0;
         this.stonePercent = 0;
         this.taggedBy = 0;
-        this.isHalf = false;
-        this.halfPairId = null;
       }
 
       update() {
@@ -2110,20 +2287,24 @@
 
         if (this.stonePercent >= 100) {
           this.vx = 0; this.vy = 0;
+          this.angularVelocity = 0;
           return;
         }
 
         this.x += this.vx;
         this.y += this.vy;
+        this.angle += this.angularVelocity;
 
         const currentFriction = this.type === 'striker' ? STRIKER_CONFIGS[selectedStrikerId].friction : FRICTION;
         this.vx *= currentFriction;
         this.vy *= currentFriction;
+        this.angularVelocity *= 0.95; // Natural spin deceleration
 
-        if (Math.abs(this.vx) < 0.05) this.vx = 0;
-        if (Math.abs(this.vy) < 0.05) this.vy = 0;
+        if (Math.abs(this.vx) < 0.04) this.vx = 0;
+        if (Math.abs(this.vy) < 0.04) this.vy = 0;
+        if (Math.abs(this.angularVelocity) < 0.002) this.angularVelocity = 0;
 
-        // Square Cushion Boundaries ONLY
+        // Square Cushion Boundaries
         const minX = FRAME_WIDTH + this.radius;
         const maxX = BOARD_SIZE - FRAME_WIDTH - this.radius;
         const minY = FRAME_WIDTH + this.radius;
@@ -2133,17 +2314,21 @@
 
         if (this.x < minX) {
           this.x = minX; this.vx = -this.vx * currentRestitution;
+          this.angularVelocity += this.vy * 0.02; // Cushion tangential roll
           Sound.playClack(Math.abs(this.vx), this.type === 'striker' ? selectedStrikerId : null);
         } else if (this.x > maxX) {
           this.x = maxX; this.vx = -this.vx * currentRestitution;
+          this.angularVelocity -= this.vy * 0.02;
           Sound.playClack(Math.abs(this.vx), this.type === 'striker' ? selectedStrikerId : null);
         }
 
         if (this.y < minY) {
           this.y = minY; this.vy = -this.vy * currentRestitution;
+          this.angularVelocity -= this.vx * 0.02;
           Sound.playClack(Math.abs(this.vy), this.type === 'striker' ? selectedStrikerId : null);
         } else if (this.y > maxY) {
           this.y = maxY; this.vy = -this.vy * currentRestitution;
+          this.angularVelocity += this.vx * 0.02;
           Sound.playClack(Math.abs(this.vy), this.type === 'striker' ? selectedStrikerId : null);
         }
       }
@@ -2155,89 +2340,10 @@
         c.translate(this.x, this.y);
         c.scale(this.scale, this.scale);
 
-        // Striker Rendering via drawStrikerArt
         if (this.type === 'striker') {
-          drawStrikerArt(c, 0, 0, this.radius, selectedStrikerId, this.rotation);
-          c.restore();
-          return;
-        }
-
-        // Regular Coins with Palette
-        const palette = COIN_PALETTES[selectedCoinKey];
-        let pInfo = this.type === 'p1' ? palette.p1 : (this.type === 'p2' ? palette.p2 : palette.queen);
-
-        let fillColor = pInfo.fill;
-        let borderColor = pInfo.border;
-
-        if (this.stonePercent > 0) {
-          const t = this.stonePercent / 100;
-          fillColor = t >= 1 ? '#5c544d' : '#8c8075';
-          borderColor = '#332f2c';
-        }
-
-        c.beginPath();
-        if (this.isHalf) {
-          c.arc(0, 0, this.radius, -Math.PI / 2, Math.PI / 2);
-          c.closePath();
+          drawStrikerArt(c, 0, 0, this.radius, selectedStrikerId, this.angle);
         } else {
-          c.arc(0, 0, this.radius, 0, Math.PI * 2);
-        }
-
-        const grad = c.createRadialGradient(-this.radius*0.3, -this.radius*0.3, 2, 0, 0, this.radius);
-        grad.addColorStop(0, '#ffffff');
-        grad.addColorStop(0.3, fillColor);
-        grad.addColorStop(1, borderColor);
-        c.fillStyle = grad;
-        c.fill();
-        c.lineWidth = 2;
-        c.strokeStyle = borderColor;
-        c.stroke();
-
-        // 🎆 DIWALI CRACKER BADGE ON COIN
-        if (this.crackerType) {
-          let badgeEmoji = '🌀';
-          let ringColor = '#ffd700';
-          if (this.crackerType === 'chakkar') { badgeEmoji = '🌀'; ringColor = '#ff9800'; }
-          else if (this.crackerType === 'flowerpot') { badgeEmoji = '🌋'; ringColor = '#ffca28'; }
-          else if (this.crackerType === '100wala') { badgeEmoji = '🧨'; ringColor = '#ff1744'; }
-          else if (this.crackerType === 'rocket') { badgeEmoji = '🚀'; ringColor = '#00e5ff'; }
-          else if (this.crackerType === 'bomb') { badgeEmoji = '💥'; ringColor = '#ff3d00'; }
-          else if (this.crackerType === 'mega_diwali') { badgeEmoji = '🪔'; ringColor = '#ffd700'; }
-
-          // Glowing festive rim
-          c.beginPath();
-          c.arc(0, 0, this.radius - 1, 0, Math.PI * 2);
-          c.lineWidth = 1.8;
-          c.strokeStyle = ringColor;
-          c.stroke();
-
-          // Cracker icon
-          c.font = '12px sans-serif';
-          c.textAlign = 'center';
-          c.textBaseline = 'middle';
-          c.fillText(badgeEmoji, 0, 0);
-        }
-
-        // Tagged Coins Badge
-        if (this.taggedBy > 0) {
-          c.beginPath();
-          c.arc(0, 0, this.radius * 0.45, 0, Math.PI * 2);
-          c.fillStyle = this.taggedBy === 1 ? '#e53935' : '#43a047';
-          c.fill();
-          c.fillStyle = '#fff';
-          c.font = 'bold 9px sans-serif';
-          c.textAlign = 'center';
-          c.textBaseline = 'middle';
-          c.fillText(this.taggedBy === 1 ? 'P1' : 'AI', 0, 0);
-        }
-
-        // Stone percent badge
-        if (this.stonePercent > 0) {
-          c.fillStyle = '#ffeb3b';
-          c.font = 'bold 8px sans-serif';
-          c.textAlign = 'center';
-          c.textBaseline = 'middle';
-          c.fillText(this.stonePercent + '%', 0, 0);
+          drawCarromCoin(c, 0, 0, this.radius, this.type, this.angle, this.stonePercent, this.taggedBy, this.crackerType);
         }
 
         c.restore();
@@ -2251,9 +2357,9 @@
       const canvas = document.getElementById('carromCanvas');
       const ctx = canvas.getContext('2d');
 
-      let state = 'menu'; // 'menu', 'aiming', 'shooting', 'paused', 'gameover'
+      let state = 'menu';
       let isFunMode = false;
-      let funVariant = 'crackers'; // 'crackers', 'magnet', 'stone', 'bomber', 'tagcoins', 'coin_breaker'
+      let funVariant = 'crackers';
 
       let turn = 1; // 1 = Player, 2 = AI
       let scores = { 1: 0, 2: 0 };
@@ -2279,15 +2385,13 @@
       const strikerBaseY = HALF_SIZE + BASELINE_OFFSET;
       const aiStrikerBaseY = HALF_SIZE - BASELINE_OFFSET;
 
-      // Fun mode states
       let funMatchTimer = 0;
       let magnetEventActive = false;
       let magnetEventTimer = 0;
       let stonePulseTimer = 0;
       let bomberTimerP1 = 120;
       let bomberTimerAI = 120;
-      let isGluePhase = false;
-      let tagCoinPhase = 'tagging'; // 'tagging' or 'pocketing'
+      let tagCoinPhase = 'tagging';
 
       let lastTime = 0;
 
@@ -2304,14 +2408,12 @@
         queenNeedsCover = false;
         piecesPocketedThisTurn = [];
 
-        // Reset fun timers
         funMatchTimer = 0;
         magnetEventActive = false;
         magnetEventTimer = 120;
         stonePulseTimer = 15;
         bomberTimerP1 = 120;
         bomberTimerAI = 120;
-        isGluePhase = false;
         tagCoinPhase = 'tagging';
 
         // Striker
@@ -2342,7 +2444,7 @@
           coins.push(c); pieces.push(c);
         }
 
-        // 🎆 DIWALI CRACKER MODE: Assign crackers to all coins
+        // 🎆 DIWALI CRACKER MODE: Randomly assign crackers to all coins
         if (isFunMode && funVariant === 'crackers') {
           const crackerTypes = ['chakkar', 'flowerpot', '100wala', 'rocket', 'bomb'];
           coins.forEach((c, idx) => {
@@ -2353,7 +2455,6 @@
             }
           });
 
-          // Shuffle cracker assignments across the coins
           for (let i = coins.length - 1; i > 0; i--) {
             if (coins[i].type !== 'queen' && coins[0].type !== 'queen') {
               const j = Math.floor(Math.random() * i);
@@ -2404,7 +2505,6 @@
             else if (funVariant === 'stone') subPill.textContent = 'Next Pulse: ' + Math.ceil(stonePulseTimer) + 's';
             else if (funVariant === 'bomber') subPill.textContent = '💣 P1: ' + Math.ceil(bomberTimerP1) + 's | AI: ' + Math.ceil(bomberTimerAI) + 's';
             else if (funVariant === 'tagcoins') subPill.textContent = 'Phase: ' + tagCoinPhase.toUpperCase() + ' (' + Math.ceil(funMatchTimer) + 's)';
-            else if (funVariant === 'coin_breaker') subPill.textContent = isGluePhase ? '✨ GLUE PHASE ACTIVE!' : 'Normal Phase';
           }
         } else {
           modePill.textContent = '🌟 NORMAL MODE • ' + strCfg.name.split('•')[0].trim();
@@ -2412,12 +2512,11 @@
         }
       }
 
-      /* =================== FUN MODE MECHANICS =================== */
       function updateFunMechanics(dt) {
         if (!isFunMode) return;
         funMatchTimer += dt;
 
-        // 1. Magnet Event (120s cooldown, 20s vortex)
+        // Magnet Event
         if (funVariant === 'magnet') {
           magnetEventTimer -= dt;
           if (magnetEventTimer <= 0) {
@@ -2448,7 +2547,7 @@
           }
         }
 
-        // 2. Stone Pulse (+5% every 15s)
+        // Stone Pulse
         if (funVariant === 'stone') {
           stonePulseTimer -= dt;
           if (stonePulseTimer <= 0) {
@@ -2464,7 +2563,7 @@
           }
         }
 
-        // 3. Player Bomber (120s countdown)
+        // Player Bomber
         if (funVariant === 'bomber') {
           if (turn === 1) {
             bomberTimerP1 -= dt;
@@ -2485,54 +2584,16 @@
           }
         }
 
-        // 4. Tag Coins (240s total match, phases toggle every 60s)
+        // Tag Coins
         if (funVariant === 'tagcoins') {
           const cycle = Math.floor(funMatchTimer / 60) % 2;
           tagCoinPhase = cycle === 0 ? 'tagging' : 'pocketing';
         }
 
-        // 5. Coin Breaker & Glue Phase
-        if (funVariant === 'coin_breaker') {
-          const glueCycle = Math.floor(funMatchTimer / 60) % 2;
-          isGluePhase = glueCycle === 1;
-        }
-
         updateHUD();
       }
 
-      function handleCoinBreak(coin) {
-        if (coin.isHalf || coin.type === 'queen') return;
-        coin.isHalf = true;
-        coin.radius = COIN_RADIUS * 0.75;
-        coin.mass = 0.5;
-        const pairId = Date.now() + Math.random();
-        coin.halfPairId = pairId;
-
-        const half2 = new Piece(coin.x + 10, coin.y + 10, coin.type, COIN_RADIUS * 0.75);
-        half2.isHalf = true;
-        half2.mass = 0.5;
-        half2.halfPairId = pairId;
-        half2.crackerType = coin.crackerType;
-        half2.vx = -coin.vx * 0.6;
-        half2.vy = -coin.vy * 0.6;
-
-        coins.push(half2); pieces.push(half2);
-        Sound.playShatter();
-        shockwaves.push(new Shockwave(coin.x, coin.y, 80, '#00e5ff'));
-      }
-
-      function handleCoinGlue(c1, c2) {
-        if (!c1.isHalf || !c2.isHalf || c1.type !== c2.type) return;
-        c1.isHalf = false;
-        c1.radius = COIN_RADIUS;
-        c1.mass = 1.0;
-        c2.isPocketed = true;
-        c2.scale = 0;
-        Sound.playGlue();
-        shockwaves.push(new Shockwave(c1.x, c1.y, 100, '#69f0ae'));
-      }
-
-      /* =================== PIECE-TO-PIECE COLLISIONS =================== */
+      /* =================== REALISTIC COLLISIONS & ANGULAR SPIN =================== */
       function resolveCollisions() {
         for (let i = 0; i < pieces.length; i++) {
           for (let j = i + 1; j < pieces.length; j++) {
@@ -2561,9 +2622,16 @@
               const ky = p1.vy - p2.vy;
               const relSpeed = Math.hypot(kx, ky);
 
-              // Sound clack with striker profile
+              // Sound clack using REAL carrom sample
               const isStrikerInvolved = (p1.type === 'striker' || p2.type === 'striker');
               Sound.playClack(relSpeed, isStrikerInvolved ? selectedStrikerId : null);
+
+              // Impart Tangential Rotational Spin (eliminates artificial sliding feel!)
+              const tx = -ny;
+              const ty = nx;
+              const tangentSpeed = kx * tx + ky * ty;
+              p1.angularVelocity += (tangentSpeed / p1.radius) * 0.32;
+              p2.angularVelocity -= (tangentSpeed / p2.radius) * 0.32;
 
               // Fun Mode: Stone Pulse chipping
               if (isFunMode && funVariant === 'stone') {
@@ -2573,17 +2641,6 @@
                     coin.mass = 1.0 + (coin.stonePercent / 100) * 15.0;
                   }
                 });
-              }
-
-              // Fun Mode: Coin Breaker (Shatter on heavy striker impact)
-              if (isFunMode && funVariant === 'coin_breaker' && !isGluePhase) {
-                if (p1.type === 'striker' && relSpeed > 8.5) handleCoinBreak(p2);
-                else if (p2.type === 'striker' && relSpeed > 8.5) handleCoinBreak(p1);
-              }
-
-              // Fun Mode: Glue Phase (Fuse matching halves)
-              if (isFunMode && funVariant === 'coin_breaker' && isGluePhase) {
-                if (p1.isHalf && p2.isHalf && p1.type === p2.type) handleCoinGlue(p1, p2);
               }
 
               // Fun Mode: Tag Coins
@@ -2614,32 +2671,29 @@
             if (dist < POCKET_RADIUS + 4) {
               p.isPocketed = true;
               p.vx = 0; p.vy = 0;
+              p.angularVelocity = 0;
               Sound.playPocket();
 
               if (p.type === 'striker') {
-                // Striker Foul
                 Sound.playFoul();
                 scores[turn] = Math.max(0, scores[turn] - 5);
                 document.getElementById('turn-msg').textContent = '⚠️ FOUL! Striker Pocketed (-5)';
               } else {
                 piecesPocketedThisTurn.push(p);
 
-                // Scoring
                 let pts = 0;
                 if (p.type === 'p1') pts = 10;
                 else if (p.type === 'p2') pts = 5;
                 else if (p.type === 'queen') pts = 25;
 
-                // 🎆 DIWALI CRACKER MODE: Activate Cracker in this pocket!
+                // 🎆 DIWALI CRACKER MODE: Activate Cracker inside this pocket hole!
                 if (isFunMode && funVariant === 'crackers' && p.crackerType) {
-                  // Register pocket cracker effect
                   activePocketCrackers.push(new ActivePocketCracker(
                     pocket.x, pocket.y,
                     p.crackerType,
                     particles, shockwaves, floatingTexts
                   ));
 
-                  // Extra bonus points for cracker explosion!
                   if (p.crackerType === 'chakkar') pts += 15;
                   else if (p.crackerType === 'flowerpot') pts += 20;
                   else if (p.crackerType === '100wala') pts += 25;
@@ -2648,7 +2702,6 @@
                   else if (p.crackerType === 'mega_diwali') pts += 50;
                 }
 
-                // Tag Coins multiplier
                 if (isFunMode && funVariant === 'tagcoins' && tagCoinPhase === 'pocketing') {
                   if (p.taggedBy === turn) pts *= 2;
                 }
@@ -2663,7 +2716,7 @@
 
       /* =================== TURN TRANSITIONS =================== */
       function checkTurnEnd() {
-        const anyMoving = pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.05 || Math.abs(p.vy) > 0.05));
+        const anyMoving = pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.04 || Math.abs(p.vy) > 0.04));
         const anyCrackersPopping = activePocketCrackers.some(c => !c.finished);
         if (anyMoving || anyCrackersPopping) return;
 
@@ -2673,19 +2726,16 @@
         let p1PocketedCount = coins.filter(c => c.type === 'p1' && c.isPocketed).length;
         let p2PocketedCount = coins.filter(c => c.type === 'p2' && c.isPocketed).length;
 
-        // Check Victory
         if (p1PocketedCount === 9 || p2PocketedCount === 9) {
           endGame();
           return;
         }
 
-        // Next Turn determination
         const scoredValidThisTurn = piecesPocketedThisTurn.length > 0 && !strikerPocketed;
         if (!scoredValidThisTurn) turn = (turn === 1) ? 2 : 1;
 
         piecesPocketedThisTurn = [];
 
-        // Reset Striker to baseline
         striker.reset(HALF_SIZE, turn === 1 ? strikerBaseY : aiStrikerBaseY);
         striker.mass = STRIKER_CONFIGS[selectedStrikerId].mass;
 
@@ -2720,7 +2770,6 @@
       function runAITurn() {
         if (state !== 'aiming' || turn !== 2) return;
 
-        // Smart AI: Find best pocketable coin
         const activeCoins = coins.filter(c => !c.isPocketed);
         let bestTarget = null;
         let bestPocket = null;
@@ -2731,7 +2780,7 @@
             const dCoinToPocket = Math.hypot(pocket.x - coin.x, pocket.y - coin.y);
             let score = (coin.type === 'p2' ? 100 : (coin.type === 'queen' ? 150 : 20)) - dCoinToPocket * 0.2;
             if (isFunMode && funVariant === 'crackers' && coin.crackerType) {
-              score += 25; // AI loves pocketing crackers!
+              score += 25;
             }
             if (score > bestScore) {
               bestScore = score;
@@ -2744,10 +2793,8 @@
         if (!bestTarget) bestTarget = coins[0];
         if (!bestPocket) bestPocket = POCKETS[0];
 
-        // Position AI striker near target X
         striker.x = Math.max(strikerMinX, Math.min(strikerMaxX, bestTarget.x + (Math.random() - 0.5) * 40));
 
-        // Aim angle from target to pocket
         const angleToPocket = Math.atan2(bestPocket.y - bestTarget.y, bestPocket.x - bestTarget.x);
         const ghostX = bestTarget.x - Math.cos(angleToPocket) * (COIN_RADIUS + STRIKER_RADIUS);
         const ghostY = bestTarget.y - Math.sin(angleToPocket) * (COIN_RADIUS + STRIKER_RADIUS);
@@ -2761,12 +2808,11 @@
         state = 'shooting';
       }
 
-      /* =================== BOARD RENDERING (100% SQUARE) =================== */
+      /* =================== BOARD RENDERING =================== */
       function drawBoard() {
         const theme = BOARD_THEMES[selectedBoardKey];
         ctx.clearRect(0, 0, BOARD_SIZE, BOARD_SIZE);
 
-        // 🟫 SQUARE TOURNAMENT BOARD
         ctx.fillStyle = theme.frame;
         ctx.fillRect(0, 0, BOARD_SIZE, BOARD_SIZE);
         ctx.fillStyle = theme.frameBorder;
@@ -2793,7 +2839,6 @@
           ctx.fill();
         }
 
-        // Cracker Mode ambient festive glow in center rosette
         if (isFunMode && funVariant === 'crackers') {
           const glow = Math.sin(Date.now() * 0.005) * 0.5 + 0.5;
           ctx.beginPath();
@@ -2892,13 +2937,11 @@
       function render(dt) {
         drawBoard();
 
-        // Striker Particle Trail
         if (state === 'shooting' && Math.hypot(striker.vx, striker.vy) > 4) {
           const cfg = STRIKER_CONFIGS[selectedStrikerId];
           particles.push(new Particle(striker.x, striker.y, cfg.trailColor, 4, -striker.vx*0.1, -striker.vy*0.1));
         }
 
-        // Ambient Diya/Cracker Sparkles in Diwali mode
         if (isFunMode && funVariant === 'crackers' && Math.random() < 0.2) {
           const coin = coins[Math.floor(Math.random() * coins.length)];
           if (coin && !coin.isPocketed) {
@@ -2906,29 +2949,24 @@
           }
         }
 
-        // Pieces
         pieces.forEach(p => p.draw(ctx));
 
-        // Active Pocket Crackers
         activePocketCrackers.forEach((crk, idx) => {
           crk.update(dt);
           crk.draw(ctx);
           if (crk.finished) activePocketCrackers.splice(idx, 1);
         });
 
-        // Shockwaves
         shockwaves.forEach((s, idx) => {
           s.update(); s.draw(ctx);
           if (s.alpha <= 0) shockwaves.splice(idx, 1);
         });
 
-        // Particles
         particles.forEach((pt, idx) => {
           pt.update(); pt.draw(ctx);
           if (pt.alpha <= 0) particles.splice(idx, 1);
         });
 
-        // Floating Score & Cracker Texts
         floatingTexts.forEach((ft, idx) => {
           ft.update(); ft.draw(ctx);
           if (ft.alpha <= 0) floatingTexts.splice(idx, 1);
@@ -2954,7 +2992,6 @@
             ctx.stroke();
             ctx.restore();
 
-            // Pull back drag line
             ctx.beginPath();
             ctx.moveTo(striker.x, striker.y);
             ctx.lineTo(aimCurrent.x, aimCurrent.y);
@@ -3086,7 +3123,6 @@
        UI BUILDERS & EVENT LISTENERS
        ========================================================================= */
 
-    // Refresh Equipped Striker Bar on Home Screen
     function updateEquippedStrikerCard() {
       const cfg = STRIKER_CONFIGS[selectedStrikerId];
       const cvs = document.getElementById('home-striker-canvas');
@@ -3098,14 +3134,12 @@
       document.getElementById('home-striker-name').textContent = cfg.name;
       document.getElementById('home-striker-desc').textContent = cfg.subtitle + ' • ' + cfg.desc;
 
-      // Update Customization chip active state
       document.querySelectorAll('#striker-options .opt-chip').forEach(c => {
         const id = parseInt(c.getAttribute('data-striker'));
         c.classList.toggle('active', id === selectedStrikerId);
       });
     }
 
-    // Build the 6-Card Godot Striker Arsenal
     function buildStrikerArsenalUI() {
       const grid = document.getElementById('arsenal-grid');
       grid.innerHTML = '';
@@ -3158,7 +3192,6 @@
         grid.appendChild(card);
       });
 
-      // Render mini canvas artwork for each striker card
       setTimeout(() => {
         Object.values(STRIKER_CONFIGS).forEach(cfg => {
           const cvs = document.getElementById('arsenal-canvas-' + cfg.id);
@@ -3171,7 +3204,6 @@
       }, 20);
     }
 
-    // Setup Home Screen buttons
     document.getElementById('card-normal').addEventListener('click', () => {
       Sound.playPocket();
       Game.launchMatch(false, 'normal');
@@ -3189,7 +3221,6 @@
       document.getElementById('menu-overlay').classList.remove('hidden');
     });
 
-    // Fun Mode Cards
     document.querySelectorAll('.fun-card').forEach(card => {
       card.addEventListener('click', () => {
         const mode = card.getAttribute('data-mode');
@@ -3198,7 +3229,6 @@
       });
     });
 
-    // Striker Arsenal Modal
     document.getElementById('btn-open-arsenal').addEventListener('click', () => {
       Sound.playFlick();
       buildStrikerArsenalUI();
@@ -3218,7 +3248,6 @@
       updateEquippedStrikerCard();
     });
 
-    // Customization Screen
     document.getElementById('btn-custom').addEventListener('click', () => {
       Sound.playFlick();
       document.getElementById('custom-overlay').classList.remove('hidden');
@@ -3230,7 +3259,6 @@
       updateEquippedStrikerCard();
     });
 
-    // Striker quick-options in customization
     document.querySelectorAll('#striker-options .opt-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         selectedStrikerId = parseInt(chip.getAttribute('data-striker'));
@@ -3239,7 +3267,6 @@
       });
     });
 
-    // Board options (100% square)
     document.querySelectorAll('#board-options .opt-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         document.querySelectorAll('#board-options .opt-chip').forEach(c => c.classList.remove('active'));
@@ -3249,7 +3276,6 @@
       });
     });
 
-    // Coin palette options
     document.querySelectorAll('#coin-options .opt-chip').forEach(chip => {
       chip.addEventListener('click', () => {
         document.querySelectorAll('#coin-options .opt-chip').forEach(c => c.classList.remove('active'));
@@ -3259,7 +3285,6 @@
       });
     });
 
-    // Result buttons
     document.getElementById('btn-rematch').addEventListener('click', () => {
       document.getElementById('result-overlay').classList.add('hidden');
       Game.launchMatch(isFunMode, funVariant);
@@ -3273,14 +3298,12 @@
       updateEquippedStrikerCard();
     });
 
-    // Sound toggle button
     document.getElementById('sound-btn').addEventListener('click', () => {
       const next = !Sound.isEnabled();
       Sound.setEnabled(next);
       document.getElementById('sound-btn').textContent = next ? '🔊' : '🔇';
     });
 
-    // Pause/Menu button
     document.getElementById('pause-btn').addEventListener('click', () => {
       document.getElementById('hud').classList.add('hidden');
       document.getElementById('turn-msg').classList.add('hidden');
@@ -3288,7 +3311,6 @@
       updateEquippedStrikerCard();
     });
 
-    // Initial load
     updateEquippedStrikerCard();
     Game.start();
   </script>
