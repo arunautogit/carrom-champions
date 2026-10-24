@@ -1554,7 +1554,6 @@
           🔥 CRACKER STRIKER: ON
         </button>
         <button id="sound-btn" class="icon-btn" title="Toggle Sound">🔊</button>
-        <button id="pause-btn" class="icon-btn" title="Exit Match">🚪</button>
       </div>
 
       <div id="p2-badge" class="player-badge">
@@ -6969,12 +6968,9 @@
       Game.exitMatch(destination);
     }
 
-    // In-game Exit Buttons
+    // In-game Exit Button
     const btnInGameExit = document.getElementById('btn-in-game-exit');
     if (btnInGameExit) btnInGameExit.addEventListener('click', openExitConfirmModal);
-
-    const pauseBtn = document.getElementById('pause-btn');
-    if (pauseBtn) pauseBtn.addEventListener('click', openExitConfirmModal);
 
     // Modal Action Buttons
     const btnExitPrev = document.getElementById('btn-exit-to-previous');
