@@ -1545,7 +1545,7 @@
             <span class="giftbox-item-emoji" style="font-size:1.6rem;">👑</span>
             <div class="giftbox-item-info">
               <div class="giftbox-item-name" style="color:#ffd700;font-size:0.88rem;">1000-Wala Rajah Maha Dhamaka</div>
-              <div class="giftbox-item-sub" style="color:#ffe082;">60-Second Perimeter Border Celebration & Blinking Lights!</div>
+              <div class="giftbox-item-sub" style="color:#ffe082;">30-Second Perimeter Border Celebration & Blinking Lights!</div>
             </div>
             <span class="giftbox-qty" style="background:#ff1744;color:#fff;">× 1 (Queen)</span>
           </div>
@@ -1572,16 +1572,37 @@
 
     const Sound = (() => {
       let ctx = null;
+      let masterNode = null;
       let enabled = true;
       let decodedBuffers = {};
 
       function getCtx() {
         if (!ctx) {
           const AudioContext = window.AudioContext || window.webkitAudioContext;
-          if (AudioContext) ctx = new AudioContext();
+          if (AudioContext) {
+            ctx = new AudioContext();
+            const comp = ctx.createDynamicsCompressor();
+            comp.threshold.setValueAtTime(-6, ctx.currentTime);
+            comp.knee.setValueAtTime(24, ctx.currentTime);
+            comp.ratio.setValueAtTime(3.5, ctx.currentTime);
+            comp.attack.setValueAtTime(0.002, ctx.currentTime);
+            comp.release.setValueAtTime(0.2, ctx.currentTime);
+
+            const masterGain = ctx.createGain();
+            masterGain.gain.setValueAtTime(1.65, ctx.currentTime); // +65% extra loudness punch!
+
+            comp.connect(masterGain);
+            masterGain.connect(ctx.destination);
+            masterNode = comp;
+          }
         }
         if (ctx && ctx.state === 'suspended') ctx.resume();
         return ctx;
+      }
+
+      function getDest() {
+        getCtx();
+        return masterNode || (ctx ? ctx.destination : null);
       }
 
       function initDecoders() {
@@ -1614,10 +1635,10 @@
           source.playbackRate.value = 1.0 + (Math.random() - 0.5) * pitchVariation;
 
           const gain = ac.createGain();
-          gain.gain.value = Math.min(Math.max(vol, 0.05), 1.0);
+          gain.gain.value = Math.min(Math.max(vol * 1.3, 0.05), 1.5);
 
           source.connect(gain);
-          gain.connect(ac.destination);
+          gain.connect(getDest() || ac.destination);
           source.start();
           return true;
         } catch(e) {
@@ -1634,11 +1655,11 @@
           const ac = getCtx();
           if (!ac) return;
 
-          const vol = Math.min(Math.max(velocity / 11, 0.2), 1.0);
+          const vol = Math.min(Math.max(velocity / 10, 0.25), 1.25);
 
           if (strikerId === null || strikerId === 0) {
             const randomSampleIdx = Math.floor(Math.random() * 5) + 1;
-            if (playSample('coin_hit_' + randomSampleIdx, vol * 0.95, 0.1)) return;
+            if (playSample('coin_hit_' + randomSampleIdx, vol * 1.15, 0.1)) return;
           }
 
           const now = ac.currentTime;
@@ -1649,42 +1670,42 @@
             osc.type = 'sine';
             osc.frequency.setValueAtTime(880, now);
             osc.frequency.exponentialRampToValueAtTime(320, now + 0.08);
-            gain.gain.setValueAtTime(vol * 0.5, now);
+            gain.gain.setValueAtTime(vol * 0.7, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
           } else if (strikerId === 2) { // Emerald Jade Glass
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(380, now);
             osc.frequency.exponentialRampToValueAtTime(75, now + 0.1);
-            gain.gain.setValueAtTime(vol * 0.75, now);
+            gain.gain.setValueAtTime(vol * 0.95, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
           } else if (strikerId === 3) { // Cobalt Sapphire Orb
             osc.type = 'sine';
             osc.frequency.setValueAtTime(1120, now);
             osc.frequency.exponentialRampToValueAtTime(450, now + 0.07);
-            gain.gain.setValueAtTime(vol * 0.45, now);
+            gain.gain.setValueAtTime(vol * 0.65, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
           } else if (strikerId === 4) { // Acid Lime Prism
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(580, now);
             osc.frequency.exponentialRampToValueAtTime(180, now + 0.05);
-            gain.gain.setValueAtTime(vol * 0.42, now);
+            gain.gain.setValueAtTime(vol * 0.6, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
           } else if (strikerId === 5) { // Titanium Mirror Chrome
             osc.type = 'square';
             osc.frequency.setValueAtTime(940, now);
             osc.frequency.exponentialRampToValueAtTime(410, now + 0.08);
-            gain.gain.setValueAtTime(vol * 0.38, now);
+            gain.gain.setValueAtTime(vol * 0.55, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
           } else {
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(700, now);
             osc.frequency.exponentialRampToValueAtTime(140, now + 0.05);
-            gain.gain.setValueAtTime(vol * 0.6, now);
+            gain.gain.setValueAtTime(vol * 0.85, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
           }
 
           osc.connect(gain);
-          gain.connect(ac.destination);
+          gain.connect(getDest() || ac.destination);
           osc.start();
           osc.stop(now + 0.1);
         },
@@ -1692,7 +1713,7 @@
         playPocket() {
           if (!enabled) return;
           const dropIdx = Math.random() < 0.5 ? 1 : 2;
-          if (playSample('pocket_drop_' + dropIdx, 0.85, 0.08)) return;
+          if (playSample('pocket_drop_' + dropIdx, 1.1, 0.08)) return;
 
           const ac = getCtx();
           if (!ac) return;
@@ -1701,17 +1722,17 @@
           osc.type = 'sine';
           osc.frequency.setValueAtTime(180, ac.currentTime);
           osc.frequency.exponentialRampToValueAtTime(45, ac.currentTime + 0.18);
-          gain.gain.setValueAtTime(0.7, ac.currentTime);
+          gain.gain.setValueAtTime(0.9, ac.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.2);
           osc.connect(gain);
-          gain.connect(ac.destination);
+          gain.connect(getDest() || ac.destination);
           osc.start();
           osc.stop(ac.currentTime + 0.2);
         },
 
         playFlick() {
           if (!enabled) return;
-          if (playSample('striker_shoot', 0.8, 0.05)) return;
+          if (playSample('striker_shoot', 1.05, 0.05)) return;
 
           const ac = getCtx();
           if (!ac) return;
@@ -1720,16 +1741,16 @@
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(320, ac.currentTime);
           osc.frequency.exponentialRampToValueAtTime(700, ac.currentTime + 0.06);
-          gain.gain.setValueAtTime(0.5, ac.currentTime);
+          gain.gain.setValueAtTime(0.7, ac.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.07);
           osc.connect(gain);
-          gain.connect(ac.destination);
+          gain.connect(getDest() || ac.destination);
           osc.start();
           osc.stop(ac.currentTime + 0.07);
         },
 
-        /* =================== 19 DIWALI CRACKER AUDIO PROFILES =================== */
-        playWhistleSpin(duration = 2.0, baseFreq = 700) {
+        /* =================== 19 DIWALI CRACKER AUDIO PROFILES (AMPLIFIED) =================== */
+        playWhistleSpin(duration = 4.5, baseFreq = 700) {
           if (!enabled) return;
           const ac = getCtx(); if (!ac) return;
           const now = ac.currentTime;
@@ -1741,17 +1762,17 @@
           osc.frequency.linearRampToValueAtTime(baseFreq * 1.8, now + duration * 0.4);
           osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.6, now + duration);
 
-          gain.gain.setValueAtTime(0.45, now);
-          gain.gain.linearRampToValueAtTime(0.75, now + 0.3);
+          gain.gain.setValueAtTime(0.65, now);
+          gain.gain.linearRampToValueAtTime(0.98, now + 0.3);
           gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
           osc.connect(gain);
-          gain.connect(ac.destination);
+          gain.connect(getDest() || ac.destination);
           osc.start();
           osc.stop(now + duration);
         },
 
-        playFountainSizzle(duration = 2.4, freq = 900) {
+        playFountainSizzle(duration = 5.0, freq = 900) {
           if (!enabled) return;
           const ac = getCtx(); if (!ac) return;
           const now = ac.currentTime;
@@ -1772,13 +1793,13 @@
           filter.Q.value = 2.5;
 
           const gain = ac.createGain();
-          gain.gain.setValueAtTime(0.55, now);
-          gain.gain.linearRampToValueAtTime(0.85, now + 0.5);
+          gain.gain.setValueAtTime(0.75, now);
+          gain.gain.linearRampToValueAtTime(1.1, now + 0.5);
           gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
           noise.connect(filter);
           filter.connect(gain);
-          gain.connect(ac.destination);
+          gain.connect(getDest() || ac.destination);
           noise.start();
         },
 
@@ -1791,24 +1812,24 @@
           const osc = ac.createOscillator();
           const gain = ac.createGain();
           osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(freq * 1.3, now);
-          osc.frequency.exponentialRampToValueAtTime(80, now + 0.04);
+          osc.frequency.setValueAtTime(freq * 1.35, now);
+          osc.frequency.exponentialRampToValueAtTime(80, now + 0.045);
 
           // Increased dB (boosted gain)
-          const masterPopGain = Math.min(0.95 * intensity, 1.0);
+          const masterPopGain = Math.min(1.25 * intensity, 1.4);
           gain.gain.setValueAtTime(masterPopGain, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.048);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
 
           osc.connect(gain);
-          gain.connect(ac.destination);
+          gain.connect(getDest() || ac.destination);
           osc.start();
-          osc.stop(now + 0.05);
+          osc.stop(now + 0.055);
 
           // Layer 2: White noise explosive burst with steep bandpass
-          const bSize = Math.floor(ac.sampleRate * 0.06);
+          const bSize = Math.floor(ac.sampleRate * 0.07);
           const buf = ac.createBuffer(1, bSize, ac.sampleRate);
           const data = buf.getChannelData(0);
-          for (let i = 0; i < bSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bSize * 0.25));
+          for (let i = 0; i < bSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bSize * 0.28));
 
           const noise = ac.createBufferSource();
           noise.buffer = buf;
@@ -1817,21 +1838,21 @@
           filter.frequency.setValueAtTime(freq * 0.6, now);
 
           const nGain = ac.createGain();
-          nGain.gain.setValueAtTime(0.7 * intensity, now);
-          nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          nGain.gain.setValueAtTime(0.95 * intensity, now);
+          nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
 
           noise.connect(filter);
           filter.connect(nGain);
-          nGain.connect(ac.destination);
+          nGain.connect(getDest() || ac.destination);
           noise.start();
 
           // Layer 3: Play real high-velocity physical sample for authentic paper crack report
           const sampleKeys = ['coin_hit_1', 'coin_hit_4', 'button_click'];
           const randKey = sampleKeys[Math.floor(Math.random() * sampleKeys.length)];
-          playSample(randKey, 0.9 * intensity, 0.25);
+          playSample(randKey, 1.15 * intensity, 0.25);
         },
 
-        playBassBoom(bassFreq = 160, duration = 0.7, powerMultiplier = 1.0) {
+        playBassBoom(bassFreq = 160, duration = 0.85, powerMultiplier = 1.0) {
           if (!enabled) return;
           const ac = getCtx(); if (!ac) return;
           const now = ac.currentTime;
@@ -1840,21 +1861,21 @@
           const osc = ac.createOscillator();
           const gain = ac.createGain();
           osc.type = 'sine';
-          osc.frequency.setValueAtTime(bassFreq * 1.1, now);
-          osc.frequency.exponentialRampToValueAtTime(22, now + duration);
+          osc.frequency.setValueAtTime(bassFreq * 1.15, now);
+          osc.frequency.exponentialRampToValueAtTime(20, now + duration);
 
-          // Increased dB punch (1.0 peak amplitude with natural saturation decay)
-          const baseVol = Math.min(1.0 * powerMultiplier, 1.0);
+          // Increased dB punch (amplified peak amplitude)
+          const baseVol = Math.min(1.35 * powerMultiplier, 1.5);
           gain.gain.setValueAtTime(baseVol, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
           osc.connect(gain);
-          gain.connect(ac.destination);
+          gain.connect(getDest() || ac.destination);
           osc.start();
           osc.stop(now + duration);
 
           // Layer 2: Heavy shockwave low-frequency distortion noise
-          const bSize = Math.floor(ac.sampleRate * Math.min(duration * 0.8, 0.45));
+          const bSize = Math.floor(ac.sampleRate * Math.min(duration * 0.8, 0.5));
           const buf = ac.createBuffer(1, bSize, ac.sampleRate);
           const data = buf.getChannelData(0);
           for (let i = 0; i < bSize; i++) {
@@ -1870,17 +1891,17 @@
           lowpass.frequency.exponentialRampToValueAtTime(70, now + duration * 0.6);
 
           const nGain = ac.createGain();
-          nGain.gain.setValueAtTime(0.85 * powerMultiplier, now);
-          nGain.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.5);
+          nGain.gain.setValueAtTime(1.15 * powerMultiplier, now);
+          nGain.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.55);
 
           noise.connect(lowpass);
           lowpass.connect(nGain);
-          nGain.connect(ac.destination);
+          nGain.connect(getDest() || ac.destination);
           noise.start();
 
           // Layer 3: Layered real Godot impact acoustic sample for true physical thump
           const impactSample = Math.random() < 0.5 ? 'striker_hit_1' : 'wall_hit_1';
-          playSample(impactSample, 1.0 * powerMultiplier, 0.15);
+          playSample(impactSample, 1.25 * powerMultiplier, 0.15);
         },
 
         playRocketScreech() {
@@ -1892,19 +1913,19 @@
           const gain = ac.createGain();
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(320, now);
-          osc.frequency.exponentialRampToValueAtTime(2400, now + 0.65);
+          osc.frequency.exponentialRampToValueAtTime(2400, now + 0.7);
 
-          gain.gain.setValueAtTime(0.35, now);
-          gain.gain.linearRampToValueAtTime(0.95, now + 0.4);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+          gain.gain.setValueAtTime(0.55, now);
+          gain.gain.linearRampToValueAtTime(1.25, now + 0.45);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
 
           osc.connect(gain);
-          gain.connect(ac.destination);
+          gain.connect(getDest() || ac.destination);
           osc.start();
-          osc.stop(now + 0.7);
+          osc.stop(now + 0.75);
         },
 
-        playExplosion() { this.playBassBoom(180, 0.65); },
+        playExplosion() { this.playBassBoom(180, 0.85); },
         playMagnetHum() {
           if (!enabled) return;
           const ac = getCtx(); if (!ac) return;
@@ -1913,10 +1934,10 @@
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(160, ac.currentTime);
           osc.frequency.linearRampToValueAtTime(320, ac.currentTime + 0.15);
-          gain.gain.setValueAtTime(0.18, ac.currentTime);
+          gain.gain.setValueAtTime(0.28, ac.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.2);
           osc.connect(gain);
-          gain.connect(ac.destination);
+          gain.connect(getDest() || ac.destination);
           osc.start();
           osc.stop(ac.currentTime + 0.2);
         },
@@ -2149,32 +2170,34 @@
     function previewCrackerSound(c) {
       if (!Sound.isEnabled()) return;
       const t = c.type;
-      if (t === 'chakkar' || t === 'rolling') Sound.playWhistleSpin(1.5, t === 'rolling' ? 950 : 750);
-      else if (t === 'flowerpot' || t === 'peacock') Sound.playFountainSizzle(1.8, t === 'peacock' ? 1200 : 850);
-      else if (t === 'sparkler' || t === 'twinkling') Sound.playFountainSizzle(1.5, 1600);
+      if (t === 'chakkar' || t === 'rolling') Sound.playWhistleSpin(3.0, t === 'rolling' ? 950 : 750);
+      else if (t === 'flowerpot' || t === 'peacock') Sound.playFountainSizzle(3.2, t === 'peacock' ? 1200 : 850);
+      else if (t === 'sparkler' || t === 'twinkling') Sound.playFountainSizzle(2.8, 1600);
       else if (t === '100wala' || t === 'mirchi') {
-        Sound.playSnappyPop(1100, 1.0, true);
-        setTimeout(() => Sound.playSnappyPop(1300, 1.2, true), 100);
-        setTimeout(() => Sound.playSnappyPop(950, 1.1, true), 200);
-        setTimeout(() => Sound.playBassBoom(220, 0.45, 1.0), 320);
+        Sound.playSnappyPop(1100, 1.2, true);
+        setTimeout(() => Sound.playSnappyPop(1250, 1.25, true), 90);
+        setTimeout(() => Sound.playSnappyPop(950, 1.25, true), 180);
+        setTimeout(() => Sound.playSnappyPop(1400, 1.3, true), 270);
+        setTimeout(() => Sound.playBassBoom(220, 0.6, 1.25), 380);
       } else if (t === 'rocket') {
         Sound.playRocketScreech();
-        setTimeout(() => Sound.playBassBoom(190, 0.6, 1.0), 650);
+        setTimeout(() => Sound.playBassBoom(190, 0.85, 1.25), 650);
         launchSkyShotFromScreen(c.rim || '#00e5ff');
       } else if (t === 'bomb' || t === 'gorilla' || t === 'dragon') {
-        Sound.playBassBoom(140, 0.8, 1.0);
+        Sound.playBassBoom(140, 1.1, 1.35);
       } else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
-        Sound.playSnappyPop(1400, 1.3, false);
+        Sound.playSnappyPop(1400, 1.45, false);
       } else if (t === 'romancandle' || t === 'sevenshot') {
-        Sound.playSnappyPop(750, 1.0, false);
-        setTimeout(() => Sound.playSnappyPop(900, 1.1, false), 160);
-        setTimeout(() => Sound.playSnappyPop(1050, 1.2, false), 320);
+        Sound.playSnappyPop(750, 1.2, false);
+        setTimeout(() => Sound.playSnappyPop(900, 1.25, false), 160);
+        setTimeout(() => Sound.playSnappyPop(1050, 1.3, false), 320);
+        setTimeout(() => Sound.playSnappyPop(1200, 1.35, false), 480);
         launchSkyShotFromScreen(c.rim || '#ffd166');
       } else if (t === 'snake') {
-        Sound.playFountainSizzle(1.8, 500);
+        Sound.playFountainSizzle(3.0, 500);
       } else if (t === 'mega_diwali') {
-        Sound.playBassBoom(110, 1.0, 1.0);
-        setTimeout(() => Sound.playWhistleSpin(1.6, 800), 180);
+        Sound.playBassBoom(105, 1.3, 1.35);
+        setTimeout(() => Sound.playWhistleSpin(3.0, 800), 180);
       }
     }
 
@@ -2932,8 +2955,136 @@
     /* =========================================================================
        ACTIVE POCKET CRACKER SYSTEM (19 UNIQUE DIWALI CRACKERS)
        ========================================================================= */
+
+    // 🧨 DIWALI CRACKER BLACK CARBON & SCATTERED PAPER PIECES SYSTEM
+    let carbonMarks = []; // Burnt black carbon scorch spots on board felt
+    let paperDebris = []; // Scattered red & festive pataka wrapper shreds
+
+    class CarbonMark {
+      constructor(x, y, radius = 26, intensity = 0.8) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.alpha = intensity;
+        this.specks = [];
+        const count = 6 + Math.floor(Math.random() * 8);
+        for (let i = 0; i < count; i++) {
+          const a = Math.random() * Math.PI * 2;
+          const d = (Math.random() * 0.85 + 0.15) * radius * 1.15;
+          this.specks.push({
+            dx: Math.cos(a) * d,
+            dy: Math.sin(a) * d,
+            size: 1.0 + Math.random() * 2.2,
+            alpha: 0.35 + Math.random() * 0.5
+          });
+        }
+      }
+
+      draw(ctx) {
+        ctx.save();
+        const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+        grad.addColorStop(0, `rgba(16, 10, 6, ${this.alpha * 0.88})`);
+        grad.addColorStop(0.4, `rgba(26, 18, 12, ${this.alpha * 0.58})`);
+        grad.addColorStop(0.75, `rgba(40, 28, 18, ${this.alpha * 0.22})`);
+        grad.addColorStop(1, 'rgba(40, 28, 18, 0)');
+
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Burnt charcoal carbon flecks
+        ctx.fillStyle = '#120d09';
+        this.specks.forEach(s => {
+          ctx.globalAlpha = this.alpha * s.alpha;
+          ctx.beginPath();
+          ctx.arc(this.x + s.dx, this.y + s.dy, s.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.restore();
+      }
+    }
+
+    const DEBRIS_PAPER_COLORS = [
+      '#d32f2f', // Red cracker paper
+      '#b71c1c', // Crimson
+      '#ff1744', // Hot red
+      '#fbc02d', // Saffron yellow pataka wrapper
+      '#ff9100', // Festive orange
+      '#ec407a', // Pink wrapping
+      '#cfd8dc', // Newspaper ash white/grey
+      '#37474f'  // Charred paper edge
+    ];
+
+    class PaperPiece {
+      constructor(x, y, burstPower = 8, customColor = null) {
+        this.x = x;
+        this.y = y;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 2.5 + Math.random() * burstPower;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.rot = Math.random() * Math.PI * 2;
+        this.vRot = (Math.random() - 0.5) * 12;
+        this.width = 2.5 + Math.random() * 4.5;
+        this.height = 3.5 + Math.random() * 6.5;
+        this.color = customColor || DEBRIS_PAPER_COLORS[Math.floor(Math.random() * DEBRIS_PAPER_COLORS.length)];
+        this.charred = Math.random() < 0.65;
+        this.settled = false;
+        this.friction = 0.88;
+      }
+
+      update() {
+        if (!this.settled) {
+          this.x += this.vx;
+          this.y += this.vy;
+          this.rot += this.vRot;
+          this.vx *= this.friction;
+          this.vy *= this.friction;
+          this.vRot *= this.friction;
+
+          const minB = FRAME_WIDTH + 6;
+          const maxB = BOARD_SIZE - FRAME_WIDTH - 6;
+          if (this.x < minB) { this.x = minB; this.vx = 0; }
+          if (this.x > maxB) { this.x = maxB; this.vx = 0; }
+          if (this.y < minB) { this.y = minB; this.vy = 0; }
+          if (this.y > maxB) { this.y = maxB; this.vy = 0; }
+
+          if (Math.hypot(this.vx, this.vy) < 0.15) {
+            this.settled = true;
+          }
+        }
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rot);
+
+        ctx.fillStyle = this.color;
+        ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
+
+        if (this.charred) {
+          ctx.fillStyle = '#140c06';
+          ctx.fillRect(-this.width / 2, -this.height / 2, this.width, Math.max(1, this.height * 0.3));
+        }
+        ctx.restore();
+      }
+    }
+
+    function addCrackerCarbonAndPaperDebris(x, y, radius = 28, paperCount = 20, burstPower = 8.5, color = null) {
+      carbonMarks.push(new CarbonMark(x, y, radius, 0.82));
+      if (carbonMarks.length > 60) carbonMarks.shift();
+
+      for (let i = 0; i < paperCount; i++) {
+        paperDebris.push(new PaperPiece(x, y, burstPower, color));
+      }
+      if (paperDebris.length > 400) {
+        paperDebris.splice(0, paperDebris.length - 400);
+      }
+    }
     
-    // 🪔 1000-Wala 60-Second Perimeter Border Celebration State
+    // 🪔 1000-Wala 30-Second Perimeter Border Celebration State (Reduced to 30s)
     let queenBorderCelebration = {
       active: false,
       timer: 0,
@@ -2943,10 +3094,10 @@
 
     function start1000WalaBorderCelebration() {
       queenBorderCelebration.active = true;
-      queenBorderCelebration.timer = 60.0; // 60 full seconds
+      queenBorderCelebration.timer = 30.0; // Reduced to 30s
       queenBorderCelebration.nextPopTime = 0.05;
       queenBorderCelebration.popIndex = 0;
-      Sound.playBassBoom(105, 1.2, 1.0);
+      Sound.playBassBoom(105, 1.4, 1.25);
     }
 
     function update1000WalaBorderCelebration(dt, particles, shockwaves) {
@@ -2978,10 +3129,15 @@
         }
 
         // Pop sound with authentic crackle report
-        Sound.playSnappyPop(1100 + (Math.random() - 0.5) * 400, 1.1, true);
+        Sound.playSnappyPop(1100 + (Math.random() - 0.5) * 400, 1.3, true);
         if (queenBorderCelebration.popIndex % 8 === 0) {
-          Sound.playBassBoom(130, 0.5, 0.9);
+          Sound.playBassBoom(130, 0.6, 1.15);
           shockwaves.push(new Shockwave(px, py, 110, '#ffd700', 8));
+        }
+
+        // Drop carbon soot mark & scatter paper pieces along border
+        if (queenBorderCelebration.popIndex % 2 === 0) {
+          addCrackerCarbonAndPaperDebris(px, py, 14, 4, 5.5);
         }
 
         // Multi-colored flash sparks & festive smoke
@@ -3192,25 +3348,28 @@
         this.finished = false;
         this.rot = 0;
 
-        // Custom duration & start sounds
+        // Custom duration & start sounds (Increased timings for grand visual spectacle)
         const t = this.cDef.type;
         if (t === 'chakkar' || t === 'rolling') {
-          this.duration = 2.4;
-          Sound.playWhistleSpin(2.4, t === 'rolling' ? 900 : 700);
+          this.duration = 4.5; // Increased from 2.4s
+          Sound.playWhistleSpin(4.5, t === 'rolling' ? 900 : 700);
+          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 34, 18, 5.5);
         } else if (t === 'flowerpot' || t === 'peacock') {
-          this.duration = 2.8;
-          Sound.playFountainSizzle(2.8, t === 'peacock' ? 1200 : 800);
+          this.duration = 5.0; // Increased from 2.8s
+          Sound.playFountainSizzle(5.0, t === 'peacock' ? 1200 : 800);
+          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 38, 20, 6.5);
         } else if (t === 'sparkler' || t === 'twinkling') {
-          this.duration = 2.2;
-          Sound.playFountainSizzle(2.2, 1600);
+          this.duration = 4.2; // Increased from 2.2s
+          Sound.playFountainSizzle(4.2, 1600);
+          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 24, 12, 4.5);
         } else if (t === '100wala' || t === 'mirchi') {
-          this.duration = 2.2;
+          this.duration = 4.5; // Increased from 2.2s
           this.popCount = 0;
-          this.maxPops = t === 'mirchi' ? 24 : 16;
-          this.popInterval = t === 'mirchi' ? 0.08 : 0.12;
+          this.maxPops = t === 'mirchi' ? 42 : 30; // 30-42 rapid staccato pops
+          this.popInterval = t === 'mirchi' ? 0.09 : 0.13;
           this.nextPopTime = 0.05;
         } else if (t === 'rocket') {
-          this.duration = 2.0;
+          this.duration = 3.5; // Increased from 2.0s
           this.rocketExploded = false;
           this.rocketX = pocketX;
           this.rocketY = pocketY;
@@ -3218,35 +3377,40 @@
           this.targetY = HALF_SIZE + (Math.random() - 0.5) * 160;
           Sound.playRocketScreech();
 
+          // Launch rocket blast scorch at pocket
+          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 26, 16, 6.5);
+
           // Launch Sky Shot Fire Animation
           const startPt = boardToScreen(pocketX, pocketY);
           const targetPt = boardToScreen(this.targetX, this.targetY);
           launchSkyShot(startPt.x, startPt.y, targetPt.x, targetPt.y, this.cDef.rim || '#00e5ff', () => {
             if (!this.rocketExploded) {
               this.rocketExploded = true;
-              Sound.playBassBoom(180, 0.7, 1.0);
+              Sound.playBassBoom(180, 0.85, 1.25);
               this.shockwaves.push(new Shockwave(this.targetX, this.targetY, 180, '#00e5ff', 9));
+              addCrackerCarbonAndPaperDebris(this.targetX, this.targetY, 44, 34, 12);
             }
           });
         } else if (t === 'bomb' || t === 'gorilla') {
-          this.duration = 1.6;
+          this.duration = 3.2; // Increased from 1.6s
           this.detonated = false;
           this.secondDetonated = false;
         } else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
-          this.duration = 1.2;
+          this.duration = 2.4; // Increased from 1.2s
           this.snapped = false;
         } else if (t === 'romancandle' || t === 'sevenshot') {
-          this.duration = 2.8;
+          this.duration = 5.2; // Increased from 2.8s
           this.shotCount = 0;
-          this.maxShots = t === 'romancandle' ? 5 : 7;
-          this.nextShotTime = 0.2;
+          this.maxShots = t === 'romancandle' ? 7 : 9; // 7-9 successive shots
+          this.nextShotTime = 0.25;
         } else if (t === 'snake') {
-          this.duration = 2.6;
-          Sound.playFountainSizzle(2.6, 500);
+          this.duration = 4.8; // Increased from 2.6s
+          Sound.playFountainSizzle(4.8, 500);
+          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 32, 10, 3.5, '#3e2723');
         } else if (t === 'mega_diwali') {
-          this.duration = 3.6;
-          Sound.playFountainSizzle(3.0, 900);
-          Sound.playWhistleSpin(2.6, 750);
+          this.duration = 6.5; // Increased from 3.6s
+          Sound.playFountainSizzle(5.0, 900);
+          Sound.playWhistleSpin(4.5, 750);
         }
 
         // Floating Title Popup
@@ -3309,26 +3473,31 @@
           }
         }
 
-        // 4. 100-Wala & Mirchi Pataka (Rapid Chain Pops)
+        // 4. 100-Wala & Mirchi Pataka (Rapid Chain Pops with Black Carbon & Paper Shreds)
         else if (t === '100wala' || t === 'mirchi') {
           if (this.time >= this.nextPopTime && this.popCount < this.maxPops) {
             this.popCount++;
-            this.nextPopTime = this.time + this.popInterval;
-            Sound.playSnappyPop(t === 'mirchi' ? 1250 : 900, 1.0 + (this.popCount / 20), true);
+            this.nextPopTime = this.time + this.popInterval + (Math.random() - 0.5) * 0.03;
+            Sound.playSnappyPop(t === 'mirchi' ? 1300 : 950, 1.15 + (this.popCount / 22), true);
 
-            for (let i = 0; i < 6; i++) {
+            const popX = this.x + (Math.random() - 0.5) * 36;
+            const popY = this.y + (Math.random() - 0.5) * 36;
+            addCrackerCarbonAndPaperDebris(popX, popY, 15 + Math.random() * 7, 6, 6.5);
+
+            for (let i = 0; i < 7; i++) {
               const a = Math.random() * Math.PI * 2;
               this.particles.push(new Particle(
-                this.x, this.y,
+                popX, popY,
                 Math.random() < 0.6 ? '#ff1744' : '#ffeb3b',
                 Math.random() * 3 + 2, Math.cos(a) * 4, Math.sin(a) * 4, 0.05
               ));
             }
-            this.particles.push(new Particle(this.x, this.y, '#9e9e9e', 5, (Math.random()-0.5)*2, (Math.random()-0.5)*2, 0.03));
+            this.particles.push(new Particle(popX, popY, '#757575', 5, (Math.random()-0.5)*2, (Math.random()-0.5)*2, 0.03));
 
             if (this.popCount === this.maxPops) {
-              Sound.playBassBoom(220, 0.6, 1.0);
+              Sound.playBassBoom(220, 0.7, 1.2);
               this.shockwaves.push(new Shockwave(this.x, this.y, 140, '#ffd700', 8));
+              addCrackerCarbonAndPaperDebris(this.x, this.y, 38, 25, 9.5);
             }
           }
         }
@@ -3347,8 +3516,9 @@
             ));
           } else if (!this.rocketExploded) {
             this.rocketExploded = true;
-            Sound.playBassBoom(180, 0.7, 1.0);
+            Sound.playBassBoom(180, 0.85, 1.25);
             this.shockwaves.push(new Shockwave(this.targetX, this.targetY, 180, '#00e5ff', 9));
+            addCrackerCarbonAndPaperDebris(this.targetX, this.targetY, 44, 34, 12);
 
             for (let i = 0; i < 36; i++) {
               const a = (i * Math.PI * 2) / 36;
@@ -3371,8 +3541,9 @@
             ));
           } else if (!this.detonated) {
             this.detonated = true;
-            Sound.playBassBoom(t === 'dragon' ? 130 : 150, 0.85, 1.0);
+            Sound.playBassBoom(t === 'dragon' ? 130 : 150, 0.95, 1.35);
             this.shockwaves.push(new Shockwave(this.x, this.y, 220, t === 'dragon' ? '#c2185b' : '#ff1744', 10));
+            addCrackerCarbonAndPaperDebris(this.x, this.y, 48, 38, 13);
 
             for (let i = 0; i < 40; i++) {
               const a = Math.random() * Math.PI * 2;
@@ -3382,10 +3553,11 @@
                 Math.random() * 4 + 2, Math.cos(a) * (3 + Math.random() * 9), Math.sin(a) * (3 + Math.random() * 9), 0.025
               ));
             }
-          } else if (t === 'gorilla' && this.time > 0.8 && !this.secondDetonated) {
+          } else if (t === 'gorilla' && this.time > 1.1 && !this.secondDetonated) {
             this.secondDetonated = true;
-            Sound.playBassBoom(95, 1.0, 1.0); // MASSIVE 2nd blast with maximum sub-bass & real impact!
+            Sound.playBassBoom(95, 1.25, 1.45); // MASSIVE 2nd blast with amplified sub-bass!
             this.shockwaves.push(new Shockwave(this.x, this.y, 260, '#ffd700', 12));
+            addCrackerCarbonAndPaperDebris(this.x, this.y, 54, 42, 15);
           }
         }
 
@@ -3393,8 +3565,9 @@
         else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
           if (!this.snapped) {
             this.snapped = true;
-            Sound.playSnappyPop(t === 'kuruvi' ? 1450 : (t === 'bijli' ? 1650 : 750), 1.35, false);
+            Sound.playSnappyPop(t === 'kuruvi' ? 1450 : (t === 'bijli' ? 1650 : 750), 1.45, false);
             this.shockwaves.push(new Shockwave(this.x, this.y, 110, t === 'bijli' ? '#fff' : '#ff5252', 12));
+            addCrackerCarbonAndPaperDebris(this.x, this.y, 28, 22, 9);
 
             for (let i = 0; i < 18; i++) {
               const a = Math.random() * Math.PI * 2;
@@ -3411,8 +3584,8 @@
         else if (t === 'romancandle' || t === 'sevenshot') {
           if (this.time >= this.nextShotTime && this.shotCount < this.maxShots) {
             this.shotCount++;
-            this.nextShotTime = this.time + 0.35;
-            Sound.playSnappyPop(650 + this.shotCount * 130, 1.15, false);
+            this.nextShotTime = this.time + 0.45;
+            Sound.playSnappyPop(650 + this.shotCount * 130, 1.35, false);
 
             const shotColors = FIREWORK_COLORS;
             const shotCol = shotColors[this.shotCount % shotColors.length];
@@ -3422,6 +3595,7 @@
             const targetX = startPt.x + dirX * (45 + Math.random() * 80);
             const targetY = startPt.y - (100 + Math.random() * 120);
             launchSkyShot(startPt.x, startPt.y, targetX, targetY, shotCol);
+            addCrackerCarbonAndPaperDebris(this.x, this.y, 22, 10, 7.5, shotCol);
 
             for (let i = 0; i < 12; i++) {
               const a = Math.random() * Math.PI * 2;
@@ -3452,11 +3626,12 @@
           this.rot += dt * 30;
           if (this.time > 1.2 && !this.finaleFired) {
             this.finaleFired = true;
-            Sound.playBassBoom(105, 1.2, 1.0); // GRAND SHOWSTOPPER MAX dB
+            Sound.playBassBoom(105, 1.4, 1.35); // GRAND SHOWSTOPPER MAX dB
             this.shockwaves.push(new Shockwave(this.x, this.y, 280, '#ffd700', 11));
-            start1000WalaBorderCelebration(); // Launch 60-second perimeter border celebration with blinking lights!
+            start1000WalaBorderCelebration(); // Launch 30-second perimeter border celebration with blinking lights!
 
             POCKETS.forEach((p, idx) => {
+              addCrackerCarbonAndPaperDebris(p.x, p.y, 48, 32, 12);
               const startPt = boardToScreen(p.x, p.y);
               setTimeout(() => {
                 const targetX = startPt.x + (HALF_SIZE - p.x) * 0.7;
@@ -3677,6 +3852,8 @@
         particles = [];
         floatingTexts = [];
         activePocketCrackers = [];
+        carbonMarks = [];
+        paperDebris = [];
         scores = { 1: 0, 2: 0 };
         turn = 1;
         queenPocketedBy = null;
@@ -4217,6 +4394,16 @@
 
       function render(dt) {
         drawBoard();
+
+        // Draw burnt black carbon soot marks on the felt
+        carbonMarks.forEach(c => c.draw(ctx));
+
+        // Update and draw scattered colored paper shreds
+        paperDebris.forEach(p => {
+          p.update();
+          p.draw(ctx);
+        });
+
         draw1000WalaBorderLights(ctx);
 
         if (state === 'shooting' && Math.hypot(striker.vx, striker.vy) > 4) {
@@ -4567,7 +4754,7 @@
       // 9 Black: 2 100-Wala ('b_01'), 4 Rocket ('w_16'), 2 Sky Shot 5-times ('b_16'), 1 Peacock ('w_11')
       equippedBlack = ['b_01', 'b_01', 'w_16', 'w_16', 'w_16', 'w_16', 'b_16', 'b_16', 'w_11'];
 
-      // 1 Queen: 1000-Wala Rajah Maha Dhamaka with 60s border celebration!
+      // 1 Queen: 1000-Wala Rajah Maha Dhamaka with 30s border celebration!
       equippedQueen = 'q_01';
 
       // Close overlays and launch match directly to play as desired!
