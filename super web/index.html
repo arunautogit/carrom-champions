@@ -5499,7 +5499,43 @@
           const dx = striker.x - aimCurrent.x;
           const dy = striker.y - aimCurrent.y;
           const dist = Math.hypot(dx, dy);
-          drawAimingSparklersAndRod(ctx, striker, aimCurrent, dist, dx, dy);
+
+          const isDiwaliMode = isFunMode && funVariant === 'crackers';
+
+          if (isDiwaliMode) {
+            // Diwali Mode Only: Phuljhadi sparklers at striker, trajectory sparkles & 3D striking rod
+            drawAimingSparklersAndRod(ctx, striker, aimCurrent, dist, dx, dy);
+          } else {
+            // Rest All: Normal classic trajectory
+            if (dist > 8) {
+              const angle = Math.atan2(dy, dx);
+              const powerLen = Math.min(dist * 1.5, 220);
+
+              ctx.save();
+              ctx.beginPath();
+              ctx.moveTo(striker.x, striker.y);
+              ctx.lineTo(striker.x + Math.cos(angle) * powerLen, striker.y + Math.sin(angle) * powerLen);
+              ctx.strokeStyle = '#ffd700';
+              ctx.lineWidth = 3;
+              ctx.setLineDash([8, 6]);
+              ctx.stroke();
+
+              // Subtle clean target endpoint pip
+              ctx.beginPath();
+              ctx.arc(striker.x + Math.cos(angle) * powerLen, striker.y + Math.sin(angle) * powerLen, 3.5, 0, Math.PI * 2);
+              ctx.fillStyle = '#ffd700';
+              ctx.fill();
+              ctx.restore();
+
+              // Clean pulling line
+              ctx.beginPath();
+              ctx.moveTo(striker.x, striker.y);
+              ctx.lineTo(aimCurrent.x, aimCurrent.y);
+              ctx.strokeStyle = 'rgba(255, 87, 34, 0.7)';
+              ctx.lineWidth = 2;
+              ctx.stroke();
+            }
+          }
         }
 
         ctx.restore();
@@ -5558,7 +5594,10 @@
           aimCurrent = pos;
           const turnMsg = document.getElementById('turn-msg');
           if (turnMsg) turnMsg.style.opacity = '0';
-          if (typeof Sound !== 'undefined' && Sound.playSparklerCrackles) Sound.playSparklerCrackles(0.4);
+          const isDiwaliMode = isFunMode && funVariant === 'crackers';
+          if (isDiwaliMode && typeof Sound !== 'undefined' && Sound.playSparklerCrackles) {
+            Sound.playSparklerCrackles(0.4);
+          }
         } else if (nearBaseline) {
           isDraggingStriker = true;
           striker.x = Math.max(strikerMinX, Math.min(strikerMaxX, pos.x));
@@ -5572,10 +5611,13 @@
         if (isDraggingStriker) striker.x = Math.max(strikerMinX, Math.min(strikerMaxX, pos.x));
         else if (isAiming) {
           aimCurrent = pos;
-          const now = Date.now();
-          if (now - lastSparklerSizzleTime > 130) {
-            lastSparklerSizzleTime = now;
-            if (typeof Sound !== 'undefined' && Sound.playSparklerCrackles) Sound.playSparklerCrackles(0.35);
+          const isDiwaliMode = isFunMode && funVariant === 'crackers';
+          if (isDiwaliMode) {
+            const now = Date.now();
+            if (now - lastSparklerSizzleTime > 130) {
+              lastSparklerSizzleTime = now;
+              if (typeof Sound !== 'undefined' && Sound.playSparklerCrackles) Sound.playSparklerCrackles(0.35);
+            }
           }
         }
       });
