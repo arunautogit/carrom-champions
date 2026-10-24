@@ -994,11 +994,12 @@
       border: 3px solid #ffd700;
       border-radius: 22px;
       padding: 24px 28px;
-      max-width: 540px;
-      width: 92%;
+      max-width: 660px;
+      width: 94%;
       text-align: center;
-      box-shadow: 0 0 45px rgba(255, 215, 0, 0.45), 0 10px 40px rgba(0,0,0,0.85);
+      box-shadow: 0 0 50px rgba(255, 215, 0, 0.45), 0 10px 40px rgba(0,0,0,0.85);
       position: relative;
+      box-sizing: border-box;
     }
     .giftbox-close-x {
       position: absolute;
@@ -1026,13 +1027,27 @@
     .giftbox-icon-glow {
       font-size: 2.6rem;
       animation: pulseGlow 2s infinite ease-in-out;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
+    }
+    .giftbox-title-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 4px 0 6px 0;
+    }
+    .giftbox-sparkle-icon {
+      font-size: 1.5rem;
+      color: #ffd700;
+      animation: pulseSparkles 1.5s infinite alternate ease-in-out;
     }
     .giftbox-sparkle-title {
-      font-size: 1.8rem;
-      margin: 2px 0 4px 0;
+      font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+      font-weight: 900;
+      letter-spacing: 1.5px;
       color: #ffd700;
-      letter-spacing: 1px;
+      white-space: nowrap;
+      margin: 0;
       text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
     }
     .giftbox-sub {
@@ -1042,167 +1057,130 @@
     }
     .giftbox-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 9px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
       margin-bottom: 16px;
       text-align: left;
     }
     .giftbox-item-row {
       background: rgba(50, 20, 10, 0.85);
       border: 1px solid #ff9800;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 8px 10px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 8px;
+      box-sizing: border-box;
+      min-width: 0;
     }
     .giftbox-item-queen {
-      grid-column: span 2;
+      grid-column: 1 / -1;
       background: linear-gradient(90deg, rgba(80, 25, 10, 0.95), rgba(50, 15, 5, 0.95));
       border: 2px solid #ffd700;
-      padding: 10px 12px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
     .giftbox-item-emoji {
-      font-size: 1.3rem;
+      font-size: 1.35rem;
+      flex-shrink: 0;
     }
     .giftbox-item-info {
       flex: 1;
+      min-width: 0;
       overflow: hidden;
     }
     .giftbox-item-name {
-      font-size: 0.78rem;
-      font-weight: bold;
+      font-size: 0.80rem;
+      font-weight: 700;
       color: #fff;
       white-space: nowrap;
+      overflow: hidden;
       text-overflow: ellipsis;
     }
     .giftbox-item-sub {
-      font-size: 0.68rem;
+      font-size: 0.69rem;
       color: #ffb74d;
       white-space: nowrap;
+      overflow: hidden;
       text-overflow: ellipsis;
     }
     .giftbox-qty {
       background: #ffd700;
       color: #1a0a00;
-      font-weight: bold;
+      font-weight: 800;
       font-size: 0.75rem;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 10px;
       white-space: nowrap;
+      flex-shrink: 0;
     }
     .giftbox-notice {
       background: rgba(255, 193, 7, 0.12);
       border: 1px dashed #ffd700;
-      border-radius: 10px;
-      padding: 8px 12px;
+      border-radius: 12px;
+      padding: 10px 14px;
       margin-bottom: 16px;
       color: #ffe082;
-      font-size: 0.75rem;
-      line-height: 1.4;
+      font-size: 0.78rem;
+      line-height: 1.45;
     }
     .giftbox-btn-row {
       display: flex;
       gap: 12px;
       justify-content: center;
+      align-items: center;
+      width: 100%;
     }
     .btn-giftbox-btn {
-      padding: 12px 18px;
+      padding: 12px 20px;
       font-size: 0.95rem;
-      font-weight: bold;
-      border-radius: 24px;
+      font-weight: 800;
+      border-radius: 26px;
       cursor: pointer;
       transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
     .btn-giftbox-secondary {
       flex: 1;
       color: #ffe082;
       background: rgba(255, 255, 255, 0.08);
-      border: 1.5px solid #ff9800;
+      border: 1.5px solid rgba(255, 215, 0, 0.4);
     }
     .btn-giftbox-secondary:hover {
       background: rgba(255, 255, 255, 0.16);
+      border-color: #ffd700;
       transform: scale(1.02);
     }
     .btn-giftbox-primary {
       flex: 2;
-      color: #1a0a00;
-      background: linear-gradient(135deg, #ffd700 0%, #ff6f00 100%);
+      color: #1a0800;
+      background: linear-gradient(135deg, #ffd700 0%, #ff6d00 100%);
       border: 2px solid #fff;
-      box-shadow: 0 4px 20px rgba(255, 111, 0, 0.6);
+      box-shadow: 0 4px 18px rgba(255, 109, 0, 0.55);
     }
     .btn-giftbox-primary:hover {
-      transform: scale(1.02);
-      box-shadow: 0 6px 28px rgba(255, 215, 0, 0.9);
-      background: linear-gradient(135deg, #fff 0%, #ffd700 100%);
+      transform: scale(1.03);
+      box-shadow: 0 6px 26px rgba(255, 215, 0, 0.85);
+      background: linear-gradient(135deg, #ffffff 0%, #ffd700 100%);
     }
-    .giftbox-card {
-      background: linear-gradient(135deg, #2b1208 0%, #150602 100%);
-      border: 2px solid #ffd700;
-      border-radius: 20px;
-      padding: 24px;
-      max-width: 540px;
-      width: 92%;
-      text-align: center;
-      box-shadow: 0 0 35px rgba(255, 215, 0, 0.4), 0 10px 40px rgba(0,0,0,0.8);
-      position: relative;
-    }
-    .giftbox-sparkle-title {
-      font-size: 2.2rem;
-      margin-bottom: 2px;
-      color: #ffd700;
-      text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
-    }
-    .giftbox-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin: 16px 0;
-      text-align: left;
-    }
-    .giftbox-item-row {
-      background: rgba(50, 20, 10, 0.75);
-      border: 1px solid #ff9800;
-      border-radius: 10px;
-      padding: 8px 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .giftbox-qty {
-      background: #ffd700;
-      color: #1a0a00;
-      font-weight: bold;
-      font-size: 0.75rem;
-      padding: 2px 6px;
-      border-radius: 10px;
-      white-space: nowrap;
-    }
-    .giftbox-item-name {
-      font-size: 0.76rem;
-      font-weight: bold;
-      color: #fff;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    .btn-claim-giftbox {
-      width: 100%;
-      padding: 12px;
-      font-size: 1.05rem;
-      font-weight: bold;
-      color: #1a0a00;
-      background: linear-gradient(135deg, #ffd700 0%, #ff6f00 100%);
-      border: 2px solid #fff;
-      border-radius: 24px;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(255, 111, 0, 0.6);
-      transition: all 0.2s ease;
-    }
-    .btn-claim-giftbox:hover {
-      transform: scale(1.02);
-      box-shadow: 0 6px 28px rgba(255, 215, 0, 0.9);
-      background: linear-gradient(135deg, #fff 0%, #ffd700 100%);
+
+    @media (max-width: 540px) {
+      .giftbox-card {
+        padding: 18px 16px;
+      }
+      .giftbox-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .giftbox-sparkle-title {
+        font-size: 1.3rem;
+      }
     }
 
     /* Sky Shot Fire Animation */
@@ -1593,7 +1571,11 @@
       <div class="giftbox-card">
         <button id="btn-giftbox-x" class="giftbox-close-x" title="Close">✕</button>
         <div class="giftbox-icon-glow">🎁</div>
-        <h2 class="giftbox-sparkle-title">✨ DIWALI SHUBH GIFTBOX ✨</h2>
+        <div class="giftbox-title-container">
+          <span class="giftbox-sparkle-icon">✨</span>
+          <h2 class="giftbox-sparkle-title">DIWALI SHUBH GIFTBOX</h2>
+          <span class="giftbox-sparkle-icon">✨</span>
+        </div>
         <p class="giftbox-sub">Authentic 19-Cracker Royal Hamper &middot; 100% Solid Coins</p>
         
         <div class="giftbox-grid">
@@ -3194,6 +3176,91 @@
       }
     }
     
+    /* =========================================================================
+       BOARD VIBRATION & HAPTIC FEEDBACK SYSTEM (BY CRACKER VARIETY)
+       ========================================================================= */
+    let boardShakeIntensity = 0;
+    let boardShakeDecay = 0.88;
+    let boardShakeOffsetX = 0;
+    let boardShakeOffsetY = 0;
+
+    const CRACKER_VIBRATION_PROFILES = {
+      // Deep low-frequency sub-bass bomb blasts
+      gorilla: { intensity: 28, decay: 0.86, haptics: [160, 50, 120, 40, 90] },
+      bomb: { intensity: 24, decay: 0.88, haptics: [140, 45, 90] },
+      dragon: { intensity: 20, decay: 0.89, haptics: [50, 30, 70, 40, 150] },
+
+      // Rapid-fire machinegun staccato strings
+      '100wala': { intensity: 13, decay: 0.93, haptics: [35, 25, 35, 25, 35, 25, 45, 30, 60] },
+      mirchi: { intensity: 11, decay: 0.93, haptics: [25, 20, 25, 20, 30, 25, 35] },
+
+      // Ascending rockets and aerial salvos
+      rocket: { intensity: 18, decay: 0.89, haptics: [70, 90, 110] },
+      sevenshot: { intensity: 15, decay: 0.90, haptics: [60, 70, 70, 70, 90] },
+      romancandle: { intensity: 13, decay: 0.90, haptics: [50, 60, 60, 60, 75] },
+
+      // Roaring gyroscopic wheels
+      chakkar: { intensity: 9, decay: 0.96, haptics: [30, 35, 30, 35, 30, 35, 30] },
+      rolling: { intensity: 11, decay: 0.95, haptics: [40, 35, 40, 35, 40, 35, 40] },
+
+      // Erupting geysers & fountains
+      flowerpot: { intensity: 10, decay: 0.93, haptics: [45, 40, 65, 40, 75] },
+      peacock: { intensity: 12, decay: 0.92, haptics: [50, 45, 75, 40, 85] },
+
+      // Instant supersonic cracks & lightning snaps
+      bullet: { intensity: 17, decay: 0.76, haptics: [85] },
+      kuruvi: { intensity: 15, decay: 0.78, haptics: [75] },
+      bijli: { intensity: 16, decay: 0.77, haptics: [70] },
+
+      // Delicate sparkling needles & ash
+      sparkler: { intensity: 5, decay: 0.91, haptics: [25, 20, 25] },
+      twinkling: { intensity: 4, decay: 0.92, haptics: [20, 25, 20] },
+      snake: { intensity: 6, decay: 0.95, haptics: [50, 60, 50, 60] },
+
+      // Queen Grand 1000-Wala Mega Diwali
+      mega_diwali: { intensity: 34, decay: 0.91, haptics: [220, 60, 200, 50, 160, 40, 130, 30, 100] },
+
+      // Default standard pocket drop
+      default: { intensity: 7, decay: 0.82, haptics: [50] }
+    };
+
+    function triggerBoardVibration(varietyOrKey, customIntensity, customDecay, customHaptics) {
+      const prof = CRACKER_VIBRATION_PROFILES[varietyOrKey] || CRACKER_VIBRATION_PROFILES['default'];
+      const targetIntensity = customIntensity !== undefined ? customIntensity : prof.intensity;
+      if (targetIntensity > boardShakeIntensity) {
+        boardShakeIntensity = targetIntensity;
+      } else {
+        boardShakeIntensity = Math.max(boardShakeIntensity, targetIntensity * 0.75);
+      }
+      boardShakeDecay = customDecay !== undefined ? customDecay : prof.decay;
+
+      const haptics = customHaptics || prof.haptics;
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator && haptics) {
+        try {
+          navigator.vibrate(haptics);
+        } catch(e) {}
+      }
+    }
+
+    function updateBoardShake(dt) {
+      const cv = document.getElementById('carromCanvas');
+      if (boardShakeIntensity > 0.05) {
+        boardShakeOffsetX = (Math.random() - 0.5) * boardShakeIntensity * 2;
+        boardShakeOffsetY = (Math.random() - 0.5) * boardShakeIntensity * 2;
+        boardShakeIntensity *= Math.pow(boardShakeDecay, dt * 60);
+        if (cv) {
+          cv.style.transform = `translate(${boardShakeOffsetX.toFixed(1)}px, ${boardShakeOffsetY.toFixed(1)}px)`;
+        }
+      } else {
+        boardShakeIntensity = 0;
+        boardShakeOffsetX = 0;
+        boardShakeOffsetY = 0;
+        if (cv && cv.style.transform !== 'none' && cv.style.transform !== '') {
+          cv.style.transform = 'none';
+        }
+      }
+    }
+    
     // 🪔 1000-Wala 30-Second Perimeter Border Celebration State (Reduced to 30s)
     let queenBorderCelebration = {
       active: false,
@@ -3208,6 +3275,7 @@
       queenBorderCelebration.nextPopTime = 0.05;
       queenBorderCelebration.popIndex = 0;
       Sound.playBassBoom(105, 1.4, 1.25);
+      triggerBoardVibration('mega_diwali', 34, 0.91);
     }
 
     function update1000WalaBorderCelebration(dt, particles, shockwaves) {
@@ -3222,6 +3290,9 @@
       if (queenBorderCelebration.nextPopTime <= 0) {
         queenBorderCelebration.nextPopTime = 0.12; // Rapid continuous pops along border
         queenBorderCelebration.popIndex++;
+
+        // Trigger vibration along border pops
+        triggerBoardVibration('100wala', (queenBorderCelebration.popIndex % 8 === 0) ? 14 : 7, 0.85, (queenBorderCelebration.popIndex % 8 === 0) ? [55] : [22]);
 
         // Calculate perimeter coordinates along the inner wooden cushion border
         const perimeterLen = PLAY_AREA_SIZE * 4;
@@ -3460,6 +3531,8 @@
 
         // Custom duration & start sounds (Increased timings for grand visual spectacle)
         const t = this.cDef.type;
+        triggerBoardVibration(t);
+
         if (t === 'chakkar' || t === 'rolling') {
           this.duration = 4.5; // Increased from 2.4s
           Sound.playWhistleSpin(4.5, t === 'rolling' ? 900 : 700);
@@ -3497,6 +3570,7 @@
             if (!this.rocketExploded) {
               this.rocketExploded = true;
               Sound.playBassBoom(180, 0.85, 1.25);
+              triggerBoardVibration('bomb', 24, 0.87, [140, 40, 90]);
               this.shockwaves.push(new Shockwave(this.targetX, this.targetY, 180, '#00e5ff', 9));
               addCrackerCarbonAndPaperDebris(this.targetX, this.targetY, 44, 34, 12);
             }
@@ -3589,6 +3663,7 @@
             this.popCount++;
             this.nextPopTime = this.time + this.popInterval + (Math.random() - 0.5) * 0.03;
             Sound.playSnappyPop(t === 'mirchi' ? 1300 : 950, 1.15 + (this.popCount / 22), true);
+            triggerBoardVibration(t, 9 + Math.random() * 4, 0.85, [25]);
 
             const popX = this.x + (Math.random() - 0.5) * 36;
             const popY = this.y + (Math.random() - 0.5) * 36;
@@ -3606,6 +3681,7 @@
 
             if (this.popCount === this.maxPops) {
               Sound.playBassBoom(220, 0.7, 1.2);
+              triggerBoardVibration('bomb', 22, 0.88, [120, 40, 70]);
               this.shockwaves.push(new Shockwave(this.x, this.y, 140, '#ffd700', 8));
               addCrackerCarbonAndPaperDebris(this.x, this.y, 38, 25, 9.5);
             }
@@ -3627,6 +3703,7 @@
           } else if (!this.rocketExploded) {
             this.rocketExploded = true;
             Sound.playBassBoom(180, 0.85, 1.25);
+            triggerBoardVibration('bomb', 24, 0.87, [140, 40, 90]);
             this.shockwaves.push(new Shockwave(this.targetX, this.targetY, 180, '#00e5ff', 9));
             addCrackerCarbonAndPaperDebris(this.targetX, this.targetY, 44, 34, 12);
 
@@ -3652,6 +3729,7 @@
           } else if (!this.detonated) {
             this.detonated = true;
             Sound.playBassBoom(t === 'dragon' ? 130 : 150, 0.95, 1.35);
+            triggerBoardVibration(t, t === 'gorilla' ? 26 : 22, 0.88, [150, 45, 90]);
             this.shockwaves.push(new Shockwave(this.x, this.y, 220, t === 'dragon' ? '#c2185b' : '#ff1744', 10));
             addCrackerCarbonAndPaperDebris(this.x, this.y, 48, 38, 13);
 
@@ -3666,6 +3744,7 @@
           } else if (t === 'gorilla' && this.time > 1.1 && !this.secondDetonated) {
             this.secondDetonated = true;
             Sound.playBassBoom(95, 1.25, 1.45); // MASSIVE 2nd blast with amplified sub-bass!
+            triggerBoardVibration('gorilla', 30, 0.86, [170, 50, 130]);
             this.shockwaves.push(new Shockwave(this.x, this.y, 260, '#ffd700', 12));
             addCrackerCarbonAndPaperDebris(this.x, this.y, 54, 42, 15);
           }
@@ -3676,6 +3755,7 @@
           if (!this.snapped) {
             this.snapped = true;
             Sound.playSnappyPop(t === 'kuruvi' ? 1450 : (t === 'bijli' ? 1650 : 750), 1.45, false);
+            triggerBoardVibration(t, 18, 0.74, [85]);
             this.shockwaves.push(new Shockwave(this.x, this.y, 110, t === 'bijli' ? '#fff' : '#ff5252', 12));
             addCrackerCarbonAndPaperDebris(this.x, this.y, 28, 22, 9);
 
@@ -3696,6 +3776,7 @@
             this.shotCount++;
             this.nextShotTime = this.time + 0.45;
             Sound.playSnappyPop(650 + this.shotCount * 130, 1.35, false);
+            triggerBoardVibration(t, 13, 0.88, [45]);
 
             const shotColors = FIREWORK_COLORS;
             const shotCol = shotColors[this.shotCount % shotColors.length];
@@ -3737,6 +3818,7 @@
           if (this.time > 1.2 && !this.finaleFired) {
             this.finaleFired = true;
             Sound.playBassBoom(105, 1.4, 1.35); // GRAND SHOWSTOPPER MAX dB
+            triggerBoardVibration('mega_diwali', 34, 0.91, [240, 60, 200, 50, 160]);
             this.shockwaves.push(new Shockwave(this.x, this.y, 280, '#ffd700', 11));
             start1000WalaBorderCelebration(); // Launch 30-second perimeter border celebration with blinking lights!
 
@@ -4245,6 +4327,7 @@
 
               if (p.type === 'striker') {
                 Sound.playFoul();
+                triggerBoardVibration('default', 9, 0.75, [40, 30, 40]);
                 scores[turn] = Math.max(0, scores[turn] - 5);
                 document.getElementById('turn-msg').textContent = '⚠️ FOUL! Striker Pocketed (-5)';
               } else {
@@ -4252,6 +4335,16 @@
                 if (turn === 1 && p.type !== 'striker') {
                   p1WonCoins.push(p);
                 }
+
+                // Trigger vibration to the board based on cracker variety
+                let crackerType = 'default';
+                if (isFunMode && funVariant === 'crackers' && p.crackerKey) {
+                  const cDef = CRACKER_DEFINITIONS[p.crackerKey];
+                  crackerType = cDef ? cDef.type : 'default';
+                } else if (p.type === 'queen') {
+                  crackerType = 'mega_diwali';
+                }
+                triggerBoardVibration(crackerType);
 
                 let pts = 0;
                 if (p.type === 'p1') pts = 10;
@@ -4366,8 +4459,10 @@
               statusEl.innerHTML = '🎉 <b>All ' + crackerKeys.length + ' winning crackers popped in center! Happy Diwali 2026!</b>';
             }
             // Launch grand finale sky shots
+            triggerBoardVibration('mega_diwali', 30, 0.90);
             for (let s = 0; s < 5; s++) {
               setTimeout(() => {
+                triggerBoardVibration('rocket', 15, 0.88);
                 launchSkyShotFromScreen(FIREWORK_COLORS[s % FIREWORK_COLORS.length]);
               }, s * 300);
             }
@@ -4600,6 +4695,11 @@
       }
 
       function render(dt) {
+        ctx.save();
+        if (boardShakeIntensity > 0.05) {
+          ctx.translate(boardShakeOffsetX * 0.35, boardShakeOffsetY * 0.35);
+        }
+
         drawBoard();
 
         // Draw burnt black carbon soot marks on the felt
@@ -4679,6 +4779,8 @@
             ctx.stroke();
           }
         }
+
+        ctx.restore();
       }
 
       function loop(timestamp) {
@@ -4703,6 +4805,7 @@
           }
         }
 
+        updateBoardShake(dt);
         render(dt);
         requestAnimationFrame(loop);
       }
@@ -4809,6 +4912,12 @@
         triggerVictory() {
           scores[1] = 100; scores[2] = 20;
           endGame();
+        },
+        triggerBoardVibration(variety, customInt, customDecay, customHap) {
+          triggerBoardVibration(variety, customInt, customDecay, customHap);
+        },
+        getBoardShakeIntensity() {
+          return boardShakeIntensity;
         }
       };
     })();
