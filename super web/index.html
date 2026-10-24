@@ -226,12 +226,10 @@
     .fun-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 14px;
       width: 100%;
       max-width: 620px;
-      max-height: 65vh;
-      overflow-y: auto;
-      padding: 6px;
+      padding: 4px;
       margin-bottom: 16px;
     }
 
@@ -246,6 +244,8 @@
       text-align: center;
       cursor: pointer;
       transition: all 0.22s ease;
+      min-height: 110px;
+      justify-content: center;
     }
 
     .fun-card:hover {
@@ -255,34 +255,110 @@
       background: linear-gradient(135deg, #4d2b14 0%, #271407 100%);
     }
 
-    /* Cracker Highlight Card in Fun Grid */
+    /* Cracker Highlight Hero Card in Fun Grid */
     .fun-card-cracker {
       grid-column: span 2;
-      background: linear-gradient(135deg, #4a1508 0%, #290a03 100%) !important;
+      background: linear-gradient(135deg, #4a1508 0%, #240a03 50%, #3a1005 100%) !important;
       border: 2px solid #ff9100 !important;
-      box-shadow: 0 4px 20px rgba(255, 109, 0, 0.45) !important;
+      box-shadow: 0 4px 24px rgba(255, 109, 0, 0.45), inset 0 1px 0 rgba(255, 215, 0, 0.35) !important;
+      border-radius: 16px;
+      padding: 14px 18px;
       position: relative;
-      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 7px;
     }
 
     .fun-card-cracker:hover {
       border-color: #ffd700 !important;
-      box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6) !important;
+      box-shadow: 0 6px 30px rgba(255, 215, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
       transform: translateY(-3px) scale(1.01) !important;
     }
 
-    .diwali-badge {
-      position: absolute;
-      top: 8px;
-      right: 12px;
-      background: linear-gradient(135deg, #ff3d00 0%, #d50000 100%);
+    .hero-badge-wrap {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: -2px;
+    }
+
+    .diwali-badge-pill {
+      background: linear-gradient(135deg, #ff3d00 0%, #c62828 100%);
       color: #fff;
-      font-size: 0.65rem;
-      font-weight: bold;
-      padding: 2px 8px;
-      border-radius: 10px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 12px;
       letter-spacing: 1px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      box-shadow: 0 2px 8px rgba(255, 61, 0, 0.5);
+      border: 1px solid #ffd700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .hero-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .hero-icons {
+      font-size: 1.85rem;
+      filter: drop-shadow(0 2px 8px rgba(255, 145, 0, 0.6));
+    }
+
+    .hero-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #ffd700;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 10px rgba(255, 215, 0, 0.55), 0 1px 2px #000;
+    }
+
+    .hero-subtitle {
+      font-size: 0.82rem;
+      color: #ffe0b2;
+      line-height: 1.35;
+      max-width: 530px;
+    }
+
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .hero-pill {
+      background: rgba(255, 145, 0, 0.18);
+      border: 1px solid rgba(255, 183, 77, 0.45);
+      border-radius: 12px;
+      padding: 2px 9px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #ffecb3;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .hero-cta {
+      font-size: 0.74rem;
+      color: #ffd54f;
+      font-weight: 600;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      letter-spacing: 0.3px;
     }
 
     /* Godot Striker Arsenal Grid Modal */
@@ -1431,39 +1507,51 @@
       <p class="subtitle">Choose your special gameplay variant vs AI</p>
 
       <div class="fun-grid">
-        <!-- 🎆 DIWALI CRACKER MODE (19 Unique Crackers) -->
+        <!-- 🎆 DIWALI CRACKER MODE HERO CARD -->
         <div class="fun-card fun-card-cracker" data-mode="crackers">
-          <span class="diwali-badge">DIWALI SPECIAL 🪔</span>
-          <div style="font-size: 2.4rem; margin-bottom: 4px;">🪔 🎆 🎇</div>
-          <div style="font-size: 1.25rem; font-weight: bold; color: #ffd700;">Diwali Cracker Mode</div>
-          <div style="font-size: 0.82rem; color: #ffe0b2; margin-top: 4px; line-height: 1.35; max-width: 520px;">
-            <strong>🪔 100 Varieties Diwali Cracker Bazaar!</strong><br>
-            <strong>Step 1:</strong> Select Diwali Mode &bull; <strong>Step 2:</strong> Open Store &bull; <strong>Step 3:</strong> Buy 9 White, 9 Black & 1 Queen &bull; <strong>Step 4:</strong> Apply & Play!<br>
-            <span style="color:#ffd700;">💰 1500 Starting Credits included! Audio preview for all 100 crackers!</span></div>
+          <div class="hero-badge-wrap">
+            <span class="diwali-badge-pill">✨ DIWALI SPECIAL EDITION 🪔</span>
+          </div>
+          <div class="hero-top-row">
+            <span class="hero-icons">🪔 🎆 🎇</span>
+            <div class="hero-title">Diwali Cracker Mode</div>
+          </div>
+          <div class="hero-subtitle">
+            Celebrate with the grand <strong>100 Varieties Cracker Bazaar</strong>, explosive pocket fireworks &amp; sparkling trajectories!
+          </div>
+          <div class="hero-pills">
+            <span class="hero-pill">🏪 100 Crackers Bazaar</span>
+            <span class="hero-pill">💰 1500 Starting Credits</span>
+            <span class="hero-pill">🔥 Chakkar Striker</span>
+            <span class="hero-pill">✨ Aiming Sparklers</span>
+          </div>
+          <div class="hero-cta">
+            <span>🎁 Tap to open Diwali Giftbox &amp; Enter Arsenal</span>
+          </div>
         </div>
 
         <div class="fun-card" data-mode="magnet">
           <div style="font-size: 2rem; margin-bottom: 4px;">🧲</div>
           <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Magnet Event</div>
-          <div style="font-size: 0.76rem; color: #cbb49e;">120s timer triggers 20s center vortex pulling coins!</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">5-Stage rotating magnet pull with center vortex!</div>
         </div>
 
         <div class="fun-card" data-mode="stone">
           <div style="font-size: 2rem; margin-bottom: 4px;">🪨</div>
           <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Stone Pulse</div>
-          <div style="font-size: 0.76rem; color: #cbb49e;">Coins petrify +5% every 15s. Double-hit reduces to 50%!</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">Progressive petrification with 80-100% deflection!</div>
         </div>
 
         <div class="fun-card" data-mode="bomber">
           <div style="font-size: 2rem; margin-bottom: 4px;">💣</div>
           <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Player Bomber</div>
-          <div style="font-size: 0.76rem; color: #cbb49e;">120s countdown. Timeout triggers blast & +10 penalty!</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">Universal 40s round bomb with blast &amp; -5 penalty!</div>
         </div>
 
         <div class="fun-card" data-mode="tagcoins">
           <div style="font-size: 2rem; margin-bottom: 4px;">🏷️</div>
           <div style="font-size: 1.05rem; font-weight: bold; color: #ffd700;">Tag Coins</div>
-          <div style="font-size: 0.76rem; color: #cbb49e;">240s phases: Tag coins first, then pocket only your tags!</div>
+          <div style="font-size: 0.76rem; color: #cbb49e;">Strict Tag Phase &amp; Tagged-only Pocket Phase!</div>
         </div>
       </div>
 
