@@ -678,6 +678,37 @@
       cursor: pointer;
       font-size: 1.1rem;
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      transition: all 0.2s ease;
+    }
+    .icon-btn:hover {
+      transform: scale(1.08);
+      border-color: #ffd700;
+      background: rgba(60, 30, 15, 0.95);
+    }
+
+    .btn-hud-exit {
+      pointer-events: auto;
+      background: linear-gradient(135deg, #421105 0%, #1e0802 100%);
+      border: 1.5px solid #d32f2f;
+      color: #ffcdd2;
+      padding: 5px 12px;
+      border-radius: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 700;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+      transition: all 0.2s ease;
+      letter-spacing: 0.3px;
+    }
+    .btn-hud-exit:hover {
+      background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+      border-color: #ff5252;
+      color: #ffffff;
+      transform: scale(1.05);
+      box-shadow: 0 4px 14px rgba(211, 47, 47, 0.55);
     }
 
     .btn-striker-cracker-toggle {
@@ -728,6 +759,73 @@
       box-shadow: 0 15px 50px rgba(0,0,0,0.8);
       max-width: 420px;
       width: 90%;
+    }
+
+    /* Exit Match Confirmation Dialog */
+    .exit-modal-box {
+      background: linear-gradient(135deg, #2b1206 0%, #150803 100%);
+      border: 2px solid #ff9100;
+      border-radius: 20px;
+      padding: 26px 24px;
+      max-width: 440px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.88), 0 0 25px rgba(255, 109, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 101;
+    }
+
+    .exit-modal-icon {
+      font-size: 2.8rem;
+      filter: drop-shadow(0 3px 10px rgba(255, 152, 0, 0.5));
+    }
+
+    .exit-modal-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffd700;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .exit-modal-desc {
+      font-size: 0.88rem;
+      color: #ffccbc;
+      line-height: 1.45;
+      margin-bottom: 6px;
+    }
+
+    .exit-modal-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      margin-top: 4px;
+    }
+
+    .btn-exit-home {
+      background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%) !important;
+      border: 1.5px solid #ff5252 !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+    }
+    .btn-exit-home:hover {
+      box-shadow: 0 4px 18px rgba(211, 47, 47, 0.6) !important;
+      transform: translateY(-2px);
+    }
+
+    .btn-exit-prev {
+      background: linear-gradient(135deg, #ff8f00 0%, #e65100 100%) !important;
+      border: 1.5px solid #ffd54f !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+    }
+    .btn-exit-prev:hover {
+      box-shadow: 0 4px 18px rgba(255, 143, 0, 0.6) !important;
+      transform: translateY(-2px);
     }
 
     /* =========================================================================
@@ -1434,10 +1532,16 @@
 
     <!-- Top In-Game HUD -->
     <div id="hud" class="hidden">
-      <div id="p1-badge" class="player-badge active-turn">
-        <div id="p1-badge-coin" class="badge-icon"></div>
-        <span>You</span>:
-        <span id="p1-score" class="score-txt">0</span>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button id="btn-in-game-exit" class="btn-hud-exit" title="Exit match and return to menu">
+          <span style="font-size: 0.95rem;">🔙</span>
+          <span>Exit</span>
+        </button>
+        <div id="p1-badge" class="player-badge active-turn">
+          <div id="p1-badge-coin" class="badge-icon"></div>
+          <span>You</span>:
+          <span id="p1-score" class="score-txt">0</span>
+        </div>
       </div>
 
       <div id="mode-pill-container">
@@ -1450,7 +1554,7 @@
           🔥 CRACKER STRIKER: ON
         </button>
         <button id="sound-btn" class="icon-btn" title="Toggle Sound">🔊</button>
-        <button id="pause-btn" class="icon-btn" title="Menu">⚙️</button>
+        <button id="pause-btn" class="icon-btn" title="Exit Match">🚪</button>
       </div>
 
       <div id="p2-badge" class="player-badge">
@@ -1782,6 +1886,34 @@
         <div class="giftbox-btn-row">
           <button id="btn-giftbox-close" class="btn-giftbox-btn btn-giftbox-secondary">CLOSE ✕</button>
           <button id="btn-giftbox-claim" class="btn-giftbox-btn btn-giftbox-primary">🎁 USE & PLAY MATCH 🪔</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. EXIT / BACK GAMEPLAY CONFIRMATION ALERT MODAL -->
+    <div id="exit-confirm-overlay" class="overlay hidden">
+      <div class="exit-modal-box">
+        <div class="exit-modal-icon">⚠️</div>
+        <h2 class="exit-modal-title">Are you really sure you want to exit?</h2>
+        <p class="exit-modal-desc">
+          Leaving this match will forfeit and <strong>completely reset</strong> the current gameplay, scores, and all active round mechanics!
+        </p>
+
+        <div class="exit-modal-btn-group">
+          <!-- Option 1: Back to Fun Mode Selection (if currently playing Fun Mode) -->
+          <button id="btn-exit-to-previous" class="btn btn-exit-prev">
+            🚀 Exit to Fun Modes
+          </button>
+
+          <!-- Option 2: Back to Home Page -->
+          <button id="btn-exit-to-home" class="btn btn-exit-home">
+            🏠 Exit to Home Page
+          </button>
+
+          <!-- Option 3: Cancel and Resume -->
+          <button id="btn-exit-cancel" class="btn btn-secondary">
+            ▶️ Cancel &amp; Resume Play
+          </button>
         </div>
       </div>
     </div>
@@ -6275,6 +6407,27 @@
           if (state === 'paused') state = 'aiming';
         },
 
+        exitMatch(destination = 'home') {
+          state = 'menu';
+          initBoard();
+          giftboxUsed = false;
+          boardShakeIntensity = 0;
+          document.getElementById('hud').classList.add('hidden');
+          document.getElementById('turn-msg').classList.add('hidden');
+          document.getElementById('exit-confirm-overlay')?.classList.add('hidden');
+          document.getElementById('diwali-celebration-overlay')?.classList.add('hidden');
+          document.getElementById('result-overlay')?.classList.add('hidden');
+
+          if (destination === 'fun') {
+            document.getElementById('fun-menu-overlay').classList.remove('hidden');
+          } else {
+            document.getElementById('menu-overlay').classList.remove('hidden');
+          }
+          updateEquippedStrikerCard();
+        },
+
+        getState() { return state; },
+
         getIsFunMode() { return isFunMode; },
         getFunVariant() { return funVariant; },
         triggerVictory() {
@@ -6771,11 +6924,78 @@
       document.getElementById('sound-btn').textContent = next ? '🔊' : '🔇';
     });
 
-    document.getElementById('pause-btn').addEventListener('click', () => {
-      document.getElementById('hud').classList.add('hidden');
-      document.getElementById('turn-msg').classList.add('hidden');
-      document.getElementById('menu-overlay').classList.remove('hidden');
-      updateEquippedStrikerCard();
+    /* =========================================================================
+       EXIT / BACK GAMEPLAY CONFIRMATION ALERT CONTROLLER
+       ========================================================================= */
+    function openExitConfirmModal() {
+      if (Game.getState() === 'menu' || Game.getState() === 'gameover') return;
+      Sound.playFlick();
+      Game.pause();
+
+      const prevBtn = document.getElementById('btn-exit-to-previous');
+      if (prevBtn) {
+        if (Game.getIsFunMode()) {
+          prevBtn.classList.remove('hidden');
+          const variant = Game.getFunVariant();
+          const variantNames = {
+            crackers: 'Diwali Cracker Mode',
+            magnet: 'Magnet Event',
+            stone: 'Stone Pulse',
+            bomber: 'Player Bomber',
+            tagcoins: 'Tag Coins'
+          };
+          const name = variantNames[variant] || 'Fun Mode';
+          prevBtn.innerHTML = `🚀 Exit to Fun Modes (${name})`;
+        } else {
+          prevBtn.classList.add('hidden');
+        }
+      }
+
+      const overlay = document.getElementById('exit-confirm-overlay');
+      if (overlay) overlay.classList.remove('hidden');
+    }
+
+    function closeExitConfirmModal() {
+      Sound.playFlick();
+      const overlay = document.getElementById('exit-confirm-overlay');
+      if (overlay) overlay.classList.add('hidden');
+      Game.resume();
+    }
+
+    function handleExitAndReset(destination) {
+      Sound.playFlick();
+      const overlay = document.getElementById('exit-confirm-overlay');
+      if (overlay) overlay.classList.add('hidden');
+      Game.exitMatch(destination);
+    }
+
+    // In-game Exit Buttons
+    const btnInGameExit = document.getElementById('btn-in-game-exit');
+    if (btnInGameExit) btnInGameExit.addEventListener('click', openExitConfirmModal);
+
+    const pauseBtn = document.getElementById('pause-btn');
+    if (pauseBtn) pauseBtn.addEventListener('click', openExitConfirmModal);
+
+    // Modal Action Buttons
+    const btnExitPrev = document.getElementById('btn-exit-to-previous');
+    if (btnExitPrev) btnExitPrev.addEventListener('click', () => handleExitAndReset('fun'));
+
+    const btnExitHome = document.getElementById('btn-exit-to-home');
+    if (btnExitHome) btnExitHome.addEventListener('click', () => handleExitAndReset('home'));
+
+    const btnExitCancel = document.getElementById('btn-exit-cancel');
+    if (btnExitCancel) btnExitCancel.addEventListener('click', closeExitConfirmModal);
+
+    // Keyboard ESC shortcut to trigger or close Exit Confirm Modal
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        const exitOverlay = document.getElementById('exit-confirm-overlay');
+        if (exitOverlay && !exitOverlay.classList.contains('hidden')) {
+          closeExitConfirmModal();
+        } else if (Game.getState() === 'aiming' || Game.getState() === 'shooting') {
+          openExitConfirmModal();
+        }
+      }
     });
 
     const strikerCrackerToggleBtn = document.getElementById('btn-striker-cracker-toggle');
