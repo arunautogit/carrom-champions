@@ -1370,7 +1370,7 @@
       </div>
 
       <div style="display: flex; align-items: center; gap: 8px;">
-        <button id="btn-striker-cracker-toggle" class="btn-striker-cracker-toggle" title="Click to Toggle Striker Cracker Mode (Chakkar & Flower Pot)">
+        <button id="btn-striker-cracker-toggle" class="btn-striker-cracker-toggle hidden" title="Click to Toggle Striker Cracker Mode (Chakkar & Flower Pot)">
           🔥 CRACKER STRIKER: ON
         </button>
         <button id="sound-btn" class="icon-btn" title="Toggle Sound">🔊</button>
@@ -4394,6 +4394,13 @@
         const btn = document.getElementById('btn-striker-cracker-toggle');
         if (!btn) return;
 
+        const isDiwaliMode = isFunMode && funVariant === 'crackers';
+        if (!isDiwaliMode) {
+          btn.classList.add('hidden');
+          return;
+        }
+        btn.classList.remove('hidden');
+
         if (!strikerCrackerFeatureEnabled) {
           btn.className = 'btn-striker-cracker-toggle off';
           btn.innerHTML = '⚪ CRACKER STRIKER: OFF';
@@ -4412,7 +4419,8 @@
       }
 
       function updateStrikerCrackerMode(dt) {
-        if (!strikerCrackerFeatureEnabled) {
+        const isDiwaliMode = isFunMode && funVariant === 'crackers';
+        if (!isDiwaliMode || !strikerCrackerFeatureEnabled) {
           strikerCrackerActive = false;
           updateStrikerCrackerUI();
           return;
@@ -4588,7 +4596,7 @@
               Sound.playClack(relSpeed, isStrikerInvolved ? selectedStrikerId : null);
 
               // 🌀 🌋 STRIKER CRACKER MODE: Striker hit coins start crackling where placed
-              if (strikerCrackerFeatureEnabled && strikerCrackerActive && isStrikerInvolved) {
+              if (isFunMode && funVariant === 'crackers' && strikerCrackerFeatureEnabled && strikerCrackerActive && isStrikerInvolved) {
                 const hitCoin = (p1.type === 'striker' && p2.type !== 'striker') ? p2 : ((p2.type === 'striker' && p1.type !== 'striker') ? p1 : null);
                 if (hitCoin && !hitCoin.isPocketed && !hitCoin.isCrackling) {
                   hitCoin.isCrackling = true;
@@ -5675,6 +5683,7 @@
 
           document.getElementById('hud').classList.remove('hidden');
           document.getElementById('turn-msg').classList.remove('hidden');
+          updateStrikerCrackerUI();
 
           YouTubePlayables.gameReady();
         },
