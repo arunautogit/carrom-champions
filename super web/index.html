@@ -2534,11 +2534,23 @@
       let ringCol = cInfo.ring;
 
       if (stonePercent > 0) {
-        const t = stonePercent / 100;
-        fillCol = t >= 1 ? '#756d66' : '#9e948a';
-        midCol = '#5c544d';
-        edgeCol = '#3e3834';
-        ringCol = '#252220';
+        const t = Math.min(stonePercent / 100, 1.0);
+        if (t >= 0.8) {
+          fillCol = '#2b2b2b';
+          midCol = '#383838';
+          edgeCol = '#1c1c1c';
+          ringCol = '#0d0d0d';
+        } else if (t >= 0.5) {
+          fillCol = '#524e4a';
+          midCol = '#423e3b';
+          edgeCol = '#2d2a28';
+          ringCol = '#1a1918';
+        } else {
+          fillCol = '#857d75';
+          midCol = '#6b635c';
+          edgeCol = '#47423e';
+          ringCol = '#2e2b29';
+        }
       }
 
       // 2. Base Turned-Wood Disc with Cylindrical Depth Gradient
@@ -2679,13 +2691,37 @@
         ctx.fillText(taggedBy === 1 ? 'P1' : 'AI', 0, 0);
       }
 
-      // 10. Stone percent badge
+      // 10. Stone percent badge & fissure cracks
       if (stonePercent > 0) {
-        ctx.fillStyle = '#ffeb3b';
-        ctx.font = 'bold 8px sans-serif';
+        ctx.save();
+        ctx.strokeStyle = stonePercent >= 80 ? 'rgba(255, 235, 59, 0.75)' : 'rgba(20, 20, 20, 0.65)';
+        ctx.lineWidth = stonePercent >= 80 ? 1.5 : 1.0;
+        ctx.beginPath();
+        ctx.moveTo(-radius * 0.6, -radius * 0.2);
+        ctx.lineTo(-radius * 0.1, 0);
+        ctx.lineTo(radius * 0.4, -radius * 0.4);
+        ctx.moveTo(0, -radius * 0.6);
+        ctx.lineTo(radius * 0.2, radius * 0.3);
+        ctx.stroke();
+
+        if (stonePercent >= 80) {
+          ctx.beginPath();
+          ctx.arc(0, 0, radius - 1.2, 0, Math.PI * 2);
+          ctx.strokeStyle = '#ffd700';
+          ctx.lineWidth = 2.0;
+          ctx.shadowColor = '#ffd700';
+          ctx.shadowBlur = 6;
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = stonePercent >= 80 ? '#ffffff' : (stonePercent >= 50 ? '#ffeb3b' : '#e0e0e0');
+        ctx.shadowColor = '#000000';
+        ctx.shadowBlur = 4;
+        ctx.font = 'bold 8.5px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(stonePercent + '%', 0, 0);
+        ctx.restore();
       }
 
       ctx.restore();
@@ -4030,7 +4066,13 @@
         this.y += this.vy;
         this.angle += this.angularVelocity;
 
-        const currentFriction = this.type === 'striker' ? STRIKER_CONFIGS[selectedStrikerId].friction : FRICTION;
+        let currentFriction = this.type === 'striker' ? STRIKER_CONFIGS[selectedStrikerId].friction : FRICTION;
+        // Progressive stone friction tiers
+        if (this.stonePercent > 0) {
+          if (this.stonePercent >= 80) currentFriction *= 0.50; // Immovable boulder
+          else if (this.stonePercent >= 50) currentFriction *= 0.72; // Hard to push
+          else if (this.stonePercent >= 20) currentFriction *= 0.88; // Hard to move
+        }
         this.vx *= currentFriction;
         this.vy *= currentFriction;
         this.angularVelocity *= 0.95;
@@ -4121,6 +4163,184 @@
     }
 
     /* =========================================================================
+       🧲 5 ROTATING MAGNET STAGES & VISUAL ENGINE
+       ========================================================================= */
+    const MAGNET_TYPES = [
+      { id: 'horseshoe', name: 'Horseshoe Magnet', icon: '🧲', poleColorN: '#e53935', poleColorS: '#1e88e5', basePull: 2.2, maxDist: 560, desc: 'Dual-pole curved magnetic flux' },
+      { id: 'bar', name: 'Bar Magnet', icon: '💈', poleColorN: '#d32f2f', poleColorS: '#1565c0', basePull: 3.2, maxDist: 580, desc: 'Linear dipolar magnetic attraction' },
+      { id: 'ring', name: 'Ring Magnet', icon: '⭕', poleColorN: '#8e24aa', poleColorS: '#ce93d8', basePull: 4.4, maxDist: 600, desc: 'Toroidal radial flux vortex' },
+      { id: 'solenoid', name: 'Solenoidal Electromagnet', icon: '⚡', poleColorN: '#ff8f00', poleColorS: '#ffd54f', basePull: 5.8, maxDist: 620, desc: 'High-current coiled electromagnetic field' },
+      { id: 'neodymium', name: 'Neodymium Super Magnet', icon: '💠', poleColorN: '#00e5ff', poleColorS: '#e0f7fa', basePull: 7.5, maxDist: 650, desc: 'Rare-earth Grade N52 super magnetic singularity' }
+    ];
+
+    function drawActiveMagnet(ctx, magnetType, powerMultiplier) {
+      const now = Date.now() * 0.003;
+      const pulse = Math.sin(now * 2) * 0.5 + 0.5;
+
+      ctx.save();
+      // Ambient magnetic flux glow
+      const auraRad = 70 + pulse * 18;
+      const auraGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, auraRad);
+      auraGrad.addColorStop(0, magnetType.poleColorN + '88');
+      auraGrad.addColorStop(0.5, magnetType.poleColorS + '44');
+      auraGrad.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = auraGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, auraRad, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Magnetic field flux lines
+      ctx.strokeStyle = magnetType.poleColorN + '66';
+      ctx.lineWidth = 1.4;
+      ctx.setLineDash([4, 6]);
+      ctx.lineDashOffset = -(now * 20) % 10;
+      for (let f = 1; f <= 3; f++) {
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 40 * f, 22 * f, now * 0.5, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.setLineDash([]);
+
+      if (magnetType.id === 'horseshoe') {
+        // 🧲 Horseshoe Magnet
+        ctx.save();
+        ctx.rotate(now * 0.8);
+        ctx.lineWidth = 12;
+        ctx.lineCap = 'butt';
+
+        // Red North arm
+        ctx.beginPath();
+        ctx.arc(0, 0, 32, -Math.PI * 0.9, -Math.PI * 0.1);
+        ctx.strokeStyle = '#e53935';
+        ctx.stroke();
+
+        // Silver bend
+        ctx.beginPath();
+        ctx.arc(0, 0, 32, -Math.PI * 0.6, -Math.PI * 0.4);
+        ctx.strokeStyle = '#cfd8dc';
+        ctx.stroke();
+
+        ctx.font = 'bold 9px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText('N', -32, 2);
+        ctx.fillText('S', 32, 2);
+
+        // Spark gap
+        ctx.strokeStyle = '#fff2b2';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(-28, 5);
+        ctx.lineTo(-10, 8 + Math.sin(now * 8) * 4);
+        ctx.lineTo(10, 4 - Math.sin(now * 8) * 4);
+        ctx.lineTo(28, 5);
+        ctx.stroke();
+        ctx.restore();
+      } else if (magnetType.id === 'bar') {
+        // 💈 Bar Magnet
+        ctx.save();
+        ctx.rotate(now * 0.9);
+        const w = 64, h = 18;
+        ctx.fillStyle = '#d32f2f';
+        ctx.fillRect(-w/2, -h/2, w/2, h);
+        ctx.fillStyle = '#1565c0';
+        ctx.fillRect(0, -h/2, w/2, h);
+
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(-w/2, -h/2, w, h);
+        ctx.beginPath(); ctx.moveTo(0, -h/2); ctx.lineTo(0, h/2); ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('N', -w/4, 0);
+        ctx.fillText('S', w/4, 0);
+        ctx.restore();
+      } else if (magnetType.id === 'ring') {
+        // ⭕ Ring Magnet
+        ctx.save();
+        const rGrad = ctx.createRadialGradient(0, 0, 16, 0, 0, 38);
+        rGrad.addColorStop(0, '#4a148c');
+        rGrad.addColorStop(0.5, '#ab47bc');
+        rGrad.addColorStop(1, '#6a1b9a');
+        ctx.fillStyle = rGrad;
+
+        ctx.beginPath();
+        ctx.arc(0, 0, 36, 0, Math.PI * 2);
+        ctx.arc(0, 0, 16, 0, Math.PI * 2, true);
+        ctx.fill();
+
+        ctx.strokeStyle = '#e1bee7';
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
+        ctx.restore();
+      } else if (magnetType.id === 'solenoid') {
+        // ⚡ Solenoidal Electromagnet
+        ctx.save();
+        ctx.rotate(now * 0.7);
+        ctx.fillStyle = '#424242';
+        ctx.fillRect(-34, -10, 68, 20);
+        ctx.strokeStyle = '#757575';
+        ctx.strokeRect(-34, -10, 68, 20);
+
+        ctx.strokeStyle = '#ffb300';
+        ctx.lineWidth = 3.5;
+        for (let x = -28; x <= 28; x += 8) {
+          ctx.beginPath();
+          ctx.ellipse(x, 0, 3.5, 12, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        ctx.strokeStyle = '#00e5ff';
+        ctx.lineWidth = 1.5;
+        for (let s = 0; s < 3; s++) {
+          const a = now * 4 + s * 2.1;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(a) * 36, Math.sin(a) * 20);
+          ctx.lineTo(Math.cos(a + 0.3) * 44, Math.sin(a + 0.3) * 24);
+          ctx.stroke();
+        }
+        ctx.restore();
+      } else if (magnetType.id === 'neodymium') {
+        // 💠 Neodymium Super Magnet
+        ctx.save();
+        ctx.rotate(now * 2.5);
+        const neoGrad = ctx.createRadialGradient(-6, -6, 2, 0, 0, 32);
+        neoGrad.addColorStop(0, '#ffffff');
+        neoGrad.addColorStop(0.3, '#80deea');
+        neoGrad.addColorStop(0.7, '#00acc1');
+        neoGrad.addColorStop(1, '#006064');
+        ctx.fillStyle = neoGrad;
+
+        ctx.beginPath();
+        ctx.arc(0, 0, 30, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#00e5ff';
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = '#00e5ff';
+        ctx.shadowBlur = 15;
+        ctx.stroke();
+
+        for (let r = 0; r < 8; r++) {
+          const rayAng = (r * Math.PI) / 4;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(rayAng) * 32, Math.sin(rayAng) * 32);
+          ctx.lineTo(Math.cos(rayAng) * (44 + pulse * 12), Math.sin(rayAng) * (44 + pulse * 12));
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      ctx.restore();
+    }
+
+    /* =========================================================================
        MAIN GAME CONTROLLER
        ========================================================================= */
     const Game = (() => {
@@ -4158,12 +4378,13 @@
       const aiStrikerBaseY = HALF_SIZE - BASELINE_OFFSET;
 
       let funMatchTimer = 0;
+      let magnetRound = 0;
       let magnetEventActive = false;
-      let magnetEventTimer = 0;
-      let stonePulseTimer = 0;
-      let bomberTimerP1 = 120;
-      let bomberTimerAI = 120;
+      let magnetEventTimer = 20;
+      let stonePulseTimer = 10;
+      let universalBombTimer = 40;
       let tagCoinPhase = 'tagging';
+      let tagPhaseTimer = 45;
       let p1WonCoins = [];
 
       let lastTime = 0;
@@ -4185,12 +4406,13 @@
         piecesPocketedThisTurn = [];
 
         funMatchTimer = 0;
+        magnetRound = 0;
         magnetEventActive = false;
-        magnetEventTimer = 120;
-        stonePulseTimer = 15;
-        bomberTimerP1 = 120;
-        bomberTimerAI = 120;
+        magnetEventTimer = 20;
+        stonePulseTimer = 10;
+        universalBombTimer = 40;
         tagCoinPhase = 'tagging';
+        tagPhaseTimer = 45;
 
         matchElapsedTime = 0;
         strikerCrackerActive = false;
@@ -4271,6 +4493,43 @@
         updateHUD();
       }
 
+      function respawnCoinAtCenter(coin) {
+        coin.vx = 0; coin.vy = 0;
+        coin.angularVelocity = 0;
+        coin.isPocketed = false;
+        coin.scale = 1.0;
+
+        let targetX = HALF_SIZE;
+        let targetY = HALF_SIZE;
+        let foundSpot = false;
+
+        for (let rad = 0; rad <= 110; rad += 20) {
+          const stepCount = rad === 0 ? 1 : 8;
+          for (let step = 0; step < stepCount; step++) {
+            const ang = (step * Math.PI * 2) / stepCount;
+            const testX = HALF_SIZE + Math.cos(ang) * rad;
+            const testY = HALF_SIZE + Math.sin(ang) * rad;
+            const collides = pieces.some(other => other !== coin && !other.isPocketed && Math.hypot(other.x - testX, other.y - testY) < (coin.radius + other.radius + 4));
+            if (!collides) {
+              targetX = testX;
+              targetY = testY;
+              foundSpot = true;
+              break;
+            }
+          }
+          if (foundSpot) break;
+        }
+
+        coin.x = targetX;
+        coin.y = targetY;
+
+        shockwaves.push(new Shockwave(targetX, targetY, 40, '#ffd700', 3));
+        for (let i = 0; i < 8; i++) {
+          const a = (i * Math.PI) / 4;
+          particles.push(new Particle(targetX, targetY, '#ffeb3b', 3, Math.cos(a) * 3, Math.sin(a) * 3));
+        }
+      }
+
       function updateHUD() {
         document.getElementById('p1-score').textContent = scores[1];
         document.getElementById('p2-score').textContent = scores[2];
@@ -4301,11 +4560,26 @@
             modePill.textContent = '🪔 100 CRACKER BAZAAR';
             subPill.textContent = '🎆 Custom 9 White, 9 Black & 1 Queen Arsenal Equipped!';
           } else {
-            modePill.textContent = '🚀 ' + funVariant.toUpperCase().replace('_', ' ');
-            if (funVariant === 'magnet') subPill.textContent = magnetEventActive ? '🧲 VORTEX ACTIVE!' : 'Cooldown: ' + Math.ceil(magnetEventTimer) + 's';
-            else if (funVariant === 'stone') subPill.textContent = 'Next Pulse: ' + Math.ceil(stonePulseTimer) + 's';
-            else if (funVariant === 'bomber') subPill.textContent = '💣 P1: ' + Math.ceil(bomberTimerP1) + 's | AI: ' + Math.ceil(bomberTimerAI) + 's';
-            else if (funVariant === 'tagcoins') subPill.textContent = 'Phase: ' + tagCoinPhase.toUpperCase() + ' (' + Math.ceil(funMatchTimer) + 's)';
+            const curMag = MAGNET_TYPES[magnetRound % MAGNET_TYPES.length];
+            const nextMag = MAGNET_TYPES[(magnetRound + 1) % MAGNET_TYPES.length];
+            if (funVariant === 'magnet') {
+              modePill.textContent = curMag.icon + ' ' + curMag.name.toUpperCase();
+              subPill.textContent = magnetEventActive ? ('🔥 ' + curMag.name + ' Active! (' + Math.ceil(magnetEventTimer) + 's) • Power Lv.' + (magnetRound + 1)) : ('⏳ Next Magnet: ' + nextMag.name + ' in ' + Math.ceil(magnetEventTimer) + 's');
+            } else if (funVariant === 'stone') {
+              modePill.textContent = '🪨 STONE PULSE MODE';
+              subPill.textContent = 'Next Petrification Pulse: ' + Math.ceil(stonePulseTimer) + 's (+20% Stone)';
+            } else if (funVariant === 'bomber') {
+              modePill.textContent = '💣 TIME BOMB MODE';
+              const isImminent = universalBombTimer <= 8;
+              subPill.textContent = (isImminent ? '🚨 DETONATION IMMINENT: ' : '💣 ROUND BOMB: ') + Math.max(0, Math.ceil(universalBombTimer)) + 's (Continuous for all)';
+            } else if (funVariant === 'tagcoins') {
+              modePill.textContent = '🏷️ TAG COINS BATTLE';
+              if (tagCoinPhase === 'tagging') {
+                subPill.textContent = '🏷️ TAG PHASE (' + Math.ceil(tagPhaseTimer) + 's) - Hit coins to Tag! (Pocketing Locked)';
+              } else {
+                subPill.textContent = '🎯 POCKET PHASE (' + Math.ceil(tagPhaseTimer) + 's) - Only Tagged Coins Accepted!';
+              }
+            }
           }
         } else {
           modePill.textContent = '🌟 NORMAL MODE • ' + strCfg.name.split('•')[0].trim();
@@ -4317,74 +4591,128 @@
         if (!isFunMode) return;
         funMatchTimer += dt;
 
+        // 1. 🧲 ROTATING MAGNET EVENT: Horseshoe -> Bar -> Ring -> Solenoid -> Neodymium
         if (funVariant === 'magnet') {
           magnetEventTimer -= dt;
           if (magnetEventTimer <= 0) {
             magnetEventActive = !magnetEventActive;
-            magnetEventTimer = magnetEventActive ? 20 : 120;
             if (magnetEventActive) {
-              Sound.playMagnetHum();
-              shockwaves.push(new Shockwave(HALF_SIZE, HALF_SIZE, 300, '#ba68c8'));
+              magnetEventTimer = 16; // Active for 16 seconds
+              const currentMag = MAGNET_TYPES[magnetRound % MAGNET_TYPES.length];
+              const powerMultiplier = 1.0 + Math.floor(magnetRound / 5) * 0.45 + (magnetRound % 5) * 0.12;
+              Sound.playMagnetHum(currentMag.basePull * powerMultiplier);
+              shockwaves.push(new Shockwave(HALF_SIZE, HALF_SIZE, 320, currentMag.poleColorN, 7));
+              floatingTexts.push(new FloatingText(HALF_SIZE, HALF_SIZE - 55, currentMag.icon + ' ' + currentMag.name.toUpperCase() + ' ACTIVATED! (Lv.' + (magnetRound + 1) + ')', currentMag.poleColorN, 18));
+              triggerBoardVibration('default', 10 + (magnetRound % 5) * 3, 0.85);
+            } else {
+              magnetRound++; // Advance rotation to next magnet for the next round!
+              magnetEventTimer = 22; // 22s cooldown
             }
           }
 
           if (magnetEventActive) {
+            const currentMag = MAGNET_TYPES[magnetRound % MAGNET_TYPES.length];
+            const powerMul = 1.0 + Math.floor(magnetRound / 5) * 0.45 + (magnetRound % 5) * 0.12;
+            const totalPull = currentMag.basePull * powerMul;
+
+            // Universal Attraction: affects ALL available unpocketed coins across the entire board!
             coins.forEach(coin => {
               if (coin.isPocketed) return;
               const dx = HALF_SIZE - coin.x;
               const dy = HALF_SIZE - coin.y;
               const dist = Math.hypot(dx, dy);
-              if (dist > 15 && dist < 280) {
-                const pull = (1 - dist / 280) * 1.6;
-                coin.vx += (dx / dist) * pull;
-                coin.vy += (dy / dist) * pull;
+              if (dist > 10) {
+                const dirX = dx / dist;
+                const dirY = dy / dist;
+                const normDist = Math.min(dist / currentMag.maxDist, 1.0);
+                const pull = (1.2 - normDist * 0.72) * totalPull * 0.45;
+                coin.vx += dirX * pull;
+                coin.vy += dirY * pull;
               }
             });
-            if (Math.random() < 0.3) {
+
+            // Striker also experiences electromagnetic pull while traveling
+            if (striker && !striker.isPocketed && state === 'shooting') {
+              const dx = HALF_SIZE - striker.x;
+              const dy = HALF_SIZE - striker.y;
+              const dist = Math.hypot(dx, dy);
+              if (dist > 12) {
+                const pull = totalPull * 0.22;
+                striker.vx += (dx / dist) * pull;
+                striker.vy += (dy / dist) * pull;
+              }
+            }
+
+            if (Math.random() < 0.4) {
               const a = Math.random() * Math.PI * 2;
-              particles.push(new Particle(HALF_SIZE + Math.cos(a) * 120, HALF_SIZE + Math.sin(a) * 120, '#e1bee7', 3, -Math.cos(a)*2, -Math.sin(a)*2));
+              const distSpawn = 80 + Math.random() * 140;
+              particles.push(new Particle(HALF_SIZE + Math.cos(a) * distSpawn, HALF_SIZE + Math.sin(a) * distSpawn, currentMag.poleColorN, 3.2, -Math.cos(a)*2.5, -Math.sin(a)*2.5));
             }
           }
         }
 
+        // 2. 🪨 STONE PULSE: Progressive Petrification Tiers (20-30%, 50-70%, 80-100%)
         if (funVariant === 'stone') {
           stonePulseTimer -= dt;
           if (stonePulseTimer <= 0) {
-            stonePulseTimer = 15;
+            stonePulseTimer = 10;
             coins.forEach(p => {
-              if (!p.isPocketed && p.stonePercent < 50) {
-                p.stonePercent = Math.min(50, p.stonePercent + 5);
-                p.mass = 1.0 + (p.stonePercent / 100) * 15.0;
+              if (!p.isPocketed) {
+                p.stonePercent = Math.min(100, p.stonePercent + 20);
+                p.mass = 1.0 + (p.stonePercent / 100) * 25.0;
                 particles.push(new Particle(p.x, p.y, '#9e9e9e', 4));
               }
             });
-            shockwaves.push(new Shockwave(HALF_SIZE, HALF_SIZE, 250, '#9e9e9e'));
+            shockwaves.push(new Shockwave(HALF_SIZE, HALF_SIZE, 280, '#9e9e9e', 6));
+            Sound.playClack(8.0);
+            floatingTexts.push(new FloatingText(HALF_SIZE, HALF_SIZE - 40, '🪨 STONE PULSE: +20% PETRIFICATION!', '#9e9e9e', 18));
+            triggerBoardVibration('default', 12, 0.82);
           }
         }
 
+        // 3. 💣 BOMBER MODE: Single Universal Bomb Timer for BOTH players continuously
         if (funVariant === 'bomber') {
-          if (turn === 1) {
-            bomberTimerP1 -= dt;
-            if (bomberTimerP1 <= 0) {
-              bomberTimerP1 = 120;
-              scores[1] = Math.max(0, scores[1] - 10);
-              Sound.playExplosion();
-              shockwaves.push(new Shockwave(striker.x, striker.y, 250, '#ff1744'));
+          universalBombTimer -= dt;
+          if (universalBombTimer <= 0) {
+            universalBombTimer = 40; // Continues automatically for the whole round!
+            scores[1] = Math.max(0, scores[1] - 5);
+            scores[2] = Math.max(0, scores[2] - 5);
+            Sound.playExplosion();
+            shockwaves.push(new Shockwave(HALF_SIZE, HALF_SIZE, 380, '#ff1744', 12));
+            triggerBoardVibration('bomb', 30, 0.85);
+            carbonMarks.push(new CarbonMark(HALF_SIZE, HALF_SIZE, 45));
+
+            pieces.forEach(p => {
+              if (p.isPocketed) return;
+              const dx = p.x - HALF_SIZE;
+              const dy = p.y - HALF_SIZE;
+              const dist = Math.max(Math.hypot(dx, dy), 12);
+              const blastForce = (1.0 - Math.min(dist / 480, 0.82)) * 20;
+              p.vx += (dx / dist) * blastForce;
+              p.vy += (dy / dist) * blastForce;
+            });
+
+            for (let i = 0; i < 30; i++) {
+              paperDebris.push(new PaperDebris(HALF_SIZE, HALF_SIZE));
             }
-          } else {
-            bomberTimerAI -= dt;
-            if (bomberTimerAI <= 0) {
-              bomberTimerAI = 120;
-              scores[2] = Math.max(0, scores[2] - 10);
-              Sound.playExplosion();
-              shockwaves.push(new Shockwave(striker.x, striker.y, 250, '#ff1744'));
-            }
+
+            floatingTexts.push(new FloatingText(HALF_SIZE, HALF_SIZE - 40, '💥 UNIVERSAL BOMB DETONATED! (-5 Pts)', '#ff1744', 22));
           }
         }
 
+        // 4. 🏷️ TAG COINS: Strictly Alternating Tag Phase & Pocket Phase
         if (funVariant === 'tagcoins') {
-          const cycle = Math.floor(funMatchTimer / 60) % 2;
-          tagCoinPhase = cycle === 0 ? 'tagging' : 'pocketing';
+          tagPhaseTimer -= dt;
+          if (tagPhaseTimer <= 0) {
+            tagCoinPhase = (tagCoinPhase === 'tagging') ? 'pocketing' : 'tagging';
+            tagPhaseTimer = 45;
+            Sound.playFlick();
+            if (tagCoinPhase === 'tagging') {
+              floatingTexts.push(new FloatingText(HALF_SIZE, HALF_SIZE - 40, '🏷️ TAG PHASE STARTED! (Pocketing Locked)', '#ffd700', 19));
+            } else {
+              floatingTexts.push(new FloatingText(HALF_SIZE, HALF_SIZE - 40, '🎯 POCKET PHASE STARTED! (Only Tagged Accepted)', '#00e676', 19));
+            }
+          }
         }
 
         updateHUD();
@@ -4617,12 +4945,42 @@
               p2.angularVelocity -= (tangentSpeed / p2.radius) * 0.32;
 
               if (isFunMode && funVariant === 'stone') {
-                [p1, p2].forEach(coin => {
-                  if (coin.type !== 'striker' && coin.stonePercent > 0 && relSpeed > 4) {
-                    coin.stonePercent = Math.max(0, coin.stonePercent - 25);
-                    coin.mass = 1.0 + (coin.stonePercent / 100) * 15.0;
+                const isStrikerP1 = p1.type === 'striker';
+                const isStrikerP2 = p2.type === 'striker';
+                if (isStrikerP1 || isStrikerP2) {
+                  const strikerPiece = isStrikerP1 ? p1 : p2;
+                  const stoneCoin = isStrikerP1 ? p2 : p1;
+
+                  if (stoneCoin.stonePercent >= 80) {
+                    // Tier 80-100%: Deflected! High kinetic opposite rebound
+                    const vDotN = strikerPiece.vx * nx + strikerPiece.vy * ny;
+                    strikerPiece.vx -= 1.85 * vDotN * nx;
+                    strikerPiece.vy -= 1.85 * vDotN * ny;
+                    stoneCoin.vx *= 0.05;
+                    stoneCoin.vy *= 0.05;
+
+                    Sound.playClack(14.0);
+                    shockwaves.push(new Shockwave(stoneCoin.x, stoneCoin.y, 45, '#e0e0e0', 3));
+                    for (let s = 0; s < 6; s++) {
+                      particles.push(new Particle(stoneCoin.x, stoneCoin.y, '#9e9e9e', 3, (Math.random()-0.5)*8, (Math.random()-0.5)*8));
+                    }
+                    floatingTexts.push(new FloatingText(stoneCoin.x, stoneCoin.y - 18, '🛡️ DEFLECTED (' + stoneCoin.stonePercent + '%)', '#ffffff', 14));
+                    triggerBoardVibration('default', 14, 0.82);
+                  } else if (stoneCoin.stonePercent >= 50) {
+                    // Tier 50-70%: Hard to push! Striker decelerates heavily
+                    strikerPiece.vx *= 0.30;
+                    strikerPiece.vy *= 0.30;
+                    stoneCoin.vx *= 0.40;
+                    stoneCoin.vy *= 0.40;
+                    floatingTexts.push(new FloatingText(stoneCoin.x, stoneCoin.y - 18, '🪨 HEAVY PUSH (' + stoneCoin.stonePercent + '%)', '#bdbdbd', 13));
+                  } else if (stoneCoin.stonePercent >= 20) {
+                    // Tier 20-30%: Hard to move! Noticeable resistance
+                    strikerPiece.vx *= 0.65;
+                    strikerPiece.vy *= 0.65;
+                    stoneCoin.vx *= 0.65;
+                    stoneCoin.vy *= 0.65;
                   }
-                });
+                }
               }
 
               if (isFunMode && funVariant === 'tagcoins' && tagCoinPhase === 'tagging') {
@@ -4648,6 +5006,28 @@
           POCKETS.forEach(pocket => {
             const dist = Math.hypot(p.x - pocket.x, p.y - pocket.y);
             if (dist < POCKET_RADIUS + 4) {
+
+              // 🏷️ TAG COINS SPECIAL POCKETING RULES
+              if (isFunMode && funVariant === 'tagcoins' && p.type !== 'striker') {
+                if (tagCoinPhase === 'tagging') {
+                  // In Tag Mode, NO coin can be pocketed! Return to center!
+                  respawnCoinAtCenter(p);
+                  Sound.playFoul();
+                  triggerBoardVibration('default', 8, 0.75);
+                  floatingTexts.push(new FloatingText(pocket.x, pocket.y - 25, '❌ TAG PHASE: Cannot pocket! Returned to center', '#ff9800', 14));
+                  return;
+                } else if (tagCoinPhase === 'pocketing') {
+                  // In Pocket Mode, ONLY tagged coins can be pocketed!
+                  if (!p.taggedBy || p.taggedBy === 0) {
+                    respawnCoinAtCenter(p);
+                    Sound.playFoul();
+                    triggerBoardVibration('default', 8, 0.75);
+                    floatingTexts.push(new FloatingText(pocket.x, pocket.y - 25, '❌ UNTAGGED: Cannot pocket! Returned to center', '#e53935', 14));
+                    return;
+                  }
+                }
+              }
+
               p.isPocketed = true;
               p.vx = 0; p.vy = 0;
               p.angularVelocity = 0;
@@ -4924,11 +5304,9 @@
         ctx.stroke();
 
         if (isFunMode && funVariant === 'magnet' && magnetEventActive) {
-          const pulse = Math.sin(Date.now() * 0.01) * 0.5 + 0.5;
-          ctx.beginPath();
-          ctx.arc(0, 0, COIN_RADIUS * 5.0, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(156, 39, 176, ' + (0.2 + pulse * 0.35) + ')';
-          ctx.fill();
+          const curMag = MAGNET_TYPES[magnetRound % MAGNET_TYPES.length];
+          const powerMul = 1.0 + Math.floor(magnetRound / 5) * 0.45 + (magnetRound % 5) * 0.12;
+          drawActiveMagnet(ctx, curMag, powerMul);
         }
 
         if (isFunMode && funVariant === 'crackers') {
@@ -5760,6 +6138,88 @@
         },
         _stopAim() {
           isAiming = false;
+        },
+        getCoins() { return coins; },
+        getPieces() { return pieces; },
+        _testActivateMagnet() {
+          magnetEventActive = true;
+          magnetEventTimer = 16;
+          return { active: magnetEventActive, round: magnetRound, currentMag: MAGNET_TYPES[magnetRound % MAGNET_TYPES.length].name };
+        },
+        _testCheckMagnetPull() {
+          updateFunMechanics(0.2);
+          const moving = coins.filter(c => !c.isPocketed && Math.hypot(c.vx, c.vy) > 0.05).length;
+          return {
+            magnetActive: magnetEventActive,
+            magnetName: MAGNET_TYPES[magnetRound % MAGNET_TYPES.length].name,
+            totalCoins: coins.filter(c => !c.isPocketed).length,
+            movingCoins: moving,
+            allAffected: moving === coins.filter(c => !c.isPocketed).length
+          };
+        },
+        _testStoneDeflection() {
+          const c = coins[0];
+          c.stonePercent = 85;
+          c.x = 400; c.y = 500; c.vx = 0; c.vy = 0;
+          striker.x = 400; striker.y = 530;
+          striker.vx = 0; striker.vy = -12; // Striker moving UP towards stone coin
+          resolveCollisions();
+          return {
+            stonePercent: c.stonePercent,
+            strikerInitialVy: -12,
+            strikerNewVy: striker.vy,
+            deflected: striker.vy > 0, // Striker velocity reversed!
+            stoneCoinVy: c.vy
+          };
+        },
+        _testBomberTimer() {
+          const t1 = universalBombTimer;
+          turn = 1;
+          updateFunMechanics(2.0);
+          const t2 = universalBombTimer;
+          turn = 2; // AI turn
+          updateFunMechanics(2.0);
+          const t3 = universalBombTimer;
+          return {
+            initial: t1,
+            afterP1Turn: t2,
+            afterAITurn: t3,
+            isContinuousBoth: t1 > t2 && t2 > t3
+          };
+        },
+        _testTagCoinsRules() {
+          const testCoin = coins[0];
+          // Test 1: In Tag Phase, try pocketing
+          tagCoinPhase = 'tagging';
+          testCoin.x = POCKETS[0].x;
+          testCoin.y = POCKETS[0].y;
+          testCoin.isPocketed = false;
+          checkPockets();
+          const tagPhaseRejected = !testCoin.isPocketed && (testCoin.x !== POCKETS[0].x || testCoin.y !== POCKETS[0].y);
+
+          // Test 2: In Pocket Phase, try untagged coin
+          tagCoinPhase = 'pocketing';
+          testCoin.taggedBy = 0;
+          testCoin.x = POCKETS[0].x;
+          testCoin.y = POCKETS[0].y;
+          testCoin.isPocketed = false;
+          checkPockets();
+          const untaggedRejected = !testCoin.isPocketed && (testCoin.x !== POCKETS[0].x || testCoin.y !== POCKETS[0].y);
+
+          // Test 3: In Pocket Phase, try tagged coin
+          testCoin.taggedBy = 1; // Tagged by P1
+          testCoin.x = POCKETS[0].x;
+          testCoin.y = POCKETS[0].y;
+          testCoin.isPocketed = false;
+          checkPockets();
+          const taggedAccepted = testCoin.isPocketed === true;
+
+          return {
+            tagPhaseRejected,
+            untaggedRejected,
+            taggedAccepted,
+            rulesWorking: tagPhaseRejected && untaggedRejected && taggedAccepted
+          };
         }
       };
     })();
