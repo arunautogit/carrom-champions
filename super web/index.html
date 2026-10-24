@@ -603,6 +603,45 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
 
+    .btn-striker-cracker-toggle {
+      pointer-events: auto;
+      padding: 5px 12px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      border-radius: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+      border: 1.5px solid #ffd700;
+      color: #1a0a00;
+      background: linear-gradient(135deg, #ffd700 0%, #ff6d00 100%);
+      box-shadow: 0 0 10px rgba(255, 109, 0, 0.5);
+    }
+    .btn-striker-cracker-toggle:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 16px rgba(255, 215, 0, 0.85);
+    }
+    .btn-striker-cracker-toggle.off {
+      background: rgba(35, 18, 10, 0.85);
+      color: #b0bec5;
+      border-color: #78909c;
+      box-shadow: none;
+    }
+    .btn-striker-cracker-toggle.active-pulse {
+      background: linear-gradient(135deg, #ff1744 0%, #ffd700 100%);
+      color: #fff;
+      border-color: #fff;
+      box-shadow: 0 0 18px rgba(255, 23, 68, 0.95), 0 0 30px rgba(255, 215, 0, 0.85);
+      animation: strikerCrackerPulse 1s infinite alternate ease-in-out;
+    }
+    @keyframes strikerCrackerPulse {
+      from { transform: scale(0.98); filter: brightness(1); }
+      to { transform: scale(1.05); filter: brightness(1.25); }
+    }
+
     .modal-box {
       background: linear-gradient(135deg, #3d2010 0%, #1e1008 100%);
       border: 3px solid #f7ca48;
@@ -1330,6 +1369,9 @@
       </div>
 
       <div style="display: flex; align-items: center; gap: 8px;">
+        <button id="btn-striker-cracker-toggle" class="btn-striker-cracker-toggle" title="Click to Toggle Striker Cracker Mode (Chakkar & Flower Pot)">
+          🔥 CRACKER STRIKER: ON
+        </button>
         <button id="sound-btn" class="icon-btn" title="Toggle Sound">🔊</button>
         <button id="pause-btn" class="icon-btn" title="Menu">⚙️</button>
       </div>
@@ -3892,6 +3934,16 @@
       }
     }
 
+    /* =========================================================================
+       🌀 🌋 STRIKER CRACKER MODE STATE (CHAKKAR & FLOWER POT STRIKER)
+       ========================================================================= */
+    let strikerCrackerFeatureEnabled = true; // On/Off toggle
+    let matchElapsedTime = 0; // Total seconds since game start
+    let strikerCrackerActive = false; // Currently in active window
+    let strikerCrackerTimeRemaining = 0; // Remaining active seconds
+    let strikerCrackerNextActivation = 180; // Starts at 3 mins (180s)
+    let strikerCrackerSoundTimer = 0;
+
     class Piece {
       constructor(x, y, type, radius = COIN_RADIUS) {
         this.x = x; this.y = y;
@@ -3906,6 +3958,12 @@
         this.stonePercent = 0;
         this.taggedBy = 0;
         this.crackerKey = null;
+
+        // Striker Cracker Hit States
+        this.isCrackling = false;
+        this.crackleTimer = 0;
+        this.crackleStartX = 0;
+        this.crackleStartY = 0;
       }
 
       reset(x, y) {
@@ -3917,10 +3975,15 @@
         this.scale = 1.0;
         this.stonePercent = 0;
         this.taggedBy = 0;
+        this.isCrackling = false;
+        this.crackleTimer = 0;
+        this.crackleStartX = 0;
+        this.crackleStartY = 0;
       }
 
       update() {
         if (this.isPocketed) {
+          this.isCrackling = false;
           if (this.scale > 0) this.scale = Math.max(0, this.scale - 0.1);
           return;
         }
@@ -3928,6 +3991,15 @@
         if (this.stonePercent >= 100) {
           this.vx = 0; this.vy = 0;
           this.angularVelocity = 0;
+          return;
+        }
+
+        // When struck by Cracker Striker: crackles and trembles in place where it was placed
+        if (this.isCrackling) {
+          this.vx *= 0.1; this.vy *= 0.1;
+          this.x = this.crackleStartX + (Math.random() - 0.5) * 4;
+          this.y = this.crackleStartY + (Math.random() - 0.5) * 4;
+          this.angle += (Math.random() - 0.5) * 0.3;
           return;
         }
 
@@ -3980,9 +4052,44 @@
         c.scale(this.scale, this.scale);
 
         if (this.type === 'striker') {
+          // 🌀 🌋 Chakkar & Flower Pot Cracker Active Aura around Striker
+          if (strikerCrackerFeatureEnabled && strikerCrackerActive) {
+            c.save();
+            const now = Date.now() * 0.006;
+            c.rotate(now * 3.5);
+            for (let i = 0; i < 6; i++) {
+              c.beginPath();
+              c.arc(Math.cos(i * Math.PI / 3) * (this.radius + 6), Math.sin(i * Math.PI / 3) * (this.radius + 6), 5, 0, Math.PI * 2);
+              c.fillStyle = (i % 2 === 0) ? '#ffd700' : '#ff3d00';
+              c.shadowColor = '#ffd700';
+              c.shadowBlur = 14;
+              c.fill();
+            }
+            c.beginPath();
+            c.arc(0, 0, this.radius + 4, 0, Math.PI * 2);
+            c.strokeStyle = '#ffd700';
+            c.lineWidth = 2.5;
+            c.setLineDash([6, 4]);
+            c.stroke();
+            c.restore();
+          }
           drawStrikerArt(c, 0, 0, this.radius, selectedStrikerId, this.angle);
         } else {
-// Coins render at 100% full opacity
+          // If coin is crackling, draw fiery vibrating heat aura & sparks around it
+          if (this.isCrackling) {
+            c.save();
+            const pulse = Math.sin(Date.now() * 0.035) * 0.5 + 0.5;
+            c.beginPath();
+            c.arc(0, 0, this.radius + 5 + pulse * 5, 0, Math.PI * 2);
+            c.fillStyle = 'rgba(255, 61, 0, 0.45)';
+            c.shadowColor = '#ffd700';
+            c.shadowBlur = 16;
+            c.fill();
+            c.strokeStyle = '#ffd700';
+            c.lineWidth = 2.5;
+            c.stroke();
+            c.restore();
+          }
           drawCarromCoin(c, 0, 0, this.radius, this.type, this.angle, this.stonePercent, this.taggedBy, this.crackerKey);
         }
 
@@ -4061,6 +4168,13 @@
         bomberTimerP1 = 120;
         bomberTimerAI = 120;
         tagCoinPhase = 'tagging';
+
+        matchElapsedTime = 0;
+        strikerCrackerActive = false;
+        strikerCrackerTimeRemaining = 0;
+        strikerCrackerNextActivation = 180;
+        strikerCrackerSoundTimer = 0;
+        updateStrikerCrackerUI();
 
         // Striker
         striker = new Piece(HALF_SIZE, strikerBaseY, 'striker', STRIKER_RADIUS);
@@ -4253,6 +4367,174 @@
         updateHUD();
       }
 
+      function updateStrikerCrackerUI() {
+        const btn = document.getElementById('btn-striker-cracker-toggle');
+        if (!btn) return;
+
+        if (!strikerCrackerFeatureEnabled) {
+          btn.className = 'btn-striker-cracker-toggle off';
+          btn.innerHTML = '⚪ CRACKER STRIKER: OFF';
+          return;
+        }
+
+        if (strikerCrackerActive) {
+          btn.className = 'btn-striker-cracker-toggle active-pulse';
+          btn.innerHTML = `🔥 CHAKKAR STRIKER ACTIVE! (${strikerCrackerTimeRemaining}s)`;
+        } else {
+          btn.className = 'btn-striker-cracker-toggle';
+          const mins = Math.floor(strikerCrackerNextActivation / 60);
+          const secs = (strikerCrackerNextActivation % 60).toString().padStart(2, '0');
+          btn.innerHTML = `⏳ Cracker Striker: ${mins}:${secs}`;
+        }
+      }
+
+      function updateStrikerCrackerMode(dt) {
+        if (!strikerCrackerFeatureEnabled) {
+          strikerCrackerActive = false;
+          updateStrikerCrackerUI();
+          return;
+        }
+
+        matchElapsedTime += dt;
+
+        // Schedule:
+        // 1. Initial 3 mins (180s) -> activates for 30 sec (180s - 210s)
+        // 2. Thereafter every 2 mins (120s cooldown) -> activates for 20 sec (recurring)
+        if (matchElapsedTime < 180) {
+          strikerCrackerActive = false;
+          strikerCrackerTimeRemaining = 0;
+          strikerCrackerNextActivation = Math.ceil(180 - matchElapsedTime);
+        } else if (matchElapsedTime < 210) {
+          if (!strikerCrackerActive) {
+            Sound.playWhistleSpin(3.0, 850);
+            Sound.playFountainSizzle(3.0, 950);
+            shockwaves.push(new Shockwave(HALF_SIZE, HALF_SIZE, 320, '#ffd700', 8));
+            floatingTexts.push(new FloatingText(HALF_SIZE, HALF_SIZE - 40, '🔥 CHAKKAR & FLOWER POT STRIKER ACTIVE (30s)!', '#ffd700', 19));
+            triggerBoardVibration('mega_diwali', 20, 0.88);
+          }
+          strikerCrackerActive = true;
+          strikerCrackerTimeRemaining = Math.ceil(210 - matchElapsedTime);
+          strikerCrackerNextActivation = 0;
+        } else {
+          const cycleTime = (matchElapsedTime - 210) % 140; // 120s cooldown + 20s active
+          if (cycleTime < 120) {
+            strikerCrackerActive = false;
+            strikerCrackerTimeRemaining = 0;
+            strikerCrackerNextActivation = Math.ceil(120 - cycleTime);
+          } else {
+            if (!strikerCrackerActive) {
+              Sound.playWhistleSpin(2.5, 850);
+              Sound.playFountainSizzle(2.5, 950);
+              shockwaves.push(new Shockwave(HALF_SIZE, HALF_SIZE, 300, '#ff9100', 8));
+              floatingTexts.push(new FloatingText(HALF_SIZE, HALF_SIZE - 40, '🔥 CHAKKAR STRIKER ACTIVE (20s)!', '#ff9100', 18));
+              triggerBoardVibration('chakkar', 16, 0.89);
+            }
+            strikerCrackerActive = true;
+            strikerCrackerTimeRemaining = Math.ceil(140 - cycleTime);
+            strikerCrackerNextActivation = 0;
+          }
+        }
+
+        // Striker Chakkar & Flower Pot VFX while traveling
+        if (strikerCrackerActive && state === 'shooting' && striker && Math.hypot(striker.vx, striker.vy) > 0.4) {
+          strikerCrackerSoundTimer -= dt;
+          if (strikerCrackerSoundTimer <= 0) {
+            strikerCrackerSoundTimer = 0.28;
+            Sound.playWhistleSpin(0.35, 900);
+            Sound.playFountainSizzle(0.35, 1100);
+          }
+
+          // Chakkar Spinning Golden Starburst Sparks
+          striker.angle += dt * 36;
+          for (let i = 0; i < 4; i++) {
+            const a = striker.angle + (i * Math.PI * 2 / 4);
+            const spd = 4 + Math.random() * 5.5;
+            particles.push(new Particle(
+              striker.x + Math.cos(a) * 14,
+              striker.y + Math.sin(a) * 14,
+              (i % 2 === 0) ? '#ffd700' : '#ff5722',
+              Math.random() * 3 + 2.5,
+              Math.cos(a) * spd,
+              Math.sin(a) * spd,
+              0.045
+            ));
+          }
+
+          // Flower Pot (Anaar) Geyser Sparks leaping upward
+          for (let i = 0; i < 3; i++) {
+            const col = ['#ffffff', '#ffd700', '#ff9800', '#ff1744'][Math.floor(Math.random() * 4)];
+            const p = new Particle(
+              striker.x + (Math.random() - 0.5) * 12,
+              striker.y + (Math.random() - 0.5) * 12,
+              col,
+              Math.random() * 3 + 2,
+              (Math.random() - 0.5) * 4 - (striker.vx * 0.15),
+              - (3.5 + Math.random() * 5.5) - (striker.vy * 0.15),
+              0.035
+            );
+            p.gravity = 0.14;
+            particles.push(p);
+          }
+
+          // Ambient micro-shake from whirring chakkar striker
+          if (Math.random() < 0.25) {
+            triggerBoardVibration('chakkar', 6, 0.92);
+          }
+        }
+
+        // Update crackling hit coins
+        pieces.forEach(p => {
+          if (p.type === 'striker' || p.isPocketed) return;
+          if (p.isCrackling) {
+            p.crackleTimer -= dt;
+
+            // Anchor & vibrate in place where it was placed
+            p.vx *= 0.05; p.vy *= 0.05;
+            p.x = p.crackleStartX + (Math.random() - 0.5) * 4;
+            p.y = p.crackleStartY + (Math.random() - 0.5) * 4;
+            p.angularVelocity = (Math.random() - 0.5) * 2;
+
+            // Crackle sizzle sparks & smoke
+            if (Math.random() < 0.75) {
+              const a = Math.random() * Math.PI * 2;
+              particles.push(new Particle(
+                p.x, p.y,
+                Math.random() < 0.5 ? '#ff3d00' : '#ffd700',
+                Math.random() * 3 + 2,
+                Math.cos(a) * 3, Math.sin(a) * 3, 0.05
+              ));
+            }
+            if (Math.random() < 0.18) {
+              Sound.playSnappyPop(1300 + Math.random() * 300, 0.75, true);
+            }
+
+            // After crackle pop: explode & randomly throw!
+            if (p.crackleTimer <= 0) {
+              p.isCrackling = false;
+              if (!p.isPocketed) {
+                // Explosive pop sound + shockwave + carbon + debris
+                Sound.playSnappyPop(1400, 1.4, false);
+                Sound.playBassBoom(170, 0.7, 1.25);
+                shockwaves.push(new Shockwave(p.x, p.y, 95, '#ffd700', 8));
+                addCrackerCarbonAndPaperDebris(p.x, p.y, 24, 16, 6);
+                triggerBoardVibration('bomb', 16, 0.85);
+
+                // "it will randomly thrown after craker pop"
+                const throwAngle = Math.random() * Math.PI * 2;
+                const throwSpeed = 16 + Math.random() * 12;
+                p.vx = Math.cos(throwAngle) * throwSpeed;
+                p.vy = Math.sin(throwAngle) * throwSpeed;
+                p.angularVelocity = (Math.random() - 0.5) * 25;
+
+                floatingTexts.push(new FloatingText(p.x, p.y - 20, '💥 POP & THROWN!', '#ff9100', 16));
+              }
+            }
+          }
+        });
+
+        updateStrikerCrackerUI();
+      }
+
       function resolveCollisions() {
         for (let i = 0; i < pieces.length; i++) {
           for (let j = i + 1; j < pieces.length; j++) {
@@ -4281,6 +4563,21 @@
 
               const isStrikerInvolved = (p1.type === 'striker' || p2.type === 'striker');
               Sound.playClack(relSpeed, isStrikerInvolved ? selectedStrikerId : null);
+
+              // 🌀 🌋 STRIKER CRACKER MODE: Striker hit coins start crackling where placed
+              if (strikerCrackerFeatureEnabled && strikerCrackerActive && isStrikerInvolved) {
+                const hitCoin = (p1.type === 'striker' && p2.type !== 'striker') ? p2 : ((p2.type === 'striker' && p1.type !== 'striker') ? p1 : null);
+                if (hitCoin && !hitCoin.isPocketed && !hitCoin.isCrackling) {
+                  hitCoin.isCrackling = true;
+                  hitCoin.crackleTimer = 1.0 + Math.random() * 0.35;
+                  hitCoin.crackleStartX = hitCoin.x;
+                  hitCoin.crackleStartY = hitCoin.y;
+                  hitCoin.vx = 0; hitCoin.vy = 0;
+                  Sound.playSnappyPop(1150, 1.25, true);
+                  floatingTexts.push(new FloatingText(hitCoin.x, hitCoin.y - 18, '🧨 CRACKLING...', '#ffd700', 15));
+                  triggerBoardVibration('100wala', 10, 0.88);
+                }
+              }
 
               const tx = -ny;
               const ty = nx;
@@ -4377,10 +4674,11 @@
 
       function checkTurnEnd() {
         const anyMoving = pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.04 || Math.abs(p.vy) > 0.04));
+        const anyCrackling = pieces.some(p => !p.isPocketed && p.isCrackling);
         // Failsafe: mark finished if time exceeds duration
         activePocketCrackers.forEach(c => { if (c.time >= (c.duration || 2.0)) c.finished = true; });
         const anyCrackersPopping = activePocketCrackers.some(c => !c.finished);
-        if (anyMoving || anyCrackersPopping) return;
+        if (anyMoving || anyCrackersPopping || anyCrackling) return;
 
         state = 'aiming';
 
@@ -4789,6 +5087,7 @@
 
         if (state === 'shooting') {
           updateFunMechanics(dt);
+          updateStrikerCrackerMode(dt);
           pieces.forEach(p => p.update());
           resolveCollisions();
           update1000WalaBorderCelebration(dt, particles, shockwaves);
@@ -4796,9 +5095,11 @@
           checkTurnEnd();
         } else if (state === 'aiming') {
           updateFunMechanics(dt);
+          updateStrikerCrackerMode(dt);
           const anyMoving = pieces.some(p => !p.isPocketed && (Math.abs(p.vx) > 0.04 || Math.abs(p.vy) > 0.04));
+          const anyCrackling = pieces.some(p => !p.isPocketed && p.isCrackling);
           update1000WalaBorderCelebration(dt, particles, shockwaves);
-          if (anyMoving) {
+          if (anyMoving || anyCrackling) {
             pieces.forEach(p => p.update());
             resolveCollisions();
             checkPockets();
@@ -4918,6 +5219,44 @@
         },
         getBoardShakeIntensity() {
           return boardShakeIntensity;
+        },
+        toggleStrikerCracker() {
+          strikerCrackerFeatureEnabled = !strikerCrackerFeatureEnabled;
+          if (strikerCrackerFeatureEnabled) {
+            Sound.playFlick();
+          } else {
+            Sound.playFoul();
+            strikerCrackerActive = false;
+          }
+          updateStrikerCrackerUI();
+          return strikerCrackerFeatureEnabled;
+        },
+        setStrikerCrackerActive(active, duration = 30) {
+          strikerCrackerFeatureEnabled = true;
+          strikerCrackerActive = active;
+          if (active) {
+            strikerCrackerTimeRemaining = duration;
+            strikerCrackerNextActivation = 0;
+            Sound.playWhistleSpin(2.5, 850);
+            Sound.playFountainSizzle(2.5, 950);
+            shockwaves.push(new Shockwave(HALF_SIZE, HALF_SIZE, 300, '#ffd700', 8));
+            triggerBoardVibration('mega_diwali', 20, 0.88);
+          } else {
+            strikerCrackerTimeRemaining = 0;
+          }
+          updateStrikerCrackerUI();
+        },
+        isStrikerCrackerActive() {
+          return strikerCrackerFeatureEnabled && strikerCrackerActive;
+        },
+        isStrikerCrackerEnabled() {
+          return strikerCrackerFeatureEnabled;
+        },
+        getStrikerCrackerTimeRemaining() {
+          return strikerCrackerTimeRemaining;
+        },
+        getStrikerCrackerNextActivation() {
+          return strikerCrackerNextActivation;
         }
       };
     })();
@@ -5256,6 +5595,13 @@
       document.getElementById('menu-overlay').classList.remove('hidden');
       updateEquippedStrikerCard();
     });
+
+    const strikerCrackerToggleBtn = document.getElementById('btn-striker-cracker-toggle');
+    if (strikerCrackerToggleBtn) {
+      strikerCrackerToggleBtn.addEventListener('click', () => {
+        Game.toggleStrikerCracker();
+      });
+    }
 
     updateEquippedStrikerCard();
     Game.start();
