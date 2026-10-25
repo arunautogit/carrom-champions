@@ -226,10 +226,17 @@
     .controls-panel {
       max-width: 1440px;
       margin: 18px auto 0;
-      padding: 0 24px;
+      padding: 12px 24px;
       display: flex;
       flex-direction: column;
       gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(11, 7, 24, 0.95);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      border-bottom: 1px solid rgba(255, 215, 0, 0.15);
     }
 
     .category-tabs {
