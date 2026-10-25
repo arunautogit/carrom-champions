@@ -1880,6 +1880,241 @@
       50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 61, 0, 0.85); }
     }
 
+    /* Cracker Live Popup Preview Dialog */
+    #cracker-preview-modal {
+      z-index: 180;
+      background: rgba(10, 4, 2, 0.94);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #cracker-preview-modal.hidden {
+      display: none !important;
+    }
+
+    .cracker-preview-card {
+      background: linear-gradient(135deg, rgba(48, 20, 10, 0.98) 0%, rgba(20, 8, 3, 0.99) 100%);
+      border: 2.5px solid #ffd700;
+      border-radius: 20px;
+      padding: 18px 22px;
+      max-width: 440px;
+      width: 92%;
+      box-shadow: 0 12px 45px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 152, 0, 0.45);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      animation: previewModalZoom 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-sizing: border-box;
+    }
+
+    @keyframes previewModalZoom {
+      0% { transform: scale(0.75) translateY(-20px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .cracker-preview-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1.5px solid rgba(255, 215, 0, 0.4);
+      color: #ffd700;
+      font-size: 1rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .cracker-preview-close:hover {
+      background: #c62828;
+      border-color: #ff5252;
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    .preview-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+      padding: 0 18px;
+    }
+
+    .preview-cat-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 10px;
+      background: rgba(255, 215, 0, 0.18);
+      border: 1px solid rgba(255, 215, 0, 0.5);
+      color: #ffd54f;
+      letter-spacing: 0.8px;
+    }
+
+    .preview-cracker-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffd700;
+      margin: 2px 0 0 0;
+      line-height: 1.25;
+      text-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+    }
+
+    .preview-cracker-desc {
+      font-size: 0.75rem;
+      color: #ffe0b2;
+      margin: 0;
+      line-height: 1.35;
+    }
+
+    .preview-stage-wrap {
+      position: relative;
+      width: 340px;
+      height: 190px;
+      max-width: 100%;
+      border-radius: 16px;
+      background: radial-gradient(circle at center, #261108 0%, #0d0402 100%);
+      border: 1.5px solid rgba(255, 215, 0, 0.35);
+      box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.85);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #preview-fx-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .preview-coin-center {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-coin-badge {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #f5f5f0 30%, #d7ccc8 70%, #bcaaa4 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.85);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .preview-coin-badge .coin-inner-ring {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1.5px dashed rgba(0, 0, 0, 0.25);
+    }
+
+    .preview-coin-badge .coin-emoji {
+      font-size: 2.1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .preview-status-tag {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      font-size: 0.70rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      background: rgba(0, 0, 0, 0.75);
+      border: 1px solid #ffd700;
+      border-radius: 12px;
+      color: #ffd700;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .preview-stats-row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .preview-stat-pill {
+      background: rgba(35, 16, 8, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 10px;
+      padding: 4px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #ffecb3;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .preview-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .btn-preview-fire {
+      width: 100%;
+      padding: 9px 16px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ff3d00 0%, #c62828 100%);
+      color: #fff;
+      border: 1.5px solid #ffd700;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(255, 61, 0, 0.6);
+      transition: all 0.2s ease;
+    }
+
+    .btn-preview-fire:hover {
+      background: linear-gradient(135deg, #ff6d00 0%, #d50000 100%);
+      transform: scale(1.02);
+      box-shadow: 0 6px 22px rgba(255, 109, 0, 0.85);
+    }
+
+    .preview-equip-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      width: 100%;
+    }
+
     #giftbox-overlay {
       background: radial-gradient(circle at center, rgba(35, 10, 5, 0.98) 0%, rgba(10, 2, 0, 0.99) 100%);
       z-index: 200;
@@ -2286,8 +2521,6 @@
       <div class="btn-group">
         <button id="btn-custom" class="btn btn-secondary" style="font-size: 0.92rem;">🎨 Board & Coin Themes</button>
         <button id="btn-home-bazaar" class="btn btn-secondary" style="font-size: 0.92rem; color: #ffd700; border-color: rgba(255,215,0,0.5); display: inline-flex; align-items: center; justify-content: center; gap: 6px;">🏪 Cracker Bazaar ➔</button>
-        <a href="crackers.html" class="btn btn-secondary" style="font-size: 0.92rem; text-decoration: none; color: #ffd700; border-color: rgba(255,215,0,0.4); display: inline-flex; align-items: center; justify-content: center; gap: 6px;">🎆 Cracker Popper Showroom</a>
-        <a href="newcrackers.html" class="btn btn-secondary" style="font-size: 0.92rem; text-decoration: none; color: #00e676; border-color: rgba(0,230,118,0.4); display: inline-flex; align-items: center; justify-content: center; gap: 6px;">✨ Review & Manage New Crackers</a>
       </div>
     </div>
 
@@ -2314,7 +2547,6 @@
             <span class="hero-pill">💰 1500 Starting Credits</span>
             <span class="hero-pill">🔥 Chakkar Striker</span>
             <span class="hero-pill">✨ Aiming Sparklers</span>
-            <a href="crackers.html" class="hero-pill" style="text-decoration: none; color: #ffd700; background: rgba(255, 215, 0, 0.22); border-color: #ffd700; cursor: pointer;" onclick="event.stopPropagation();" title="Open Interactive Cracker Popper Showroom">🎆 Popper Showroom ➔</a>
           </div>
           <div class="hero-cta">
             <span>🎁 Tap to open Diwali Giftbox &amp; Enter Arsenal</span>
@@ -2501,12 +2733,61 @@
       <div class="bazaar-action-bar">
         <div class="bazaar-quick-btns">
           <button id="btn-open-giftbox" class="btn-bazaar-giftbox">🎁 OPEN DIWALI GIFTBOX ✨</button>
-          <a href="crackers.html" class="btn-bazaar-aux" style="text-decoration: none; display: inline-flex; align-items: center; gap: 5px; background: linear-gradient(135deg, #ff4500 0%, #ff8c00 100%); color: #fff; border: 1px solid #ffd700; font-weight: bold;">🎆 Popper Showroom</a>
           <button id="btn-bazaar-bundle" class="btn-bazaar-aux">⚡ Buy 9 Bundle (-20%)</button>
           <button id="btn-bazaar-random" class="btn-bazaar-aux">🎲 Surprise Mix</button>
           <button id="btn-bazaar-back" class="btn-bazaar-aux">Back</button>
         </div>
         <button id="btn-bazaar-play" class="btn-bazaar-play">Apply & Play Match 🪔</button>
+      </div>
+    </div>
+
+    <!-- 🎆 CRACKER LIVE POPUP PREVIEW DIALOG -->
+    <div id="cracker-preview-modal" class="overlay hidden">
+      <div class="cracker-preview-card">
+        <button id="btn-close-preview-modal" class="cracker-preview-close" title="Close Preview">✕</button>
+        
+        <div class="preview-header">
+          <span id="preview-cat-badge" class="preview-cat-badge">🌀 CHAKKAR</span>
+          <h2 id="preview-cracker-name" class="preview-cracker-name">Cracker Preview</h2>
+          <p id="preview-cracker-desc" class="preview-cracker-desc">Live pyrotechnics and audio synthesis preview</p>
+        </div>
+
+        <div class="preview-stage-wrap">
+          <canvas id="preview-fx-canvas" width="340" height="190"></canvas>
+          <div id="preview-coin-center" class="preview-coin-center">
+            <div id="preview-coin-badge" class="preview-coin-badge">
+              <div class="coin-inner-ring"></div>
+              <span id="preview-coin-emoji" class="coin-emoji">💥</span>
+            </div>
+          </div>
+          <div id="preview-status-tag" class="preview-status-tag">💥 IGNITED & POPPING!</div>
+        </div>
+
+        <div class="preview-stats-row">
+          <div class="preview-stat-pill">
+            <span class="preview-stat-icon">⭐</span>
+            <span id="preview-stat-pts">+25 Pts</span>
+          </div>
+          <div class="preview-stat-pill">
+            <span class="preview-stat-icon">🪙</span>
+            <span id="preview-stat-cost">50 Credits</span>
+          </div>
+          <div class="preview-stat-pill">
+            <span class="preview-stat-icon">🪔</span>
+            <span id="preview-stat-armed">Unarmed</span>
+          </div>
+        </div>
+
+        <div class="preview-actions">
+          <button id="btn-preview-reignite" class="btn-preview-fire">
+            <span>💥</span> Ignite / Pop Again!
+          </button>
+          <div class="preview-equip-group">
+            <button id="btn-prev-equip-white" class="btn-action-equip-target btn-equip-white">⚪ White</button>
+            <button id="btn-prev-equip-black" class="btn-action-equip-target btn-equip-black">⚫ Black</button>
+            <button id="btn-prev-equip-queen" class="btn-action-equip-target btn-equip-queen">👑 Queen</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -3313,46 +3594,437 @@
     let activeTrayView = 'white';
     let currentBazaarCat = 'categories';
 
-    function previewCrackerPopOnCard(cardEl, c) {
+    /* =========================================================================
+       CRACKER LIVE POPUP PREVIEW DIALOG & CANVAS PARTICLE ENGINE
+       ========================================================================= */
+    let currentPreviewCracker = null;
+    let previewAnimFrameId = null;
+    let previewParticles = [];
+    let previewShockwaves = [];
+    let previewTexts = [];
+    let lastPreviewTime = performance.now();
+
+    class PreviewParticle {
+      constructor(x, y, vx, vy, color, size, life, gravity = 0.08, drag = 0.96) {
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.color = color;
+        this.size = size;
+        this.baseSize = size;
+        this.life = life;
+        this.maxLife = life;
+        this.gravity = gravity;
+        this.drag = drag;
+        this.alpha = 1.0;
+      }
+      update(dt) {
+        this.life -= dt;
+        if (this.life <= 0) return false;
+        this.vx *= this.drag;
+        this.vy = this.vy * this.drag + this.gravity;
+        this.x += this.vx * dt * 60;
+        this.y += this.vy * dt * 60;
+        this.alpha = Math.max(0, this.life / this.maxLife);
+        return true;
+      }
+      draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, Math.max(0.8, this.size * (this.life / this.maxLife)), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    class PreviewShockwave {
+      constructor(x, y, maxRadius, color, duration = 0.5) {
+        this.x = x;
+        this.y = y;
+        this.radius = 2;
+        this.maxRadius = maxRadius;
+        this.color = color;
+        this.duration = duration;
+        this.age = 0;
+      }
+      update(dt) {
+        this.age += dt;
+        const progress = this.age / this.duration;
+        if (progress >= 1) return false;
+        this.radius = this.maxRadius * Math.sin(progress * Math.PI * 0.5);
+        this.alpha = 1 - progress;
+        return true;
+      }
+      draw(ctx) {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = Math.max(1, 3.5 * (1 - this.age / this.duration));
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    class PreviewFloatText {
+      constructor(x, y, text, color, fontSize = 15) {
+        this.x = x;
+        this.y = y;
+        this.text = text;
+        this.color = color;
+        this.fontSize = fontSize;
+        this.age = 0;
+        this.duration = 1.4;
+      }
+      update(dt) {
+        this.age += dt;
+        this.y -= 20 * dt;
+        return this.age < this.duration;
+      }
+      draw(ctx) {
+        const alpha = Math.max(0, 1 - (this.age / this.duration));
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.font = `800 ${this.fontSize}px 'Outfit', sans-serif`;
+        ctx.fillStyle = this.color;
+        ctx.textAlign = 'center';
+        ctx.shadowColor = '#000';
+        ctx.shadowBlur = 8;
+        ctx.fillText(this.text, this.x, this.y);
+        ctx.restore();
+      }
+    }
+
+    function runPreviewFxLoop(timestamp) {
+      if (!currentPreviewCracker) return;
+      const dt = Math.min((timestamp - lastPreviewTime) / 1000, 0.1);
+      lastPreviewTime = timestamp;
+
+      const canvas = document.getElementById('preview-fx-canvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'rgba(10, 4, 2, 0.22)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Shockwaves
+        for (let i = previewShockwaves.length - 1; i >= 0; i--) {
+          const sw = previewShockwaves[i];
+          if (!sw.update(dt)) previewShockwaves.splice(i, 1);
+          else sw.draw(ctx);
+        }
+
+        // Particles
+        for (let i = previewParticles.length - 1; i >= 0; i--) {
+          const p = previewParticles[i];
+          if (!p.update(dt)) previewParticles.splice(i, 1);
+          else p.draw(ctx);
+        }
+
+        // Floating texts
+        for (let i = previewTexts.length - 1; i >= 0; i--) {
+          const ft = previewTexts[i];
+          if (!ft.update(dt)) previewTexts.splice(i, 1);
+          else ft.draw(ctx);
+        }
+      }
+
+      previewAnimFrameId = requestAnimationFrame(runPreviewFxLoop);
+    }
+
+    function triggerCrackerFxPreview(c) {
+      if (!c) return;
+      const canvas = document.getElementById('preview-fx-canvas');
+      const cx = canvas ? (canvas.width / 2) : 170;
+      const cy = canvas ? (canvas.height / 2) : 95;
+      const rim = c.rim || '#ffd700';
+
+      // Coin bounce animation
+      const coinBadge = document.getElementById('preview-coin-badge');
+      if (coinBadge) {
+        coinBadge.style.transition = 'transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.15s ease';
+        coinBadge.style.transform = 'scale(1.24) rotate(-6deg)';
+        coinBadge.style.borderColor = rim;
+        coinBadge.style.boxShadow = `0 0 26px ${rim}`;
+        setTimeout(() => {
+          if (coinBadge) {
+            coinBadge.style.transform = 'scale(1.0) rotate(0deg)';
+            coinBadge.style.boxShadow = `0 0 16px rgba(255, 145, 0, 0.45)`;
+          }
+        }, 320);
+      }
+
+      // Status tag bounce
+      const statusTag = document.getElementById('preview-status-tag');
+      if (statusTag) {
+        statusTag.textContent = '💥 IGNITED & POPPING!';
+        statusTag.style.color = '#ffd700';
+        setTimeout(() => {
+          if (statusTag && currentPreviewCracker === c) {
+            statusTag.textContent = '✨ READY TO POP AGAIN';
+            statusTag.style.color = '#00e676';
+          }
+        }, 1800);
+      }
+
+      // Play audio
       previewCrackerSound(c);
 
-      // Create a visual popping spark burst over the card coin badge
-      const badge = cardEl.querySelector('.card-coin-badge');
-      if (!badge) return;
+      // Score float
+      previewTexts.push(new PreviewFloatText(cx, cy - 35, `${c.emoji} +${c.pts} PTS!`, rim, 15));
 
-      badge.style.transform = 'scale(1.25)';
-      setTimeout(() => badge.style.transform = 'scale(1.0)', 300);
+      const t = c.type;
 
-      // Spawn 12 floating spark particles inside the card
-      for (let i = 0; i < 12; i++) {
-        const spark = document.createElement('div');
-        spark.style.position = 'absolute';
-        spark.style.width = '5px';
-        spark.style.height = '5px';
-        spark.style.borderRadius = '50%';
-        spark.style.backgroundColor = c.rim || '#ffd700';
-        spark.style.boxShadow = '0 0 8px ' + (c.rim || '#ffd700');
-        spark.style.pointerEvents = 'none';
-        spark.style.zIndex = '100';
-
-        const angle = (i * Math.PI * 2) / 12;
-        const dist = 24 + Math.random() * 20;
-        const startX = 26;
-        const startY = 26;
-
-        spark.style.left = startX + 'px';
-        spark.style.top = startY + 'px';
-        spark.style.transition = 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
-        cardEl.style.position = 'relative';
-        cardEl.appendChild(spark);
-
-        requestAnimationFrame(() => {
-          spark.style.transform = 'translate(' + (Math.cos(angle) * dist) + 'px, ' + (Math.sin(angle) * dist) + 'px) scale(0)';
-          spark.style.opacity = '0';
-        });
-
-        setTimeout(() => spark.remove(), 550);
+      // Particle simulations tailored by type
+      if (t === 'chakkar' || t === 'rolling' || t === 'drone' || t === 'helicopter') {
+        previewShockwaves.push(new PreviewShockwave(cx, cy, 95, rim, 0.5));
+        for (let i = 0; i < 65; i++) {
+          const angle = (i * 0.28) + (Math.random() * 0.15);
+          const speed = 1.8 + Math.random() * 3.6;
+          const color = (i % 2 === 0) ? rim : '#ffffff';
+          previewParticles.push(new PreviewParticle(
+            cx, cy,
+            Math.cos(angle) * speed,
+            Math.sin(angle) * speed,
+            color,
+            2.5 + Math.random() * 2.5,
+            0.9 + Math.random() * 0.7,
+            0.02, 0.97
+          ));
+        }
       }
+      else if (t === 'flowerpot' || t === 'peacock') {
+        previewShockwaves.push(new PreviewShockwave(cx, cy + 15, 80, rim, 0.45));
+        for (let i = 0; i < 75; i++) {
+          const spread = (Math.random() - 0.5) * 1.2;
+          const speed = 3.6 + Math.random() * 5.4;
+          const color = (Math.random() > 0.35) ? rim : '#ffd700';
+          previewParticles.push(new PreviewParticle(
+            cx, cy + 20,
+            spread * speed * 0.5,
+            -speed,
+            color,
+            2.2 + Math.random() * 2.8,
+            1.1 + Math.random() * 0.8,
+            0.15, 0.98
+          ));
+        }
+      }
+      else if (t === 'sparkler' || t === 'twinkling' || t === 'snake') {
+        previewShockwaves.push(new PreviewShockwave(cx, cy, 65, rim, 0.35));
+        const colors = ['#ffffff', '#ffd700', rim, '#ffab00', '#00e5ff'];
+        for (let i = 0; i < 55; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 1.0 + Math.random() * 4.2;
+          previewParticles.push(new PreviewParticle(
+            cx, cy,
+            Math.cos(angle) * speed,
+            Math.sin(angle) * speed,
+            colors[i % colors.length],
+            2.0 + Math.random() * 2.5,
+            0.7 + Math.random() * 0.6,
+            0.05, 0.95
+          ));
+        }
+      }
+      else if (t === 'rocket' || t === 'parachute') {
+        // Rocket trail shooting up from bottom
+        for (let i = 0; i < 16; i++) {
+          previewParticles.push(new PreviewParticle(
+            cx, cy + 45,
+            (Math.random() - 0.5) * 1.2,
+            -4.8 - Math.random() * 1.5,
+            '#ffd700', 3, 0.35, 0.05, 0.98
+          ));
+        }
+        setTimeout(() => {
+          previewShockwaves.push(new PreviewShockwave(cx, cy - 35, 105, rim, 0.55));
+          for (let i = 0; i < 60; i++) {
+            const angle = (i * Math.PI * 2) / 45 + (Math.random() * 0.2);
+            const speed = 2.0 + Math.random() * 4.4;
+            const color = (i % 3 === 0) ? '#ffffff' : rim;
+            previewParticles.push(new PreviewParticle(
+              cx, cy - 35,
+              Math.cos(angle) * speed,
+              Math.sin(angle) * speed,
+              color,
+              2.8 + Math.random() * 2.2,
+              0.9 + Math.random() * 0.5,
+              0.07, 0.96
+            ));
+          }
+        }, 320);
+      }
+      else if (t === '100wala' || t === 'mirchi') {
+        for (let b = 0; b < 6; b++) {
+          setTimeout(() => {
+            const bx = cx + (Math.random() - 0.5) * 60;
+            const by = cy + (Math.random() - 0.5) * 40;
+            previewShockwaves.push(new PreviewShockwave(bx, by, 35, '#ff3d00', 0.28));
+            for (let i = 0; i < 14; i++) {
+              const a = Math.random() * Math.PI * 2;
+              const sp = 1.2 + Math.random() * 3.2;
+              previewParticles.push(new PreviewParticle(
+                bx, by,
+                Math.cos(a) * sp,
+                Math.sin(a) * sp,
+                (i % 2 === 0) ? '#ff3d00' : '#ffd700',
+                2.2 + Math.random() * 2,
+                0.45 + Math.random() * 0.3,
+                0.08, 0.95
+              ));
+            }
+          }, b * 95);
+        }
+      }
+      else if (t === 'bomb' || t === 'gorilla' || t === 'dragon') {
+        previewShockwaves.push(new PreviewShockwave(cx, cy, 140, rim, 0.65));
+        previewShockwaves.push(new PreviewShockwave(cx, cy, 75, '#ffffff', 0.35));
+        const colors = ['#ffffff', '#ffd700', '#ff3d00', rim];
+        for (let i = 0; i < 80; i++) {
+          const angle = (i * Math.PI * 2) / 60 + (Math.random() * 0.25);
+          const speed = 2.5 + Math.random() * 5.6;
+          previewParticles.push(new PreviewParticle(
+            cx, cy,
+            Math.cos(angle) * speed,
+            Math.sin(angle) * speed,
+            colors[i % colors.length],
+            3.2 + Math.random() * 3.5,
+            1.0 + Math.random() * 0.6,
+            0.09, 0.95
+          ));
+        }
+      }
+      else {
+        previewShockwaves.push(new PreviewShockwave(cx, cy, 90, rim, 0.45));
+        const colors = ['#ffffff', '#ffd700', rim];
+        for (let i = 0; i < 50; i++) {
+          const angle = (i * Math.PI * 2) / 40 + (Math.random() * 0.2);
+          const speed = 2.0 + Math.random() * 4.2;
+          previewParticles.push(new PreviewParticle(
+            cx, cy,
+            Math.cos(angle) * speed,
+            Math.sin(angle) * speed,
+            colors[i % colors.length],
+            2.5 + Math.random() * 2.5,
+            0.85 + Math.random() * 0.5,
+            0.08, 0.96
+          ));
+        }
+      }
+    }
+
+    function updatePreviewArmedStatus(c) {
+      if (!c) return;
+      const statArmedEl = document.getElementById('preview-stat-armed');
+      const wCount = equippedWhite.filter(id => id === c.id).length;
+      const bCount = equippedBlack.filter(id => id === c.id).length;
+      const isQueen = (equippedQueen === c.id);
+
+      if (statArmedEl) {
+        if (isQueen) {
+          statArmedEl.textContent = 'Armed: 👑 Queen Finale';
+          statArmedEl.style.color = '#ff1744';
+        } else if (wCount > 0 && bCount > 0) {
+          statArmedEl.textContent = `Armed: ⚪(${wCount}) & ⚫(${bCount})`;
+          statArmedEl.style.color = '#ffd700';
+        } else if (wCount > 0) {
+          statArmedEl.textContent = `Armed: ⚪ White (${wCount}/9)`;
+          statArmedEl.style.color = '#ffffff';
+        } else if (bCount > 0) {
+          statArmedEl.textContent = `Armed: ⚫ Black (${bCount}/9)`;
+          statArmedEl.style.color = '#bbbbbb';
+        } else {
+          statArmedEl.textContent = 'Not Armed on Coins';
+          statArmedEl.style.color = '#aaaaaa';
+        }
+      }
+
+      const btnWhite = document.getElementById('btn-prev-equip-white');
+      if (btnWhite) btnWhite.textContent = `⚪ White ${wCount > 0 ? '(' + wCount + ')' : ''}`;
+      const btnBlack = document.getElementById('btn-prev-equip-black');
+      if (btnBlack) btnBlack.textContent = `⚫ Black ${bCount > 0 ? '(' + bCount + ')' : ''}`;
+      const btnQueen = document.getElementById('btn-prev-equip-queen');
+      if (btnQueen) {
+        btnQueen.textContent = isQueen ? '👑 Queen (Armed)' : '👑 Queen';
+        if (isQueen) btnQueen.classList.add('equipped-active');
+        else btnQueen.classList.remove('equipped-active');
+      }
+    }
+
+    function openCrackerPreviewModal(c) {
+      if (!c) return;
+      currentPreviewCracker = c;
+
+      const modal = document.getElementById('cracker-preview-modal');
+      const catBadge = document.getElementById('preview-cat-badge');
+      const nameEl = document.getElementById('preview-cracker-name');
+      const descEl = document.getElementById('preview-cracker-desc');
+      const coinBadge = document.getElementById('preview-coin-badge');
+      const coinEmoji = document.getElementById('preview-coin-emoji');
+      const statPts = document.getElementById('preview-stat-pts');
+      const statCost = document.getElementById('preview-stat-cost');
+
+      const meta = CATEGORY_META[c.category] || { icon: '✨', title: c.category.toUpperCase() };
+
+      if (catBadge) catBadge.textContent = `${meta.icon} ${c.category.toUpperCase()}`;
+      if (nameEl) nameEl.textContent = c.name;
+      if (descEl) descEl.textContent = c.desc;
+      if (coinEmoji) coinEmoji.textContent = c.emoji;
+      if (coinBadge) {
+        coinBadge.style.borderColor = c.rim || '#ffd700';
+        coinBadge.style.boxShadow = `0 0 16px ${c.rim || 'rgba(255, 145, 0, 0.45)'}`;
+      }
+      if (statPts) statPts.textContent = `+${c.pts} Pts`;
+      if (statCost) statCost.textContent = `${c.cost || 50} Credits`;
+
+      updatePreviewArmedStatus(c);
+
+      // Show modal
+      if (modal) modal.classList.remove('hidden');
+
+      // Clear previous canvas objects
+      previewParticles = [];
+      previewShockwaves = [];
+      previewTexts = [];
+
+      const canvas = document.getElementById('preview-fx-canvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      // Start animation loop
+      if (previewAnimFrameId) cancelAnimationFrame(previewAnimFrameId);
+      lastPreviewTime = performance.now();
+      previewAnimFrameId = requestAnimationFrame(runPreviewFxLoop);
+
+      // Trigger the live visual pop
+      triggerCrackerFxPreview(c);
+    }
+
+    function closeCrackerPreviewModal() {
+      const modal = document.getElementById('cracker-preview-modal');
+      if (modal) modal.classList.add('hidden');
+      if (previewAnimFrameId) {
+        cancelAnimationFrame(previewAnimFrameId);
+        previewAnimFrameId = null;
+      }
+      currentPreviewCracker = null;
+      previewParticles = [];
+      previewShockwaves = [];
+      previewTexts = [];
+    }
+
+    function previewCrackerPopOnCard(cardEl, c) {
+      openCrackerPreviewModal(c);
     }
 
     const CATEGORY_META = {
@@ -3459,7 +4131,7 @@
 
       card.querySelector('.btn-preview-pop').addEventListener('click', (e) => {
         e.stopPropagation();
-        previewCrackerPopOnCard(card, c);
+        openCrackerPreviewModal(c);
       });
 
       card.querySelector('.btn-equip-white').addEventListener('click', (e) => {
@@ -8364,6 +9036,89 @@
         unlockedCrackers.add(equippedQueen);
       }
       renderBazaarUI();
+    });
+
+    // Wire up Cracker Live Popup Preview Dialog
+    const previewModalEl = document.getElementById('cracker-preview-modal');
+    if (previewModalEl) {
+      previewModalEl.addEventListener('click', (e) => {
+        if (e.target === previewModalEl) closeCrackerPreviewModal();
+      });
+    }
+    const btnClosePreview = document.getElementById('btn-close-preview-modal');
+    if (btnClosePreview) {
+      btnClosePreview.addEventListener('click', (e) => {
+        e.stopPropagation();
+        Sound.playFlick();
+        closeCrackerPreviewModal();
+      });
+    }
+    const btnPreviewReignite = document.getElementById('btn-preview-reignite');
+    if (btnPreviewReignite) {
+      btnPreviewReignite.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (currentPreviewCracker) {
+          triggerCrackerFxPreview(currentPreviewCracker);
+        }
+      });
+    }
+    const btnPrevEquipWhite = document.getElementById('btn-prev-equip-white');
+    if (btnPrevEquipWhite) {
+      btnPrevEquipWhite.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!currentPreviewCracker) return;
+        unlockedCrackers.add(currentPreviewCracker.id);
+        if (equippedWhite.length < 9) {
+          equippedWhite.push(currentPreviewCracker.id);
+        } else {
+          equippedWhite.shift();
+          equippedWhite.push(currentPreviewCracker.id);
+        }
+        activeTrayView = 'white';
+        Sound.playClack(8, 0);
+        renderBazaarUI();
+        updatePreviewArmedStatus(currentPreviewCracker);
+      });
+    }
+    const btnPrevEquipBlack = document.getElementById('btn-prev-equip-black');
+    if (btnPrevEquipBlack) {
+      btnPrevEquipBlack.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!currentPreviewCracker) return;
+        unlockedCrackers.add(currentPreviewCracker.id);
+        if (equippedBlack.length < 9) {
+          equippedBlack.push(currentPreviewCracker.id);
+        } else {
+          equippedBlack.shift();
+          equippedBlack.push(currentPreviewCracker.id);
+        }
+        activeTrayView = 'black';
+        Sound.playClack(8, 0);
+        renderBazaarUI();
+        updatePreviewArmedStatus(currentPreviewCracker);
+      });
+    }
+    const btnPrevEquipQueen = document.getElementById('btn-prev-equip-queen');
+    if (btnPrevEquipQueen) {
+      btnPrevEquipQueen.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!currentPreviewCracker) return;
+        unlockedCrackers.add(currentPreviewCracker.id);
+        equippedQueen = (equippedQueen === currentPreviewCracker.id) ? null : currentPreviewCracker.id;
+        activeTrayView = 'queen';
+        Sound.playPocket();
+        renderBazaarUI();
+        updatePreviewArmedStatus(currentPreviewCracker);
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const previewModal = document.getElementById('cracker-preview-modal');
+        if (previewModal && !previewModal.classList.contains('hidden')) {
+          closeCrackerPreviewModal();
+        }
+      }
     });
 
     document.getElementById('btn-open-arsenal').addEventListener('click', () => {
