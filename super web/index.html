@@ -1116,6 +1116,79 @@
       box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
     }
 
+    
+    .approved-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 5px;
+    }
+    .badge-equipped-tag {
+      font-size: 0.62rem;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .tag-white {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+    .tag-black {
+      background: rgba(40, 40, 40, 0.85);
+      color: #ffd54f;
+      border: 1px solid #ff9800;
+    }
+    .tag-queen {
+      background: rgba(255, 23, 68, 0.25);
+      color: #ff5252;
+      border: 1px solid #ff1744;
+    }
+    .approved-btn-row {
+      display: grid;
+      grid-template-columns: auto 1fr 1fr 1fr;
+      gap: 4px;
+    }
+    .btn-action-equip-target {
+      padding: 6px 4px;
+      font-size: 0.68rem;
+      font-weight: bold;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-equip-white {
+      background: linear-gradient(135deg, #e0e0e0 0%, #9e9e9e 100%);
+      color: #212121;
+    }
+    .btn-equip-white:hover {
+      background: #ffffff;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    }
+    .btn-equip-black {
+      background: linear-gradient(135deg, #424242 0%, #212121 100%);
+      color: #ffd54f;
+      border-color: #ff9800;
+    }
+    .btn-equip-black:hover {
+      background: #616161;
+      box-shadow: 0 0 8px rgba(255, 152, 0, 0.5);
+    }
+    .btn-equip-queen {
+      background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+      color: #ffffff;
+      border-color: #ff5252;
+    }
+    .btn-equip-queen:hover {
+      background: #d32f2f;
+      box-shadow: 0 0 8px rgba(255, 23, 68, 0.6);
+    }
+
     .btn-equipped {
       background: rgba(0, 230, 118, 0.18);
       color: #69f0ae;
@@ -2536,15 +2609,18 @@
 
     let userCredits = 1500; // Minimum starting credits for user to purchase
     let unlockedCrackers = new Set([
+      // ⭐ 5 Approved Novelties unlocked by default
+      'app_01', 'app_02', 'app_03', 'app_04', 'app_05',
       // Starter unlocked collection
       'w_01', 'w_02', 'w_06', 'w_07', 'w_13', 'w_16', 'w_19', 'w_21', 'w_23',
       'b_01', 'b_02', 'b_04', 'b_05', 'b_08', 'b_10', 'b_12', 'b_14', 'b_20',
       'q_01'
     ]);
 
-    let equippedWhite = ['w_01', 'w_02', 'w_06', 'w_07', 'w_13', 'w_16', 'w_19', 'w_21', 'w_23'];
-    let equippedBlack = ['b_01', 'b_02', 'b_04', 'b_05', 'b_08', 'b_10', 'b_12', 'b_14', 'b_20'];
-    let equippedQueen = 'q_01';
+    // Initial default loadout includes the approved novelties on White & Black coins & Queen!
+    let equippedWhite = ['app_01', 'app_03', 'w_01', 'w_02', 'w_06', 'w_07', 'w_13', 'w_16', 'w_19'];
+    let equippedBlack = ['app_02', 'app_05', 'b_01', 'b_02', 'b_04', 'b_05', 'b_08', 'b_10', 'b_12'];
+    let equippedQueen = 'app_04';
     let giftboxUsed = false;
     let currentBazaarCat = 'white';
 
@@ -2607,33 +2683,43 @@
       const countEl = document.getElementById('tray-count-indicator');
       const traySlotsEl = document.getElementById('bazaar-tray-slots');
 
+      const whiteAppCount = equippedWhite.filter(id => id && id.startsWith('app_')).length;
+      const blackAppCount = equippedBlack.filter(id => id && id.startsWith('app_')).length;
+      const isQueenApp = equippedQueen && equippedQueen.startsWith('app_');
+
       if (currentBazaarCat === 'approved') {
-        titleEl.textContent = '⭐ Approved Special Novelties (Equip to White, Black, or Queen)';
-        countEl.textContent = 'Active: 5 Special Items';
+        titleEl.textContent = '⭐ Approved Novelties (Equip to White, Black, or Queen Coins)';
+        countEl.textContent = '⚪ Armed: ' + whiteAppCount + '/9 | ⚫ Armed: ' + blackAppCount + '/9' + (isQueenApp ? ' | 👑 Queen Armed' : '');
         traySlotsEl.innerHTML = '';
-        const appSlots = [
-          { label: 'White (Slot 1)', cDef: CRACKER_DEFINITIONS[equippedWhite[0]] },
-          { label: 'White (Slot 2)', cDef: CRACKER_DEFINITIONS[equippedWhite[1]] },
-          { label: 'Black (Slot 1)', cDef: CRACKER_DEFINITIONS[equippedBlack[0]] },
-          { label: 'Black (Slot 2)', cDef: CRACKER_DEFINITIONS[equippedBlack[1]] },
-          { label: 'Queen Finale', cDef: CRACKER_DEFINITIONS[equippedQueen] }
+
+        // Render combined tray showing active White slots, Black slots, and Queen
+        const trayItems = [
+          ...equippedWhite.slice(0, 4).map((id, idx) => ({ label: '⚪ W' + (idx+1), id })),
+          ...equippedBlack.slice(0, 4).map((id, idx) => ({ label: '⚫ B' + (idx+1), id })),
+          { label: '👑 Queen', id: equippedQueen }
         ];
-        appSlots.forEach(s => {
+
+        trayItems.forEach((s) => {
+          const cDef = s.id ? CRACKER_DEFINITIONS[s.id] : null;
+          const isApp = s.id && s.id.startsWith('app_');
           const slot = document.createElement('div');
           slot.className = 'tray-slot filled';
-          slot.innerHTML = s.cDef ? '<span>' + s.cDef.emoji + '</span><div class="slot-label">' + s.label + '</div>' : '<span>+</span>';
+          if (isApp) slot.style.borderColor = '#00e676';
+          slot.innerHTML = cDef ? '<span style="font-size:1.4rem;">' + cDef.emoji + '</span><div class="slot-label">' + s.label + (isApp ? ' ⭐' : '') + '</div>' : '<span>+</span>';
           traySlotsEl.appendChild(slot);
         });
       } else if (currentBazaarCat === 'white') {
         titleEl.textContent = '⚪ White Coins Arsenal (9 Slots)';
-        countEl.textContent = 'Equipped: ' + equippedWhite.length + ' / 9';
+        countEl.textContent = 'Equipped: ' + equippedWhite.length + ' / 9' + (whiteAppCount > 0 ? ' (' + whiteAppCount + ' Novelties ⭐)' : '');
         traySlotsEl.innerHTML = '';
         for (let i = 0; i < 9; i++) {
           const id = equippedWhite[i];
           const cDef = id ? CRACKER_DEFINITIONS[id] : null;
+          const isApp = id && id.startsWith('app_');
           const slot = document.createElement('div');
           slot.className = 'tray-slot' + (cDef ? ' filled' : '');
-          slot.innerHTML = cDef ? '<span>' + cDef.emoji + '</span><div class="slot-label">' + cDef.name + '</div>' : '<span style="opacity:0.3;">+</span>';
+          if (isApp) slot.style.borderColor = '#00e676';
+          slot.innerHTML = cDef ? '<span>' + cDef.emoji + '</span><div class="slot-label">' + (isApp ? '⭐ ' : '') + cDef.name + '</div>' : '<span style="opacity:0.3;">+</span>';
           if (cDef) {
             slot.title = 'Click to unequip';
             slot.addEventListener('click', () => {
@@ -2647,14 +2733,16 @@
         }
       } else if (currentBazaarCat === 'black') {
         titleEl.textContent = '⚫ Black Coins Arsenal (9 Slots)';
-        countEl.textContent = 'Equipped: ' + equippedBlack.length + ' / 9';
+        countEl.textContent = 'Equipped: ' + equippedBlack.length + ' / 9' + (blackAppCount > 0 ? ' (' + blackAppCount + ' Novelties ⭐)' : '');
         traySlotsEl.innerHTML = '';
         for (let i = 0; i < 9; i++) {
           const id = equippedBlack[i];
           const cDef = id ? CRACKER_DEFINITIONS[id] : null;
+          const isApp = id && id.startsWith('app_');
           const slot = document.createElement('div');
           slot.className = 'tray-slot' + (cDef ? ' filled' : '');
-          slot.innerHTML = cDef ? '<span>' + cDef.emoji + '</span><div class="slot-label">' + cDef.name + '</div>' : '<span style="opacity:0.3;">+</span>';
+          if (isApp) slot.style.borderColor = '#00e676';
+          slot.innerHTML = cDef ? '<span>' + cDef.emoji + '</span><div class="slot-label">' + (isApp ? '⭐ ' : '') + cDef.name + '</div>' : '<span style="opacity:0.3;">+</span>';
           if (cDef) {
             slot.title = 'Click to unequip';
             slot.addEventListener('click', () => {
@@ -2668,97 +2756,185 @@
         }
       } else if (currentBazaarCat === 'queen') {
         titleEl.textContent = '🔴 Red Queen Grand Finale (1 Slot)';
-        countEl.textContent = 'Equipped: 1 / 1';
+        countEl.textContent = isQueenApp ? '⭐ Approved Novelty Finale Equipped' : 'Classic Finale Equipped';
         traySlotsEl.innerHTML = '';
         const cDef = CRACKER_DEFINITIONS[equippedQueen];
         const slot = document.createElement('div');
         slot.className = 'tray-slot filled';
         slot.style.width = '70px';
         slot.style.height = '60px';
-        slot.innerHTML = cDef ? '<span style="font-size:1.6rem;">' + cDef.emoji + '</span><div class="slot-label" style="font-size:0.65rem;">' + cDef.name + '</div>' : '';
+        if (isQueenApp) slot.style.borderColor = '#ffd700';
+        slot.innerHTML = cDef ? '<span style="font-size:1.6rem;">' + cDef.emoji + '</span><div class="slot-label" style="font-size:0.65rem;">' + (isQueenApp ? '⭐ ' : '') + cDef.name + '</div>' : '';
         traySlotsEl.appendChild(slot);
       }
 
       const gridEl = document.getElementById('bazaar-grid');
       gridEl.innerHTML = '';
 
-      const items = CRACKER_CATALOG.filter(c => c.cat === currentBazaarCat);
+      // Determine items to display
+      let items = [];
+      if (currentBazaarCat === 'approved') {
+        items = CRACKER_CATALOG.filter(c => c.cat === 'approved' || c.approved);
+      } else if (currentBazaarCat === 'white') {
+        // Show approved novelties at top, then white crackers
+        const approvedItems = CRACKER_CATALOG.filter(c => c.cat === 'approved' || c.approved);
+        const whiteItems = CRACKER_CATALOG.filter(c => c.cat === 'white');
+        items = [...approvedItems, ...whiteItems];
+      } else if (currentBazaarCat === 'black') {
+        // Show approved novelties at top, then black crackers
+        const approvedItems = CRACKER_CATALOG.filter(c => c.cat === 'approved' || c.approved);
+        const blackItems = CRACKER_CATALOG.filter(c => c.cat === 'black');
+        items = [...approvedItems, ...blackItems];
+      } else if (currentBazaarCat === 'queen') {
+        // Show approved novelties + queen items
+        const approvedItems = CRACKER_CATALOG.filter(c => c.cat === 'approved' || c.approved);
+        const queenItems = CRACKER_CATALOG.filter(c => c.cat === 'queen');
+        items = [...approvedItems, ...queenItems];
+      }
+
       items.forEach(c => {
+        const isApprovedItem = c.cat === 'approved' || c.approved || c.id.startsWith('app_');
         const isUnlocked = unlockedCrackers.has(c.id);
-        const isEquipped = equippedWhite.includes(c.id) ||
-                           equippedBlack.includes(c.id) ||
-                           equippedQueen === c.id;
+
+        const wCount = equippedWhite.filter(id => id === c.id).length;
+        const bCount = equippedBlack.filter(id => id === c.id).length;
+        const isQueen = equippedQueen === c.id;
+        const isEquipped = wCount > 0 || bCount > 0 || isQueen;
 
         const card = document.createElement('div');
         card.className = 'store-item-card' + (isEquipped ? ' equipped' : '');
-        card.innerHTML = `
-          <div class="item-top-row">
-            <div class="item-emoji">${c.emoji}</div>
-            <div class="item-title-col">
-              <div class="item-name" title="${c.name}">${c.name}</div>
-              <div class="item-pts">+${c.pts} Pts Bonus</div>
+        if (isApprovedItem) card.style.border = '1.8px solid #00e676';
+
+        // Badge tags
+        let badgeHtml = '';
+        if (wCount > 0) badgeHtml += '<span class="badge-equipped-tag tag-white">⚪ On White (' + wCount + ')</span> ';
+        if (bCount > 0) badgeHtml += '<span class="badge-equipped-tag tag-black">⚫ On Black (' + bCount + ')</span> ';
+        if (isQueen) badgeHtml += '<span class="badge-equipped-tag tag-queen">👑 On Queen</span>';
+
+        if (isApprovedItem) {
+          card.innerHTML = `
+            <div class="item-top-row">
+              <div class="item-emoji">${c.emoji}</div>
+              <div class="item-title-col">
+                <div class="item-name" title="${c.name}">⭐ ${c.name}</div>
+                <div class="item-pts">+${c.pts} Pts Bonus</div>
+              </div>
             </div>
-          </div>
-          <div class="item-desc">${c.desc}</div>
-          <div class="item-btn-row">
-            <button class="btn-preview-sound" title="Preview Sound">🔊</button>
-            <button class="btn-action-buy ${isEquipped ? 'btn-equipped' : (isUnlocked ? 'btn-equip' : (giftboxUsed ? 'btn-locked' : 'btn-buy'))}" ${(giftboxUsed && !isUnlocked && !isEquipped) ? 'title="Store purchase locked while Giftbox is active"' : ''}>
-              ${isEquipped ? '✓ Equipped' : (isUnlocked ? 'Equip' : (giftboxUsed ? '🔒 Locked' : '💰 ' + c.cost))}
-            </button>
-          </div>
-        `;
+            <div class="item-desc">${c.desc}</div>
+            ${badgeHtml ? '<div class="approved-badge-row">' + badgeHtml + '</div>' : ''}
+            <div class="item-btn-row approved-btn-row">
+              <button class="btn-preview-sound" title="Preview Sound">🔊</button>
+              <button class="btn-action-equip-target btn-equip-white" title="Equip to White Coins">⚪ White</button>
+              <button class="btn-action-equip-target btn-equip-black" title="Equip to Black Coins">⚫ Black</button>
+              <button class="btn-action-equip-target btn-equip-queen" title="Equip to Queen Finale">👑 Queen</button>
+            </div>
+          `;
 
-        card.querySelector('.btn-preview-sound').addEventListener('click', (e) => {
-          e.stopPropagation();
-          previewCrackerSound(c);
-        });
+          card.querySelector('.btn-preview-sound').addEventListener('click', (e) => {
+            e.stopPropagation();
+            previewCrackerSound(c);
+          });
 
-        const actionBtn = card.querySelector('.btn-action-buy');
-        actionBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (isEquipped) return;
+          card.querySelector('.btn-equip-white').addEventListener('click', (e) => {
+            e.stopPropagation();
+            equipToTarget(c, 'white');
+          });
 
-          if (!isUnlocked) {
-            if (giftboxUsed) {
-              alert('🎁 Diwali Giftbox is currently active on your coins! Store purchases are locked for this match.');
-              return;
-            }
-            if (userCredits >= c.cost) {
-              userCredits -= c.cost;
-              unlockedCrackers.add(c.id);
-              Sound.playPocket();
-              equipItem(c);
-              renderBazaarUI();
+          card.querySelector('.btn-equip-black').addEventListener('click', (e) => {
+            e.stopPropagation();
+            equipToTarget(c, 'black');
+          });
+
+          card.querySelector('.btn-equip-queen').addEventListener('click', (e) => {
+            e.stopPropagation();
+            equipToTarget(c, 'queen');
+          });
+
+        } else {
+          // Standard cracker card
+          card.innerHTML = `
+            <div class="item-top-row">
+              <div class="item-emoji">${c.emoji}</div>
+              <div class="item-title-col">
+                <div class="item-name" title="${c.name}">${c.name}</div>
+                <div class="item-pts">+${c.pts} Pts Bonus</div>
+              </div>
+            </div>
+            <div class="item-desc">${c.desc}</div>
+            <div class="item-btn-row">
+              <button class="btn-preview-sound" title="Preview Sound">🔊</button>
+              <button class="btn-action-buy ${isEquipped ? 'btn-equipped' : (isUnlocked ? 'btn-equip' : (giftboxUsed ? 'btn-locked' : 'btn-buy'))}" ${(giftboxUsed && !isUnlocked && !isEquipped) ? 'title="Store purchase locked while Giftbox is active"' : ''}>
+                ${isEquipped ? '✓ Equipped' : (isUnlocked ? 'Equip' : (giftboxUsed ? '🔒 Locked' : '💰 ' + c.cost))}
+              </button>
+            </div>
+          `;
+
+          card.querySelector('.btn-preview-sound').addEventListener('click', (e) => {
+            e.stopPropagation();
+            previewCrackerSound(c);
+          });
+
+          const actionBtn = card.querySelector('.btn-action-buy');
+          actionBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isEquipped) return;
+
+            if (!isUnlocked) {
+              if (giftboxUsed) {
+                alert('🎁 Diwali Giftbox is currently active on your coins! Store purchases are locked for this match.');
+                return;
+              }
+              if (userCredits >= c.cost) {
+                userCredits -= c.cost;
+                unlockedCrackers.add(c.id);
+                Sound.playPocket();
+                equipItem(c);
+                renderBazaarUI();
+              } else {
+                alert('Not enough credits! Win matches or score points to earn more credits.');
+              }
             } else {
-              alert('Not enough credits! Win matches or score points to earn more credits.');
+              equipItem(c);
+              Sound.playClack(8, 0);
+              renderBazaarUI();
             }
-          } else {
-            equipItem(c);
-            Sound.playClack(8, 0);
-            renderBazaarUI();
-          }
-        });
+          });
+        }
 
         gridEl.appendChild(card);
       });
     }
 
-    function equipItem(c) {
-      if (c.cat === 'approved') {
-        // Equip approved novelties to White, Black, or Queen based on type
-        if (c.type === 'cake240' || c.type === 'fanshot') {
-          equippedQueen = c.id;
-        } else if (c.type === 'drone' || c.type === 'parachute') {
-          if (!equippedWhite.includes(c.id)) {
-            if (equippedWhite.length >= 9) equippedWhite.shift();
-            equippedWhite.push(c.id);
-          }
+    function equipToTarget(c, target) {
+      unlockedCrackers.add(c.id);
+      if (target === 'white') {
+        const nonAppIdx = equippedWhite.findIndex(id => !id.startsWith('app_'));
+        if (nonAppIdx !== -1) {
+          equippedWhite[nonAppIdx] = c.id;
         } else {
-          if (!equippedBlack.includes(c.id)) {
-            if (equippedBlack.length >= 9) equippedBlack.shift();
-            equippedBlack.push(c.id);
-          }
+          if (equippedWhite.length >= 9) equippedWhite.shift();
+          equippedWhite.push(c.id);
         }
+        Sound.playClack(8, 0);
+      } else if (target === 'black') {
+        const nonAppIdx = equippedBlack.findIndex(id => !id.startsWith('app_'));
+        if (nonAppIdx !== -1) {
+          equippedBlack[nonAppIdx] = c.id;
+        } else {
+          if (equippedBlack.length >= 9) equippedBlack.shift();
+          equippedBlack.push(c.id);
+        }
+        Sound.playClack(8, 0);
+      } else if (target === 'queen') {
+        equippedQueen = c.id;
+        Sound.playPocket();
+      }
+      renderBazaarUI();
+    }
+
+    function equipItem(c) {
+      if (c.cat === 'approved' || c.approved || c.id.startsWith('app_')) {
+        equipToTarget(c, currentBazaarCat === 'black' ? 'black' : (currentBazaarCat === 'queen' ? 'queen' : 'white'));
       } else if (c.cat === 'white') {
         if (!equippedWhite.includes(c.id)) {
           if (equippedWhite.length >= 9) equippedWhite.shift();
@@ -2933,19 +3109,36 @@
       ctx.fillStyle = isQueen ? 'rgba(255, 255, 255, 0.35)' : (isP1 ? 'rgba(255, 255, 255, 0.42)' : 'rgba(255, 255, 255, 0.18)');
       ctx.fill();
 
-      // 8. 🎆 19 DIWALI CRACKER BADGES ON COIN
+      // 8. 🎆 19 DIWALI CRACKER BADGES ON COIN (WITH DUAL-RING GLOW FOR APPROVED NOVELTIES)
       if (crackerKey && CRACKER_DEFINITIONS[crackerKey]) {
         const cDef = CRACKER_DEFINITIONS[crackerKey];
+        const isApproved = cDef.approved || crackerKey.startsWith('app_');
 
+        // Outer glow rim
         ctx.beginPath();
-        ctx.arc(0, 0, radius - 1, 0, Math.PI * 2);
-        ctx.lineWidth = 1.8;
+        ctx.arc(0, 0, radius - 1.2, 0, Math.PI * 2);
+        ctx.lineWidth = isApproved ? 2.6 : 1.8;
         ctx.strokeStyle = cDef.rim;
         ctx.shadowColor = cDef.rim;
-        ctx.shadowBlur = 6;
+        ctx.shadowBlur = isApproved ? 12 : 6;
         ctx.stroke();
 
-        ctx.font = '12px sans-serif';
+        if (isApproved) {
+          // Secondary concentric inner accent ring for approved novelties
+          ctx.beginPath();
+          ctx.arc(0, 0, radius - 4.2, 0, Math.PI * 2);
+          ctx.lineWidth = 1.0;
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+          ctx.stroke();
+
+          // Soft contrast backdrop disc behind emoji so it pops vividly on dark or light coins
+          ctx.beginPath();
+          ctx.arc(0, 0, radius * 0.58, 0, Math.PI * 2);
+          ctx.fillStyle = isP1 ? 'rgba(0, 0, 0, 0.28)' : 'rgba(255, 255, 255, 0.22)';
+          ctx.fill();
+        }
+
+        ctx.font = isApproved ? 'bold 14px sans-serif' : '12px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(cDef.emoji, 0, 0);
@@ -3894,6 +4087,8 @@
       constructor(pocketX, pocketY, crackerKey, particlesArray, shockwavesArray, floatTextsArray) {
         this.x = pocketX;
         this.y = pocketY;
+        this.curX = pocketX;
+        this.curY = pocketY;
         this.key = crackerKey;
         this.cDef = CRACKER_DEFINITIONS[crackerKey] || CRACKER_DEFINITIONS['w_chakkar'];
         this.particles = particlesArray;
@@ -3903,41 +4098,89 @@
         this.finished = false;
         this.rot = 0;
 
-        // Custom duration & start sounds (Increased timings for grand visual spectacle)
+        // Approved novelties state tracking
+        this.dronePopped = false;
+        this.helicopterPopped = false;
+        this.chuteDeployed = false;
+        this.targetX = pocketX;
+        this.targetY = pocketY;
+        this.shotCount = 0;
+        this.waveCount = 0;
+        this.nextShotTime = 0;
+        this.nextWaveTime = 0;
+
         const t = this.cDef.type;
         triggerBoardVibration(t);
 
-        if (t === 'chakkar' || t === 'rolling') {
-          this.duration = 4.5; // Increased from 2.4s
+        // ⭐ NOVELTY 1: Flying Butterfly Drone (app_01)
+        if (t === 'drone') {
+          this.duration = 4.2;
+          this.targetX = pocketX + (HALF_SIZE - pocketX) * 0.45;
+          this.targetY = pocketY + (HALF_SIZE - pocketY) * 0.45;
+          Sound.playWhistleSpin(3.0, 750);
+          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 32, 16, 5.5, '#00e676');
+        }
+        // ⭐ NOVELTY 2: Whistling Helicopter Sky Spinner (app_02)
+        else if (t === 'helicopter') {
+          this.duration = 4.5;
+          this.targetX = pocketX + (HALF_SIZE - pocketX) * 0.55;
+          this.targetY = pocketY + (HALF_SIZE - pocketY) * 0.55;
+          Sound.playWhistleSpin(3.6, 950);
+          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 34, 18, 6.0, '#00e5ff');
+        }
+        // ⭐ NOVELTY 3: Illuminated Silk Parachute Rocket (app_03)
+        else if (t === 'parachute') {
+          this.duration = 6.2;
+          this.targetX = pocketX + (HALF_SIZE - pocketX) * 0.65;
+          this.targetY = Math.max(120, pocketY + (HALF_SIZE - pocketY) * 0.65 - 80);
+          Sound.playRocketScreech();
+          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 30, 14, 5.0, '#ffeb3b');
+        }
+        // ⭐ NOVELTY 4: Brocade Crown 240-Shot Aerial Cake (app_04)
+        else if (t === 'cake240') {
+          this.duration = 6.8;
+          this.maxShots = 14;
+          this.nextShotTime = 0.15;
+          Sound.playBassBoom(140, 0.85);
+          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 46, 32, 11, '#ffd700');
+        }
+        // ⭐ NOVELTY 5: Fan-Shape W-Shot Aerial Matrix (app_05)
+        else if (t === 'fanshot') {
+          this.duration = 6.2;
+          this.maxWaves = 4;
+          this.nextWaveTime = 0.2;
+          Sound.playBassBoom(120, 0.95);
+          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 44, 30, 10, '#e040fb');
+        }
+        // Classic Varieties
+        else if (t === 'chakkar' || t === 'rolling') {
+          this.duration = 4.5;
           Sound.playWhistleSpin(4.5, t === 'rolling' ? 900 : 700);
           addCrackerCarbonAndPaperDebris(pocketX, pocketY, 34, 18, 5.5);
         } else if (t === 'flowerpot' || t === 'peacock') {
-          this.duration = 5.0; // Increased from 2.8s
+          this.duration = 5.0;
           Sound.playFountainSizzle(5.0, t === 'peacock' ? 1200 : 800);
           addCrackerCarbonAndPaperDebris(pocketX, pocketY, 38, 20, 6.5);
         } else if (t === 'sparkler' || t === 'twinkling') {
-          this.duration = 4.2; // Increased from 2.2s
+          this.duration = 4.2;
           Sound.playFountainSizzle(4.2, 1600);
           addCrackerCarbonAndPaperDebris(pocketX, pocketY, 24, 12, 4.5);
         } else if (t === '100wala' || t === 'mirchi') {
-          this.duration = 4.5; // Increased from 2.2s
+          this.duration = 4.5;
           this.popCount = 0;
-          this.maxPops = t === 'mirchi' ? 42 : 30; // 30-42 rapid staccato pops
+          this.maxPops = t === 'mirchi' ? 42 : 30;
           this.popInterval = t === 'mirchi' ? 0.09 : 0.13;
           this.nextPopTime = 0.05;
         } else if (t === 'rocket') {
-          this.duration = 3.5; // Increased from 2.0s
+          this.duration = 3.5;
           this.rocketExploded = false;
           this.rocketX = pocketX;
           this.rocketY = pocketY;
           this.targetX = HALF_SIZE + (Math.random() - 0.5) * 160;
           this.targetY = HALF_SIZE + (Math.random() - 0.5) * 160;
           Sound.playRocketScreech();
-
-          // Launch rocket blast scorch at pocket
           addCrackerCarbonAndPaperDebris(pocketX, pocketY, 26, 16, 6.5);
 
-          // Launch Sky Shot Fire Animation
           const startPt = boardToScreen(pocketX, pocketY);
           const targetPt = boardToScreen(this.targetX, this.targetY);
           launchSkyShot(startPt.x, startPt.y, targetPt.x, targetPt.y, this.cDef.rim || '#00e5ff', () => {
@@ -3950,36 +4193,23 @@
             }
           });
         } else if (t === 'bomb' || t === 'gorilla') {
-          this.duration = 3.2; // Increased from 1.6s
+          this.duration = 3.2;
           this.detonated = false;
           this.secondDetonated = false;
         } else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
-          this.duration = 2.4; // Increased from 1.2s
+          this.duration = 2.4;
           this.snapped = false;
         } else if (t === 'romancandle' || t === 'sevenshot') {
-          this.duration = 5.2; // Increased from 2.8s
+          this.duration = 5.2;
           this.shotCount = 0;
-          this.maxShots = t === 'romancandle' ? 7 : 9; // 7-9 successive shots
+          this.maxShots = t === 'romancandle' ? 7 : 9;
           this.nextShotTime = 0.25;
         } else if (t === 'snake') {
-          this.duration = 4.8; // Increased from 2.6s
+          this.duration = 4.8;
           Sound.playFountainSizzle(4.8, 500);
           addCrackerCarbonAndPaperDebris(pocketX, pocketY, 32, 10, 3.5, '#3e2723');
-        } else if (t === 'drone' || t === 'helicopter') {
-          this.duration = 4.0;
-          Sound.playWhistleSpin(3.5, t === 'helicopter' ? 950 : 650);
-          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 30, 16, 5.0, this.cDef.rim);
-        } else if (t === 'parachute') {
-          this.duration = 5.5;
-          Sound.playRocketScreech();
-          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 28, 14, 5.5, this.cDef.rim);
-        } else if (t === 'cake240' || t === 'fanshot') {
-          this.duration = 6.0;
-          Sound.playWhistleSpin(4.0, 800);
-          this.shotCount = 0;
-          this.nextShotTime = 0.2;
         } else if (t === 'mega_diwali') {
-          this.duration = 6.5; // Increased from 3.6s
+          this.duration = 6.5;
           Sound.playFountainSizzle(5.0, 900);
           Sound.playWhistleSpin(4.5, 750);
         }
@@ -3998,60 +4228,183 @@
         const dirX = (HALF_SIZE - this.x) > 0 ? 1 : -1;
         const dirY = (HALF_SIZE - this.y) > 0 ? 1 : -1;
 
-        // Approved Novelty 1: Flying Butterfly Drone & Helicopter
-        if (t === 'drone' || t === 'helicopter') {
-          this.rot += dt * 32;
-          for (let i = 0; i < 3; i++) {
-            const angle = this.rot + (i * Math.PI * 2 / 3);
-            const speed = 3.5 + Math.random() * 4.5;
-            this.particles.push(new Particle(
-              this.x + Math.cos(angle) * 12, this.y + Math.sin(angle) * 12,
-              t === 'helicopter' ? '#00e5ff' : '#00e676',
-              Math.random() * 3 + 2, Math.cos(angle) * speed, Math.sin(angle) * speed, 0.04
-            ));
-          }
-          if (this.time > 1.2 && !this.dronePopped) {
+        // ⭐ NOVELTY 1: Flying Butterfly Drone (app_01)
+        if (t === 'drone') {
+          if (this.time < 1.6) {
+            const p = this.time / 1.6;
+            this.curX = this.x + (this.targetX - this.x) * p;
+            this.curY = this.y + (this.targetY - this.y) * p;
+            this.rot += dt * 38;
+
+            // Butterfly flutter sparks
+            for (let i = 0; i < 3; i++) {
+              const a = this.rot + (i * Math.PI * 2 / 3);
+              this.particles.push(new Particle(
+                this.curX + Math.cos(a) * 14, this.curY + Math.sin(a) * 14,
+                Math.random() < 0.6 ? '#00e676' : '#ffd700',
+                Math.random() * 3 + 1.5, Math.cos(a) * 3, Math.sin(a) * 3, 0.035
+              ));
+            }
+          } else if (!this.dronePopped) {
             this.dronePopped = true;
-            Sound.playSnappyPop(1400, 1.4);
-            Sound.playBassBoom(160, 0.6);
-            this.shockwaves.push(new Shockwave(this.x, this.y, 140, this.cDef.rim, 8));
+            Sound.playSnappyPop(1500, 1.5);
+            Sound.playBassBoom(130, 0.9, 1.3);
+            triggerBoardVibration('bomb', 22, 0.88, [90, 40, 70]);
+            this.shockwaves.push(new Shockwave(this.curX, this.curY, 180, '#00e676', 9));
+            this.shockwaves.push(new Shockwave(this.curX, this.curY, 130, '#ffd700', 7));
+
+            for (let i = 0; i < 36; i++) {
+              const a = (i * Math.PI * 2) / 36;
+              const spd = 3.5 + Math.random() * 5.5;
+              this.particles.push(new Particle(
+                this.curX, this.curY,
+                i % 2 === 0 ? '#00e676' : '#ffd700',
+                3.5, Math.cos(a) * spd, Math.sin(a) * spd, 0.022
+              ));
+            }
           }
         }
 
-        // Approved Novelty 2: Parachute Rocket
+        // ⭐ NOVELTY 2: Whistling Helicopter Sky Spinner (app_02)
+        else if (t === 'helicopter') {
+          if (this.time < 1.7) {
+            const p = this.time / 1.7;
+            this.curX = this.x + (this.targetX - this.x) * p;
+            this.curY = this.y + (this.targetY - this.y) * p;
+            this.rot += dt * 48;
+
+            // Neon cyan rotor wind particles streaming downwards
+            for (let i = 0; i < 3; i++) {
+              const a = this.rot + (i * Math.PI * 2 / 3);
+              this.particles.push(new Particle(
+                this.curX + Math.cos(a) * 16, this.curY + Math.sin(a) * 16,
+                Math.random() < 0.65 ? '#00e5ff' : '#ffffff',
+                Math.random() * 3 + 2, (Math.random() - 0.5) * 2, 2.5 + Math.random() * 3.5, 0.038
+              ));
+            }
+          } else if (!this.helicopterPopped) {
+            this.helicopterPopped = true;
+            Sound.playSnappyPop(1650, 1.6);
+            Sound.playBassBoom(110, 1.1, 1.35);
+            triggerBoardVibration('bomb', 26, 0.86, [120, 50, 80]);
+            this.shockwaves.push(new Shockwave(this.curX, this.curY, 210, '#00e5ff', 10));
+            this.shockwaves.push(new Shockwave(this.curX, this.curY, 150, '#ffffff', 8));
+
+            for (let i = 0; i < 42; i++) {
+              const a = (i * Math.PI * 2) / 42;
+              const spd = 4 + Math.random() * 6;
+              this.particles.push(new Particle(
+                this.curX, this.curY,
+                i % 3 === 0 ? '#00e5ff' : (i % 3 === 1 ? '#ffffff' : '#ffd700'),
+                3.5, Math.cos(a) * spd, Math.sin(a) * spd, 0.02
+              ));
+            }
+          }
+        }
+
+        // ⭐ NOVELTY 3: Illuminated Silk Parachute Rocket (app_03)
         else if (t === 'parachute') {
-          if (this.time > 0.8 && !this.chuteDeployed) {
+          if (this.time < 0.8) {
+            const p = this.time / 0.8;
+            this.curX = this.x + (this.targetX - this.x) * p;
+            this.curY = this.y + (this.targetY - this.y) * p;
+
+            // Screeching rocket flame trail
+            this.particles.push(new Particle(
+              this.curX, this.curY,
+              Math.random() < 0.6 ? '#ff9800' : '#ffeb3b',
+              3.5, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 0.045
+            ));
+          } else if (!this.chuteDeployed) {
             this.chuteDeployed = true;
-            Sound.playSnappyPop(1200, 1.2);
-            Sound.playBassBoom(170, 0.6);
-            this.shockwaves.push(new Shockwave(this.x, this.y, 160, '#ffeb3b', 9));
+            Sound.playSnappyPop(1250, 1.3);
+            Sound.playBassBoom(160, 0.7);
+            this.shockwaves.push(new Shockwave(this.curX, this.curY, 160, '#ffeb3b', 8));
+
             for (let i = 0; i < 24; i++) {
               const a = Math.random() * Math.PI * 2;
-              this.particles.push(new Particle(this.x, this.y, '#ffd700', 3, Math.cos(a)*4, Math.sin(a)*4, 0.02));
+              this.particles.push(new Particle(this.curX, this.curY, '#ffd700', 3, Math.cos(a) * 4.5, Math.sin(a) * 4.5, 0.025));
             }
-          }
-          // Drift embers
-          if (this.chuteDeployed && Math.random() < 0.4) {
-            this.particles.push(new Particle(
-              this.x + (Math.random()-0.5)*20, this.y + (Math.random()-0.5)*20,
-              '#ffeb3b', 2.5, (Math.random()-0.5)*2, 1 + Math.random()*2, 0.02
-            ));
+          } else {
+            // Gentle parachute drifting & swaying across board
+            const tDiff = this.time - 0.8;
+            this.curX = this.targetX + Math.sin(tDiff * 2.8) * 26;
+            this.curY = this.targetY + tDiff * 30;
+
+            // Falling illuminated golden embers from flare
+            if (Math.random() < 0.55) {
+              const p = new Particle(
+                this.curX + (Math.random() - 0.5) * 12, this.curY + 18,
+                Math.random() < 0.7 ? '#ffd700' : '#ffeb3b',
+                2.5, (Math.random() - 0.5) * 1.5, 1.5 + Math.random() * 2, 0.022
+              );
+              p.gravity = 0.05;
+              this.particles.push(p);
+            }
           }
         }
 
-        // Approved Novelty 3: Brocade Crown 240-Shot Cake & Fan-Shape Matrix
-        else if (t === 'cake240' || t === 'fanshot') {
-          if (this.time >= this.nextShotTime && this.shotCount < 8) {
+        // ⭐ NOVELTY 4: Brocade Crown 240-Shot Aerial Cake (app_04)
+        else if (t === 'cake240') {
+          if (this.time >= this.nextShotTime && this.shotCount < this.maxShots) {
             this.shotCount++;
-            this.nextShotTime = this.time + 0.35;
-            Sound.playSnappyPop(700 + this.shotCount * 120, 1.3);
-            Sound.playBassBoom(160, 0.5);
-            const shotCol = t === 'cake240' ? '#ffd700' : '#e040fb';
-            this.shockwaves.push(new Shockwave(this.x, this.y, 100 + this.shotCount * 12, shotCol, 7));
-            for (let i = 0; i < 14; i++) {
+            this.nextShotTime = this.time + 0.32;
+            Sound.playSnappyPop(700 + (this.shotCount % 6) * 110, 1.35);
+            Sound.playBassBoom(180, 0.55);
+            triggerBoardVibration('bomb', 12, 0.88, [35]);
+
+            const targetX = HALF_SIZE + (Math.random() - 0.5) * 240;
+            const targetY = HALF_SIZE + (Math.random() - 0.5) * 240;
+
+            this.shockwaves.push(new Shockwave(targetX, targetY, 100 + this.shotCount * 6, '#ffd700', 7));
+
+            // Cascading Brocade weeping willow golden sparks with soft gravity
+            for (let i = 0; i < 18; i++) {
               const a = Math.random() * Math.PI * 2;
-              this.particles.push(new Particle(this.x, this.y, shotCol, 3.5, Math.cos(a)*5, Math.sin(a)*5, 0.03));
+              const spd = 2 + Math.random() * 4.5;
+              const p = new Particle(
+                targetX, targetY,
+                Math.random() < 0.8 ? '#ffd700' : '#fff59d',
+                3.5, Math.cos(a) * spd, Math.sin(a) * spd, 0.018
+              );
+              p.gravity = 0.06;
+              this.particles.push(p);
             }
+          }
+        }
+
+        // ⭐ NOVELTY 5: Fan-Shape W-Shot Aerial Matrix (app_05)
+        else if (t === 'fanshot') {
+          if (this.time >= this.nextWaveTime && this.waveCount < this.maxWaves) {
+            this.waveCount++;
+            this.nextWaveTime = this.time + 0.9;
+            Sound.playSnappyPop(1300 + this.waveCount * 80, 1.4);
+            Sound.playBassBoom(130, 0.85, 1.3);
+            triggerBoardVibration('bomb', 20, 0.86, [70, 30, 60]);
+
+            const waveCols = ['#e040fb', '#ffd700', '#00e5ff', '#00e676'];
+            const col = waveCols[this.waveCount % waveCols.length];
+
+            // 5 simultaneous fan comets shooting across horizon
+            const fanAngles = [-0.65, -0.32, 0, 0.32, 0.65];
+            const baseAngle = Math.atan2(HALF_SIZE - this.y, HALF_SIZE - this.x);
+
+            fanAngles.forEach((fa, fIdx) => {
+              const shotAngle = baseAngle + fa;
+              const dist = 90 + (fIdx % 2 === 0 ? 30 : 60);
+              const tx = this.x + Math.cos(shotAngle) * dist;
+              const ty = this.y + Math.sin(shotAngle) * dist;
+
+              this.shockwaves.push(new Shockwave(tx, ty, 80, col, 8));
+
+              for (let i = 0; i < 10; i++) {
+                const a = Math.random() * Math.PI * 2;
+                this.particles.push(new Particle(
+                  tx, ty, col, 3,
+                  Math.cos(a) * 3.5, Math.sin(a) * 3.5, 0.03
+                ));
+              }
+            });
           }
         }
 
@@ -4187,7 +4540,7 @@
             }
           } else if (t === 'gorilla' && this.time > 1.1 && !this.secondDetonated) {
             this.secondDetonated = true;
-            Sound.playBassBoom(95, 1.25, 1.45); // MASSIVE 2nd blast with amplified sub-bass!
+            Sound.playBassBoom(95, 1.25, 1.45);
             triggerBoardVibration('gorilla', 30, 0.86, [170, 50, 130]);
             this.shockwaves.push(new Shockwave(this.x, this.y, 260, '#ffd700', 12));
             addCrackerCarbonAndPaperDebris(this.x, this.y, 54, 42, 15);
@@ -4225,7 +4578,6 @@
             const shotColors = FIREWORK_COLORS;
             const shotCol = shotColors[this.shotCount % shotColors.length];
 
-            // Launch Sky Shot Fire Animation for each shot
             const startPt = boardToScreen(this.x, this.y);
             const targetX = startPt.x + dirX * (45 + Math.random() * 80);
             const targetY = startPt.y - (100 + Math.random() * 120);
@@ -4261,10 +4613,10 @@
           this.rot += dt * 30;
           if (this.time > 1.2 && !this.finaleFired) {
             this.finaleFired = true;
-            Sound.playBassBoom(105, 1.4, 1.35); // GRAND SHOWSTOPPER MAX dB
+            Sound.playBassBoom(105, 1.4, 1.35);
             triggerBoardVibration('mega_diwali', 34, 0.91, [240, 60, 200, 50, 160]);
             this.shockwaves.push(new Shockwave(this.x, this.y, 280, '#ffd700', 11));
-            start1000WalaBorderCelebration(); // Launch 30-second perimeter border celebration with blinking lights!
+            start1000WalaBorderCelebration();
 
             POCKETS.forEach((p, idx) => {
               addCrackerCarbonAndPaperDebris(p.x, p.y, 48, 32, 12);
@@ -4290,9 +4642,166 @@
 
       draw(ctx) {
         ctx.save();
-        ctx.translate(this.x, this.y);
 
         const t = this.cDef.type;
+
+        // ⭐ NOVELTY 1: Flying Butterfly Drone (app_01)
+        if (t === 'drone' && !this.dronePopped) {
+          ctx.translate(this.curX, this.curY);
+          ctx.rotate(this.rot);
+
+          // Glowing rotor halo
+          ctx.beginPath();
+          ctx.arc(0, 0, 15, 0, Math.PI * 2);
+          ctx.strokeStyle = '#00e676';
+          ctx.shadowColor = '#00e676';
+          ctx.shadowBlur = 14;
+          ctx.lineWidth = 2.0;
+          ctx.stroke();
+
+          // 4-blade drone rotor cross
+          ctx.fillStyle = '#00e676';
+          for (let i = 0; i < 4; i++) {
+            ctx.rotate(Math.PI / 2);
+            ctx.fillRect(-2, 4, 4, 10);
+            ctx.beginPath();
+            ctx.arc(0, 14, 3, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffd700';
+            ctx.fill();
+            ctx.fillStyle = '#00e676';
+          }
+          ctx.restore();
+          return;
+        }
+
+        // ⭐ NOVELTY 2: Whistling Helicopter Sky Spinner (app_02)
+        else if (t === 'helicopter' && !this.helicopterPopped) {
+          ctx.translate(this.curX, this.curY);
+
+          // Spinning cyan rotor disc
+          ctx.save();
+          ctx.rotate(this.rot);
+          ctx.beginPath();
+          ctx.arc(0, 0, 18, 0, Math.PI * 2);
+          ctx.strokeStyle = '#00e5ff';
+          ctx.shadowColor = '#00e5ff';
+          ctx.shadowBlur = 16;
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(-18, -1.5, 36, 3);
+          ctx.fillRect(-1.5, -18, 3, 36);
+          ctx.restore();
+
+          // Helicopter fuselage & strobe
+          ctx.beginPath();
+          ctx.arc(0, 0, 6, 0, Math.PI * 2);
+          ctx.fillStyle = '#ff1744';
+          ctx.fill();
+          ctx.restore();
+          return;
+        }
+
+        // ⭐ NOVELTY 3: Illuminated Silk Parachute Rocket (app_03)
+        else if (t === 'parachute') {
+          if (!this.chuteDeployed) {
+            // Ascending rocket
+            ctx.translate(this.curX, this.curY);
+            const angle = Math.atan2(this.targetY - this.y, this.targetX - this.x);
+            ctx.rotate(angle);
+            ctx.fillStyle = '#ffeb3b';
+            ctx.fillRect(-12, -4, 16, 8);
+            ctx.beginPath();
+            ctx.moveTo(4, -6); ctx.lineTo(12, 0); ctx.lineTo(4, 6);
+            ctx.fillStyle = '#ffd700';
+            ctx.fill();
+            ctx.restore();
+            return;
+          } else {
+            // Floating silk parachute canopy with suspension cords and hanging flare
+            ctx.translate(this.curX, this.curY);
+            const sway = Math.sin((this.time - 0.8) * 2.8) * 0.15;
+            ctx.rotate(sway);
+
+            // Silk canopy dome
+            ctx.beginPath();
+            ctx.arc(0, -18, 20, Math.PI, 0);
+            ctx.fillStyle = 'rgba(255, 235, 59, 0.85)';
+            ctx.shadowColor = '#ffd700';
+            ctx.shadowBlur = 16;
+            ctx.fill();
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = '#ffffff';
+            ctx.stroke();
+
+            // Parachute suspension cords
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(-18, -18); ctx.lineTo(0, 14);
+            ctx.moveTo(-7, -18);  ctx.lineTo(0, 14);
+            ctx.moveTo(7, -18);   ctx.lineTo(0, 14);
+            ctx.moveTo(18, -18);  ctx.lineTo(0, 14);
+            ctx.stroke();
+
+            // Hanging illuminated flare point
+            ctx.beginPath();
+            ctx.arc(0, 14, 4.5, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffd700';
+            ctx.shadowColor = '#ffeb3b';
+            ctx.shadowBlur = 18;
+            ctx.fill();
+
+            ctx.restore();
+            return;
+          }
+        }
+
+        // ⭐ NOVELTY 4: Brocade Crown 240-Shot Aerial Cake (app_04)
+        else if (t === 'cake240') {
+          ctx.translate(this.x, this.y);
+          ctx.fillStyle = '#ffd700';
+          ctx.shadowColor = '#ffd700';
+          ctx.shadowBlur = 16;
+          ctx.beginPath();
+          ctx.arc(0, 0, 15, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#ff1744';
+          ctx.beginPath();
+          ctx.arc(0, 0, 8, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+          return;
+        }
+
+        // ⭐ NOVELTY 5: Fan-Shape W-Shot Aerial Matrix (app_05)
+        else if (t === 'fanshot') {
+          ctx.translate(this.x, this.y);
+          ctx.strokeStyle = '#e040fb';
+          ctx.shadowColor = '#e040fb';
+          ctx.shadowBlur = 16;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(0, 0, 16, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.fillStyle = '#ffd700';
+          for (let i = 0; i < 5; i++) {
+            const a = (i * Math.PI * 2 / 5);
+            ctx.beginPath();
+            ctx.arc(Math.cos(a) * 11, Math.sin(a) * 11, 3, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+          return;
+        }
+
+        // Classic Varieties
+        ctx.translate(this.x, this.y);
+
         if (t === 'chakkar' || t === 'rolling') {
           ctx.rotate(this.rot);
           ctx.beginPath();
@@ -4904,22 +5413,26 @@
             }
           }
 
-          const shuffledWhite = [...equippedWhite];
-          shuffle(shuffledWhite);
-
-          const shuffledBlack = [...equippedBlack];
-          shuffle(shuffledBlack);
+          // Prioritize Approved Novelties so they are stamped FIRST on the board coins!
+          const orderedWhite = [
+            ...equippedWhite.filter(id => id.startsWith('app_')),
+            ...equippedWhite.filter(id => !id.startsWith('app_'))
+          ];
+          const orderedBlack = [
+            ...equippedBlack.filter(id => id.startsWith('app_')),
+            ...equippedBlack.filter(id => !id.startsWith('app_'))
+          ];
 
           let wIdx = 0;
           let bIdx = 0;
 
           coins.forEach(c => {
             if (c.type === 'queen') {
-              c.crackerKey = equippedQueen || 'q_01';
+              c.crackerKey = equippedQueen || 'app_04';
             } else if (c.type === 'p1') {
-              c.crackerKey = shuffledWhite[wIdx++ % shuffledWhite.length];
+              c.crackerKey = orderedWhite[wIdx++ % orderedWhite.length];
             } else if (c.type === 'p2') {
-              c.crackerKey = shuffledBlack[bIdx++ % shuffledBlack.length];
+              c.crackerKey = orderedBlack[bIdx++ % orderedBlack.length];
             }
           });
         }
@@ -6497,6 +7010,15 @@
       resize();
 
       return {
+        getCoins: () => coins,
+        getPieces: () => pieces,
+        getActivePocketCrackers: () => activePocketCrackers,
+        pocketCoin(coin, pocketIdx = 0) {
+          const pocket = POCKETS[pocketIdx];
+          coin.x = pocket.x;
+          coin.y = pocket.y;
+          checkPockets();
+        },
         start() {
           YouTubePlayables.init();
           requestAnimationFrame((t) => { lastTime = t; loop(t); });
@@ -6861,19 +7383,18 @@
       Sound.playPocket();
       giftboxUsed = true;
 
-      // Unlock all giftbox items in user inventory
-      const giftItems = ['b_01', 'w_01', 'w_06', 'w_16', 'b_16', 'w_11', 'q_01'];
+      // Unlock all giftbox items & approved novelties
+      const giftItems = ['app_01', 'app_02', 'app_03', 'app_04', 'app_05', 'b_01', 'w_01', 'w_06', 'w_16', 'b_16', 'w_11', 'q_01'];
       giftItems.forEach(id => unlockedCrackers.add(id));
 
-      // Exact 19 coins requested:
-      // 9 White: 4 Chakkar ('w_01'), 4 Flower Pot ('w_06'), 1 Peacock ('w_11')
-      equippedWhite = ['w_01', 'w_01', 'w_01', 'w_01', 'w_06', 'w_06', 'w_06', 'w_06', 'w_11'];
+      // 9 White Coins including Approved Novelties (Butterfly Drone & Silk Parachute):
+      equippedWhite = ['app_01', 'app_03', 'w_01', 'w_01', 'w_06', 'w_06', 'w_11', 'w_13', 'w_16'];
 
-      // 9 Black: 2 100-Wala ('b_01'), 4 Rocket ('w_16'), 2 Sky Shot 5-times ('b_16'), 1 Peacock ('w_11')
-      equippedBlack = ['b_01', 'b_01', 'w_16', 'w_16', 'w_16', 'w_16', 'b_16', 'b_16', 'w_11'];
+      // 9 Black Coins including Approved Novelties (Whistling Helicopter & Fan Matrix):
+      equippedBlack = ['app_02', 'app_05', 'b_01', 'b_01', 'w_16', 'w_16', 'b_16', 'b_16', 'w_11'];
 
-      // 1 Queen: 1000-Wala Rajah Maha Dhamaka with 30s border celebration!
-      equippedQueen = 'q_01';
+      // 1 Queen: Brocade Crown 240-Shot Aerial Cake Grand Finale
+      equippedQueen = 'app_04';
 
       // Close overlays and launch match directly to play as desired!
       closeGiftboxModal();
