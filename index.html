@@ -1897,8 +1897,10 @@
       background: linear-gradient(135deg, rgba(48, 20, 10, 0.98) 0%, rgba(20, 8, 3, 0.99) 100%);
       border: 2.5px solid #ffd700;
       border-radius: 20px;
-      padding: 18px 22px;
+      padding: 16px 20px;
       max-width: 440px;
+      max-height: 94vh;
+      overflow-y: auto;
       width: 92%;
       box-shadow: 0 12px 45px rgba(0, 0, 0, 0.9), 0 0 35px rgba(255, 152, 0, 0.45);
       position: relative;
@@ -1906,7 +1908,7 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      gap: 10px;
+      gap: 9px;
       animation: previewModalZoom 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       box-sizing: border-box;
     }
@@ -2113,6 +2115,132 @@
       grid-template-columns: 1fr 1fr 1fr;
       gap: 6px;
       width: 100%;
+    }
+
+    /* Cracker Record & Refactor Enhancement Notes */
+    .preview-comment-section {
+      width: 100%;
+      background: rgba(22, 9, 4, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      border-radius: 12px;
+      padding: 9px 12px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+      margin-top: 2px;
+    }
+
+    .preview-comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .preview-comment-title {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #ffd700;
+      letter-spacing: 0.4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .preview-comment-time {
+      font-size: 0.68rem;
+      color: #b0bec5;
+      font-style: italic;
+    }
+
+    .preview-comment-input-row {
+      width: 100%;
+    }
+
+    .preview-comment-box {
+      width: 100%;
+      box-sizing: border-box;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 8px;
+      color: #fff8e1;
+      font-family: inherit;
+      font-size: 0.78rem;
+      line-height: 1.35;
+      padding: 6px 10px;
+      resize: vertical;
+      min-height: 44px;
+      max-height: 120px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .preview-comment-box:focus {
+      border-color: #ffd700;
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.45);
+    }
+
+    .preview-comment-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .btn-save-comment {
+      background: linear-gradient(135deg, #00c853 0%, #007e33 100%);
+      color: #fff;
+      border: 1px solid #00e676;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 6px rgba(0, 200, 83, 0.35);
+    }
+
+    .btn-save-comment:hover {
+      background: linear-gradient(135deg, #00e676 0%, #009624 100%);
+      transform: scale(1.03);
+      box-shadow: 0 0 10px rgba(0, 230, 118, 0.6);
+    }
+
+    .btn-export-comment {
+      background: rgba(255, 215, 0, 0.14);
+      color: #ffd700;
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-export-comment:hover {
+      background: rgba(255, 215, 0, 0.28);
+      color: #fff;
+      border-color: #ffd700;
+      transform: scale(1.03);
+    }
+
+    .comment-saved-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #00e676;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
     }
 
     #giftbox-overlay {
@@ -2786,6 +2914,26 @@
             <button id="btn-prev-equip-white" class="btn-action-equip-target btn-equip-white">⚪ White</button>
             <button id="btn-prev-equip-black" class="btn-action-equip-target btn-equip-black">⚫ Black</button>
             <button id="btn-prev-equip-queen" class="btn-action-equip-target btn-equip-queen">👑 Queen</button>
+          </div>
+        </div>
+
+        <!-- 📝 CRACKER RECORD & REFACTOR ENHANCEMENT NOTES -->
+        <div class="preview-comment-section">
+          <div class="preview-comment-header">
+            <span class="preview-comment-title">📝 Cracker Refactor & Enhancement Notes</span>
+            <span id="preview-comment-timestamp" class="preview-comment-time"></span>
+          </div>
+          <div class="preview-comment-input-row">
+            <textarea id="preview-cracker-comment" class="preview-comment-box" rows="2" placeholder="Record ideas, sound tweaks, particle physics, or refactoring notes for this cracker..."></textarea>
+          </div>
+          <div class="preview-comment-actions">
+            <button id="btn-save-cracker-comment" class="btn-save-comment" title="Save enhancement note to background JSON">
+              💾 Save Note
+            </button>
+            <button id="btn-export-enhancements-json" class="btn-export-comment" title="Download all cracker enhancement notes as JSON">
+              📥 Export All JSON
+            </button>
+            <span id="preview-comment-saved-badge" class="comment-saved-badge hidden">✅ Saved to JSON!</span>
           </div>
         </div>
       </div>
@@ -3959,6 +4107,99 @@
       }
     }
 
+    /* =========================================================================
+       CRACKER RECORD & REFACTOR ENHANCEMENT NOTES (BACKGROUND JSON)
+       ========================================================================= */
+    let crackerEnhancementNotes = {};
+    try {
+      const stored = localStorage.getItem('carrom_cracker_enhancements');
+      if (stored) crackerEnhancementNotes = JSON.parse(stored);
+    } catch (e) {
+      console.warn('Could not load cracker enhancement notes from localStorage', e);
+      crackerEnhancementNotes = {};
+    }
+
+    function saveCrackerEnhancementNote(c, commentText) {
+      if (!c) return;
+      const text = (commentText || '').trim();
+      const now = new Date();
+      if (text.length > 0) {
+        crackerEnhancementNotes[c.id] = {
+          id: c.id,
+          name: c.name,
+          category: c.category,
+          type: c.type,
+          emoji: c.emoji,
+          pts: c.pts,
+          comment: text,
+          lastUpdated: now.toISOString(),
+          formattedDate: now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+      } else {
+        delete crackerEnhancementNotes[c.id];
+      }
+
+      // Persist in localStorage
+      try {
+        localStorage.setItem('carrom_cracker_enhancements', JSON.stringify(crackerEnhancementNotes, null, 2));
+      } catch (err) {
+        console.warn('LocalStorage save failed', err);
+      }
+
+      // Update timestamp UI
+      const timeEl = document.getElementById('preview-comment-timestamp');
+      if (timeEl) {
+        timeEl.textContent = text.length > 0 ? `Saved: Just now` : '';
+      }
+
+      // Flash saved badge
+      const badge = document.getElementById('preview-comment-saved-badge');
+      if (badge) {
+        badge.classList.remove('hidden');
+        badge.textContent = text.length > 0 
+          ? `✅ Saved to JSON (${Object.keys(crackerEnhancementNotes).length} notes)` 
+          : '🗑️ Note cleared';
+        setTimeout(() => {
+          if (badge) badge.classList.add('hidden');
+        }, 2600);
+      }
+
+      // Attempt background POST if dev server is running
+      try {
+        fetch('/save-cracker-enhancements', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(crackerEnhancementNotes, null, 2)
+        }).catch(() => {});
+      } catch (e) {}
+
+      Sound.playClack(6, 4);
+      return crackerEnhancementNotes[c.id];
+    }
+
+    function exportCrackerEnhancementsJSON() {
+      const payload = {
+        _metadata: {
+          title: "Diwali Crackers Enhancement & Refactoring Notes",
+          description: "Database recording developer reviews, physics refactoring notes, and audio balance tweaks for Diwali crackers.",
+          totalRecorded: Object.keys(crackerEnhancementNotes).length,
+          exportedAt: new Date().toISOString()
+        },
+        notes: crackerEnhancementNotes
+      };
+      const jsonStr = JSON.stringify(payload, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'cracker_enhancement_notes.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      Sound.playPocket();
+    }
+
     function openCrackerPreviewModal(c) {
       if (!c) return;
       currentPreviewCracker = c;
@@ -3987,6 +4228,27 @@
 
       updatePreviewArmedStatus(c);
 
+      // Populate enhancement note for this cracker
+      const commentBox = document.getElementById('preview-cracker-comment');
+      const timeEl = document.getElementById('preview-comment-timestamp');
+      const savedBadge = document.getElementById('preview-comment-saved-badge');
+      if (savedBadge) savedBadge.classList.add('hidden');
+
+      const existingNote = crackerEnhancementNotes[c.id];
+      if (commentBox) {
+        commentBox.value = existingNote ? existingNote.comment : '';
+      }
+      if (timeEl) {
+        if (existingNote && existingNote.formattedDate) {
+          timeEl.textContent = `Saved: ${existingNote.formattedDate}`;
+        } else if (existingNote && existingNote.lastUpdated) {
+          const d = new Date(existingNote.lastUpdated);
+          timeEl.textContent = `Saved: ${d.toLocaleDateString()} ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        } else {
+          timeEl.textContent = '';
+        }
+      }
+
       // Show modal
       if (modal) modal.classList.remove('hidden');
 
@@ -4011,6 +4273,18 @@
     }
 
     function closeCrackerPreviewModal() {
+      // Auto-save any modified comment text before closing
+      if (currentPreviewCracker) {
+        const commentBox = document.getElementById('preview-cracker-comment');
+        if (commentBox) {
+          const text = commentBox.value.trim();
+          const existing = (crackerEnhancementNotes[currentPreviewCracker.id]?.comment || '').trim();
+          if (text !== existing) {
+            saveCrackerEnhancementNote(currentPreviewCracker, text);
+          }
+        }
+      }
+
       const modal = document.getElementById('cracker-preview-modal');
       if (modal) modal.classList.add('hidden');
       if (previewAnimFrameId) {
@@ -9109,6 +9383,36 @@
         Sound.playPocket();
         renderBazaarUI();
         updatePreviewArmedStatus(currentPreviewCracker);
+      });
+    }
+
+    const btnSaveComment = document.getElementById('btn-save-cracker-comment');
+    if (btnSaveComment) {
+      btnSaveComment.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!currentPreviewCracker) return;
+        const box = document.getElementById('preview-cracker-comment');
+        saveCrackerEnhancementNote(currentPreviewCracker, box ? box.value : '');
+      });
+    }
+
+    const btnExportJSON = document.getElementById('btn-export-enhancements-json');
+    if (btnExportJSON) {
+      btnExportJSON.addEventListener('click', (e) => {
+        e.stopPropagation();
+        exportCrackerEnhancementsJSON();
+      });
+    }
+
+    const commentBoxEl = document.getElementById('preview-cracker-comment');
+    if (commentBoxEl) {
+      commentBoxEl.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          if (currentPreviewCracker) {
+            saveCrackerEnhancementNote(currentPreviewCracker, commentBoxEl.value);
+          }
+        }
       });
     }
 
