@@ -849,21 +849,28 @@
        🪔 DIWALI CRACKER BAZAAR & CRACKER ARSENAL MODAL
        ========================================================================= */
     #bazaar-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: radial-gradient(circle at center, rgba(35, 14, 5, 0.98) 0%, rgba(12, 4, 1, 0.99) 100%);
       z-index: 120;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       justify-content: flex-start;
-      overflow-y: auto;
-      padding: 16px 12px;
+      padding: 10px 14px 6px 14px;
+      box-sizing: border-box;
+      overflow: hidden;
     }
 
     .bazaar-header {
       width: 100%;
-      max-width: 820px;
+      max-width: 980px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
-      padding-bottom: 8px;
+      margin-bottom: 6px;
+      padding-bottom: 6px;
       border-bottom: 2px solid rgba(255, 215, 0, 0.3);
     }
 
@@ -898,15 +905,16 @@
     /* 9-Slot Arsenal Equip Tray */
     .bazaar-tray {
       width: 100%;
-      max-width: 820px;
+      max-width: 980px;
+      flex-shrink: 0;
       background: rgba(20, 8, 3, 0.85);
       border: 1.5px solid #d4af37;
       border-radius: 14px;
-      padding: 8px 12px;
-      margin-bottom: 10px;
+      padding: 6px 12px;
+      margin-bottom: 6px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
     }
 
     .tray-header {
@@ -999,11 +1007,12 @@
       display: flex;
       gap: 6px;
       width: 100%;
-      max-width: 820px;
-      margin-bottom: 12px;
+      max-width: 980px;
+      flex-shrink: 0;
+      margin-bottom: 6px;
       overflow-x: auto;
       white-space: nowrap;
-      padding: 8px 6px;
+      padding: 6px 4px;
       background: rgba(22, 9, 3, 0.97);
       backdrop-filter: blur(10px);
       border-radius: 12px;
@@ -1171,8 +1180,8 @@
     }
 
     .card-coin-badge {
-      width: 38px;
-      height: 38px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: radial-gradient(circle, #f5f5f0 30%, #d7ccc8 70%, #bcaaa4 100%);
       display: flex;
@@ -1185,56 +1194,43 @@
     }
     .card-coin-badge .coin-inner-ring {
       position: absolute;
-      width: 30px;
-      height: 30px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      border: 1px dashed rgba(0,0,0,0.22);
+      border: 1px dashed rgba(0,0,0,0.25);
     }
     .card-coin-badge .coin-emoji {
-      font-size: 1.35rem;
+      font-size: 1.5rem;
       position: relative;
       z-index: 2;
     }
     .item-cat-tag {
-      font-size: 0.62rem;
-      font-weight: bold;
-      padding: 1px 6px;
+      font-size: 0.64rem;
+      font-weight: 800;
+      padding: 2px 7px;
       border-radius: 4px;
-      background: rgba(255, 215, 0, 0.16);
+      background: rgba(255, 215, 0, 0.18);
       color: #ffd54f;
-      border: 1px solid rgba(255, 215, 0, 0.35);
+      border: 1px solid rgba(255, 215, 0, 0.45);
       display: inline-block;
       margin-top: 2px;
-    }
-    .btn-preview-pop {
-      padding: 5px 8px;
-      font-size: 0.72rem;
-      font-weight: bold;
-      background: linear-gradient(135deg, #e65100 0%, #bf360c 100%);
-      color: #fff;
-      border: 1px solid #ff9800;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      white-space: nowrap;
-    }
-    .btn-preview-pop:hover {
-      background: linear-gradient(135deg, #ff6d00 0%, #e65100 100%);
-      box-shadow: 0 0 10px rgba(255, 109, 0, 0.6);
-      transform: scale(1.05);
     }
 
     /* Cracker Items Grid (105 Varieties) */
     .cracker-store-grid {
       width: 100%;
-      max-width: 820px;
+      max-width: 980px;
       flex: 1;
-      min-height: 250px;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      padding-right: 4px;
-      margin-bottom: 10px;
+      gap: 12px;
+      padding-right: 6px;
+      margin-bottom: 6px;
+      scrollbar-width: thin;
+      scrollbar-color: #ffd700 rgba(30, 15, 8, 0.8);
     }
 
     .category-section-block {
@@ -1370,8 +1366,8 @@
     .category-cards-grid {
       width: 100%;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 12px;
     }
 
     /* Category Hub Grid & Cards */
@@ -1726,20 +1722,52 @@
       border: 1px solid #ff1744;
     }
     .approved-btn-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: auto;
+      width: 100%;
+    }
+    .equip-btn-subrow {
       display: grid;
-      grid-template-columns: auto 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 4px;
+      width: 100%;
+    }
+    .btn-preview-pop {
+      width: 100%;
+      padding: 6px 10px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #e65100 0%, #bf360c 100%);
+      color: #fff;
+      border: 1px solid #ff9800;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 6px rgba(230, 81, 0, 0.4);
+    }
+    .btn-preview-pop:hover {
+      background: linear-gradient(135deg, #ff6d00 0%, #e65100 100%);
+      transform: scale(1.02);
+      box-shadow: 0 0 10px rgba(255, 109, 0, 0.7);
     }
     .btn-action-equip-target {
-      padding: 6px 4px;
+      padding: 6px 2px;
       font-size: 0.68rem;
-      font-weight: bold;
+      font-weight: 800;
       border-radius: 6px;
       border: 1px solid transparent;
       cursor: pointer;
       text-align: center;
       transition: all 0.15s ease;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .btn-equip-white {
       background: linear-gradient(135deg, #e0e0e0 0%, #9e9e9e 100%);
@@ -1777,13 +1805,17 @@
 
     .bazaar-action-bar {
       width: 100%;
-      max-width: 820px;
+      max-width: 980px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      border-top: 1.5px solid rgba(255, 215, 0, 0.25);
-      padding-top: 8px;
+      gap: 10px;
+      border-top: 1.5px solid rgba(255, 215, 0, 0.35);
+      padding: 8px 4px 4px 4px;
+      background: rgba(18, 8, 3, 0.98);
+      z-index: 25;
+      box-sizing: border-box;
     }
 
     .bazaar-quick-btns {
@@ -3415,11 +3447,13 @@
         </div>
         <div class="item-desc">${c.desc}</div>
         ${badgeHtml ? '<div class="approved-badge-row">' + badgeHtml + '</div>' : ''}
-        <div class="item-btn-row approved-btn-row">
-          <button class="btn-preview-pop" title="Preview Pop Effect & Sound">💥 Pop</button>
-          <button class="btn-action-equip-target btn-equip-white" title="Equip to White Coins (${wCount}/9)">⚪ White ${wCount > 0 ? '(' + wCount + ')' : ''}</button>
-          <button class="btn-action-equip-target btn-equip-black" title="Equip to Black Coins (${bCount}/9)">⚫ Black ${bCount > 0 ? '(' + bCount + ')' : ''}</button>
-          <button class="btn-action-equip-target btn-equip-queen" title="Equip to Queen Finale">👑 Queen</button>
+        <div class="approved-btn-row">
+          <button class="btn-preview-pop" title="Preview Pop Effect & Sound">💥 Pop Live Preview</button>
+          <div class="equip-btn-subrow">
+            <button class="btn-action-equip-target btn-equip-white" title="Equip to White Coins (${wCount}/9)">⚪ White ${wCount > 0 ? '(' + wCount + ')' : ''}</button>
+            <button class="btn-action-equip-target btn-equip-black" title="Equip to Black Coins (${bCount}/9)">⚫ Black ${bCount > 0 ? '(' + bCount + ')' : ''}</button>
+            <button class="btn-action-equip-target btn-equip-queen" title="Equip to Queen Finale">👑 Queen</button>
+          </div>
         </div>
       `;
 
