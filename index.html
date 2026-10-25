@@ -2621,6 +2621,9 @@
     let equippedWhite = ['app_01', 'app_03', 'w_01', 'w_02', 'w_06', 'w_07', 'w_13', 'w_16', 'w_19'];
     let equippedBlack = ['app_02', 'app_05', 'b_01', 'b_02', 'b_04', 'b_05', 'b_08', 'b_10', 'b_12'];
     let equippedQueen = 'app_04';
+    let savedUserEquippedWhite = null;
+    let savedUserEquippedBlack = null;
+    let savedUserEquippedQueen = null;
     let giftboxUsed = false;
     let currentBazaarCat = 'white';
 
@@ -2689,28 +2692,42 @@
 
       if (currentBazaarCat === 'approved') {
         titleEl.textContent = '⭐ Approved Novelties (Equip to White, Black, or Queen Coins)';
-        countEl.textContent = '⚪ Armed: ' + whiteAppCount + '/9 | ⚫ Armed: ' + blackAppCount + '/9' + (isQueenApp ? ' | 👑 Queen Armed' : '');
+        countEl.textContent = '⚪ Armed: ' + equippedWhite.length + '/9 | ⚫ Armed: ' + equippedBlack.length + '/9' + (equippedQueen ? ' | 👑 Queen Armed' : ' | 👑 Queen Empty') + ' · Click slot to unequip';
         traySlotsEl.innerHTML = '';
 
-        // Render combined tray showing active White slots, Black slots, and Queen
+        // Show armed White slots, Black slots, and Queen
         const trayItems = [
-          ...equippedWhite.slice(0, 4).map((id, idx) => ({ label: '⚪ W' + (idx+1), id })),
-          ...equippedBlack.slice(0, 4).map((id, idx) => ({ label: '⚫ B' + (idx+1), id })),
-          { label: '👑 Queen', id: equippedQueen }
+          ...equippedWhite.map((id, idx) => ({ label: '⚪ W' + (idx+1), id, pool: 'white', index: idx })),
+          ...equippedBlack.map((id, idx) => ({ label: '⚫ B' + (idx+1), id, pool: 'black', index: idx }))
         ];
+        if (equippedQueen) {
+          trayItems.push({ label: '👑 Queen', id: equippedQueen, pool: 'queen', index: 0 });
+        }
 
-        trayItems.forEach((s) => {
-          const cDef = s.id ? CRACKER_DEFINITIONS[s.id] : null;
-          const isApp = s.id && s.id.startsWith('app_');
-          const slot = document.createElement('div');
-          slot.className = 'tray-slot filled';
-          if (isApp) slot.style.borderColor = '#00e676';
-          slot.innerHTML = cDef ? '<span style="font-size:1.4rem;">' + cDef.emoji + '</span><div class="slot-label">' + s.label + (isApp ? ' ⭐' : '') + '</div>' : '<span>+</span>';
-          traySlotsEl.appendChild(slot);
-        });
+        if (trayItems.length === 0) {
+          traySlotsEl.innerHTML = '<div style="color:#bfa58a;font-size:0.85rem;padding:10px;">No crackers armed yet. Click ⚪ White, ⚫ Black, or 👑 Queen on any card below to arm coins!</div>';
+        } else {
+          trayItems.forEach((s) => {
+            const cDef = s.id ? CRACKER_DEFINITIONS[s.id] : null;
+            const isApp = s.id && s.id.startsWith('app_');
+            const slot = document.createElement('div');
+            slot.className = 'tray-slot filled';
+            if (isApp) slot.style.borderColor = '#00e676';
+            slot.title = 'Click to unequip ' + (cDef ? cDef.name : '') + ' from ' + s.label;
+            slot.innerHTML = cDef ? '<span style="font-size:1.4rem;">' + cDef.emoji + '</span><div class="slot-label">' + s.label + (isApp ? ' ⭐' : '') + '</div>' : '<span>+</span>';
+            slot.addEventListener('click', () => {
+              if (s.pool === 'white') equippedWhite.splice(s.index, 1);
+              else if (s.pool === 'black') equippedBlack.splice(s.index, 1);
+              else if (s.pool === 'queen') equippedQueen = null;
+              Sound.playFlick();
+              renderBazaarUI();
+            });
+            traySlotsEl.appendChild(slot);
+          });
+        }
       } else if (currentBazaarCat === 'white') {
-        titleEl.textContent = '⚪ White Coins Arsenal (9 Slots)';
-        countEl.textContent = 'Equipped: ' + equippedWhite.length + ' / 9' + (whiteAppCount > 0 ? ' (' + whiteAppCount + ' Novelties ⭐)' : '');
+        titleEl.textContent = '⚪ White Coins Arsenal (Equip 1 to 9 Crackers)';
+        countEl.textContent = 'Armed: ' + equippedWhite.length + ' / 9 coins will pop crackers · Click slot to unequip';
         traySlotsEl.innerHTML = '';
         for (let i = 0; i < 9; i++) {
           const id = equippedWhite[i];
@@ -2719,21 +2736,22 @@
           const slot = document.createElement('div');
           slot.className = 'tray-slot' + (cDef ? ' filled' : '');
           if (isApp) slot.style.borderColor = '#00e676';
-          slot.innerHTML = cDef ? '<span>' + cDef.emoji + '</span><div class="slot-label">' + (isApp ? '⭐ ' : '') + cDef.name + '</div>' : '<span style="opacity:0.3;">+</span>';
+          slot.innerHTML = cDef ? '<span>' + cDef.emoji + '</span><div class="slot-label">' + (isApp ? '⭐ ' : '') + cDef.name + '</div>' : '<span style="opacity:0.3;">+</span><div class="slot-label">Empty</div>';
           if (cDef) {
-            slot.title = 'Click to unequip';
+            slot.title = 'Click to unequip ' + cDef.name + ' (leaves coin normal)';
             slot.addEventListener('click', () => {
-              if (equippedWhite.length > 1) {
-                equippedWhite.splice(i, 1);
-                renderBazaarUI();
-              }
+              equippedWhite.splice(i, 1);
+              Sound.playFlick();
+              renderBazaarUI();
             });
+          } else {
+            slot.title = 'Empty White coin slot (Click any cracker below to equip)';
           }
           traySlotsEl.appendChild(slot);
         }
       } else if (currentBazaarCat === 'black') {
-        titleEl.textContent = '⚫ Black Coins Arsenal (9 Slots)';
-        countEl.textContent = 'Equipped: ' + equippedBlack.length + ' / 9' + (blackAppCount > 0 ? ' (' + blackAppCount + ' Novelties ⭐)' : '');
+        titleEl.textContent = '⚫ Black Coins Arsenal (Equip 1 to 9 Crackers)';
+        countEl.textContent = 'Armed: ' + equippedBlack.length + ' / 9 coins will pop crackers · Click slot to unequip';
         traySlotsEl.innerHTML = '';
         for (let i = 0; i < 9; i++) {
           const id = equippedBlack[i];
@@ -2742,29 +2760,38 @@
           const slot = document.createElement('div');
           slot.className = 'tray-slot' + (cDef ? ' filled' : '');
           if (isApp) slot.style.borderColor = '#00e676';
-          slot.innerHTML = cDef ? '<span>' + cDef.emoji + '</span><div class="slot-label">' + (isApp ? '⭐ ' : '') + cDef.name + '</div>' : '<span style="opacity:0.3;">+</span>';
+          slot.innerHTML = cDef ? '<span>' + cDef.emoji + '</span><div class="slot-label">' + (isApp ? '⭐ ' : '') + cDef.name + '</div>' : '<span style="opacity:0.3;">+</span><div class="slot-label">Empty</div>';
           if (cDef) {
-            slot.title = 'Click to unequip';
+            slot.title = 'Click to unequip ' + cDef.name + ' (leaves coin normal)';
             slot.addEventListener('click', () => {
-              if (equippedBlack.length > 1) {
-                equippedBlack.splice(i, 1);
-                renderBazaarUI();
-              }
+              equippedBlack.splice(i, 1);
+              Sound.playFlick();
+              renderBazaarUI();
             });
+          } else {
+            slot.title = 'Empty Black coin slot (Click any cracker below to equip)';
           }
           traySlotsEl.appendChild(slot);
         }
       } else if (currentBazaarCat === 'queen') {
-        titleEl.textContent = '🔴 Red Queen Grand Finale (1 Slot)';
-        countEl.textContent = isQueenApp ? '⭐ Approved Novelty Finale Equipped' : 'Classic Finale Equipped';
+        titleEl.textContent = '🔴 Red Queen Grand Finale (1 Slot Max)';
+        countEl.textContent = equippedQueen ? 'Armed: 1 / 1 Queen will pop grand finale · Click to unequip' : 'No cracker armed on Queen · Select one below';
         traySlotsEl.innerHTML = '';
-        const cDef = CRACKER_DEFINITIONS[equippedQueen];
+        const cDef = equippedQueen ? CRACKER_DEFINITIONS[equippedQueen] : null;
         const slot = document.createElement('div');
-        slot.className = 'tray-slot filled';
+        slot.className = 'tray-slot' + (cDef ? ' filled' : '');
         slot.style.width = '70px';
         slot.style.height = '60px';
         if (isQueenApp) slot.style.borderColor = '#ffd700';
-        slot.innerHTML = cDef ? '<span style="font-size:1.6rem;">' + cDef.emoji + '</span><div class="slot-label" style="font-size:0.65rem;">' + (isQueenApp ? '⭐ ' : '') + cDef.name + '</div>' : '';
+        slot.innerHTML = cDef ? '<span style="font-size:1.6rem;">' + cDef.emoji + '</span><div class="slot-label" style="font-size:0.65rem;">' + (isQueenApp ? '⭐ ' : '') + cDef.name + '</div>' : '<span style="opacity:0.3;font-size:1.6rem;">+</span><div class="slot-label">Empty Queen</div>';
+        if (cDef) {
+          slot.title = 'Click to unequip cracker from Queen';
+          slot.addEventListener('click', () => {
+            equippedQueen = null;
+            Sound.playFlick();
+            renderBazaarUI();
+          });
+        }
         traySlotsEl.appendChild(slot);
       }
 
@@ -2776,17 +2803,14 @@
       if (currentBazaarCat === 'approved') {
         items = CRACKER_CATALOG.filter(c => c.cat === 'approved' || c.approved);
       } else if (currentBazaarCat === 'white') {
-        // Show approved novelties at top, then white crackers
         const approvedItems = CRACKER_CATALOG.filter(c => c.cat === 'approved' || c.approved);
         const whiteItems = CRACKER_CATALOG.filter(c => c.cat === 'white');
         items = [...approvedItems, ...whiteItems];
       } else if (currentBazaarCat === 'black') {
-        // Show approved novelties at top, then black crackers
         const approvedItems = CRACKER_CATALOG.filter(c => c.cat === 'approved' || c.approved);
         const blackItems = CRACKER_CATALOG.filter(c => c.cat === 'black');
         items = [...approvedItems, ...blackItems];
       } else if (currentBazaarCat === 'queen') {
-        // Show approved novelties + queen items
         const approvedItems = CRACKER_CATALOG.filter(c => c.cat === 'approved' || c.approved);
         const queenItems = CRACKER_CATALOG.filter(c => c.cat === 'queen');
         items = [...approvedItems, ...queenItems];
@@ -2824,8 +2848,8 @@
             ${badgeHtml ? '<div class="approved-badge-row">' + badgeHtml + '</div>' : ''}
             <div class="item-btn-row approved-btn-row">
               <button class="btn-preview-sound" title="Preview Sound">🔊</button>
-              <button class="btn-action-equip-target btn-equip-white" title="Equip to White Coins">⚪ White</button>
-              <button class="btn-action-equip-target btn-equip-black" title="Equip to Black Coins">⚫ Black</button>
+              <button class="btn-action-equip-target btn-equip-white" title="Equip another to White Coins (${wCount}/9)">⚪ White ${wCount > 0 ? '(' + wCount + ')' : ''}</button>
+              <button class="btn-action-equip-target btn-equip-black" title="Equip another to Black Coins (${bCount}/9)">⚫ Black ${bCount > 0 ? '(' + bCount + ')' : ''}</button>
               <button class="btn-action-equip-target btn-equip-queen" title="Equip to Queen Finale">👑 Queen</button>
             </div>
           `;
@@ -2852,6 +2876,11 @@
 
         } else {
           // Standard cracker card
+          const currentPoolCount = (currentBazaarCat === 'white') ? wCount : ((currentBazaarCat === 'black') ? bCount : (isQueen ? 1 : 0));
+          const btnLabel = isEquipped 
+            ? (currentPoolCount > 0 ? '+ Add More (' + currentPoolCount + ')' : '✓ Equipped')
+            : (isUnlocked ? 'Equip' : (giftboxUsed ? '🔒 Locked' : '💰 ' + c.cost));
+
           card.innerHTML = `
             <div class="item-top-row">
               <div class="item-emoji">${c.emoji}</div>
@@ -2861,10 +2890,11 @@
               </div>
             </div>
             <div class="item-desc">${c.desc}</div>
+            ${badgeHtml ? '<div class="approved-badge-row">' + badgeHtml + '</div>' : ''}
             <div class="item-btn-row">
               <button class="btn-preview-sound" title="Preview Sound">🔊</button>
               <button class="btn-action-buy ${isEquipped ? 'btn-equipped' : (isUnlocked ? 'btn-equip' : (giftboxUsed ? 'btn-locked' : 'btn-buy'))}" ${(giftboxUsed && !isUnlocked && !isEquipped) ? 'title="Store purchase locked while Giftbox is active"' : ''}>
-                ${isEquipped ? '✓ Equipped' : (isUnlocked ? 'Equip' : (giftboxUsed ? '🔒 Locked' : '💰 ' + c.cost))}
+                ${btnLabel}
               </button>
             </div>
           `;
@@ -2877,7 +2907,6 @@
           const actionBtn = card.querySelector('.btn-action-buy');
           actionBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (isEquipped) return;
 
             if (!isUnlocked) {
               if (giftboxUsed) {
@@ -2908,49 +2937,65 @@
     function equipToTarget(c, target) {
       unlockedCrackers.add(c.id);
       if (target === 'white') {
-        const nonAppIdx = equippedWhite.findIndex(id => !id.startsWith('app_'));
-        if (nonAppIdx !== -1) {
-          equippedWhite[nonAppIdx] = c.id;
+        if (equippedWhite.length < 9) {
+          equippedWhite.push(c.id);
         } else {
-          if (equippedWhite.length >= 9) equippedWhite.shift();
+          equippedWhite.shift();
           equippedWhite.push(c.id);
         }
         Sound.playClack(8, 0);
       } else if (target === 'black') {
-        const nonAppIdx = equippedBlack.findIndex(id => !id.startsWith('app_'));
-        if (nonAppIdx !== -1) {
-          equippedBlack[nonAppIdx] = c.id;
+        if (equippedBlack.length < 9) {
+          equippedBlack.push(c.id);
         } else {
-          if (equippedBlack.length >= 9) equippedBlack.shift();
+          equippedBlack.shift();
           equippedBlack.push(c.id);
         }
         Sound.playClack(8, 0);
       } else if (target === 'queen') {
-        equippedQueen = c.id;
+        equippedQueen = (equippedQueen === c.id) ? null : c.id;
         Sound.playPocket();
       }
       renderBazaarUI();
     }
 
     function equipItem(c) {
-      if (c.cat === 'approved' || c.approved || c.id.startsWith('app_')) {
-        equipToTarget(c, currentBazaarCat === 'black' ? 'black' : (currentBazaarCat === 'queen' ? 'queen' : 'white'));
-      } else if (c.cat === 'white') {
-        if (!equippedWhite.includes(c.id)) {
-          if (equippedWhite.length >= 9) equippedWhite.shift();
+      if (currentBazaarCat === 'white') {
+        if (equippedWhite.length < 9) {
+          equippedWhite.push(c.id);
+        } else {
+          equippedWhite.shift();
           equippedWhite.push(c.id);
         }
-      } else if (c.cat === 'black') {
-        if (!equippedBlack.includes(c.id)) {
-          if (equippedBlack.length >= 9) equippedBlack.shift();
+      } else if (currentBazaarCat === 'black') {
+        if (equippedBlack.length < 9) {
+          equippedBlack.push(c.id);
+        } else {
+          equippedBlack.shift();
           equippedBlack.push(c.id);
         }
-      } else if (c.cat === 'queen') {
-        equippedQueen = c.id;
+      } else if (currentBazaarCat === 'queen') {
+        equippedQueen = (equippedQueen === c.id) ? null : c.id;
+      } else if (currentBazaarCat === 'approved') {
+        if (equippedWhite.length < 9) {
+          equippedWhite.push(c.id);
+        } else {
+          equippedWhite.shift();
+          equippedWhite.push(c.id);
+        }
       }
     }
 
     function openBazaarModal() {
+      if (savedUserEquippedWhite) {
+        equippedWhite = [...savedUserEquippedWhite];
+        equippedBlack = [...savedUserEquippedBlack];
+        equippedQueen = savedUserEquippedQueen;
+        savedUserEquippedWhite = null;
+        savedUserEquippedBlack = null;
+        savedUserEquippedQueen = null;
+      }
+      giftboxUsed = false;
       document.getElementById('menu-overlay').classList.add('hidden');
       document.getElementById('fun-menu-overlay').classList.add('hidden');
       document.getElementById('bazaar-overlay').classList.remove('hidden');
@@ -5392,35 +5437,21 @@
           coins.push(c); pieces.push(c);
         }
 
-        // 🎆 100 DIWALI CRACKERS ARSENAL ASSIGNMENT
+        // 🎆 DIWALI CRACKERS ARSENAL ASSIGNMENT
         if (isFunMode && funVariant === 'crackers') {
-          // Fill missing slots if user equipped less than 9
-          while (equippedWhite.length < 9) {
-            const avail = CRACKER_CATALOG.filter(c => c.cat === 'white' && !equippedWhite.includes(c.id));
-            if (avail.length > 0) equippedWhite.push(avail[0].id);
-            else break;
-          }
-          while (equippedBlack.length < 9) {
-            const avail = CRACKER_CATALOG.filter(c => c.cat === 'black' && !equippedBlack.includes(c.id));
-            if (avail.length > 0) equippedBlack.push(avail[0].id);
-            else break;
-          }
+          // DO NOT auto-fill missing slots!
+          // Only arm the exact number of crackers the player configured/wished in the Bazaar!
+          const activeWhite = [...equippedWhite];
+          const activeBlack = [...equippedBlack];
 
-          function shuffle(arr) {
-            for (let i = arr.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              const tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
-            }
-          }
-
-          // Prioritize Approved Novelties so they are stamped FIRST on the board coins!
+          // Priority ordering: put approved novelties first so they appear on outer coins
           const orderedWhite = [
-            ...equippedWhite.filter(id => id.startsWith('app_')),
-            ...equippedWhite.filter(id => !id.startsWith('app_'))
+            ...activeWhite.filter(id => id && id.startsWith('app_')),
+            ...activeWhite.filter(id => id && !id.startsWith('app_'))
           ];
           const orderedBlack = [
-            ...equippedBlack.filter(id => id.startsWith('app_')),
-            ...equippedBlack.filter(id => !id.startsWith('app_'))
+            ...activeBlack.filter(id => id && id.startsWith('app_')),
+            ...activeBlack.filter(id => id && !id.startsWith('app_'))
           ];
 
           let wIdx = 0;
@@ -5428,11 +5459,19 @@
 
           coins.forEach(c => {
             if (c.type === 'queen') {
-              c.crackerKey = equippedQueen || 'app_04';
+              c.crackerKey = equippedQueen || null;
             } else if (c.type === 'p1') {
-              c.crackerKey = orderedWhite[wIdx++ % orderedWhite.length];
+              if (wIdx < orderedWhite.length) {
+                c.crackerKey = orderedWhite[wIdx++];
+              } else {
+                c.crackerKey = null; // Unarmed coin: pops NO cracker!
+              }
             } else if (c.type === 'p2') {
-              c.crackerKey = orderedBlack[bIdx++ % orderedBlack.length];
+              if (bIdx < orderedBlack.length) {
+                c.crackerKey = orderedBlack[bIdx++];
+              } else {
+                c.crackerKey = null; // Unarmed coin: pops NO cracker!
+              }
             }
           });
         }
@@ -7055,6 +7094,14 @@
         exitMatch(destination = 'home') {
           state = 'menu';
           initBoard();
+          if (savedUserEquippedWhite) {
+            equippedWhite = [...savedUserEquippedWhite];
+            equippedBlack = [...savedUserEquippedBlack];
+            equippedQueen = savedUserEquippedQueen;
+            savedUserEquippedWhite = null;
+            savedUserEquippedBlack = null;
+            savedUserEquippedQueen = null;
+          }
           giftboxUsed = false;
           boardShakeIntensity = 0;
           document.getElementById('hud').classList.add('hidden');
@@ -7373,28 +7420,42 @@
 
     function handleGiftboxClose() {
       closeGiftboxModal();
-      // If user came from Fun Menu and hasn't started match, open Bazaar store so they can manually buy/equip
-      if (document.getElementById('bazaar-overlay').classList.contains('hidden') && !document.getElementById('fun-menu-overlay').classList.contains('hidden')) {
-        openBazaarModal();
+      if (savedUserEquippedWhite) {
+        equippedWhite = [...savedUserEquippedWhite];
+        equippedBlack = [...savedUserEquippedBlack];
+        equippedQueen = savedUserEquippedQueen;
+        savedUserEquippedWhite = null;
+        savedUserEquippedBlack = null;
+        savedUserEquippedQueen = null;
       }
+      giftboxUsed = false;
+      openBazaarModal();
     }
 
     function handleGiftboxUseAndPlay() {
       Sound.playPocket();
       giftboxUsed = true;
 
-      // Unlock all giftbox items & approved novelties
-      const giftItems = ['app_01', 'app_02', 'app_03', 'app_04', 'app_05', 'b_01', 'w_01', 'w_06', 'w_16', 'b_16', 'w_11', 'q_01'];
+      // Save user custom Bazaar loadout before applying Giftbox
+      if (!savedUserEquippedWhite) {
+        savedUserEquippedWhite = [...equippedWhite];
+        savedUserEquippedBlack = [...equippedBlack];
+        savedUserEquippedQueen = equippedQueen;
+      }
+
+      // Unlock all giftbox items in user inventory
+      const giftItems = ['b_01', 'w_01', 'w_06', 'w_16', 'b_16', 'w_11', 'q_01'];
       giftItems.forEach(id => unlockedCrackers.add(id));
 
-      // 9 White Coins including Approved Novelties (Butterfly Drone & Silk Parachute):
-      equippedWhite = ['app_01', 'app_03', 'w_01', 'w_01', 'w_06', 'w_06', 'w_11', 'w_13', 'w_16'];
+      // Exact 19 authentic hamper coins as displayed on the Giftbox card:
+      // 9 White: 4 Chakkar ('w_01'), 4 Flower Pot ('w_06'), 1 Peacock ('w_11')
+      equippedWhite = ['w_01', 'w_01', 'w_01', 'w_01', 'w_06', 'w_06', 'w_06', 'w_06', 'w_11'];
 
-      // 9 Black Coins including Approved Novelties (Whistling Helicopter & Fan Matrix):
-      equippedBlack = ['app_02', 'app_05', 'b_01', 'b_01', 'w_16', 'w_16', 'b_16', 'b_16', 'w_11'];
+      // 9 Black: 2 100-Wala ('b_01'), 4 Rocket ('w_16'), 2 Sky Shot 5-times ('b_16'), 1 Peacock ('w_11')
+      equippedBlack = ['b_01', 'b_01', 'w_16', 'w_16', 'w_16', 'w_16', 'b_16', 'b_16', 'w_11'];
 
-      // 1 Queen: Brocade Crown 240-Shot Aerial Cake Grand Finale
-      equippedQueen = 'app_04';
+      // 1 Queen: 1000-Wala Rajah Maha Dhamaka with 30s border celebration!
+      equippedQueen = 'q_01';
 
       // Close overlays and launch match directly to play as desired!
       closeGiftboxModal();
