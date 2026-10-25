@@ -1374,6 +1374,190 @@
       gap: 10px;
     }
 
+    /* Category Hub Grid & Cards */
+    .category-hub-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+      gap: 12px;
+      padding: 2px;
+    }
+
+    .category-hub-card {
+      background: linear-gradient(135deg, rgba(46, 22, 10, 0.96) 0%, rgba(20, 9, 4, 0.98) 100%);
+      border: 1.8px solid #5d4037;
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    .category-hub-card:hover {
+      transform: translateY(-3px) scale(1.01);
+      border-color: #ffd700;
+      box-shadow: 0 6px 22px rgba(255, 215, 0, 0.35);
+      background: linear-gradient(135deg, rgba(68, 32, 14, 0.98) 0%, rgba(30, 14, 6, 0.98) 100%);
+    }
+
+    .category-hub-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .category-hub-icon {
+      font-size: 2.1rem;
+      filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.5));
+      flex-shrink: 0;
+    }
+
+    .category-hub-title-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .category-hub-title {
+      font-size: 1.0rem;
+      font-weight: 800;
+      color: #ffd700;
+      letter-spacing: 0.3px;
+    }
+
+    .category-hub-count {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #ffb74d;
+    }
+
+    .category-hub-desc {
+      font-size: 0.74rem;
+      color: #d7ccc8;
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .category-hub-emojis {
+      display: flex;
+      gap: 6px;
+      font-size: 1.25rem;
+      padding: 6px 10px;
+      background: rgba(0, 0, 0, 0.38);
+      border-radius: 8px;
+      border: 1px dashed rgba(255, 215, 0, 0.25);
+    }
+
+    .category-hub-arrow-btn {
+      width: 100%;
+      padding: 8px 12px;
+      background: linear-gradient(135deg, #ffd700 0%, #ff8f00 100%);
+      color: #211202;
+      border: none;
+      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(255, 143, 0, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .category-hub-arrow-btn:hover {
+      background: linear-gradient(135deg, #fff 0%, #ffd700 100%);
+      transform: scale(1.02);
+      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.7);
+    }
+
+    /* Category View Banner (Inside a category) */
+    .category-view-banner {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(50, 24, 10, 0.96) 0%, rgba(24, 10, 4, 0.98) 100%);
+      border: 1.5px solid #6d4c41;
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+      flex-wrap: wrap;
+    }
+
+    .btn-category-back {
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #3e2723 0%, #1b0000 100%);
+      color: #ffd700;
+      border: 1.5px solid #d4af37;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-category-back:hover {
+      background: linear-gradient(135deg, #ffd700 0%, #ff8f00 100%);
+      color: #211202;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+      transform: translateX(-2px);
+    }
+
+    .category-view-info {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .category-view-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffd700;
+      letter-spacing: 0.3px;
+    }
+
+    .category-view-subtitle {
+      font-size: 0.74rem;
+      color: #d7ccc8;
+      margin-top: 2px;
+    }
+
+    .category-view-nav {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-cat-nav {
+      padding: 5px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: rgba(45, 20, 10, 0.85);
+      border: 1px solid #8d6e63;
+      border-radius: 6px;
+      color: #ffe082;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-cat-nav:hover {
+      border-color: #ffd700;
+      color: #fff;
+      background: rgba(75, 35, 15, 0.95);
+    }
+
     .store-item-card {
       background: linear-gradient(135deg, #2c160a 0%, #150904 100%);
       border: 1.5px solid #6d4c41;
@@ -1416,16 +1600,28 @@
 
     .item-title-col {
       flex: 1;
-      overflow: hidden;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
     }
 
     .item-name {
-      font-size: 0.82rem;
-      font-weight: bold;
-      color: #fff;
-      white-space: nowrap;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #ffd700;
+      line-height: 1.25;
+      white-space: normal;
+      word-break: break-word;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
+      min-height: 2.25em;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+      letter-spacing: 0.2px;
     }
 
     .item-pts {
@@ -2243,8 +2439,7 @@
 
       <!-- Category Filter Tabs with Arrow Pop-up Selector -->
       <div class="bazaar-tabs">
-        <button id="btn-category-arrow-popup" class="bazaar-tab category-arrow-dropdown-btn" title="Open Interactive Category Pop-up Menu">📂 Categories ▾</button>
-        <button class="bazaar-tab active" data-cat="all">🌟 All (105)</button>
+        <button class="bazaar-tab active" data-cat="categories" title="Open Categories Hub with Arrow Pop-ups">📂 Categories (9)</button>
         <button class="bazaar-tab" data-cat="chakkar">🌀 Chakkars (14)</button>
         <button class="bazaar-tab" data-cat="flowerpot">🌋 Flowerpots (16)</button>
         <button class="bazaar-tab" data-cat="rocket">🚀 Rockets (5)</button>
@@ -3084,7 +3279,7 @@
     }
 
     let activeTrayView = 'white';
-    let currentBazaarCat = 'all';
+    let currentBazaarCat = 'categories';
 
     function previewCrackerPopOnCard(cardEl, c) {
       previewCrackerSound(c);
@@ -3361,60 +3556,40 @@
         traySlotsEl.appendChild(slot);
       }
 
-      // Render Distinct Categorized Sections
+      // Render Category-Specific View or Category Hub with Arrow Pop-ups
       const gridEl = document.getElementById('bazaar-grid');
       gridEl.innerHTML = '';
 
-      const categoriesToRender = (currentBazaarCat === 'all') 
-        ? CATEGORY_ORDER 
-        : [currentBazaarCat];
+      if (currentBazaarCat === 'categories') {
+        const hubGrid = document.createElement('div');
+        hubGrid.className = 'category-hub-grid';
 
-      categoriesToRender.forEach(catKey => {
-        const catItems = CRACKER_CATALOG.filter(c => c.category === catKey);
-        if (catItems.length === 0) return;
+        CATEGORY_ORDER.forEach(catKey => {
+          const catItems = CRACKER_CATALOG.filter(c => c.category === catKey);
+          const meta = CATEGORY_META[catKey] || { title: catKey, subtitle: '', icon: '✨', color: '#ffd700' };
+          const card = document.createElement('div');
+          card.className = 'category-hub-card';
+          card.style.borderLeft = `5px solid ${meta.color}`;
 
-        const meta = CATEGORY_META[catKey] || {
-          title: catKey.toUpperCase(),
-          subtitle: 'Collection of ' + catItems.length + ' varieties',
-          color: '#ffd700'
-        };
+          const emojisSample = catItems.slice(0, 6).map(c => c.emoji).join(' ');
 
-        const sectionBlock = document.createElement('div');
-        sectionBlock.className = 'category-section-block';
-        sectionBlock.id = `cat-section-${catKey}`;
-
-        const headerEl = document.createElement('div');
-        headerEl.className = 'category-section-header';
-        headerEl.style.borderLeft = '4px solid ' + meta.color;
-        headerEl.innerHTML = `
-          <div class="category-header-top-row">
-            <div class="category-header-left">
-              <button type="button" class="category-arrow-btn" aria-label="Toggle ${meta.title}">▼</button>
-              <span>${meta.title}</span>
+          card.innerHTML = `
+            <div class="category-hub-top">
+              <div class="category-hub-icon">${meta.icon}</div>
+              <div class="category-hub-title-box">
+                <div class="category-hub-title">${meta.title}</div>
+                <div class="category-hub-count">${catItems.length} Varieties Available</div>
+              </div>
             </div>
-            <div class="category-header-actions">
-              <span class="category-header-count">${catItems.length} Varieties</span>
-              <button type="button" class="category-popup-btn" title="Pop up ${meta.title} in exclusive view" data-popcat="${catKey}">
-                ↗ Pop Up
-              </button>
-            </div>
-          </div>
-          <div class="category-header-subtitle">${meta.subtitle}</div>
-          <div class="category-collapsed-hint">Collapsed • Click arrow ▼ to expand ${catItems.length} items</div>
-        `;
+            <div class="category-hub-desc">${meta.subtitle}</div>
+            <div class="category-hub-emojis">${emojisSample}</div>
+            <button type="button" class="category-hub-arrow-btn">
+              <span>Explore ${catItems.length} ${meta.icon} Crackers</span>
+              <span style="font-size: 1.1rem;">➔</span>
+            </button>
+          `;
 
-        // Arrow and header toggle expand/collapse
-        headerEl.addEventListener('click', (e) => {
-          if (e.target.closest('.category-popup-btn')) return;
-          sectionBlock.classList.toggle('collapsed');
-          Sound.playFlick();
-        });
-
-        // "↗ Pop Up" button: filters strictly to this category tab
-        const popBtn = headerEl.querySelector('.category-popup-btn');
-        if (popBtn) {
-          popBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
+          card.addEventListener('click', () => {
             Sound.playPocket();
             currentBazaarCat = catKey;
             document.querySelectorAll('.bazaar-tab[data-cat]').forEach(t => {
@@ -3423,19 +3598,79 @@
             });
             renderBazaarUI();
           });
-        }
 
-        sectionBlock.appendChild(headerEl);
+          hubGrid.appendChild(card);
+        });
+
+        gridEl.appendChild(hubGrid);
+      } else {
+        const catKey = currentBazaarCat;
+        const catItems = CRACKER_CATALOG.filter(c => c.category === catKey);
+        const meta = CATEGORY_META[catKey] || { title: catKey.toUpperCase(), subtitle: '', icon: '✨', color: '#ffd700' };
+
+        const banner = document.createElement('div');
+        banner.className = 'category-view-banner';
+        banner.style.borderLeft = `4px solid ${meta.color}`;
+
+        const catIdx = CATEGORY_ORDER.indexOf(catKey);
+        const prevCat = catIdx > 0 ? CATEGORY_ORDER[catIdx - 1] : CATEGORY_ORDER[CATEGORY_ORDER.length - 1];
+        const nextCat = catIdx < CATEGORY_ORDER.length - 1 ? CATEGORY_ORDER[catIdx + 1] : CATEGORY_ORDER[0];
+        const prevMeta = CATEGORY_META[prevCat];
+        const nextMeta = CATEGORY_META[nextCat];
+
+        banner.innerHTML = `
+          <button type="button" class="btn-category-back">
+            <span>←</span> Back to Categories
+          </button>
+          <div class="category-view-info">
+            <div class="category-view-title">${meta.title} (${catItems.length} Varieties)</div>
+            <div class="category-view-subtitle">${meta.subtitle}</div>
+          </div>
+          <div class="category-view-nav">
+            <button type="button" class="btn-cat-nav btn-cat-prev" title="Switch to ${prevMeta.title}">◀ ${prevMeta.icon}</button>
+            <button type="button" class="btn-cat-nav btn-cat-next" title="Switch to ${nextMeta.title}">${nextMeta.icon} ▶</button>
+          </div>
+        `;
+
+        banner.querySelector('.btn-category-back').addEventListener('click', () => {
+          Sound.playFlick();
+          currentBazaarCat = 'categories';
+          document.querySelectorAll('.bazaar-tab[data-cat]').forEach(t => {
+            if (t.getAttribute('data-cat') === 'categories') t.classList.add('active');
+            else t.classList.remove('active');
+          });
+          renderBazaarUI();
+        });
+
+        banner.querySelector('.btn-cat-prev').addEventListener('click', () => {
+          Sound.playFlick();
+          currentBazaarCat = prevCat;
+          document.querySelectorAll('.bazaar-tab[data-cat]').forEach(t => {
+            if (t.getAttribute('data-cat') === prevCat) t.classList.add('active');
+            else t.classList.remove('active');
+          });
+          renderBazaarUI();
+        });
+
+        banner.querySelector('.btn-cat-next').addEventListener('click', () => {
+          Sound.playFlick();
+          currentBazaarCat = nextCat;
+          document.querySelectorAll('.bazaar-tab[data-cat]').forEach(t => {
+            if (t.getAttribute('data-cat') === nextCat) t.classList.add('active');
+            else t.classList.remove('active');
+          });
+          renderBazaarUI();
+        });
+
+        gridEl.appendChild(banner);
 
         const cardsGrid = document.createElement('div');
         cardsGrid.className = 'category-cards-grid';
         catItems.forEach(c => {
           cardsGrid.appendChild(createCrackerCard(c));
         });
-        sectionBlock.appendChild(cardsGrid);
-
-        gridEl.appendChild(sectionBlock);
-      });
+        gridEl.appendChild(cardsGrid);
+      }
 
       // Populate Floating Category Arrow Pop-up Menu
       const popupListEl = document.getElementById('category-popup-list');
@@ -8062,7 +8297,7 @@
         alert('🎁 Diwali Giftbox is currently active! Store purchases are locked for this match.');
         return;
       }
-      const unbought = CRACKER_CATALOG.filter(c => (currentBazaarCat === 'all' || c.category === currentBazaarCat) && !unlockedCrackers.has(c.id));
+      const unbought = CRACKER_CATALOG.filter(c => (currentBazaarCat === 'categories' || currentBazaarCat === 'all' || c.category === currentBazaarCat) && !unlockedCrackers.has(c.id));
       if (unbought.length === 0) {
         alert('You have already unlocked all crackers in this category!');
         return;
@@ -8082,7 +8317,7 @@
 
     document.getElementById('btn-bazaar-random').addEventListener('click', () => {
       Sound.playFlick();
-      const pool = currentBazaarCat === 'all' 
+      const pool = (currentBazaarCat === 'categories' || currentBazaarCat === 'all') 
         ? CRACKER_CATALOG 
         : CRACKER_CATALOG.filter(c => c.category === currentBazaarCat);
       const shuffled = [...pool].sort(() => Math.random() - 0.5);
