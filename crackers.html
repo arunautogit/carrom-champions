@@ -1,0 +1,2791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🪔 Diwali Cracker Bazaar & Interactive Popper Showroom 🎆</title>
+  <style>
+    :root {
+      --bg-dark: #0b0716;
+      --bg-card: #150f26;
+      --bg-card-hover: #1f1638;
+      --gold: #ffd700;
+      --gold-glow: rgba(255, 215, 0, 0.45);
+      --red: #ff334b;
+      --green: #00e676;
+      --cyan: #00e5ff;
+      --orange: #ff9100;
+      --purple: #b388ff;
+      --text-main: #f5f2eb;
+      --text-dim: #a09cb0;
+      --card-border: rgba(255, 215, 0, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(138, 43, 226, 0.18) 0%, transparent 60%),
+        radial-gradient(circle at 10% 30%, rgba(255, 153, 0, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 90% 70%, rgba(0, 229, 255, 0.1) 0%, transparent 50%),
+        linear-gradient(180deg, #0d061c 0%, #06030c 100%);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* Pyrotechnics overlay canvas */
+    #fxCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Screen flash overlay */
+    #flashOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #ffffff;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transition: opacity 0.08s ease-out;
+    }
+
+    /* Header Bar */
+    header {
+      background: rgba(14, 8, 30, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 2px solid rgba(255, 215, 0, 0.35);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 12px 24px;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .title-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .diya-icon {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 0 10px rgba(255, 180, 0, 0.8));
+      animation: diyaFloat 2.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes diyaFloat {
+      0% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 8px rgba(255, 170, 0, 0.7)); }
+      100% { transform: translateY(-4px) scale(1.08); filter: drop-shadow(0 0 16px rgba(255, 220, 0, 0.95)); }
+    }
+
+    h1 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #fff 0%, #ffd700 45%, #ff9100 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 14px rgba(255, 215, 0, 0.3);
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: #dfd7ee;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 9px 16px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      outline: none;
+      text-decoration: none;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    .btn-back {
+      background: linear-gradient(135deg, #2a2044 0%, #171126 100%);
+      color: #fff;
+      border-color: rgba(255, 215, 0, 0.4);
+    }
+    .btn-back:hover {
+      background: linear-gradient(135deg, #3d2f63 0%, #221a38 100%);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.35);
+      border-color: #ffd700;
+      transform: translateY(-1px);
+    }
+
+    .btn-fire {
+      background: linear-gradient(135deg, #ff4500 0%, #ff8c00 100%);
+      color: #fff;
+      border: 1px solid #ffd700;
+      box-shadow: 0 0 16px rgba(255, 69, 0, 0.5);
+    }
+    .btn-fire:hover {
+      background: linear-gradient(135deg, #ff5722 0%, #ffa000 100%);
+      box-shadow: 0 0 24px rgba(255, 110, 0, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn-rapid {
+      background: linear-gradient(135deg, #7c4dff 0%, #00e5ff 100%);
+      color: #fff;
+      border: 1px solid rgba(0, 229, 255, 0.6);
+      box-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
+    }
+    .btn-rapid:hover {
+      box-shadow: 0 0 24px rgba(0, 229, 255, 0.75);
+      transform: translateY(-2px);
+    }
+    .btn-rapid.active {
+      background: linear-gradient(135deg, #ff1744 0%, #ff5252 100%);
+      border-color: #ff1744;
+      animation: pulseAlert 1.2s infinite;
+    }
+
+    @keyframes pulseAlert {
+      0%, 100% { box-shadow: 0 0 12px rgba(255, 23, 68, 0.6); }
+      50% { box-shadow: 0 0 28px rgba(255, 23, 68, 0.95); }
+    }
+
+    .btn-audio {
+      background: #1e1735;
+      color: #e2dcfa;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Hero / Stats Banner */
+    .stats-bar {
+      max-width: 1400px;
+      margin: 16px auto 0;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .stat-pill {
+      background: rgba(26, 18, 48, 0.65);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      border-radius: 14px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .stat-icon {
+      font-size: 1.6rem;
+    }
+
+    .stat-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-val {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffd700;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-dim);
+    }
+
+    /* Controls Bar: Categories & Search */
+    .controls-panel {
+      max-width: 1400px;
+      margin: 18px auto 0;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+    .category-tabs::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(22, 16, 40, 0.75);
+      color: var(--text-dim);
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+      background: rgba(43, 31, 78, 0.85);
+      border-color: rgba(255, 215, 0, 0.35);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+      color: #120924;
+      border-color: #ffd700;
+      box-shadow: 0 0 18px rgba(255, 215, 0, 0.5);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 260px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(20, 14, 38, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.25);
+      border-radius: 12px;
+      padding: 10px 16px 10px 40px;
+      color: #fff;
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: #ffd700;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.35);
+      background: rgba(28, 19, 54, 0.95);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      color: #8c86a3;
+      pointer-events: none;
+    }
+
+    .type-select, .sort-select {
+      background: rgba(20, 14, 38, 0.85);
+      border: 1px solid rgba(255, 215, 0, 0.25);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #ffd700;
+      font-size: 0.88rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Cracker Grid */
+    main {
+      max-width: 1400px;
+      margin: 20px auto 60px;
+      padding: 0 24px;
+    }
+
+    .cracker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    /* Individual Cracker Card */
+    .cracker-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--card-border);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+      transition: transform 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28), box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .cracker-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.08) 0%, transparent 65%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .cracker-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--card-rim-glow, rgba(255, 215, 0, 0.35));
+      border-color: var(--card-rim, #ffd700);
+    }
+
+    .cracker-card:hover::before {
+      opacity: 1;
+    }
+
+    .cracker-card:active {
+      transform: scale(0.97);
+    }
+
+    /* Card popping animations */
+    .cracker-card.popping {
+      animation: cardPopBurst 0.65s cubic-bezier(0.25, 1, 0.5, 1);
+      border-color: #ff334b !important;
+      box-shadow: 0 0 35px rgba(255, 51, 75, 0.85) !important;
+    }
+
+    @keyframes cardPopBurst {
+      0% { transform: scale(1); filter: brightness(1); }
+      15% { transform: scale(0.92) rotate(-2deg); filter: brightness(1.8) contrast(1.4); }
+      40% { transform: scale(1.08) rotate(3deg); filter: brightness(2.2); }
+      70% { transform: scale(1.03) rotate(-1deg); filter: brightness(1.3); }
+      100% { transform: scale(1); filter: brightness(1); }
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .emoji-box {
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+      transition: transform 0.25s ease;
+    }
+
+    .cracker-card:hover .emoji-box {
+      transform: scale(1.14) rotate(8deg);
+    }
+
+    .card-meta {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .badge-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .cat-badge {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .cat-white {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .cat-black {
+      background: rgba(40, 30, 60, 0.8);
+      color: #ffd700;
+      border: 1px solid rgba(255, 215, 0, 0.4);
+    }
+
+    .cat-queen {
+      background: linear-gradient(135deg, #ffd700 0%, #ff1744 100%);
+      color: #12001e;
+      border: 1px solid #ffd700;
+      font-weight: 900;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+      animation: queenGlow 2s infinite alternate;
+    }
+
+    @keyframes queenGlow {
+      0% { filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.5)); }
+      100% { filter: drop-shadow(0 0 12px rgba(255, 23, 68, 0.9)); }
+    }
+
+    .type-badge {
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(0, 229, 255, 0.15);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      text-transform: uppercase;
+    }
+
+    .cracker-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+      margin-top: 2px;
+    }
+
+    .cracker-desc {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.4;
+      min-height: 34px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 10px;
+      margin-top: auto;
+    }
+
+    .points-tag {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .cost-tag {
+      font-size: 0.8rem;
+      color: #ffd700;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .pop-btn {
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #ff9100 0%, #ff3d00 100%);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 10px rgba(255, 61, 0, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .pop-btn:hover {
+      background: linear-gradient(135deg, #ffa726 0%, #ff5722 100%);
+      box-shadow: 0 0 16px rgba(255, 87, 34, 0.8);
+      transform: scale(1.05);
+    }
+
+    .pop-counter-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #ffd700;
+      display: none;
+    }
+
+    .pop-counter-badge.visible {
+      display: block;
+    }
+
+    /* Floating Toast / Announcement */
+    #celebrationToast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(18, 10, 36, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 2px solid #ffd700;
+      border-radius: 999px;
+      padding: 12px 28px;
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 24px rgba(255, 215, 0, 0.4);
+      z-index: 10000;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      pointer-events: none;
+    }
+
+    #celebrationToast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Screen shake */
+    .screen-shake {
+      animation: shakeAnim 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    @keyframes shakeAnim {
+      10%, 90% { transform: translate3d(-3px, 2px, 0); }
+      20%, 80% { transform: translate3d(4px, -3px, 0); }
+      30%, 50%, 70% { transform: translate3d(-5px, 4px, 0); }
+      40%, 60% { transform: translate3d(5px, -4px, 0); }
+    }
+
+    .screen-shake-heavy {
+      animation: shakeHeavyAnim 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    @keyframes shakeHeavyAnim {
+      10%, 90% { transform: translate3d(-8px, 6px, 0) rotate(-0.5deg); }
+      20%, 80% { transform: translate3d(9px, -7px, 0) rotate(0.6deg); }
+      30%, 50%, 70% { transform: translate3d(-10px, 8px, 0) rotate(-0.8deg); }
+      40%, 60% { transform: translate3d(10px, -8px, 0) rotate(0.8deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header { padding: 10px 16px; }
+      h1 { font-size: 1.2rem; }
+      .header-content { flex-direction: column; align-items: stretch; }
+      .header-actions { justify-content: space-between; }
+      .stats-bar, .controls-panel, main { padding: 0 16px; }
+      .cracker-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fullscreen canvas for sparks, fireworks, shockwaves, smoke & floating labels -->
+  <canvas id="fxCanvas"></canvas>
+  <div id="flashOverlay"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <div class="title-area">
+        <div class="diya-icon">🪔</div>
+        <div>
+          <h1>Diwali Cracker Bazaar & Popper Showroom</h1>
+          <div class="subtitle">Click any cracker card to light its fuse and watch it pop off with live pyrotechnics!</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="btn btn-back" id="btnBack">
+          <span>🔙</span> Back to Carrom Board
+        </a>
+        <button class="btn btn-fire" id="btnPopAll">
+          <span>💥</span> Pop All Visible
+        </button>
+        <button class="btn btn-rapid" id="btnRapid">
+          <span>🚀</span> Rapid Chain Reaction
+        </button>
+        <button class="btn btn-audio" id="btnAudioToggle">
+          <span id="audioIcon">🔊</span> Sound: ON
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stats Banner -->
+  <div class="stats-bar">
+    <div class="stat-pill">
+      <div class="stat-icon">🎆</div>
+      <div class="stat-details">
+        <span class="stat-val" id="statTotal">100</span>
+        <span class="stat-label">Total Crackers</span>
+      </div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-icon">💥</div>
+      <div class="stat-details">
+        <span class="stat-val" id="statPopped">0</span>
+        <span class="stat-label">Crackers Popped</span>
+      </div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-icon">✨</div>
+      <div class="stat-details">
+        <span class="stat-val" id="statPoints">0</span>
+        <span class="stat-label">Celebration Points</span>
+      </div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-icon">👑</div>
+      <div class="stat-details">
+        <span class="stat-val" id="statShowstoppers">10</span>
+        <span class="stat-label">Queen Showstoppers</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls Panel -->
+  <div class="controls-panel">
+    <div class="category-tabs">
+      <button class="tab-btn active" data-cat="all">🌟 All Crackers (100)</button>
+      <button class="tab-btn" data-cat="white">⚪ White Coins (45)</button>
+      <button class="tab-btn" data-cat="black">⚫ Black Coins (45)</button>
+      <button class="tab-btn" data-cat="queen">👑 Queen Showstoppers (10)</button>
+    </div>
+
+    <div class="filter-row">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by name, type, or description (e.g. bomb, chakkar, rocket, gold)...">
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <select id="typeFilter" class="type-select">
+          <option value="all">All Types (19)</option>
+          <option value="chakkar">Chakkars (Spinners)</option>
+          <option value="flowerpot">Flowerpots (Anaars)</option>
+          <option value="peacock">Peacocks (Feather Fountains)</option>
+          <option value="sparkler">Sparklers (Phooljhadi)</option>
+          <option value="rocket">Rockets (Sky High)</option>
+          <option value="bomb">Atom & Hydro Bombs</option>
+          <option value="100wala">100-Wala & 1000-Wala (Ladi)</option>
+          <option value="mirchi">Mirchi & Bullet Crackers</option>
+          <option value="gorilla">Gorilla & Big Dhamaka</option>
+          <option value="sevenshot">Multi-Shots & Roman Candles</option>
+          <option value="mega_diwali">Queen Mega Showstoppers</option>
+        </select>
+        <select id="sortFilter" class="sort-select">
+          <option value="catalog">Default Catalog Order</option>
+          <option value="pts-desc">Highest Points First</option>
+          <option value="cost-desc">Highest Price First</option>
+          <option value="name-asc">Alphabetical (A-Z)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Cracker Grid -->
+  <main>
+    <div class="cracker-grid" id="crackerGrid"></div>
+  </main>
+
+  <!-- Celebration Toast Banner -->
+  <div id="celebrationToast">
+    <span id="toastEmoji">🎇</span>
+    <span id="toastText">Happy Diwali! Ready to pop crackers!</span>
+  </div>
+
+  <script>
+    /* ================= 100 CRACKER FULL CATALOG ================= */
+    const CRACKER_CATALOG = [
+  {
+    "id": "w_01",
+    "cat": "white",
+    "name": "Zameen Chakkar Classic",
+    "emoji": "🌀",
+    "desc": "Fast ground starburst spinner",
+    "cost": 30,
+    "pts": 15,
+    "rim": "#ffd700",
+    "type": "chakkar"
+  },
+  {
+    "id": "w_02",
+    "cat": "white",
+    "name": "Deluxe Special Chakkar",
+    "emoji": "💫",
+    "desc": "Dual-ring golden spinner",
+    "cost": 45,
+    "pts": 20,
+    "rim": "#ffeb3b",
+    "type": "chakkar"
+  },
+  {
+    "id": "w_03",
+    "cat": "white",
+    "name": "Disco Wheel Chakkar",
+    "emoji": "🎡",
+    "desc": "Neon multi-color spinning disc",
+    "cost": 55,
+    "pts": 22,
+    "rim": "#00e5ff",
+    "type": "chakkar"
+  },
+  {
+    "id": "w_04",
+    "cat": "white",
+    "name": "Super Jumbo Chakkar",
+    "emoji": "⚡",
+    "desc": "Giant high-RPM roaring wheel",
+    "cost": 75,
+    "pts": 26,
+    "rim": "#ff9100",
+    "type": "chakkar"
+  },
+  {
+    "id": "w_05",
+    "cat": "white",
+    "name": "Whistling Chakkar",
+    "emoji": "🌪️",
+    "desc": "High-pitch banshee spin whirl",
+    "cost": 80,
+    "pts": 28,
+    "rim": "#76ff03",
+    "type": "chakkar"
+  },
+  {
+    "id": "w_06",
+    "cat": "white",
+    "name": "Flower Pot (Anaar) Classic",
+    "emoji": "🌋",
+    "desc": "Golden spark fountain geyser",
+    "cost": 35,
+    "pts": 18,
+    "rim": "#ff9800",
+    "type": "flowerpot"
+  },
+  {
+    "id": "w_07",
+    "cat": "white",
+    "name": "Super Anaar Deluxe",
+    "emoji": "✨",
+    "desc": "High-pressure golden shower",
+    "cost": 50,
+    "pts": 22,
+    "rim": "#ffd54f",
+    "type": "flowerpot"
+  },
+  {
+    "id": "w_08",
+    "cat": "white",
+    "name": "Colour Koti Fountain",
+    "emoji": "🌈",
+    "desc": "Tricolor glowing spark geyser",
+    "cost": 65,
+    "pts": 25,
+    "rim": "#e91e63",
+    "type": "flowerpot"
+  },
+  {
+    "id": "w_09",
+    "cat": "white",
+    "name": "Emerald Green Fountain",
+    "emoji": "🌲",
+    "desc": "Vibrant jade green ember burst",
+    "cost": 70,
+    "pts": 26,
+    "rim": "#00e676",
+    "type": "flowerpot"
+  },
+  {
+    "id": "w_10",
+    "cat": "white",
+    "name": "Royal Crimson Anaar",
+    "emoji": "🏮",
+    "desc": "Ruby spark fountain tower",
+    "cost": 75,
+    "pts": 28,
+    "rim": "#ff1744",
+    "type": "flowerpot"
+  },
+  {
+    "id": "w_11",
+    "cat": "white",
+    "name": "Peacock Feather Fountain",
+    "emoji": "🦚",
+    "desc": "Majestic emerald & gold plumage",
+    "cost": 85,
+    "pts": 30,
+    "rim": "#1de9b6",
+    "type": "peacock"
+  },
+  {
+    "id": "w_12",
+    "cat": "white",
+    "name": "Golden Peacock Glory",
+    "emoji": "🦚",
+    "desc": "Shimmering golden fan plume",
+    "cost": 95,
+    "pts": 32,
+    "rim": "#ffd700",
+    "type": "peacock"
+  },
+  {
+    "id": "w_13",
+    "cat": "white",
+    "name": "Electric Fuljhadi (Sparkler)",
+    "emoji": "🪄",
+    "desc": "Classic golden needle sizzler",
+    "cost": 25,
+    "pts": 15,
+    "rim": "#fff59d",
+    "type": "sparkler"
+  },
+  {
+    "id": "w_14",
+    "cat": "white",
+    "name": "Silver Strobe Sparkler",
+    "emoji": "⭐",
+    "desc": "Crisp pulsating silver strobe",
+    "cost": 40,
+    "pts": 18,
+    "rim": "#e0e0e0",
+    "type": "sparkler"
+  },
+  {
+    "id": "w_15",
+    "cat": "white",
+    "name": "Color Sparkler Bouquet",
+    "emoji": "💐",
+    "desc": "Rainbow needle spark spray",
+    "cost": 50,
+    "pts": 20,
+    "rim": "#f48fb1",
+    "type": "sparkler"
+  },
+  {
+    "id": "w_16",
+    "cat": "white",
+    "name": "Hawayi Rocket Classic",
+    "emoji": "🚀",
+    "desc": "Screaming upward rocket starburst",
+    "cost": 50,
+    "pts": 24,
+    "rim": "#00e5ff",
+    "type": "rocket"
+  },
+  {
+    "id": "w_17",
+    "cat": "white",
+    "name": "Whistling Sky Rocket",
+    "emoji": "🛰️",
+    "desc": "Piercing ascending whistle & flash",
+    "cost": 70,
+    "pts": 28,
+    "rim": "#00b0ff",
+    "type": "rocket"
+  },
+  {
+    "id": "w_18",
+    "cat": "white",
+    "name": "Parachute Flash Rocket",
+    "emoji": "🪂",
+    "desc": "Mid-air canopy flare burst",
+    "cost": 85,
+    "pts": 30,
+    "rim": "#ff4081",
+    "type": "rocket"
+  },
+  {
+    "id": "w_19",
+    "cat": "white",
+    "name": "Bijli Pataka Flash",
+    "emoji": "⚡",
+    "desc": "Sudden electric lightning snap",
+    "cost": 30,
+    "pts": 18,
+    "rim": "#ffee58",
+    "type": "bijli"
+  },
+  {
+    "id": "w_20",
+    "cat": "white",
+    "name": "Mega Bijli Striker",
+    "emoji": "🌩️",
+    "desc": "High-voltage staccato thunder snap",
+    "cost": 45,
+    "pts": 20,
+    "rim": "#fff176",
+    "type": "bijli"
+  },
+  {
+    "id": "w_21",
+    "cat": "white",
+    "name": "Roman Candle 5-Shots",
+    "emoji": "🌟",
+    "desc": "Rhythmic ascending glowing comets",
+    "cost": 60,
+    "pts": 24,
+    "rim": "#ab47bc",
+    "type": "romancandle"
+  },
+  {
+    "id": "w_22",
+    "cat": "white",
+    "name": "Roman Candle 10-Shots",
+    "emoji": "🌠",
+    "desc": "Ten dazzling color fireball bursts",
+    "cost": 85,
+    "pts": 30,
+    "rim": "#ce93d8",
+    "type": "romancandle"
+  },
+  {
+    "id": "w_23",
+    "cat": "white",
+    "name": "Twinkling Star Glimmer",
+    "emoji": "✨",
+    "desc": "Silver starlight glitter envelope",
+    "cost": 35,
+    "pts": 18,
+    "rim": "#e0e0e0",
+    "type": "twinkling"
+  },
+  {
+    "id": "w_24",
+    "cat": "white",
+    "name": "Golden Glitter Chime",
+    "emoji": "🔔",
+    "desc": "Crystalline golden bell sparkles",
+    "cost": 55,
+    "pts": 22,
+    "rim": "#ffecb3",
+    "type": "twinkling"
+  },
+  {
+    "id": "w_25",
+    "cat": "white",
+    "name": "Saanp Ki Goli (Black Serpent)",
+    "emoji": "🐍",
+    "desc": "Writhing tower of volcanic ember ash",
+    "cost": 30,
+    "pts": 18,
+    "rim": "#8d6e63",
+    "type": "snake"
+  },
+  {
+    "id": "w_26",
+    "cat": "white",
+    "name": "King Cobra Serpent Tablet",
+    "emoji": "🐉",
+    "desc": "Thick smoking fiery coil column",
+    "cost": 50,
+    "pts": 22,
+    "rim": "#5d4037",
+    "type": "snake"
+  },
+  {
+    "id": "w_27",
+    "cat": "white",
+    "name": "Silver Rain Waterfall",
+    "emoji": "🌊",
+    "desc": "Cascading curtain of white embers",
+    "cost": 65,
+    "pts": 25,
+    "rim": "#b0bec5",
+    "type": "flowerpot"
+  },
+  {
+    "id": "w_28",
+    "cat": "white",
+    "name": "Golden Shower Cascade",
+    "emoji": "🚿",
+    "desc": "Overhead rain of luminous sparks",
+    "cost": 65,
+    "pts": 25,
+    "rim": "#ffd54f",
+    "type": "flowerpot"
+  },
+  {
+    "id": "w_29",
+    "cat": "white",
+    "name": "Butterfly Spinner",
+    "emoji": "🦋",
+    "desc": "Fluttering fluttering twin spark wings",
+    "cost": 55,
+    "pts": 22,
+    "rim": "#80d8ff",
+    "type": "chakkar"
+  },
+  {
+    "id": "w_30",
+    "cat": "white",
+    "name": "Dragonfly Twirler",
+    "emoji": "🪰",
+    "desc": "High-speed erratic glittering swirl",
+    "cost": 60,
+    "pts": 24,
+    "rim": "#b388ff",
+    "type": "chakkar"
+  },
+  {
+    "id": "w_31",
+    "cat": "white",
+    "name": "Starlight Aerial Comet",
+    "emoji": "☄️",
+    "desc": "Brilliant blazing white streak shot",
+    "cost": 75,
+    "pts": 28,
+    "rim": "#ffffff",
+    "type": "rocket"
+  },
+  {
+    "id": "w_32",
+    "cat": "white",
+    "name": "Phoenix Fire Feather",
+    "emoji": "🪶",
+    "desc": "Orange-crimson feathered fountain",
+    "cost": 85,
+    "pts": 30,
+    "rim": "#ff6e40",
+    "type": "peacock"
+  },
+  {
+    "id": "w_33",
+    "cat": "white",
+    "name": "Magic Crystal Wand",
+    "emoji": "🪄",
+    "desc": "Sizzling pastel rainbow sparks",
+    "cost": 45,
+    "pts": 20,
+    "rim": "#ea80fc",
+    "type": "sparkler"
+  },
+  {
+    "id": "w_34",
+    "cat": "white",
+    "name": "Laser Flash Strobe",
+    "emoji": "🔦",
+    "desc": "Rapid 10Hz blinding strobe pops",
+    "cost": 65,
+    "pts": 25,
+    "rim": "#00e5ff",
+    "type": "bijli"
+  },
+  {
+    "id": "w_35",
+    "cat": "white",
+    "name": "Moonlight Silver Fountain",
+    "emoji": "🌙",
+    "desc": "Cool pearl-white tranquil geyser",
+    "cost": 70,
+    "pts": 26,
+    "rim": "#cfd8dc",
+    "type": "flowerpot"
+  },
+  {
+    "id": "w_36",
+    "cat": "white",
+    "name": "Sunbeam Gold Fountain",
+    "emoji": "☀️",
+    "desc": "Blinding warm solar ray eruption",
+    "cost": 75,
+    "pts": 28,
+    "rim": "#ffab00",
+    "type": "flowerpot"
+  },
+  {
+    "id": "w_37",
+    "cat": "white",
+    "name": "Sky Lantern Ascent",
+    "emoji": "🏮",
+    "desc": "Slow floating golden flame ember",
+    "cost": 60,
+    "pts": 24,
+    "rim": "#ff9e80",
+    "type": "rocket"
+  },
+  {
+    "id": "w_38",
+    "cat": "white",
+    "name": "Whistling Siren Spinner",
+    "emoji": "🚨",
+    "desc": "High-frequency Doppler whine",
+    "cost": 80,
+    "pts": 28,
+    "rim": "#ff5252",
+    "type": "chakkar"
+  },
+  {
+    "id": "w_39",
+    "cat": "white",
+    "name": "Jumping Frog Popper",
+    "emoji": "🐸",
+    "desc": "Erratic jumping ground snaps",
+    "cost": 40,
+    "pts": 18,
+    "rim": "#69f0ae",
+    "type": "bijli"
+  },
+  {
+    "id": "w_40",
+    "cat": "white",
+    "name": "Diamond Dust Sparkler",
+    "emoji": "💎",
+    "desc": "Ultra-pure white diamond glitter",
+    "cost": 70,
+    "pts": 26,
+    "rim": "#b2ebf2",
+    "type": "twinkling"
+  },
+  {
+    "id": "w_41",
+    "cat": "white",
+    "name": "Ruby Ring Chakkar",
+    "emoji": "💍",
+    "desc": "Spinning ruby flame perimeter",
+    "cost": 65,
+    "pts": 25,
+    "rim": "#ff1744",
+    "type": "chakkar"
+  },
+  {
+    "id": "w_42",
+    "cat": "white",
+    "name": "Sapphire Glow Fountain",
+    "emoji": "🔷",
+    "desc": "Deep cobalt blue pyrotechnic flare",
+    "cost": 80,
+    "pts": 28,
+    "rim": "#2979ff",
+    "type": "flowerpot"
+  },
+  {
+    "id": "w_43",
+    "cat": "white",
+    "name": "Topaz Fire Fountain",
+    "emoji": "🔶",
+    "desc": "Warm amber sparkling geyser",
+    "cost": 60,
+    "pts": 24,
+    "rim": "#ff9100",
+    "type": "flowerpot"
+  },
+  {
+    "id": "w_44",
+    "cat": "white",
+    "name": "Aurora Sky Burst",
+    "emoji": "🌌",
+    "desc": "Pastel purple-teal sky bloom",
+    "cost": 90,
+    "pts": 32,
+    "rim": "#b388ff",
+    "type": "rocket"
+  },
+  {
+    "id": "w_45",
+    "cat": "white",
+    "name": "Crown Jewel Showpiece",
+    "emoji": "👑",
+    "desc": "Golden tiara sparkler burst",
+    "cost": 100,
+    "pts": 35,
+    "rim": "#ffd700",
+    "type": "peacock"
+  },
+  {
+    "id": "b_01",
+    "cat": "black",
+    "name": "100-Wala Ladi Classic",
+    "emoji": "🧨",
+    "desc": "Fast rhythmic red machine-gun snaps",
+    "cost": 40,
+    "pts": 22,
+    "rim": "#ff1744",
+    "type": "100wala"
+  },
+  {
+    "id": "b_02",
+    "cat": "black",
+    "name": "200-Wala Super Ladi",
+    "emoji": "🧨",
+    "desc": "Continuous 24-shot rapid fire string",
+    "cost": 60,
+    "pts": 26,
+    "rim": "#d50000",
+    "type": "100wala"
+  },
+  {
+    "id": "b_03",
+    "cat": "black",
+    "name": "500-Wala Grand Ladi",
+    "emoji": "🧨",
+    "desc": "Heavy smoke & non-stop crackle barrage",
+    "cost": 85,
+    "pts": 32,
+    "rim": "#b71c1c",
+    "type": "100wala"
+  },
+  {
+    "id": "b_04",
+    "cat": "black",
+    "name": "Atom Bomb Standard",
+    "emoji": "💥",
+    "desc": "Deep resonant sub-bass blast",
+    "cost": 50,
+    "pts": 26,
+    "rim": "#ff3d00",
+    "type": "bomb"
+  },
+  {
+    "id": "b_05",
+    "cat": "black",
+    "name": "Classic Green Bomb",
+    "emoji": "💣",
+    "desc": "Traditional twine jute paper blast",
+    "cost": 45,
+    "pts": 24,
+    "rim": "#2e7d32",
+    "type": "bomb"
+  },
+  {
+    "id": "b_06",
+    "cat": "black",
+    "name": "Hydro Bomb Dhamaka",
+    "emoji": "🌊",
+    "desc": "High-pressure shockwave percussion",
+    "cost": 70,
+    "pts": 28,
+    "rim": "#0277bd",
+    "type": "bomb"
+  },
+  {
+    "id": "b_07",
+    "cat": "black",
+    "name": "Agni Bomb Heavy",
+    "emoji": "🔥",
+    "desc": "Blazing fireball blast with smoke",
+    "cost": 80,
+    "pts": 30,
+    "rim": "#dd2c00",
+    "type": "bomb"
+  },
+  {
+    "id": "b_08",
+    "cat": "black",
+    "name": "Bullet Bomb Piercer",
+    "emoji": "🎯",
+    "desc": "Sharp high-pressure gunshot report",
+    "cost": 40,
+    "pts": 22,
+    "rim": "#d50000",
+    "type": "bullet"
+  },
+  {
+    "id": "b_09",
+    "cat": "black",
+    "name": "Super Bullet Dhamaka",
+    "emoji": "💥",
+    "desc": "Ultra-loud instantaneous paper crack",
+    "cost": 55,
+    "pts": 25,
+    "rim": "#c62828",
+    "type": "bullet"
+  },
+  {
+    "id": "b_10",
+    "cat": "black",
+    "name": "Mirchi Pataka String",
+    "emoji": "🌶️",
+    "desc": "Ultra-fast high-pitch chili sizzle pops",
+    "cost": 35,
+    "pts": 20,
+    "rim": "#e53935",
+    "type": "mirchi"
+  },
+  {
+    "id": "b_11",
+    "cat": "black",
+    "name": "Red Hot Chili Bomb",
+    "emoji": "🌶️",
+    "desc": "Staccato firecracker string with smoke",
+    "cost": 50,
+    "pts": 24,
+    "rim": "#b71c1c",
+    "type": "mirchi"
+  },
+  {
+    "id": "b_12",
+    "cat": "black",
+    "name": "Rolling Wheel Spinner",
+    "emoji": "🎡",
+    "desc": "Fiery roaring wheel along cushion edges",
+    "cost": 50,
+    "pts": 24,
+    "rim": "#ff6d00",
+    "type": "rolling"
+  },
+  {
+    "id": "b_13",
+    "cat": "black",
+    "name": "Fire Tornado Wheel",
+    "emoji": "🌪️",
+    "desc": "High-speed gyroscopic droning firewheel",
+    "cost": 75,
+    "pts": 28,
+    "rim": "#ff3d00",
+    "type": "rolling"
+  },
+  {
+    "id": "b_14",
+    "cat": "black",
+    "name": "Dragon Thunder Roar",
+    "emoji": "🐉",
+    "desc": "Golden serpentine banshee sky blast",
+    "cost": 65,
+    "pts": 28,
+    "rim": "#c2185b",
+    "type": "dragon"
+  },
+  {
+    "id": "b_15",
+    "cat": "black",
+    "name": "Mega Dragon Blast",
+    "emoji": "🐲",
+    "desc": "Dual-stage banshee screech into boom",
+    "cost": 85,
+    "pts": 32,
+    "rim": "#880e4f",
+    "type": "dragon"
+  },
+  {
+    "id": "b_16",
+    "cat": "black",
+    "name": "Sky Shot 5-Times",
+    "emoji": "🎯",
+    "desc": "Seven distinct timed aerial detonations",
+    "cost": 75,
+    "pts": 30,
+    "rim": "#ff5722",
+    "type": "sevenshot"
+  },
+  {
+    "id": "b_17",
+    "cat": "black",
+    "name": "12-Shots Sky Salvo",
+    "emoji": "🎆",
+    "desc": "Twelve successive aerial thunder thuds",
+    "cost": 100,
+    "pts": 36,
+    "rim": "#e64a19",
+    "type": "sevenshot"
+  },
+  {
+    "id": "b_18",
+    "cat": "black",
+    "name": "Gorilla Bomb Double",
+    "emoji": "🦍",
+    "desc": "Low-frequency dual-stage ground thunder",
+    "cost": 80,
+    "pts": 32,
+    "rim": "#b71c1c",
+    "type": "gorilla"
+  },
+  {
+    "id": "b_19",
+    "cat": "black",
+    "name": "King Kong Mega Bomb",
+    "emoji": "🦍",
+    "desc": "Massive double dhamaka shockwave",
+    "cost": 110,
+    "pts": 38,
+    "rim": "#880e4f",
+    "type": "gorilla"
+  },
+  {
+    "id": "b_20",
+    "cat": "black",
+    "name": "Kuruvi Vedi Classic",
+    "emoji": "🦅",
+    "desc": "Sharp traditional Indian paper-bomb crack",
+    "cost": 30,
+    "pts": 18,
+    "rim": "#f4511e",
+    "type": "kuruvi"
+  },
+  {
+    "id": "b_21",
+    "cat": "black",
+    "name": "Falcon Speed Pop",
+    "emoji": "🦅",
+    "desc": "High-frequency supersonic sparrow snap",
+    "cost": 45,
+    "pts": 22,
+    "rim": "#d84315",
+    "type": "kuruvi"
+  },
+  {
+    "id": "b_22",
+    "cat": "black",
+    "name": "Thunderbolt Sound King",
+    "emoji": "⚡",
+    "desc": "Sharp metallic clap echoing outward",
+    "cost": 60,
+    "pts": 26,
+    "rim": "#ffd600",
+    "type": "bomb"
+  },
+  {
+    "id": "b_23",
+    "cat": "black",
+    "name": "Dynamite Stick Classic",
+    "emoji": "🧨",
+    "desc": "Thick red tube subterranean rumble",
+    "cost": 75,
+    "pts": 28,
+    "rim": "#b71c1c",
+    "type": "bomb"
+  },
+  {
+    "id": "b_24",
+    "cat": "black",
+    "name": "Grenade Shell Cracker",
+    "emoji": "💣",
+    "desc": "Heavy cast-iron shrapnel spark burst",
+    "cost": 80,
+    "pts": 30,
+    "rim": "#37474f",
+    "type": "bomb"
+  },
+  {
+    "id": "b_25",
+    "cat": "black",
+    "name": "Volcano Blast Mortar",
+    "emoji": "🌋",
+    "desc": "Upward geyser of smoke and deafening boom",
+    "cost": 90,
+    "pts": 32,
+    "rim": "#ff3d00",
+    "type": "bomb"
+  },
+  {
+    "id": "b_26",
+    "cat": "black",
+    "name": "Gunpowder Barrel",
+    "emoji": "🛢️",
+    "desc": "Heavy black powder explosive thump",
+    "cost": 95,
+    "pts": 34,
+    "rim": "#424242",
+    "type": "gorilla"
+  },
+  {
+    "id": "b_27",
+    "cat": "black",
+    "name": "Sonic Boom Wave",
+    "emoji": "🔊",
+    "desc": "Distorting air-pulse expansion ring",
+    "cost": 70,
+    "pts": 28,
+    "rim": "#00e5ff",
+    "type": "bullet"
+  },
+  {
+    "id": "b_28",
+    "cat": "black",
+    "name": "Sholay Goli Blast",
+    "emoji": "🔫",
+    "desc": "Fiery pistol shot with instant muzzle flash",
+    "cost": 45,
+    "pts": 22,
+    "rim": "#ff6f00",
+    "type": "bullet"
+  },
+  {
+    "id": "b_29",
+    "cat": "black",
+    "name": "Cracker String 50-Wala",
+    "emoji": "🧨",
+    "desc": "Quick 12-shot rapid staccato burst",
+    "cost": 30,
+    "pts": 18,
+    "rim": "#ff5252",
+    "type": "100wala"
+  },
+  {
+    "id": "b_30",
+    "cat": "black",
+    "name": "Bappi Lahiri Disco Bomb",
+    "emoji": "🪩",
+    "desc": "Funky rhythmic multi-pop thunder",
+    "cost": 65,
+    "pts": 26,
+    "rim": "#ff4081",
+    "type": "100wala"
+  },
+  {
+    "id": "b_31",
+    "cat": "black",
+    "name": "Lion Roar Mortar",
+    "emoji": "🦁",
+    "desc": "Guttural deep acoustic shockwave",
+    "cost": 85,
+    "pts": 32,
+    "rim": "#ff6d00",
+    "type": "bomb"
+  },
+  {
+    "id": "b_32",
+    "cat": "black",
+    "name": "Tiger Claw Bomb",
+    "emoji": "🐯",
+    "desc": "Aggressive triple-strike spark snap",
+    "cost": 75,
+    "pts": 30,
+    "rim": "#f57c00",
+    "type": "gorilla"
+  },
+  {
+    "id": "b_33",
+    "cat": "black",
+    "name": "Panther Shadow Burst",
+    "emoji": "🐆",
+    "desc": "Dark smoke cloud with sudden bright blast",
+    "cost": 80,
+    "pts": 30,
+    "rim": "#212121",
+    "type": "bomb"
+  },
+  {
+    "id": "b_34",
+    "cat": "black",
+    "name": "Thunderstorm Salvo",
+    "emoji": "⛈️",
+    "desc": "Rolling thunder acoustics across board",
+    "cost": 95,
+    "pts": 34,
+    "rim": "#5c6bc0",
+    "type": "sevenshot"
+  },
+  {
+    "id": "b_35",
+    "cat": "black",
+    "name": "Earthquake Thud",
+    "emoji": "🌍",
+    "desc": "Sub-bass rumble vibrating board cushions",
+    "cost": 100,
+    "pts": 35,
+    "rim": "#4e342e",
+    "type": "bomb"
+  },
+  {
+    "id": "b_36",
+    "cat": "black",
+    "name": "Cobra Venom Strike",
+    "emoji": "🐍",
+    "desc": "Sharp sizzling hiss ending in sharp snap",
+    "cost": 50,
+    "pts": 24,
+    "rim": "#388e3c",
+    "type": "kuruvi"
+  },
+  {
+    "id": "b_37",
+    "cat": "black",
+    "name": "Iron Fist Dhamaka",
+    "emoji": "✊",
+    "desc": "Heavy solid punch acoustic impulse",
+    "cost": 65,
+    "pts": 26,
+    "rim": "#78909c",
+    "type": "bullet"
+  },
+  {
+    "id": "b_38",
+    "cat": "black",
+    "name": "Golden Cannon Shell",
+    "emoji": "🪙",
+    "desc": "Heavy brass artillery boom with golden smoke",
+    "cost": 85,
+    "pts": 32,
+    "rim": "#ffd700",
+    "type": "bomb"
+  },
+  {
+    "id": "b_39",
+    "cat": "black",
+    "name": "Screaming Banshee Bomb",
+    "emoji": "😱",
+    "desc": "High siren whistle culminating in thunder",
+    "cost": 80,
+    "pts": 30,
+    "rim": "#ec407a",
+    "type": "dragon"
+  },
+  {
+    "id": "b_40",
+    "cat": "black",
+    "name": "Black Pepper String",
+    "emoji": "🧂",
+    "desc": "Pungent smoky crackle carpet string",
+    "cost": 40,
+    "pts": 20,
+    "rim": "#616161",
+    "type": "mirchi"
+  },
+  {
+    "id": "b_41",
+    "cat": "black",
+    "name": "Vulcan Hammer Thud",
+    "emoji": "🔨",
+    "desc": "Industrial metal strike shockwave",
+    "cost": 75,
+    "pts": 28,
+    "rim": "#455a64",
+    "type": "bomb"
+  },
+  {
+    "id": "b_42",
+    "cat": "black",
+    "name": "Red Fort Salvo",
+    "emoji": "🏰",
+    "desc": "Ceremonial gun salute detonation",
+    "cost": 90,
+    "pts": 34,
+    "rim": "#c62828",
+    "type": "sevenshot"
+  },
+  {
+    "id": "b_43",
+    "cat": "black",
+    "name": "Ghost Rider Wheel",
+    "emoji": "💀",
+    "desc": "Blazing skull flame rolling wheel",
+    "cost": 85,
+    "pts": 32,
+    "rim": "#ff3d00",
+    "type": "rolling"
+  },
+  {
+    "id": "b_44",
+    "cat": "black",
+    "name": "Blaster Grenade Pro",
+    "emoji": "💥",
+    "desc": "Concentrated high-energy kinetic blast",
+    "cost": 95,
+    "pts": 35,
+    "rim": "#d50000",
+    "type": "bomb"
+  },
+  {
+    "id": "b_45",
+    "cat": "black",
+    "name": "Titanium Thunder Strike",
+    "emoji": "🛡️",
+    "desc": "Supreme armor-piercing sonic crack",
+    "cost": 110,
+    "pts": 38,
+    "rim": "#cfd8dc",
+    "type": "gorilla"
+  },
+  {
+    "id": "q_01",
+    "cat": "queen",
+    "name": "1000-Wala Rajah Maha Dhamaka",
+    "emoji": "🪔",
+    "desc": "All 4 pockets ignite with golden temple celebration",
+    "cost": 120,
+    "pts": 60,
+    "rim": "#ffd700",
+    "type": "mega_diwali"
+  },
+  {
+    "id": "q_02",
+    "cat": "queen",
+    "name": "Diwali Queen Golden Palace",
+    "emoji": "👑",
+    "desc": "Synchronized golden geysers in all pockets",
+    "cost": 140,
+    "pts": 65,
+    "rim": "#ffea00",
+    "type": "mega_diwali"
+  },
+  {
+    "id": "q_03",
+    "cat": "queen",
+    "name": "5000-Wala Maharaja Finale",
+    "emoji": "🎆",
+    "desc": "Ultra-chain salvo across all pockets simultaneously",
+    "cost": 160,
+    "pts": 70,
+    "rim": "#ff1744",
+    "type": "mega_diwali"
+  },
+  {
+    "id": "q_04",
+    "cat": "queen",
+    "name": "Golden Temple Showstopper",
+    "emoji": "🛕",
+    "desc": "Ceremonial bells, bass booms & four-pocket starbursts",
+    "cost": 180,
+    "pts": 75,
+    "rim": "#ffd54f",
+    "type": "mega_diwali"
+  },
+  {
+    "id": "q_05",
+    "cat": "queen",
+    "name": "Royal Peacock Symphony",
+    "emoji": "🦚",
+    "desc": "Four emerald & gold plumes lighting up the table",
+    "cost": 190,
+    "pts": 80,
+    "rim": "#00e676",
+    "type": "mega_diwali"
+  },
+  {
+    "id": "q_06",
+    "cat": "queen",
+    "name": "Dragon Emperor Quad Roar",
+    "emoji": "🐲",
+    "desc": "Four screaming whistling sky rockets launched together",
+    "cost": 200,
+    "pts": 85,
+    "rim": "#c2185b",
+    "type": "mega_diwali"
+  },
+  {
+    "id": "q_07",
+    "cat": "queen",
+    "name": "Rainbow Symphony Fireworks",
+    "emoji": "🌈",
+    "desc": "Multi-color synchronized aerial cascades",
+    "cost": 220,
+    "pts": 90,
+    "rim": "#00e5ff",
+    "type": "mega_diwali"
+  },
+  {
+    "id": "q_08",
+    "cat": "queen",
+    "name": "Atom Thunder God Explosion",
+    "emoji": "⚡",
+    "desc": "Four-corner earthquake sub-bass blast",
+    "cost": 230,
+    "pts": 95,
+    "rim": "#ff6d00",
+    "type": "mega_diwali"
+  },
+  {
+    "id": "q_09",
+    "cat": "queen",
+    "name": "Starlight Celestial Shower",
+    "emoji": "🌠",
+    "desc": "Shimmering four-corner diamond rain burst",
+    "cost": 240,
+    "pts": 100,
+    "rim": "#ffffff",
+    "type": "mega_diwali"
+  },
+  {
+    "id": "q_10",
+    "cat": "queen",
+    "name": "Crown of Jewels Grand Dhamaka",
+    "emoji": "💎",
+    "desc": "Ultimate Diwali showstopper +110 points bonus!",
+    "cost": 250,
+    "pts": 110,
+    "rim": "#ff4081",
+    "type": "mega_diwali"
+  }
+];
+
+    /* ================= AUDIO SYNTHESIZER ================= */
+    class CrackerAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+        this.masterNode = null;
+      }
+
+      init() {
+        if (this.ctx) {
+          if (this.ctx.state === 'suspended') this.ctx.resume();
+          return this.ctx;
+        }
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return null;
+        this.ctx = new AudioCtx();
+
+        const comp = this.ctx.createDynamicsCompressor();
+        comp.threshold.setValueAtTime(-6, this.ctx.currentTime);
+        comp.knee.setValueAtTime(24, this.ctx.currentTime);
+        comp.ratio.setValueAtTime(3.5, this.ctx.currentTime);
+        comp.attack.setValueAtTime(0.002, this.ctx.currentTime);
+        comp.release.setValueAtTime(0.2, this.ctx.currentTime);
+
+        const masterGain = this.ctx.createGain();
+        masterGain.gain.setValueAtTime(1.5, this.ctx.currentTime);
+
+        comp.connect(masterGain);
+        masterGain.connect(this.ctx.destination);
+        this.masterNode = comp;
+
+        return this.ctx;
+      }
+
+      getDest() {
+        this.init();
+        return this.masterNode || (this.ctx ? this.ctx.destination : null);
+      }
+
+      playWhistleSpin(duration = 3.5, baseFreq = 750) {
+        if (!this.enabled) return;
+        const ac = this.init(); if (!ac) return;
+        const now = ac.currentTime;
+
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(baseFreq, now);
+        osc.frequency.linearRampToValueAtTime(baseFreq * 1.8, now + duration * 0.4);
+        osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.5, now + duration);
+
+        gain.gain.setValueAtTime(0.65, now);
+        gain.gain.linearRampToValueAtTime(0.95, now + 0.25);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        osc.connect(gain);
+        gain.connect(this.getDest());
+        osc.start();
+        osc.stop(now + duration);
+      }
+
+      playFountainSizzle(duration = 4.0, freq = 900) {
+        if (!this.enabled) return;
+        const ac = this.init(); if (!ac) return;
+        const now = ac.currentTime;
+
+        const bufferSize = ac.sampleRate * duration;
+        const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+        const noise = ac.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = ac.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(freq, now);
+        filter.frequency.linearRampToValueAtTime(freq * 2.2, now + duration * 0.5);
+        filter.frequency.exponentialRampToValueAtTime(freq * 0.8, now + duration);
+        filter.Q.value = 2.5;
+
+        const gain = ac.createGain();
+        gain.gain.setValueAtTime(0.7, now);
+        gain.gain.linearRampToValueAtTime(1.1, now + 0.4);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.getDest());
+        noise.start();
+      }
+
+      playSnappyPop(freq = 950, intensity = 1.0) {
+        if (!this.enabled) return;
+        const ac = this.init(); if (!ac) return;
+        const now = ac.currentTime;
+
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(freq * 1.35, now);
+        osc.frequency.exponentialRampToValueAtTime(80, now + 0.045);
+
+        const masterPopGain = Math.min(1.2 * intensity, 1.4);
+        gain.gain.setValueAtTime(masterPopGain, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+        osc.connect(gain);
+        gain.connect(this.getDest());
+        osc.start();
+        osc.stop(now + 0.055);
+
+        const bSize = Math.floor(ac.sampleRate * 0.07);
+        const buf = ac.createBuffer(1, bSize, ac.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < bSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bSize * 0.28));
+
+        const noise = ac.createBufferSource();
+        noise.buffer = buf;
+        const filter = ac.createBiquadFilter();
+        filter.type = 'highpass';
+        filter.frequency.setValueAtTime(freq * 0.6, now);
+
+        const nGain = ac.createGain();
+        nGain.gain.setValueAtTime(0.9 * intensity, now);
+        nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+
+        noise.connect(filter);
+        filter.connect(nGain);
+        nGain.connect(this.getDest());
+        noise.start();
+      }
+
+      playBassBoom(bassFreq = 160, duration = 0.85, powerMultiplier = 1.0) {
+        if (!this.enabled) return;
+        const ac = this.init(); if (!ac) return;
+        const now = ac.currentTime;
+
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(bassFreq * 1.15, now);
+        osc.frequency.exponentialRampToValueAtTime(20, now + duration);
+
+        const baseVol = Math.min(1.3 * powerMultiplier, 1.5);
+        gain.gain.setValueAtTime(baseVol, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        osc.connect(gain);
+        gain.connect(this.getDest());
+        osc.start();
+        osc.stop(now + duration);
+
+        const bSize = Math.floor(ac.sampleRate * Math.min(duration * 0.8, 0.5));
+        const buf = ac.createBuffer(1, bSize, ac.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < bSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bSize * 0.35));
+        }
+
+        const noise = ac.createBufferSource();
+        noise.buffer = buf;
+
+        const lowpass = ac.createBiquadFilter();
+        lowpass.type = 'lowpass';
+        lowpass.frequency.setValueAtTime(450, now);
+        lowpass.frequency.exponentialRampToValueAtTime(70, now + duration * 0.6);
+
+        const nGain = ac.createGain();
+        nGain.gain.setValueAtTime(1.1 * powerMultiplier, now);
+        nGain.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.55);
+
+        noise.connect(lowpass);
+        lowpass.connect(nGain);
+        nGain.connect(this.getDest());
+        noise.start();
+      }
+
+      playRocketScreech() {
+        if (!this.enabled) return;
+        const ac = this.init(); if (!ac) return;
+        const now = ac.currentTime;
+
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(2400, now + 0.7);
+
+        gain.gain.setValueAtTime(0.55, now);
+        gain.gain.linearRampToValueAtTime(1.2, now + 0.45);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
+
+        osc.connect(gain);
+        gain.connect(this.getDest());
+        osc.start();
+        osc.stop(now + 0.75);
+      }
+    }
+
+    const audio = new CrackerAudioEngine();
+
+    /* ================= FULLSCREEN PYROTECHNICS CANVAS ENGINE ================= */
+    const canvas = document.getElementById('fxCanvas');
+    const ctx = canvas.getContext('2d');
+    const flashEl = document.getElementById('flashOverlay');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const particles = [];
+    const rockets = [];
+    const shockwaves = [];
+    const chakkars = [];
+    const fountains = [];
+    const floatTexts = [];
+
+    class Particle {
+      constructor(x, y, vx, vy, color, size, life, gravity = 0.15, drag = 0.96) {
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.color = color;
+        this.size = size;
+        this.baseSize = size;
+        this.life = life;
+        this.maxLife = life;
+        this.gravity = gravity;
+        this.drag = drag;
+        this.alpha = 1.0;
+        this.trail = [];
+      }
+
+      update(dt) {
+        this.life -= dt;
+        if (this.life <= 0) return false;
+
+        this.vx *= this.drag;
+        this.vy = this.vy * this.drag + this.gravity;
+        this.x += this.vx * dt * 60;
+        this.y += this.vy * dt * 60;
+
+        this.alpha = Math.max(0, this.life / this.maxLife);
+        this.size = this.baseSize * (0.3 + 0.7 * this.alpha);
+
+        return true;
+      }
+
+      draw(c) {
+        c.save();
+        c.globalAlpha = this.alpha;
+        c.fillStyle = this.color;
+        c.shadowColor = this.color;
+        c.shadowBlur = 8;
+        c.beginPath();
+        c.arc(this.x, this.y, Math.max(0.5, this.size), 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      }
+    }
+
+    class ShockwaveRing {
+      constructor(x, y, maxRadius, color = '#ffd700', duration = 0.5) {
+        this.x = x;
+        this.y = y;
+        this.maxRadius = maxRadius;
+        this.color = color;
+        this.duration = duration;
+        this.time = 0;
+      }
+
+      update(dt) {
+        this.time += dt;
+        return this.time < this.duration;
+      }
+
+      draw(c) {
+        const progress = this.time / this.duration;
+        const currentRadius = this.maxRadius * Math.sin(progress * Math.PI * 0.5);
+        const alpha = Math.max(0, 1 - progress);
+
+        c.save();
+        c.globalAlpha = alpha;
+        c.strokeStyle = this.color;
+        c.lineWidth = Math.max(1, (1 - progress) * 8);
+        c.shadowColor = this.color;
+        c.shadowBlur = 15;
+        c.beginPath();
+        c.arc(this.x, this.y, currentRadius, 0, Math.PI * 2);
+        c.stroke();
+        c.restore();
+      }
+    }
+
+    class FloatingLabel {
+      constructor(x, y, text, color = '#ffd700', fontSize = 18) {
+        this.x = x;
+        this.y = y;
+        this.text = text;
+        this.color = color;
+        this.fontSize = fontSize;
+        this.time = 0;
+        this.duration = 1.8;
+      }
+
+      update(dt) {
+        this.time += dt;
+        this.y -= dt * 45; // float upward
+        return this.time < this.duration;
+      }
+
+      draw(c) {
+        const progress = this.time / this.duration;
+        const alpha = progress < 0.2 ? progress / 0.2 : Math.max(0, 1 - (progress - 0.2) / 0.8);
+        const safeX = Math.max(180, Math.min(window.innerWidth - 180, this.x));
+
+        c.save();
+        c.globalAlpha = alpha;
+        c.font = `bold ${this.fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
+        c.fillStyle = this.color;
+        c.textAlign = 'center';
+        c.shadowColor = '#000000';
+        c.shadowBlur = 10;
+        c.shadowOffsetX = 0;
+        c.shadowOffsetY = 2;
+        c.fillText(this.text, safeX, this.y);
+        c.restore();
+      }
+    }
+
+    class ActiveChakkarEffect {
+      constructor(x, y, rimColor, duration = 3.0) {
+        this.x = x;
+        this.y = y;
+        this.rim = rimColor;
+        this.duration = duration;
+        this.time = 0;
+        this.rot = 0;
+      }
+
+      update(dt) {
+        this.time += dt;
+        if (this.time >= this.duration) return false;
+
+        this.rot += dt * 25;
+        // Spew spinning spiral sparks
+        const sparkCount = 3;
+        for (let i = 0; i < sparkCount; i++) {
+          const angle = this.rot + (i * Math.PI * 2 / sparkCount);
+          const speed = 2.5 + Math.random() * 4.5;
+          const colors = [this.rim, '#ffd700', '#ff9100', '#ffffff'];
+          const col = colors[Math.floor(Math.random() * colors.length)];
+          particles.push(new Particle(
+            this.x, this.y,
+            Math.cos(angle) * speed,
+            Math.sin(angle) * speed,
+            col, 2.8, 0.45 + Math.random() * 0.35, 0.05, 0.94
+          ));
+        }
+        return true;
+      }
+
+      draw(c) {
+        c.save();
+        c.translate(this.x, this.y);
+        c.rotate(this.rot);
+        c.strokeStyle = this.rim;
+        c.shadowColor = this.rim;
+        c.shadowBlur = 12;
+        c.lineWidth = 3;
+        c.beginPath();
+        c.arc(0, 0, 18, 0, Math.PI * 1.5);
+        c.stroke();
+        c.restore();
+      }
+    }
+
+    class ActiveFountainEffect {
+      constructor(x, y, rimColor, duration = 3.5, heightPower = 1.0) {
+        this.x = x;
+        this.y = y;
+        this.rim = rimColor;
+        this.duration = duration;
+        this.heightPower = heightPower;
+        this.time = 0;
+      }
+
+      update(dt) {
+        this.time += dt;
+        if (this.time >= this.duration) return false;
+
+        const count = 4;
+        for (let i = 0; i < count; i++) {
+          const vx = (Math.random() - 0.5) * 3.5;
+          const vy = -(4.5 + Math.random() * 6.5 * this.heightPower);
+          const colors = [this.rim, '#ffd700', '#ffffff', '#ffab00', '#00e5ff'];
+          const col = colors[Math.floor(Math.random() * colors.length)];
+          particles.push(new Particle(
+            this.x + (Math.random() - 0.5) * 10,
+            this.y,
+            vx, vy,
+            col, 2.5 + Math.random() * 1.8,
+            0.6 + Math.random() * 0.5,
+            0.18, 0.97
+          ));
+        }
+        return true;
+      }
+
+      draw() {}
+    }
+
+    class AerialRocket {
+      constructor(startX, startY, targetX, targetY, rimColor, onExplode) {
+        this.x = startX;
+        this.y = startY;
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.rim = rimColor;
+        this.onExplode = onExplode;
+        this.progress = 0;
+        this.speed = 1.25 + Math.random() * 0.4;
+      }
+
+      update(dt) {
+        this.progress += dt * this.speed;
+        this.x += (this.targetX - this.x) * (dt * this.speed * 2.8);
+        this.y += (this.targetY - this.y) * (dt * this.speed * 2.8);
+
+        // Rocket exhaust trail sparks
+        particles.push(new Particle(
+          this.x, this.y,
+          (Math.random() - 0.5) * 1.5,
+          1.5 + Math.random() * 2.5,
+          '#ff9100', 3, 0.25, 0.05, 0.95
+        ));
+
+        if (this.progress >= 1.0 || Math.hypot(this.targetX - this.x, this.targetY - this.y) < 25) {
+          if (this.onExplode) this.onExplode(this.targetX, this.targetY, this.rim);
+          return false;
+        }
+        return true;
+      }
+
+      draw(c) {
+        c.save();
+        c.fillStyle = '#fff';
+        c.shadowColor = '#ffd700';
+        c.shadowBlur = 15;
+        c.beginPath();
+        c.arc(this.x, this.y, 4, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      }
+    }
+
+    function triggerScreenFlash(intensity = 0.5) {
+      flashEl.style.opacity = intensity;
+      setTimeout(() => { flashEl.style.opacity = '0'; }, 60);
+    }
+
+    function triggerScreenShake(heavy = false) {
+      document.body.classList.remove('screen-shake', 'screen-shake-heavy');
+      void document.body.offsetWidth; // re-flow
+      document.body.classList.add(heavy ? 'screen-shake-heavy' : 'screen-shake');
+      setTimeout(() => {
+        document.body.classList.remove('screen-shake', 'screen-shake-heavy');
+      }, heavy ? 650 : 380);
+    }
+
+    function spawnStarburst(x, y, count, color, power = 1.0) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = (2 + Math.random() * 8.5) * power;
+        const pColor = Math.random() < 0.25 ? '#ffffff' : (Math.random() < 0.4 ? '#ffd700' : color);
+        particles.push(new Particle(
+          x, y,
+          Math.cos(angle) * speed,
+          Math.sin(angle) * speed,
+          pColor,
+          2.5 + Math.random() * 2.5,
+          0.8 + Math.random() * 0.7,
+          0.14,
+          0.96
+        ));
+      }
+    }
+
+    /* Animation Loop */
+    let lastTime = performance.now();
+    function fxLoop(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Update & Draw Fountains
+      for (let i = fountains.length - 1; i >= 0; i--) {
+        if (!fountains[i].update(dt)) fountains.splice(i, 1);
+        else fountains[i].draw(ctx);
+      }
+
+      // Update & Draw Chakkars
+      for (let i = chakkars.length - 1; i >= 0; i--) {
+        if (!chakkars[i].update(dt)) chakkars.splice(i, 1);
+        else chakkars[i].draw(ctx);
+      }
+
+      // Update & Draw Rockets
+      for (let i = rockets.length - 1; i >= 0; i--) {
+        if (!rockets[i].update(dt)) rockets.splice(i, 1);
+        else rockets[i].draw(ctx);
+      }
+
+      // Update & Draw Shockwaves
+      for (let i = shockwaves.length - 1; i >= 0; i--) {
+        if (!shockwaves[i].update(dt)) shockwaves.splice(i, 1);
+        else shockwaves[i].draw(ctx);
+      }
+
+      // Update & Draw Particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        if (!particles[i].update(dt)) particles.splice(i, 1);
+        else particles[i].draw(ctx);
+      }
+
+      // Update & Draw Floating Labels
+      for (let i = floatTexts.length - 1; i >= 0; i--) {
+        if (!floatTexts[i].update(dt)) floatTexts.splice(i, 1);
+        else floatTexts[i].draw(ctx);
+      }
+
+      requestAnimationFrame(fxLoop);
+    }
+    requestAnimationFrame(fxLoop);
+
+    /* ================= STATS & TOAST ================= */
+    let totalPoppedCount = 0;
+    let totalPointsAccumulated = 0;
+    const cardPopCounters = {};
+
+    const statPoppedEl = document.getElementById('statPopped');
+    const statPointsEl = document.getElementById('statPoints');
+    const toastEl = document.getElementById('celebrationToast');
+    const toastEmojiEl = document.getElementById('toastEmoji');
+    const toastTextEl = document.getElementById('toastText');
+    let toastTimeout = null;
+
+    function showToast(emoji, text) {
+      toastEmojiEl.textContent = emoji;
+      toastTextEl.textContent = text;
+      toastEl.classList.add('show');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toastEl.classList.remove('show');
+      }, 2600);
+    }
+
+    /* ================= MAIN POPPER LOGIC ================= */
+    function popCracker(crackerDef, cardElement) {
+      audio.init();
+
+      // Update Stats
+      totalPoppedCount++;
+      totalPointsAccumulated += crackerDef.pts;
+      statPoppedEl.textContent = totalPoppedCount;
+      statPointsEl.textContent = totalPointsAccumulated;
+
+      // Update individual card counter
+      cardPopCounters[crackerDef.id] = (cardPopCounters[crackerDef.id] || 0) + 1;
+      if (cardElement) {
+        const badge = cardElement.querySelector('.pop-counter-badge');
+        if (badge) {
+          badge.textContent = `💥 ${cardPopCounters[crackerDef.id]}`;
+          badge.classList.add('visible');
+        }
+        cardElement.classList.add('popping');
+        setTimeout(() => cardElement.classList.remove('popping'), 650);
+      }
+
+      // Compute Origin on Screen
+      let originX = window.innerWidth / 2;
+      let originY = window.innerHeight / 2;
+      if (cardElement) {
+        const rect = cardElement.getBoundingClientRect();
+        originX = rect.left + rect.width / 2;
+        originY = rect.top + rect.height / 2;
+      }
+
+      // Add floating label
+      floatTexts.push(new FloatingLabel(
+        originX, originY - 30,
+        `${crackerDef.emoji} ${crackerDef.name.toUpperCase()}! +${crackerDef.pts}`,
+        crackerDef.rim || '#ffd700',
+        crackerDef.cat === 'queen' ? 24 : 18
+      ));
+
+      showToast(crackerDef.emoji, `Popped ${crackerDef.name}! (+${crackerDef.pts} Points)`);
+
+      const t = crackerDef.type;
+      const rim = crackerDef.rim || '#ffd700';
+
+      // Pyrotechnics & Audio by Cracker Type
+      if (t === 'chakkar' || t === 'rolling') {
+        audio.playWhistleSpin(3.5, t === 'rolling' ? 950 : 750);
+        chakkars.push(new ActiveChakkarEffect(originX, originY, rim, 3.2));
+        shockwaves.push(new ShockwaveRing(originX, originY, 90, rim, 0.45));
+      } 
+      else if (t === 'flowerpot' || t === 'peacock') {
+        audio.playFountainSizzle(4.2, t === 'peacock' ? 1200 : 850);
+        fountains.push(new ActiveFountainEffect(originX, originY, rim, 3.8, t === 'peacock' ? 1.4 : 1.0));
+        shockwaves.push(new ShockwaveRing(originX, originY, 110, rim, 0.5));
+      } 
+      else if (t === 'sparkler' || t === 'twinkling' || t === 'snake') {
+        audio.playFountainSizzle(3.0, 1600);
+        fountains.push(new ActiveFountainEffect(originX, originY, rim, 2.5, 0.6));
+      } 
+      else if (t === 'rocket') {
+        audio.playRocketScreech();
+        const targetX = originX + (Math.random() - 0.5) * 200;
+        const targetY = Math.max(80, originY - (250 + Math.random() * 200));
+
+        rockets.push(new AerialRocket(originX, originY, targetX, targetY, rim, (tx, ty, rColor) => {
+          audio.playBassBoom(180, 0.9, 1.25);
+          triggerScreenFlash(0.4);
+          triggerScreenShake(false);
+          shockwaves.push(new ShockwaveRing(tx, ty, 200, rColor, 0.6));
+          spawnStarburst(tx, ty, 80, rColor, 1.2);
+        }));
+      } 
+      else if (t === 'bomb' || t === 'gorilla') {
+        triggerScreenFlash(0.7);
+        triggerScreenShake(t === 'gorilla');
+        audio.playBassBoom(t === 'gorilla' ? 120 : 160, 1.0, 1.4);
+        shockwaves.push(new ShockwaveRing(originX, originY, 240, rim, 0.7));
+        spawnStarburst(originX, originY, 90, rim, 1.3);
+
+        if (t === 'gorilla') {
+          setTimeout(() => {
+            audio.playBassBoom(90, 1.3, 1.5);
+            triggerScreenFlash(0.85);
+            triggerScreenShake(true);
+            shockwaves.push(new ShockwaveRing(originX, originY, 320, '#ff1744', 0.8));
+            spawnStarburst(originX, originY, 120, '#ff1744', 1.6);
+          }, 450);
+        }
+      } 
+      else if (t === '100wala' || t === 'mirchi') {
+        const pops = t === 'mirchi' ? 18 : 26;
+        for (let p = 0; p < pops; p++) {
+          setTimeout(() => {
+            const rx = originX + (Math.random() - 0.5) * 90;
+            const ry = originY + (Math.random() - 0.5) * 90;
+            audio.playSnappyPop(1000 + Math.random() * 400, 1.15);
+            spawnStarburst(rx, ry, 12, '#ff3d00', 0.5);
+          }, p * 85);
+        }
+      } 
+      else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
+        audio.playSnappyPop(1400, 1.4);
+        audio.playBassBoom(220, 0.5, 1.1);
+        triggerScreenFlash(0.35);
+        shockwaves.push(new ShockwaveRing(originX, originY, 140, rim, 0.45));
+        spawnStarburst(originX, originY, 45, rim, 1.0);
+      } 
+      else if (t === 'romancandle' || t === 'sevenshot') {
+        const shots = t === 'sevenshot' ? 7 : 5;
+        for (let s = 0; s < shots; s++) {
+          setTimeout(() => {
+            audio.playRocketScreech();
+            const tx = originX + (Math.random() - 0.5) * 220;
+            const ty = Math.max(90, originY - (220 + Math.random() * 180));
+            rockets.push(new AerialRocket(originX, originY, tx, ty, rim, (ex, ey, rCol) => {
+              audio.playSnappyPop(700 + s * 120, 1.3);
+              shockwaves.push(new ShockwaveRing(ex, ey, 140, rCol, 0.5));
+              spawnStarburst(ex, ey, 50, rCol, 1.1);
+            }));
+          }, s * 380);
+        }
+      } 
+      else if (t === 'mega_diwali' || crackerDef.cat === 'queen') {
+        // GRAND SHOWSTOPPER SPECTACLE
+        triggerScreenFlash(0.9);
+        triggerScreenShake(true);
+        audio.playBassBoom(110, 1.4, 1.5);
+        audio.playWhistleSpin(4.5, 800);
+        audio.playFountainSizzle(5.0, 1000);
+
+        shockwaves.push(new ShockwaveRing(originX, originY, 350, '#ffd700', 0.9));
+        chakkars.push(new ActiveChakkarEffect(originX, originY, '#ffd700', 4.0));
+        fountains.push(new ActiveFountainEffect(originX, originY, '#ff1744', 4.5, 1.8));
+
+        // Launch 3 grand sky shots
+        for (let r = 0; r < 3; r++) {
+          setTimeout(() => {
+            const rx = originX + (r - 1) * 160;
+            const ry = Math.max(60, originY - 320);
+            rockets.push(new AerialRocket(originX, originY, rx, ry, rim, (tx, ty, rCol) => {
+              audio.playBassBoom(95, 1.2, 1.45);
+              triggerScreenFlash(0.7);
+              shockwaves.push(new ShockwaveRing(tx, ty, 280, rCol, 0.7));
+              spawnStarburst(tx, ty, 100, rCol, 1.5);
+            }));
+          }, 350 + r * 450);
+        }
+      } 
+      else {
+        // Fallback pop
+        audio.playSnappyPop(1100, 1.2);
+        audio.playBassBoom(170, 0.6, 1.1);
+        shockwaves.push(new ShockwaveRing(originX, originY, 130, rim, 0.45));
+        spawnStarburst(originX, originY, 40, rim, 1.0);
+      }
+    }
+
+    /* ================= RENDER CARDS ================= */
+    const grid = document.getElementById('crackerGrid');
+    let currentFilterCat = 'all';
+    let currentSearchTerm = '';
+    let currentTypeFilter = 'all';
+    let currentSortOrder = 'catalog';
+
+    function renderCards() {
+      grid.innerHTML = '';
+
+      let filtered = CRACKER_CATALOG.filter(c => {
+        if (currentFilterCat !== 'all' && c.cat !== currentFilterCat) return false;
+        if (currentTypeFilter !== 'all' && c.type !== currentTypeFilter) return false;
+        if (currentSearchTerm) {
+          const term = currentSearchTerm.toLowerCase();
+          const matchName = c.name.toLowerCase().includes(term);
+          const matchDesc = c.desc.toLowerCase().includes(term);
+          const matchType = c.type.toLowerCase().includes(term);
+          if (!matchName && !matchDesc && !matchType) return false;
+        }
+        return true;
+      });
+
+      // Sort
+      if (currentSortOrder === 'pts-desc') {
+        filtered.sort((a, b) => b.pts - a.pts);
+      } else if (currentSortOrder === 'cost-desc') {
+        filtered.sort((a, b) => b.cost - a.cost);
+      } else if (currentSortOrder === 'name-asc') {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-dim);">
+            <div style="font-size: 3rem; margin-bottom: 12px;">🔍</div>
+            <div style="font-size: 1.2rem; font-weight: 700; color: #fff;">No crackers found matching your filter!</div>
+            <div style="font-size: 0.9rem; margin-top: 6px;">Try clearing search terms or selecting 'All Crackers'.</div>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'cracker-card';
+        card.id = `card_${c.id}`;
+        card.style.setProperty('--card-rim', c.rim || '#ffd700');
+        card.style.setProperty('--card-rim-glow', (c.rim || '#ffd700') + '66');
+
+        let catBadgeClass = 'cat-white';
+        let catBadgeText = 'White Coin';
+        if (c.cat === 'black') {
+          catBadgeClass = 'cat-black';
+          catBadgeText = 'Black Coin';
+        } else if (c.cat === 'queen') {
+          catBadgeClass = 'cat-queen';
+          catBadgeText = '👑 Queen Showstopper';
+        }
+
+        const poppedTimes = cardPopCounters[c.id] || 0;
+
+        card.innerHTML = `
+          <div class="pop-counter-badge ${poppedTimes > 0 ? 'visible' : ''}">💥 ${poppedTimes}</div>
+          <div class="card-top">
+            <div class="emoji-box">${c.emoji}</div>
+            <div class="card-meta">
+              <div class="badge-row">
+                <span class="cat-badge ${catBadgeClass}">${catBadgeText}</span>
+                <span class="type-badge">${c.type}</span>
+              </div>
+              <div class="cracker-name">${c.name}</div>
+            </div>
+          </div>
+          <div class="cracker-desc">${c.desc}</div>
+          <div class="card-footer">
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <span class="points-tag">⭐ +${c.pts} pts</span>
+              <span class="cost-tag">🪙 ${c.cost} Credits</span>
+            </div>
+            <button class="pop-btn" type="button">💥 Pop It!</button>
+          </div>
+        `;
+
+        // Click on card or pop-btn pops the cracker
+        card.addEventListener('click', (e) => {
+          popCracker(c, card);
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    renderCards();
+
+    /* ================= FILTERS & SEARCH EVENT LISTENERS ================= */
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilterCat = btn.getAttribute('data-cat');
+        renderCards();
+      });
+    });
+
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+      currentSearchTerm = e.target.value.trim();
+      renderCards();
+    });
+
+    const typeFilter = document.getElementById('typeFilter');
+    typeFilter.addEventListener('change', (e) => {
+      currentTypeFilter = e.target.value;
+      renderCards();
+    });
+
+    const sortFilter = document.getElementById('sortFilter');
+    sortFilter.addEventListener('change', (e) => {
+      currentSortOrder = e.target.value;
+      renderCards();
+    });
+
+    /* ================= RAPID CHAIN REACTION & POP ALL ================= */
+    let rapidInterval = null;
+    const btnRapid = document.getElementById('btnRapid');
+    const btnPopAll = document.getElementById('btnPopAll');
+
+    btnRapid.addEventListener('click', () => {
+      if (rapidInterval) {
+        clearInterval(rapidInterval);
+        rapidInterval = null;
+        btnRapid.classList.remove('active');
+        btnRapid.innerHTML = '<span>🚀</span> Rapid Chain Reaction';
+        showToast('⏹️', 'Rapid chain reaction stopped.');
+      } else {
+        btnRapid.classList.add('active');
+        btnRapid.innerHTML = '<span>⏹️</span> Stop Chain Reaction';
+        showToast('🚀', 'Rapid Chain Reaction ACTIVE! Popping non-stop!');
+
+        rapidInterval = setInterval(() => {
+          const visibleCards = Array.from(document.querySelectorAll('.cracker-card'));
+          if (visibleCards.length === 0) return;
+          const randomCard = visibleCards[Math.floor(Math.random() * visibleCards.length)];
+          const cid = randomCard.id.replace('card_', '');
+          const cDef = CRACKER_CATALOG.find(c => c.id === cid);
+          if (cDef) {
+            popCracker(cDef, randomCard);
+          }
+        }, 360);
+      }
+    });
+
+    btnPopAll.addEventListener('click', () => {
+      const visibleCards = Array.from(document.querySelectorAll('.cracker-card'));
+      if (visibleCards.length === 0) return;
+
+      showToast('🎆', `GRAND FINALE! Triggering all ${visibleCards.length} visible crackers!`);
+      btnPopAll.disabled = true;
+
+      visibleCards.forEach((card, idx) => {
+        setTimeout(() => {
+          const cid = card.id.replace('card_', '');
+          const cDef = CRACKER_CATALOG.find(c => c.id === cid);
+          if (cDef) popCracker(cDef, card);
+        }, idx * 120);
+      });
+
+      setTimeout(() => {
+        btnPopAll.disabled = false;
+      }, visibleCards.length * 120 + 500);
+    });
+
+    /* ================= AUDIO TOGGLE ================= */
+    const btnAudioToggle = document.getElementById('btnAudioToggle');
+    const audioIcon = document.getElementById('audioIcon');
+
+    btnAudioToggle.addEventListener('click', () => {
+      audio.enabled = !audio.enabled;
+      if (audio.enabled) {
+        audioIcon.textContent = '🔊';
+        btnAudioToggle.innerHTML = '<span id="audioIcon">🔊</span> Sound: ON';
+        showToast('🔊', 'Pyrotechnic sounds ENABLED!');
+      } else {
+        audioIcon.textContent = '🔇';
+        btnAudioToggle.innerHTML = '<span id="audioIcon">🔇</span> Sound: MUTED';
+        showToast('🔇', 'Sound MUTED.');
+      }
+    });
+
+    // Initialize audio context on first user click anywhere on page
+    window.addEventListener('pointerdown', () => {
+      audio.init();
+    }, { once: true });
+  </script>
+</body>
+</html>
