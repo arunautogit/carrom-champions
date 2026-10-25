@@ -1069,13 +1069,112 @@
     .cracker-store-grid {
       width: 100%;
       max-width: 820px;
-      max-height: 44vh;
+      max-height: 48vh;
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-right: 6px;
+      margin-bottom: 10px;
+    }
+
+    .category-section-block {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .category-section-header {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(50, 24, 10, 0.95) 0%, rgba(25, 12, 5, 0.95) 100%);
+      border: 1.5px solid #6d4c41;
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .category-header-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.96rem;
+      font-weight: bold;
+      color: #ffd700;
+      letter-spacing: 0.3px;
+    }
+
+    .category-header-count {
+      font-size: 0.72rem;
+      font-weight: bold;
+      padding: 3px 9px;
+      background: rgba(255, 215, 0, 0.18);
+      border: 1px solid rgba(255, 215, 0, 0.45);
+      border-radius: 10px;
+      color: #ffd54f;
+    }
+
+    .category-header-subtitle {
+      font-size: 0.72rem;
+      color: #d7ccc8;
+      margin-top: 3px;
+      line-height: 1.25;
+    }
+
+    .category-cards-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 10px;
+    }
+
+    
+    .category-section-block {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .category-section-header {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(45, 22, 10, 0.95) 0%, rgba(20, 10, 5, 0.95) 100%);
+      border: 1.5px solid #5d4037;
+      border-radius: 12px;
+      padding: 9px 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .category-header-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: #ffd700;
+      letter-spacing: 0.3px;
+    }
+
+    .category-header-count {
+      font-size: 0.72rem;
+      font-weight: bold;
+      padding: 3px 9px;
+      background: rgba(255, 215, 0, 0.18);
+      border: 1px solid rgba(255, 215, 0, 0.45);
+      border-radius: 10px;
+      color: #ffd54f;
+    }
+
+    .category-header-subtitle {
+      font-size: 0.72rem;
+      color: #d7ccc8;
+      margin-top: 3px;
+      line-height: 1.25;
+    }
+
+    .category-cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 10px;
-      padding-right: 4px;
-      margin-bottom: 10px;
     }
 
     .store-item-card {
@@ -2819,11 +2918,156 @@
       }
     }
 
+    const CATEGORY_META = {
+      chakkar: {
+        title: '🌀 Chakkars (Spinners, Drones & Wheels)',
+        subtitle: 'Ground starburst wheels, whistling spinners & flying aerial rotor drones',
+        color: '#ffd700',
+        icon: '🌀'
+      },
+      flowerpot: {
+        title: '🌋 Flowerpots (Anaars, Geysers & Fountains)',
+        subtitle: 'High-pressure golden spark geysers, colour koti & peacock plumage fountains',
+        color: '#ff9800',
+        icon: '🌋'
+      },
+      rocket: {
+        title: '🚀 Rockets (Sky High Screechers)',
+        subtitle: 'Screaming upward rocket ascent with mid-air starburst blasts & whistling trails',
+        color: '#00e5ff',
+        icon: '🚀'
+      },
+      parachute: {
+        title: '🪂 Parachutes (Illuminated Silk Chutes)',
+        subtitle: 'Rocket liftoff, aerial canopy deployment & slow-drifting glowing silk parachute with embers',
+        color: '#ffeb3b',
+        icon: '🪂'
+      },
+      wala: {
+        title: '🧨 Walas (Chain Lar Strings & Finales)',
+        subtitle: 'Machine-gun staccato chain pops, red paper confetti shreds & grand thunderous salvos',
+        color: '#ff1744',
+        icon: '🧨'
+      },
+      skyshot: {
+        title: '🎆 Sky Shots (Aerial Cakes & Multi-Shots)',
+        subtitle: 'Multi-shell Brocade weeping willow cascades, fan matrix horizon barrages & Roman candles',
+        color: '#e040fb',
+        icon: '🎆'
+      },
+      sparkler: {
+        title: '✨ Sparklers (Fuljhadis & Twinkling Stars)',
+        subtitle: 'Handheld electric sizzlers, pulsating silver strobes & rainbow needle spark bouquets',
+        color: '#fff59d',
+        icon: '✨'
+      },
+      bomb: {
+        title: '💣 Bombs (Dhamakas, Vedis & Sonic Thunder)',
+        subtitle: 'Sub-bass acoustic thuds, supersonic cracks, bullet snaps & armor-piercing shockwaves',
+        color: '#f44336',
+        icon: '💣'
+      },
+      snake: {
+        title: '🐍 Snakes (Saanp Ki Goli Novelties)',
+        subtitle: 'Sizzling pyrotechnic black snake coils growing and curling across the board surface',
+        color: '#795548',
+        icon: '🐍'
+      }
+    };
+
+    const CATEGORY_ORDER = ['chakkar', 'flowerpot', 'rocket', 'parachute', 'wala', 'skyshot', 'sparkler', 'bomb', 'snake'];
+
+    function createCrackerCard(c) {
+      const isUnlocked = unlockedCrackers.has(c.id);
+      const wCount = equippedWhite.filter(id => id === c.id).length;
+      const bCount = equippedBlack.filter(id => id === c.id).length;
+      const isQueen = equippedQueen === c.id;
+      const isEquipped = wCount > 0 || bCount > 0 || isQueen;
+
+      const card = document.createElement('div');
+      card.className = 'store-item-card' + (isEquipped ? ' equipped' : '');
+
+      let badgeHtml = '';
+      if (wCount > 0) badgeHtml += '<span class="badge-equipped-tag tag-white">⚪ On White (' + wCount + ')</span> ';
+      if (bCount > 0) badgeHtml += '<span class="badge-equipped-tag tag-black">⚫ On Black (' + bCount + ')</span> ';
+      if (isQueen) badgeHtml += '<span class="badge-equipped-tag tag-queen">👑 On Queen</span>';
+
+      const meta = CATEGORY_META[c.category] || { icon: '✨', title: c.category };
+
+      card.innerHTML = `
+        <div class="item-top-row">
+          <div class="card-coin-badge" style="border: 2.2px solid ${c.rim || '#ffd700'}; box-shadow: 0 0 10px ${c.rim || '#ffd700'};">
+            <div class="coin-inner-ring"></div>
+            <span class="coin-emoji">${c.emoji}</span>
+          </div>
+          <div class="item-title-col">
+            <div class="item-name" title="${c.name}">${c.name}</div>
+            <div>
+              <span class="item-cat-tag">${meta.icon} ${c.category.toUpperCase()}</span>
+              <span class="item-pts">+${c.pts} Pts</span>
+            </div>
+          </div>
+        </div>
+        <div class="item-desc">${c.desc}</div>
+        ${badgeHtml ? '<div class="approved-badge-row">' + badgeHtml + '</div>' : ''}
+        <div class="item-btn-row approved-btn-row">
+          <button class="btn-preview-pop" title="Preview Pop Effect & Sound">💥 Pop</button>
+          <button class="btn-action-equip-target btn-equip-white" title="Equip to White Coins (${wCount}/9)">⚪ White ${wCount > 0 ? '(' + wCount + ')' : ''}</button>
+          <button class="btn-action-equip-target btn-equip-black" title="Equip to Black Coins (${bCount}/9)">⚫ Black ${bCount > 0 ? '(' + bCount + ')' : ''}</button>
+          <button class="btn-action-equip-target btn-equip-queen" title="Equip to Queen Finale">👑 Queen</button>
+        </div>
+      `;
+
+      card.querySelector('.btn-preview-pop').addEventListener('click', (e) => {
+        e.stopPropagation();
+        previewCrackerPopOnCard(card, c);
+      });
+
+      card.querySelector('.btn-equip-white').addEventListener('click', (e) => {
+        e.stopPropagation();
+        unlockedCrackers.add(c.id);
+        if (equippedWhite.length < 9) {
+          equippedWhite.push(c.id);
+        } else {
+          equippedWhite.shift();
+          equippedWhite.push(c.id);
+        }
+        activeTrayView = 'white';
+        Sound.playClack(8, 0);
+        renderBazaarUI();
+      });
+
+      card.querySelector('.btn-equip-black').addEventListener('click', (e) => {
+        e.stopPropagation();
+        unlockedCrackers.add(c.id);
+        if (equippedBlack.length < 9) {
+          equippedBlack.push(c.id);
+        } else {
+          equippedBlack.shift();
+          equippedBlack.push(c.id);
+        }
+        activeTrayView = 'black';
+        Sound.playClack(8, 0);
+        renderBazaarUI();
+      });
+
+      card.querySelector('.btn-equip-queen').addEventListener('click', (e) => {
+        e.stopPropagation();
+        unlockedCrackers.add(c.id);
+        equippedQueen = (equippedQueen === c.id) ? null : c.id;
+        activeTrayView = 'queen';
+        Sound.playPocket();
+        renderBazaarUI();
+      });
+
+      return card;
+    }
+
     function renderBazaarUI() {
       const crEl = document.getElementById('bazaar-credits-val');
       if (crEl) crEl.textContent = userCredits;
 
-      // Update tray count numbers
+      // Update tray count indicators
       const wCountEl = document.getElementById('white-tray-count');
       if (wCountEl) wCountEl.textContent = equippedWhite.length;
       const bCountEl = document.getElementById('black-tray-count');
@@ -2907,115 +3151,47 @@
         traySlotsEl.appendChild(slot);
       }
 
-      // Filter items according to pyrotechnic category
+      // Render Distinct Categorized Sections
       const gridEl = document.getElementById('bazaar-grid');
       gridEl.innerHTML = '';
 
-      let items = CRACKER_CATALOG;
-      if (currentBazaarCat !== 'all') {
-        items = CRACKER_CATALOG.filter(c => c.category === currentBazaarCat);
-      }
+      const categoriesToRender = (currentBazaarCat === 'all') 
+        ? CATEGORY_ORDER 
+        : [currentBazaarCat];
 
-      const catLabels = {
-        chakkar: '🌀 Chakkar',
-        flowerpot: '🌋 Flowerpot',
-        rocket: '🚀 Rocket',
-        parachute: '🪂 Parachute',
-        wala: '🧨 Wala',
-        skyshot: '🎆 Sky Shot',
-        sparkler: '✨ Sparkler',
-        bomb: '💣 Bomb',
-        snake: '🐍 Snake'
-      };
+      categoriesToRender.forEach(catKey => {
+        const catItems = CRACKER_CATALOG.filter(c => c.category === catKey);
+        if (catItems.length === 0) return;
 
-      items.forEach(c => {
-        const isUnlocked = unlockedCrackers.has(c.id);
-        const wCount = equippedWhite.filter(id => id === c.id).length;
-        const bCount = equippedBlack.filter(id => id === c.id).length;
-        const isQueen = equippedQueen === c.id;
-        const isEquipped = wCount > 0 || bCount > 0 || isQueen;
+        const meta = CATEGORY_META[catKey] || {
+          title: catKey.toUpperCase(),
+          subtitle: 'Collection of ' + catItems.length + ' varieties',
+          color: '#ffd700'
+        };
 
-        const card = document.createElement('div');
-        card.className = 'store-item-card' + (isEquipped ? ' equipped' : '');
+        const sectionBlock = document.createElement('div');
+        sectionBlock.className = 'category-section-block';
 
-        let badgeHtml = '';
-        if (wCount > 0) badgeHtml += '<span class="badge-equipped-tag tag-white">⚪ On White (' + wCount + ')</span> ';
-        if (bCount > 0) badgeHtml += '<span class="badge-equipped-tag tag-black">⚫ On Black (' + bCount + ')</span> ';
-        if (isQueen) badgeHtml += '<span class="badge-equipped-tag tag-queen">👑 On Queen</span>';
-
-        const catTag = catLabels[c.category] || c.category;
-
-        card.innerHTML = `
-          <div class="item-top-row">
-            <div class="card-coin-badge" style="border: 2.2px solid ${c.rim || '#ffd700'}; box-shadow: 0 0 10px ${c.rim || '#ffd700'};">
-              <div class="coin-inner-ring"></div>
-              <span class="coin-emoji">${c.emoji}</span>
-            </div>
-            <div class="item-title-col">
-              <div class="item-name" title="${c.name}">${c.name}</div>
-              <div>
-                <span class="item-cat-tag">${catTag}</span>
-                <span class="item-pts">+${c.pts} Pts</span>
-              </div>
-            </div>
+        const headerEl = document.createElement('div');
+        headerEl.className = 'category-section-header';
+        headerEl.style.borderLeft = '4px solid ' + meta.color;
+        headerEl.innerHTML = `
+          <div class="category-header-title">
+            <span>${meta.title}</span>
+            <span class="category-header-count">${catItems.length} Varieties</span>
           </div>
-          <div class="item-desc">${c.desc}</div>
-          ${badgeHtml ? '<div class="approved-badge-row">' + badgeHtml + '</div>' : ''}
-          <div class="item-btn-row approved-btn-row">
-            <button class="btn-preview-pop" title="Preview Pop Effect & Sound">💥 Pop</button>
-            <button class="btn-action-equip-target btn-equip-white" title="Equip to White Coins (${wCount}/9)">⚪ White ${wCount > 0 ? '(' + wCount + ')' : ''}</button>
-            <button class="btn-action-equip-target btn-equip-black" title="Equip to Black Coins (${bCount}/9)">⚫ Black ${bCount > 0 ? '(' + bCount + ')' : ''}</button>
-            <button class="btn-action-equip-target btn-equip-queen" title="Equip to Queen Finale">👑 Queen</button>
-          </div>
+          <div class="category-header-subtitle">${meta.subtitle}</div>
         `;
+        sectionBlock.appendChild(headerEl);
 
-        // 💥 Preview Pop button
-        card.querySelector('.btn-preview-pop').addEventListener('click', (e) => {
-          e.stopPropagation();
-          previewCrackerPopOnCard(card, c);
+        const cardsGrid = document.createElement('div');
+        cardsGrid.className = 'category-cards-grid';
+        catItems.forEach(c => {
+          cardsGrid.appendChild(createCrackerCard(c));
         });
+        sectionBlock.appendChild(cardsGrid);
 
-        // ⚪ Equip to White
-        card.querySelector('.btn-equip-white').addEventListener('click', (e) => {
-          e.stopPropagation();
-          unlockedCrackers.add(c.id);
-          if (equippedWhite.length < 9) {
-            equippedWhite.push(c.id);
-          } else {
-            equippedWhite.shift();
-            equippedWhite.push(c.id);
-          }
-          activeTrayView = 'white';
-          Sound.playClack(8, 0);
-          renderBazaarUI();
-        });
-
-        // ⚫ Equip to Black
-        card.querySelector('.btn-equip-black').addEventListener('click', (e) => {
-          e.stopPropagation();
-          unlockedCrackers.add(c.id);
-          if (equippedBlack.length < 9) {
-            equippedBlack.push(c.id);
-          } else {
-            equippedBlack.shift();
-            equippedBlack.push(c.id);
-          }
-          activeTrayView = 'black';
-          Sound.playClack(8, 0);
-          renderBazaarUI();
-        });
-
-        // 👑 Equip to Queen
-        card.querySelector('.btn-equip-queen').addEventListener('click', (e) => {
-          e.stopPropagation();
-          unlockedCrackers.add(c.id);
-          equippedQueen = (equippedQueen === c.id) ? null : c.id;
-          activeTrayView = 'queen';
-          Sound.playPocket();
-          renderBazaarUI();
-        });
-
-        gridEl.appendChild(card);
+        gridEl.appendChild(sectionBlock);
       });
     }
 
