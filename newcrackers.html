@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🪔 New Crackers Manager & Interactive Popper Showroom 🎆</title>
+  <title>🪔 Complete Crackers Database Manager & Interactive Popper 🎆</title>
   <style>
     :root {
       --bg-dark: #080512;
@@ -17,7 +17,7 @@
       --purple: #b388ff;
       --text-main: #f5f2eb;
       --text-dim: #9e97b2;
-      --card-border: rgba(255, 215, 0, 0.25);
+      --card-border: rgba(255, 215, 0, 0.22);
     }
 
     * {
@@ -43,7 +43,6 @@
       position: relative;
     }
 
-    /* Pyrotechnics overlay canvas */
     #fxCanvas {
       position: fixed;
       top: 0;
@@ -184,7 +183,7 @@
       margin: 16px auto 0;
       padding: 0 24px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 12px;
     }
 
@@ -323,6 +322,12 @@
       border-color: var(--card-rim, #ffd700);
     }
 
+    .cracker-card.is-approved {
+      border-color: #ffd700;
+      background: linear-gradient(180deg, #1d1436 0%, #130a24 100%);
+      box-shadow: 0 8px 25px rgba(255, 215, 0, 0.18);
+    }
+
     .cracker-card.deleted {
       animation: cardDisintegrate 0.45s forwards cubic-bezier(0.4, 0, 0.2, 1);
       pointer-events: none;
@@ -340,9 +345,9 @@
       justify-content: space-between;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       padding-bottom: 8px;
+      gap: 8px;
     }
 
-    /* Checkbox & Delete Toggle Switch */
     .keep-checkbox-wrap {
       display: flex;
       align-items: center;
@@ -406,6 +411,13 @@
       gap: 4px;
     }
 
+    .badge-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
     .cat-badge {
       font-size: 0.68rem;
       font-weight: 800;
@@ -415,7 +427,23 @@
       background: rgba(255, 215, 0, 0.15);
       color: #ffd700;
       border: 1px solid rgba(255, 215, 0, 0.35);
-      align-self: flex-start;
+    }
+
+    .approved-badge {
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #ffd700 0%, #ff6d00 100%);
+      color: #120524;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      letter-spacing: 0.5px;
+    }
+
+    .cat-queen {
+      background: linear-gradient(135deg, #ff1744 0%, #d50000 100%);
+      color: #fff;
+      border-color: #ff5252;
     }
 
     .cracker-name {
@@ -465,7 +493,6 @@
       box-shadow: 0 0 14px rgba(255, 87, 34, 0.8);
     }
 
-    /* Celebration Toast */
     #celebrationToast {
       position: fixed;
       bottom: 28px;
@@ -505,22 +532,22 @@
       <div class="title-area">
         <div class="diya-icon">🪔</div>
         <div>
-          <h1>Diwali Crackers Manager & Popper</h1>
-          <div class="subtitle">Review crackers: Uncheck/Click 'Delete' to remove unwanted data right here, or click to pop off!</div>
+          <h1>Diwali Complete Crackers Database & Popper</h1>
+          <div class="subtitle">105 Crackers Total (Top 5 Approved + 100 Catalog). Keep checkbox = Yes (Kept), Uncheck/Delete = No (Deleted from Database).</div>
         </div>
       </div>
       <div class="header-actions">
         <a href="crackers.html" class="btn btn-back">
-          <span>🌟</span> Open Standard 100 Showroom
+          <span>🌟</span> Open Popper Showroom
         </a>
         <a href="index.html" class="btn btn-back">
-          <span>🔙</span> Back to Carrom
+          <span>🔙</span> Back to Carrom Board
         </a>
         <button class="btn btn-export" id="btnExport">
           <span>💾</span> Export Approved JSON
         </button>
         <button class="btn btn-reset" id="btnReset">
-          <span>🔄</span> Reset All Data
+          <span>🔄</span> Reset Full 105 DB
         </button>
         <button class="btn btn-audio" id="btnAudioToggle">
           <span id="audioIcon">🔊</span> Sound: ON
@@ -535,14 +562,21 @@
       <div class="stat-icon">📦</div>
       <div class="stat-details">
         <span class="stat-val" id="statTotalCount">0</span>
-        <span class="stat-label">Active / Kept Crackers</span>
+        <span class="stat-label">Active Kept in DB</span>
+      </div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-details">
+        <span class="stat-val" id="statApprovedCount" style="color: #ffd700;">5</span>
+        <span class="stat-label">Approved Novelties</span>
       </div>
     </div>
     <div class="stat-pill">
       <div class="stat-icon">🗑️</div>
       <div class="stat-details">
         <span class="stat-val" id="statDeletedCount" style="color: #ff5252;">0</span>
-        <span class="stat-label">Deleted / Removed</span>
+        <span class="stat-label">Deleted from DB</span>
       </div>
     </div>
     <div class="stat-pill">
@@ -564,16 +598,18 @@
   <!-- Scope & Filter Tabs -->
   <div class="controls-panel">
     <div class="scope-tabs">
-      <button class="tab-btn active" data-scope="new">✨ New Special Novelties (15)</button>
-      <button class="tab-btn" data-scope="standard">🪔 Standard Catalog (100)</button>
-      <button class="tab-btn" data-scope="all">🌟 All Combined</button>
+      <button class="tab-btn active" data-scope="all">🌟 All Crackers (105)</button>
+      <button class="tab-btn" data-scope="approved" style="color: #ffd700;">⭐ Top 5 Approved</button>
+      <button class="tab-btn" data-scope="white">⚪ White Coins (45)</button>
+      <button class="tab-btn" data-scope="black">⚫ Black Coins (45)</button>
+      <button class="tab-btn" data-scope="queen">👑 Queen Showstoppers (10)</button>
       <button class="tab-btn" data-scope="trash" id="tabTrash" style="color: #ff5252;">🗑️ Deleted Items (0)</button>
     </div>
 
     <div class="filter-row">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search cracker name, type or description...">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search cracker name, type or description (e.g. drone, bomb, chakkar, rocket)...">
       </div>
       <div style="display: flex; gap: 8px;">
         <button class="btn btn-back" id="btnPopAllKept">
@@ -583,7 +619,7 @@
     </div>
   </div>
 
-  <!-- Grid -->
+  <!-- Main Grid -->
   <main>
     <div class="cracker-grid" id="crackerGrid"></div>
   </main>
@@ -594,11 +630,12 @@
   </div>
 
   <script>
-    /* ================= INITIAL CRACKER LISTS ================= */
-    const INITIAL_NEW_CRACKERS = [
+    /* ================= 105 FULL CRACKER DATABASE ================= */
+    const FULL_INITIAL_DB = [
   {
-    "id": "nc_01",
-    "cat": "novelty",
+    "id": "app_01",
+    "cat": "approved",
+    "approved": true,
     "name": "Flying Butterfly Drone (Chidiya)",
     "emoji": "🦋",
     "desc": "Spins on floor, generates aerodynamic lift & shoots 40ft vertically with green-gold halos",
@@ -608,8 +645,9 @@
     "type": "drone"
   },
   {
-    "id": "nc_02",
-    "cat": "novelty",
+    "id": "app_02",
+    "cat": "approved",
+    "approved": true,
     "name": "Whistling Helicopter Sky Spinner",
     "emoji": "🚁",
     "desc": "Piercing siren scream on ground, lifts off vertically into night sky ending in a crisp pop",
@@ -619,8 +657,9 @@
     "type": "helicopter"
   },
   {
-    "id": "nc_03",
-    "cat": "aerial",
+    "id": "app_03",
+    "cat": "approved",
+    "approved": true,
     "name": "Illuminated Silk Parachute Rocket",
     "emoji": "🪂",
     "desc": "Shoots 100ft high, bursts & deploys a glowing silk parachute floating gently for 30s",
@@ -630,8 +669,9 @@
     "type": "parachute"
   },
   {
-    "id": "nc_04",
-    "cat": "aerial",
+    "id": "app_04",
+    "cat": "approved",
+    "approved": true,
     "name": "Brocade Crown 240-Shot Aerial Cake",
     "emoji": "🎆",
     "desc": "1-Fuse automatic 90s continuous sky symphony of golden willow cascades & dragon eggs",
@@ -641,8 +681,9 @@
     "type": "cake240"
   },
   {
-    "id": "nc_05",
-    "cat": "aerial",
+    "id": "app_05",
+    "cat": "approved",
+    "approved": true,
     "name": "Fan-Shape W-Shot Aerial Matrix",
     "emoji": "✨",
     "desc": "Simultaneous 7-shell wide angle V & W fan formation sky barrage covering entire horizon",
@@ -651,118 +692,6 @@
     "rim": "#e040fb",
     "type": "fanshot"
   },
-  {
-    "id": "nc_06",
-    "cat": "aerial",
-    "name": "Niagara Falls Silver Cascade",
-    "emoji": "🌊",
-    "desc": "Aerial burst dropping a shimmering curtain of hanging silver rain waterfall",
-    "cost": 220,
-    "pts": 75,
-    "rim": "#80deea",
-    "type": "waterfall"
-  },
-  {
-    "id": "nc_07",
-    "cat": "percussion",
-    "name": "Emergency Siren Cracker (Police Pataka)",
-    "emoji": "🚨",
-    "desc": "Loud rising & falling two-tone emergency siren for 3s followed by thunderous seismic boom",
-    "cost": 140,
-    "pts": 50,
-    "rim": "#ff1744",
-    "type": "siren"
-  },
-  {
-    "id": "nc_08",
-    "cat": "fountain",
-    "name": "Musical Anaar (Symphony Flowerpot)",
-    "emoji": "🎶",
-    "desc": "3-Pitch musical fountain shifting from amber gold to ruby red to sapphire blue",
-    "cost": 160,
-    "pts": 60,
-    "rim": "#ff9100",
-    "type": "musical_anaar"
-  },
-  {
-    "id": "nc_09",
-    "cat": "traditional",
-    "name": "Traditional Palm-Leaf Ola Vedi (Thadaal)",
-    "emoji": "🌴",
-    "desc": "Handmade palmyra dried leaf triangular explosive with authentic ultra-crisp whip crack",
-    "cost": 110,
-    "pts": 40,
-    "rim": "#76ff03",
-    "type": "olavedi"
-  },
-  {
-    "id": "nc_10",
-    "cat": "novelty",
-    "name": "Tri-Color Daylight Smoke Fountain",
-    "emoji": "💨",
-    "desc": "Daylight celebration fountain emitting thick Saffron, White & Green smoke plumes",
-    "cost": 130,
-    "pts": 45,
-    "rim": "#ff6d00",
-    "type": "smoke_fountain"
-  },
-  {
-    "id": "nc_11",
-    "cat": "novelty",
-    "name": "Magic Pop-Pop Snappers (Onion Bulbs)",
-    "emoji": "🧅",
-    "desc": "Friction-activated tear-drop snaps! Throw against floor for instant snap, no fire needed",
-    "cost": 50,
-    "pts": 20,
-    "rim": "#ba68c8",
-    "type": "poppop"
-  },
-  {
-    "id": "nc_12",
-    "cat": "novelty",
-    "name": "Magic Crackling Whip Ribbon",
-    "emoji": "⚡",
-    "desc": "3-Foot hanging electric ribbon that zips and crackles down its length like live electricity",
-    "cost": 90,
-    "pts": 35,
-    "rim": "#ffee58",
-    "type": "whip"
-  },
-  {
-    "id": "nc_13",
-    "cat": "wheel",
-    "name": "Doctor Strange Giant Wall Bicycle Wheel",
-    "emoji": "🎡",
-    "desc": "Wall-mounted 15ft colossal spinning circular ring portal of golden fire at 2000 RPM",
-    "cost": 280,
-    "pts": 90,
-    "rim": "#ff6f00",
-    "type": "bicycle_wheel"
-  },
-  {
-    "id": "nc_14",
-    "cat": "percussion",
-    "name": "Elephant Brand 28 Giant Heavy Salutes",
-    "emoji": "🐘",
-    "desc": "Legendary Sivakasi heritage heavy-cylinder earth-shattering salutes",
-    "cost": 200,
-    "pts": 70,
-    "rim": "#cfd8dc",
-    "type": "elephant_brand"
-  },
-  {
-    "id": "nc_15",
-    "cat": "fountain",
-    "name": "Dancing Peacock 12-Feather Plume",
-    "emoji": "🦚",
-    "desc": "Ultra-wide fan fountain simulating full open peacock plume with crackling tips",
-    "cost": 210,
-    "pts": 75,
-    "rim": "#00b0ff",
-    "type": "peacock12"
-  }
-];
-    const INITIAL_STD_CRACKERS = [
   {
     "id": "w_01",
     "cat": "white",
@@ -1865,22 +1794,21 @@
   }
 ];
 
-    const STORAGE_KEY_ACTIVE = 'carrom_newcrackers_active_v1';
-    const STORAGE_KEY_DELETED = 'carrom_newcrackers_deleted_v1';
+    const STORAGE_KEY_ACTIVE = 'carrom_all_crackers_active_v2';
+    const STORAGE_KEY_DELETED = 'carrom_all_crackers_deleted_v2';
 
     let activeCrackers = [];
     let deletedCrackers = [];
 
-    // Load from localStorage or defaults
     function loadData() {
       const savedActive = localStorage.getItem(STORAGE_KEY_ACTIVE);
       const savedDeleted = localStorage.getItem(STORAGE_KEY_DELETED);
 
       if (savedActive) {
         try { activeCrackers = JSON.parse(savedActive); }
-        catch(e) { activeCrackers = [...INITIAL_NEW_CRACKERS, ...INITIAL_STD_CRACKERS]; }
+        catch(e) { activeCrackers = [...FULL_INITIAL_DB]; }
       } else {
-        activeCrackers = [...INITIAL_NEW_CRACKERS, ...INITIAL_STD_CRACKERS];
+        activeCrackers = [...FULL_INITIAL_DB];
       }
 
       if (savedDeleted) {
@@ -1913,36 +1841,6 @@
         if (!AudioCtx) return null;
         this.ctx = new AudioCtx();
         return this.ctx;
-      }
-
-      playSiren(duration = 2.5) {
-        if (!this.enabled) return;
-        const ac = this.init(); if (!ac) return;
-        const now = ac.currentTime;
-
-        const osc = ac.createOscillator();
-        const gain = ac.createGain();
-        osc.type = 'sawtooth';
-
-        // LFO for emergency 2-tone siren
-        const lfo = ac.createOscillator();
-        const lfoGain = ac.createGain();
-        lfo.frequency.setValueAtTime(3.5, now);
-        lfoGain.gain.setValueAtTime(220, now);
-
-        osc.frequency.setValueAtTime(750, now);
-        lfo.connect(osc.frequency);
-
-        gain.gain.setValueAtTime(0.4, now);
-        gain.gain.linearRampToValueAtTime(0.8, now + 0.3);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-        osc.connect(gain);
-        gain.connect(ac.destination);
-        lfo.start();
-        osc.start();
-        lfo.stop(now + duration);
-        osc.stop(now + duration);
       }
 
       playWhistleSpin(duration = 3.5, baseFreq = 750) {
@@ -2098,8 +1996,7 @@
         if (this.time >= this.duration) return false;
         this.swing += dt * 3;
         this.x += Math.sin(this.swing) * 1.5;
-        this.y += dt * 35; // gentle downward drift
-        // drop little star embers
+        this.y += dt * 35;
         if (Math.random() < 0.3) {
           particles.push(new Particle(this.x, this.y + 15, (Math.random()-0.5)*0.5, 0.5, this.color, 2, 0.4, 0.02));
         }
@@ -2110,20 +2007,17 @@
         c.save();
         c.globalAlpha = alpha;
         c.translate(this.x, this.y);
-        // parachute canopy
         c.fillStyle = this.color;
         c.beginPath();
         c.arc(0, 0, 16, Math.PI, 0, false);
         c.closePath();
         c.fill();
-        // suspension lines
         c.strokeStyle = '#fff';
         c.lineWidth = 1;
         c.beginPath();
         c.moveTo(-16, 0); c.lineTo(0, 16);
         c.moveTo(16, 0); c.lineTo(0, 16);
         c.stroke();
-        // glowing flare cargo
         c.fillStyle = '#ff1744';
         c.shadowColor = '#ffd700';
         c.shadowBlur = 10;
@@ -2147,7 +2041,6 @@
       update(dt) {
         this.time += dt;
         if (this.time >= this.duration) {
-          // Explode at peak
           audio.playSharpSnap(1500);
           audio.playBassBoom(180, 0.6);
           for (let i = 0; i < 60; i++) {
@@ -2158,8 +2051,7 @@
           return false;
         }
         this.rot += dt * 35;
-        this.y -= dt * 180; // vertical lift
-        // halo sparks
+        this.y -= dt * 180;
         const count = 3;
         for (let i = 0; i < count; i++) {
           const a = this.rot + (i * Math.PI * 2 / count);
@@ -2260,6 +2152,7 @@
     let totalPts = 0;
 
     const statTotalCountEl = document.getElementById('statTotalCount');
+    const statApprovedCountEl = document.getElementById('statApprovedCount');
     const statDeletedCountEl = document.getElementById('statDeletedCount');
     const statPoppedCountEl = document.getElementById('statPoppedCount');
     const statPointsAccumEl = document.getElementById('statPointsAccum');
@@ -2279,13 +2172,15 @@
 
     function updateStats() {
       statTotalCountEl.textContent = activeCrackers.length;
+      const approvedLeft = activeCrackers.filter(c => c.approved).length;
+      statApprovedCountEl.textContent = approvedLeft;
       statDeletedCountEl.textContent = deletedCrackers.length;
       tabTrashEl.textContent = `🗑️ Deleted Items (${deletedCrackers.length})`;
       statPoppedCountEl.textContent = totalPops;
       statPointsAccumEl.textContent = totalPts;
     }
 
-    /* ================= CRACKER POPPING FX ================= */
+    /* ================= POPPER FX ================= */
     function triggerPopper(cDef, cardElement) {
       audio.init();
       totalPops++;
@@ -2318,20 +2213,6 @@
           parachutes.push(new FloatingParachute(originX, Math.max(80, originY - 260), rim));
         }, 800);
       }
-      else if (t === 'siren') {
-        audio.playSiren(2.8);
-        setTimeout(() => {
-          flashEl.style.opacity = '0.8';
-          setTimeout(() => flashEl.style.opacity = '0', 80);
-          audio.playBassBoom(110, 1.3);
-          shockwaves.push(new ShockwaveRing(originX, originY, 320, '#ff1744'));
-          for (let i = 0; i < 90; i++) {
-            const a = Math.random() * Math.PI * 2;
-            const s = 3 + Math.random() * 8;
-            particles.push(new Particle(originX, originY, Math.cos(a)*s, Math.sin(a)*s, '#ff1744', 3, 1));
-          }
-        }, 2800);
-      }
       else if (t === 'cake240') {
         for (let shot = 0; shot < 12; shot++) {
           setTimeout(() => {
@@ -2349,39 +2230,69 @@
           }, shot * 260);
         }
       }
-      else if (t === 'olavedi' || t === 'poppop') {
-        audio.playSharpSnap(t === 'olavedi' ? 1800 : 1200);
-        shockwaves.push(new ShockwaveRing(originX, originY, 140, rim));
-        for (let i = 0; i < 40; i++) {
-          const a = Math.random() * Math.PI * 2;
-          particles.push(new Particle(originX, originY, Math.cos(a)*5, Math.sin(a)*5, rim, 2.5, 0.5));
+      else if (t === 'fanshot') {
+        audio.playWhistleSpin(1.2, 850);
+        for (let f = 0; f < 7; f++) {
+          setTimeout(() => {
+            const angleDeg = -60 + f * 20;
+            const tx = originX + Math.sin(angleDeg * Math.PI / 180) * 240;
+            const ty = Math.max(60, originY - Math.cos(angleDeg * Math.PI / 180) * 280);
+            audio.playBassBoom(180, 0.6);
+            shockwaves.push(new ShockwaveRing(tx, ty, 140, rim));
+            for (let p = 0; p < 30; p++) {
+              const a = Math.random() * Math.PI * 2;
+              particles.push(new Particle(tx, ty, Math.cos(a)*5, Math.sin(a)*5, rim, 2.5, 0.7));
+            }
+          }, f * 100);
         }
       }
-      else if (t === 'bicycle_wheel') {
-        audio.playWhistleSpin(4.0, 900);
-        shockwaves.push(new ShockwaveRing(originX, originY, 260, '#ff6f00'));
-        for (let i = 0; i < 120; i++) {
-          const a = Math.random() * Math.PI * 2;
-          particles.push(new Particle(originX, originY, Math.cos(a)*6, Math.sin(a)*6, '#ff6f00', 3, 1.2));
-        }
-      }
-      else if (t === 'smoke_fountain') {
-        audio.playFountain(3.5, 450);
-        const smokeCols = ['#ff6d00', '#ffffff', '#00c853'];
+      else if (t === 'chakkar' || t === 'rolling') {
+        audio.playWhistleSpin(3.5, 800);
+        shockwaves.push(new ShockwaveRing(originX, originY, 120, rim));
         for (let i = 0; i < 70; i++) {
-          const col = smokeCols[i % 3];
-          particles.push(new Particle(
-            originX + (Math.random() - 0.5) * 30,
-            originY,
-            (Math.random() - 0.5) * 2,
-            -(2 + Math.random() * 4),
-            col, 6, 1.8, -0.02, 0.98
-          ));
+          const a = Math.random() * Math.PI * 2;
+          particles.push(new Particle(originX, originY, Math.cos(a)*4, Math.sin(a)*4, rim, 2.5, 0.7));
+        }
+      }
+      else if (t === 'flowerpot' || t === 'peacock') {
+        audio.playFountain(3.8, 900);
+        for (let i = 0; i < 60; i++) {
+          particles.push(new Particle(originX + (Math.random()-0.5)*12, originY, (Math.random()-0.5)*3, -(3+Math.random()*6), rim, 3, 0.8));
+        }
+      }
+      else if (t === 'bomb' || t === 'gorilla') {
+        flashEl.style.opacity = '0.8';
+        setTimeout(() => flashEl.style.opacity = '0', 70);
+        audio.playBassBoom(120, 1.2);
+        shockwaves.push(new ShockwaveRing(originX, originY, 260, rim));
+        for (let i = 0; i < 80; i++) {
+          const a = Math.random() * Math.PI * 2;
+          particles.push(new Particle(originX, originY, Math.cos(a)*6, Math.sin(a)*6, rim, 3, 0.9));
+        }
+      }
+      else if (t === '100wala' || t === 'mirchi') {
+        for (let p = 0; p < 20; p++) {
+          setTimeout(() => {
+            audio.playSharpSnap(1100 + Math.random() * 300);
+            const rx = originX + (Math.random() - 0.5) * 80;
+            const ry = originY + (Math.random() - 0.5) * 80;
+            particles.push(new Particle(rx, ry, (Math.random()-0.5)*3, (Math.random()-0.5)*3, '#ff3d00', 2, 0.4));
+          }, p * 90);
+        }
+      }
+      else if (t === 'mega_diwali' || cDef.cat === 'queen') {
+        flashEl.style.opacity = '0.9';
+        setTimeout(() => flashEl.style.opacity = '0', 90);
+        audio.playBassBoom(105, 1.4);
+        audio.playWhistleSpin(4.0, 800);
+        shockwaves.push(new ShockwaveRing(originX, originY, 320, '#ffd700'));
+        for (let i = 0; i < 110; i++) {
+          const a = Math.random() * Math.PI * 2;
+          particles.push(new Particle(originX, originY, Math.cos(a)*7, Math.sin(a)*7, '#ffd700', 3, 1.2));
         }
       }
       else {
-        // Fallback
-        audio.playSharpSnap(1100);
+        audio.playSharpSnap(1200);
         audio.playBassBoom(170, 0.6);
         shockwaves.push(new ShockwaveRing(originX, originY, 120, rim));
         for (let i = 0; i < 40; i++) {
@@ -2403,7 +2314,7 @@
           const removed = activeCrackers.splice(idx, 1)[0];
           deletedCrackers.push(removed);
           saveData();
-          showToast('🗑️', `Deleted "${removed.name}" from active list!`);
+          showToast('🗑️', `Deleted "${removed.name}" from database!`);
           render();
         }
       }, 400);
@@ -2415,13 +2326,13 @@
         const restored = deletedCrackers.splice(idx, 1)[0];
         activeCrackers.push(restored);
         saveData();
-        showToast('✅', `Restored "${restored.name}" back to active list!`);
+        showToast('✅', `Restored "${restored.name}" back to database!`);
         render();
       }
     }
 
     /* ================= RENDER CRACKERS ================= */
-    let currentScope = 'new';
+    let currentScope = 'all';
     let searchTerm = '';
     const grid = document.getElementById('crackerGrid');
 
@@ -2433,10 +2344,11 @@
         list = deletedCrackers;
       } else {
         list = activeCrackers.filter(c => {
-          const isNew = c.id.startsWith('nc_');
-          if (currentScope === 'new' && !isNew) return false;
-          if (currentScope === 'standard' && isNew) return false;
-          return true;
+          if (currentScope === 'approved') return !!c.approved;
+          if (currentScope === 'white') return c.cat === 'white';
+          if (currentScope === 'black') return c.cat === 'black';
+          if (currentScope === 'queen') return c.cat === 'queen';
+          return true; // 'all'
         });
       }
 
@@ -2454,7 +2366,7 @@
           <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-dim);">
             <div style="font-size: 3rem; margin-bottom: 10px;">📦</div>
             <div style="font-size: 1.2rem; font-weight: bold; color: #fff;">No crackers in this view!</div>
-            <div style="margin-top: 6px; font-size: 0.9rem;">Try switching scopes or resetting all data.</div>
+            <div style="margin-top: 6px; font-size: 0.9rem;">Try selecting 'All Crackers' or resetting data.</div>
           </div>
         `;
         return;
@@ -2462,25 +2374,32 @@
 
       list.forEach(c => {
         const card = document.createElement('div');
-        card.className = 'cracker-card';
+        card.className = 'cracker-card' + (c.approved ? ' is-approved' : '');
         card.id = `card_${c.id}`;
         card.style.setProperty('--card-rim', c.rim || '#ffd700');
         card.style.setProperty('--card-rim-glow', (c.rim || '#ffd700') + '66');
 
         const isTrash = (currentScope === 'trash');
 
+        let catBadgeText = c.cat;
+        let catBadgeClass = 'cat-badge';
+        if (c.cat === 'white') catBadgeText = 'White Coin';
+        else if (c.cat === 'black') catBadgeText = 'Black Coin';
+        else if (c.cat === 'queen') { catBadgeText = 'Queen'; catBadgeClass += ' cat-queen'; }
+        else if (c.cat === 'approved') catBadgeText = 'Approved Novelty';
+
         card.innerHTML = `
           <div class="card-header-bar">
             ${isTrash ? `
               <span style="color: #ff5252; font-weight: 700; font-size: 0.8rem;">[DELETED ITEM]</span>
-              <button class="btn btn-export" type="button" style="padding: 3px 10px; font-size: 0.72rem;">♻️ Restore</button>
+              <button class="btn btn-export" type="button" style="padding: 3px 10px; font-size: 0.72rem;">♻️ Restore to DB</button>
             ` : `
-              <label class="keep-checkbox-wrap" title="Uncheck to delete this cracker">
+              <label class="keep-checkbox-wrap" title="Uncheck to delete this cracker from DB">
                 <input type="checkbox" checked class="keep-cb">
-                <span>Keep in Arsenal</span>
+                <span>Keep in Arsenal (Yes)</span>
               </label>
-              <button class="btn-delete-item" type="button" title="Delete this cracker right now">
-                <span>✕</span> Delete
+              <button class="btn-delete-item" type="button" title="Delete this cracker immediately">
+                <span>✕</span> Delete (No)
               </button>
             `}
           </div>
@@ -2488,7 +2407,11 @@
           <div class="card-top">
             <div class="emoji-box">${c.emoji}</div>
             <div class="card-meta">
-              <span class="cat-badge">${c.cat} • ${c.type}</span>
+              <div class="badge-row">
+                ${c.approved ? '<span class="approved-badge">⭐ APPROVED</span>' : ''}
+                <span class="${catBadgeClass}">${catBadgeText}</span>
+                <span class="cat-badge" style="background: rgba(0,229,255,0.15); color: #00e5ff; border-color: rgba(0,229,255,0.3);">${c.type}</span>
+              </div>
               <div class="cracker-name">${c.name}</div>
             </div>
           </div>
@@ -2564,17 +2487,17 @@
           const cid = card.id.replace('card_', '');
           const cDef = activeCrackers.find(c => c.id === cid) || deletedCrackers.find(c => c.id === cid);
           if (cDef) triggerPopper(cDef, card);
-        }, idx * 140);
+        }, idx * 130);
       });
     });
 
     document.getElementById('btnReset').addEventListener('click', () => {
-      if (confirm('Are you sure you want to restore all original crackers and clear deleted items?')) {
+      if (confirm('Are you sure you want to restore the entire 105 crackers database and clear deleted items?')) {
         localStorage.removeItem(STORAGE_KEY_ACTIVE);
         localStorage.removeItem(STORAGE_KEY_DELETED);
         loadData();
         saveData();
-        showToast('🔄', 'All cracker data reset to full defaults!');
+        showToast('🔄', 'Full 105 crackers database reset to defaults!');
         render();
       }
     });
@@ -2584,7 +2507,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'approved_crackers.json';
+      a.download = 'approved_crackers_database.json';
       a.click();
       URL.revokeObjectURL(url);
       showToast('💾', `Exported ${activeCrackers.length} approved crackers to JSON!`);
@@ -2601,7 +2524,6 @@
 
     window.addEventListener('pointerdown', () => audio.init(), { once: true });
 
-    // Initialize
     loadData();
     updateStats();
     render();
