@@ -3691,8 +3691,11 @@
     function previewCrackerSound(c) {
       if (!Sound.isEnabled()) return;
       const t = c.type;
-      if (t === 'drone' || t === 'helicopter') {
-        Sound.playWhistleSpin(2.5, t === 'helicopter' ? 950 : 650);
+      if (t === 'drone' || c.id === 'app_01') {
+        Sound.playWhistleSpin(4.2, 720);
+        return;
+      } else if (t === 'helicopter' || c.id === 'app_02') {
+        Sound.playWhistleSpin(4.5, 950);
         return;
       } else if (t === 'parachute') {
         Sound.playRocketScreech();
@@ -3708,9 +3711,11 @@
         setTimeout(() => Sound.playBassBoom(170, 0.7, 1.3), 200);
         return;
       }
-      if (t === 'chakkar' || t === 'rolling') Sound.playWhistleSpin(3.0, t === 'rolling' ? 950 : 750);
-      else if (t === 'flowerpot' || t === 'peacock') Sound.playFountainSizzle(3.2, t === 'peacock' ? 1200 : 850);
-      else if (t === 'sparkler' || t === 'twinkling') Sound.playFountainSizzle(2.8, 1600);
+      if (t === 'chakkar' || t === 'rolling' || c.category === 'chakkar') {
+        Sound.playWhistleSpin(4.5, (c.id === 'w_05' || c.id === 'w_38') ? 1050 : 780);
+      }
+      else if (t === 'flowerpot' || t === 'peacock') Sound.playFountainSizzle(3.5, t === 'peacock' ? 1200 : 850);
+      else if (t === 'sparkler' || t === 'twinkling') Sound.playFountainSizzle(3.0, 1600);
       else if (t === '100wala' || t === 'mirchi') {
         Sound.playSnappyPop(1100, 1.2, true);
         setTimeout(() => Sound.playSnappyPop(1250, 1.25, true), 90);
@@ -3720,7 +3725,6 @@
       } else if (t === 'rocket') {
         Sound.playRocketScreech();
         setTimeout(() => Sound.playBassBoom(190, 0.85, 1.25), 650);
-        launchSkyShotFromScreen(c.rim || '#00e5ff');
       } else if (t === 'bomb' || t === 'gorilla' || t === 'dragon') {
         Sound.playBassBoom(140, 1.1, 1.35);
       } else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
@@ -3730,7 +3734,6 @@
         setTimeout(() => Sound.playSnappyPop(900, 1.25, false), 160);
         setTimeout(() => Sound.playSnappyPop(1050, 1.3, false), 320);
         setTimeout(() => Sound.playSnappyPop(1200, 1.35, false), 480);
-        launchSkyShotFromScreen(c.rim || '#ffd166');
       } else if (t === 'snake') {
         Sound.playFountainSizzle(3.0, 500);
       } else if (t === 'mega_diwali') {
@@ -3750,6 +3753,7 @@
     let previewParticles = [];
     let previewShockwaves = [];
     let previewTexts = [];
+    let previewActiveSimulation = null;
     let lastPreviewTime = performance.now();
 
     class PreviewParticle {
@@ -3851,6 +3855,444 @@
       }
     }
 
+    /* =========================================================================
+       AUTHENTIC ACTIVE PYROTECHNIC SIMULATIONS FOR LIVE PREVIEW
+       ========================================================================= */
+
+    // 🌀 1. Continuous Ground Zameen Chakkar Simulation
+    class PreviewChakkarSimulation {
+      constructor(cx, cy, c) {
+        this.c = c;
+        this.id = c.id;
+        this.baseX = cx;
+        this.baseY = cy + 12;
+        this.x = this.baseX;
+        this.y = this.baseY;
+        this.time = 0;
+        this.duration = 5.0;
+        this.rot = 0;
+        this.spinSpeed = (this.id === 'w_05' || this.id === 'w_38') ? 50 : 36;
+        this.radius = (this.id === 'w_04') ? 22 : 16;
+        this.color = c.rim || '#ffd700';
+
+        if (this.id === 'w_01') {
+          this.nozzles = 3;
+          this.colors = ['#ffd700', '#ff9800', '#ff6d00'];
+        } else if (this.id === 'w_02') {
+          this.nozzles = 4;
+          this.colors = ['#ffffff', '#ffd700', '#fff9c4'];
+        } else if (this.id === 'w_03') {
+          this.nozzles = 4;
+          this.colors = ['#ff007f', '#00e5ff', '#ffd700', '#00e676'];
+        } else if (this.id === 'w_04') {
+          this.nozzles = 5;
+          this.colors = ['#ffd700', '#ff5722', '#ffeb3b'];
+        } else if (this.id === 'w_05') {
+          this.nozzles = 2;
+          this.colors = ['#ffffff', '#80d8ff', '#ffd700'];
+        } else if (this.id === 'w_29') {
+          this.nozzles = 2;
+          this.colors = ['#e040fb', '#00e676', '#ffd700'];
+        } else if (this.id === 'w_30') {
+          this.nozzles = 4;
+          this.colors = ['#00e5ff', '#1de9b6', '#ffffff'];
+        } else if (this.id === 'w_38') {
+          this.nozzles = 2;
+          this.colors = ['#ff1744', '#ffd700', '#ff3d00'];
+        } else if (this.id === 'w_41') {
+          this.nozzles = 3;
+          this.colors = ['#ff1744', '#d50000', '#ffd700'];
+        } else if (this.id === 'b_12') {
+          this.nozzles = 3;
+          this.colors = ['#ff9100', '#ffd700', '#ffffff'];
+        } else if (this.id === 'b_13') {
+          this.nozzles = 4;
+          this.colors = ['#ff3d00', '#ff9100', '#ffd700'];
+        } else if (this.id === 'b_43') {
+          this.nozzles = 3;
+          this.colors = ['#00e5ff', '#76ff03', '#ffffff'];
+        } else {
+          this.nozzles = 3;
+          this.colors = [this.color, '#ffffff', '#ffd700'];
+        }
+      }
+
+      update(dt, canvas, ctx) {
+        this.time += dt;
+        if (this.time >= this.duration) return false;
+
+        let speedMult = 1.0;
+        if (this.time < 0.5) speedMult = 0.4 + (this.time / 0.5) * 0.6;
+        else if (this.time > 3.8) speedMult = Math.max(0.2, 1.0 - (this.time - 3.8) / 1.2);
+
+        this.rot += dt * this.spinSpeed * speedMult;
+
+        // Rolling motion for b_12
+        if (this.id === 'b_12') {
+          this.x = this.baseX + Math.sin(this.time * 2.8) * 60;
+        } else if (this.id === 'b_13') {
+          this.x = this.baseX + Math.sin(this.time * 6) * 5;
+        }
+
+        // Emit continuous spiral spark streams from each tangential nozzle
+        const sparksPerFrame = (this.id === 'w_04') ? 3 : 2;
+        for (let s = 0; s < sparksPerFrame; s++) {
+          for (let n = 0; n < this.nozzles; n++) {
+            const angle = this.rot + (n * Math.PI * 2 / this.nozzles);
+            const nX = this.x + Math.cos(angle) * this.radius;
+            const nY = this.y + Math.sin(angle) * this.radius;
+
+            const jetAngle = angle + Math.PI / 2 + (Math.random() - 0.5) * 0.35;
+            const jetSpeed = (3.2 + Math.random() * 4.2) * speedMult;
+            const vx = Math.cos(jetAngle) * jetSpeed;
+            const vy = Math.sin(jetAngle) * jetSpeed;
+
+            let col = this.colors[Math.floor(Math.random() * this.colors.length)];
+            if (this.id === 'w_03') {
+              const hue = (this.time * 360 + n * 90) % 360;
+              col = `hsl(${hue}, 100%, 65%)`;
+            }
+
+            previewParticles.push(new PreviewParticle(
+              nX, nY,
+              vx, vy,
+              col,
+              2.0 + Math.random() * 2.2,
+              0.42 + Math.random() * 0.35,
+              0.02, 0.96
+            ));
+
+            if (this.id === 'b_13' && Math.random() < 0.3) {
+              previewParticles.push(new PreviewParticle(
+                nX, nY,
+                (Math.random() - 0.5) * 1.5, -2.5 - Math.random() * 3.5,
+                '#ff3d00', 2.8, 0.5, -0.05, 0.98
+              ));
+            }
+          }
+        }
+        return true;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+
+        ctx.beginPath();
+        ctx.ellipse(0, this.radius * 0.7, this.radius * 1.4, this.radius * 0.5, 0, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fill();
+
+        ctx.rotate(this.rot);
+
+        ctx.beginPath();
+        ctx.arc(0, 0, this.radius + 2, 0, Math.PI * 2);
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 3;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 18;
+        ctx.stroke();
+
+        const grad = ctx.createRadialGradient(0, 0, 2, 0, 0, this.radius);
+        grad.addColorStop(0, '#ffffff');
+        grad.addColorStop(0.3, this.color);
+        grad.addColorStop(0.8, '#d84315');
+        grad.addColorStop(1, '#3e2723');
+        ctx.beginPath();
+        ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2.2;
+        ctx.shadowBlur = 8;
+        for (let n = 0; n < this.nozzles; n++) {
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          const a = (n * Math.PI * 2 / this.nozzles);
+          const cpX = Math.cos(a + 0.5) * (this.radius * 0.65);
+          const cpY = Math.sin(a + 0.5) * (this.radius * 0.65);
+          const endX = Math.cos(a) * this.radius;
+          const endY = Math.sin(a) * this.radius;
+          ctx.quadraticCurveTo(cpX, cpY, endX, endY);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(endX, endY, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+        }
+
+        ctx.beginPath();
+        ctx.arc(0, 0, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#fff';
+        ctx.shadowBlur = 14;
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    // 🦋 2. Flying Butterfly Drone Simulation (app_01)
+    class PreviewButterflySimulation {
+      constructor(cx, cy, c) {
+        this.c = c;
+        this.cx = cx;
+        this.cy = cy;
+        this.time = 0;
+        this.duration = 5.0;
+        this.x = cx;
+        this.y = cy;
+      }
+
+      update(dt, canvas, ctx) {
+        this.time += dt;
+        if (this.time >= this.duration) return false;
+
+        this.x = this.cx + Math.sin(this.time * 2.2) * 72;
+        this.y = this.cy + Math.sin(this.time * 4.4) * 28 - 12;
+
+        const wingFlap = Math.sin(this.time * 22);
+
+        if (Math.random() < 0.75) {
+          const wingSpan = 18 * Math.abs(wingFlap);
+          previewParticles.push(new PreviewParticle(
+            this.x - wingSpan, this.y - 6,
+            (Math.random() - 0.5) * 1.2, 0.8 + Math.random() * 1.5,
+            Math.random() < 0.6 ? '#00e676' : '#ffd700',
+            2.0 + Math.random() * 2,
+            0.6, 0.03, 0.97
+          ));
+          previewParticles.push(new PreviewParticle(
+            this.x + wingSpan, this.y - 6,
+            (Math.random() - 0.5) * 1.2, 0.8 + Math.random() * 1.5,
+            Math.random() < 0.6 ? '#00e676' : '#ffffff',
+            2.0 + Math.random() * 2,
+            0.6, 0.03, 0.97
+          ));
+        }
+
+        return true;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+
+        const wingFlap = Math.sin(this.time * 22);
+        const flapWidth = Math.abs(wingFlap);
+        const bank = Math.cos(this.time * 2.2) * 0.25;
+        ctx.rotate(bank);
+
+        ctx.beginPath();
+        ctx.arc(0, 0, 24, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 230, 118, 0.12)';
+        ctx.shadowColor = '#00e676';
+        ctx.shadowBlur = 20;
+        ctx.fill();
+
+        const lGrad = ctx.createLinearGradient(-24, -18, 0, 0);
+        lGrad.addColorStop(0, '#00e676');
+        lGrad.addColorStop(0.5, '#69f0ae');
+        lGrad.addColorStop(1, '#ffd700');
+
+        // Left forewing
+        ctx.save();
+        ctx.scale(flapWidth, 1);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-14, -20, -28, -14, -22, 2);
+        ctx.bezierCurveTo(-18, 8, -6, 6, 0, 0);
+        ctx.fillStyle = lGrad;
+        ctx.shadowColor = '#00e676';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Left hindwing
+        ctx.beginPath();
+        ctx.moveTo(0, 2);
+        ctx.bezierCurveTo(-16, 6, -18, 18, -4, 16);
+        ctx.bezierCurveTo(-1, 14, 0, 6, 0, 2);
+        ctx.fillStyle = 'rgba(255, 215, 0, 0.85)';
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        // Right forewing
+        ctx.save();
+        ctx.scale(-flapWidth, 1);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(-14, -20, -28, -14, -22, 2);
+        ctx.bezierCurveTo(-18, 8, -6, 6, 0, 0);
+        ctx.fillStyle = lGrad;
+        ctx.shadowColor = '#00e676';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Right hindwing
+        ctx.beginPath();
+        ctx.moveTo(0, 2);
+        ctx.bezierCurveTo(-16, 6, -18, 18, -4, 16);
+        ctx.bezierCurveTo(-1, 14, 0, 6, 0, 2);
+        ctx.fillStyle = 'rgba(255, 215, 0, 0.85)';
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+
+        // Slender body
+        ctx.beginPath();
+        ctx.ellipse(0, 2, 2.5, 9, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffd700';
+        ctx.shadowColor = '#fff';
+        ctx.shadowBlur = 10;
+        ctx.fill();
+
+        // Antennae
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(-1, -7); ctx.quadraticCurveTo(-4, -13, -7, -15);
+        ctx.moveTo(1, -7);  ctx.quadraticCurveTo(4, -13, 7, -15);
+        ctx.stroke();
+
+        ctx.fillStyle = '#69f0ae';
+        ctx.beginPath();
+        ctx.arc(-7, -15, 1.5, 0, Math.PI * 2);
+        ctx.arc(7, -15, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    // 🚁 3. Whistling Helicopter Sky Spinner Simulation (app_02)
+    class PreviewHelicopterSimulation {
+      constructor(cx, cy, c) {
+        this.c = c;
+        this.cx = cx;
+        this.cy = cy;
+        this.time = 0;
+        this.duration = 5.0;
+        this.x = cx;
+        this.y = cy;
+        this.rotorAngle = 0;
+      }
+
+      update(dt, canvas, ctx) {
+        this.time += dt;
+        if (this.time >= this.duration) return false;
+
+        this.x = this.cx + Math.sin(this.time * 2.0) * 35;
+        this.y = this.cy - 10 + Math.sin(this.time * 3.2) * 16;
+        this.rotorAngle += dt * 58;
+
+        for (let i = 0; i < 2; i++) {
+          const offX = (Math.random() - 0.5) * 32;
+          previewParticles.push(new PreviewParticle(
+            this.x + offX, this.y + 12,
+            (Math.random() - 0.5) * 1.5,
+            3.0 + Math.random() * 3.5,
+            Math.random() < 0.7 ? '#00e5ff' : '#ffffff',
+            2.0 + Math.random() * 2,
+            0.5, 0.04, 0.97
+          ));
+        }
+
+        return true;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+
+        const bank = Math.cos(this.time * 2.0) * 0.12;
+        ctx.rotate(bank);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.ellipse(0, -10, 32, 7, 0, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 229, 255, 0.22)';
+        ctx.strokeStyle = '#00e5ff';
+        ctx.shadowColor = '#00e5ff';
+        ctx.shadowBlur = 18;
+        ctx.lineWidth = 1.5;
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.rotate(this.rotorAngle);
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowBlur = 10;
+        ctx.fillRect(-30, -1.5, 60, 3);
+        ctx.fillRect(-1.5, -30, 3, 60);
+
+        ctx.fillStyle = '#00e5ff';
+        ctx.beginPath();
+        ctx.arc(-30, 0, 2.5, 0, Math.PI * 2);
+        ctx.arc(30, 0, 2.5, 0, Math.PI * 2);
+        ctx.arc(0, -30, 2.5, 0, Math.PI * 2);
+        ctx.arc(0, 30, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        ctx.fillStyle = '#b0bec5';
+        ctx.fillRect(-2, -10, 4, 8);
+
+        ctx.beginPath();
+        ctx.ellipse(0, 2, 13, 7.5, 0, 0, Math.PI * 2);
+        const fGrad = ctx.createLinearGradient(-12, -4, 12, 8);
+        fGrad.addColorStop(0, '#ff1744');
+        fGrad.addColorStop(0.5, '#d50000');
+        fGrad.addColorStop(1, '#ffd700');
+        ctx.fillStyle = fGrad;
+        ctx.shadowColor = '#ff1744';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.ellipse(4, 0, 5.5, 3.5, 0.15, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 229, 255, 0.85)';
+        ctx.shadowColor = '#00e5ff';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+
+        ctx.strokeStyle = '#ff1744';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(-12, 2);
+        ctx.lineTo(-26, 0);
+        ctx.lineTo(-26, -6);
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(-26, -6);
+        ctx.rotate(this.rotorAngle * 1.5);
+        ctx.fillStyle = '#00e5ff';
+        ctx.fillRect(-6, -1, 12, 2);
+        ctx.restore();
+
+        ctx.strokeStyle = '#cfd8dc';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(-8, 9); ctx.lineTo(-8, 12);
+        ctx.moveTo(6, 9);  ctx.lineTo(6, 12);
+        ctx.moveTo(-12, 12); ctx.lineTo(10, 12);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+    }
+
     function runPreviewFxLoop(timestamp) {
       if (!currentPreviewCracker) return;
       const dt = Math.min((timestamp - lastPreviewTime) / 1000, 0.1);
@@ -3861,6 +4303,15 @@
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = 'rgba(10, 4, 2, 0.22)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Active continuous simulation
+        if (previewActiveSimulation) {
+          if (!previewActiveSimulation.update(dt, canvas, ctx)) {
+            previewActiveSimulation = null;
+          } else {
+            previewActiveSimulation.draw(ctx);
+          }
+        }
 
         // Shockwaves
         for (let i = previewShockwaves.length - 1; i >= 0; i--) {
@@ -3894,6 +4345,9 @@
       const cy = canvas ? (canvas.height / 2) : 95;
       const rim = c.rim || '#ffd700';
 
+      // Reset any running continuous simulation
+      previewActiveSimulation = null;
+
       // Coin bounce animation
       const coinBadge = document.getElementById('preview-coin-badge');
       if (coinBadge) {
@@ -3909,17 +4363,21 @@
         }, 320);
       }
 
-      // Status tag bounce
+      // Status tag
       const statusTag = document.getElementById('preview-status-tag');
       if (statusTag) {
-        statusTag.textContent = '💥 IGNITED & POPPING!';
+        if (c.id === 'app_01') statusTag.textContent = '🦋 BUTTERFLY FLUTTERING!';
+        else if (c.id === 'app_02') statusTag.textContent = '🚁 HELICOPTER HOVERING!';
+        else if (c.category === 'chakkar' || c.type === 'chakkar' || c.type === 'rolling') statusTag.textContent = '🌀 ZAMEEN CHAKKAR SPINNING!';
+        else statusTag.textContent = '💥 IGNITED & POPPING!';
         statusTag.style.color = '#ffd700';
+
         setTimeout(() => {
           if (statusTag && currentPreviewCracker === c) {
             statusTag.textContent = '✨ READY TO POP AGAIN';
             statusTag.style.color = '#00e676';
           }
-        }, 1800);
+        }, 4800);
       }
 
       // Play audio
@@ -3930,25 +4388,21 @@
 
       const t = c.type;
 
-      // Particle simulations tailored by type
-      if (t === 'chakkar' || t === 'rolling' || t === 'drone' || t === 'helicopter') {
-        previewShockwaves.push(new PreviewShockwave(cx, cy, 95, rim, 0.5));
-        for (let i = 0; i < 65; i++) {
-          const angle = (i * 0.28) + (Math.random() * 0.15);
-          const speed = 1.8 + Math.random() * 3.6;
-          const color = (i % 2 === 0) ? rim : '#ffffff';
-          previewParticles.push(new PreviewParticle(
-            cx, cy,
-            Math.cos(angle) * speed,
-            Math.sin(angle) * speed,
-            color,
-            2.5 + Math.random() * 2.5,
-            0.9 + Math.random() * 0.7,
-            0.02, 0.97
-          ));
-        }
+      // Authentic Continuous Simulations
+      if (c.id === 'app_01') {
+        previewActiveSimulation = new PreviewButterflySimulation(cx, cy, c);
+        return;
       }
-      else if (t === 'flowerpot' || t === 'peacock') {
+      if (c.id === 'app_02') {
+        previewActiveSimulation = new PreviewHelicopterSimulation(cx, cy, c);
+        return;
+      }
+      if (c.category === 'chakkar' || t === 'chakkar' || t === 'rolling' || t === 'drone' || t === 'helicopter') {
+        previewActiveSimulation = new PreviewChakkarSimulation(cx, cy, c);
+        return;
+      }
+
+      if (t === 'flowerpot' || t === 'peacock') {
         previewShockwaves.push(new PreviewShockwave(cx, cy + 15, 80, rim, 0.45));
         for (let i = 0; i < 75; i++) {
           const spread = (Math.random() - 0.5) * 1.2;
@@ -3983,7 +4437,6 @@
         }
       }
       else if (t === 'rocket' || t === 'parachute') {
-        // Rocket trail shooting up from bottom
         for (let i = 0; i < 16; i++) {
           previewParticles.push(new PreviewParticle(
             cx, cy + 45,
@@ -4110,13 +4563,173 @@
     /* =========================================================================
        CRACKER RECORD & REFACTOR ENHANCEMENT NOTES (BACKGROUND JSON)
        ========================================================================= */
-    let crackerEnhancementNotes = {};
+    const DEFAULT_ENHANCEMENT_NOTES = {
+      "app_01": {
+        "id": "app_01",
+        "name": "Flying Butterfly Drone (Chidiya)",
+        "category": "chakkar",
+        "type": "drone",
+        "emoji": "🦋",
+        "pts": 45,
+        "comment": "need like a butterfly ,it explode like a sky shot",
+        "lastUpdated": "2026-10-25T12:44:12.288Z",
+        "formattedDate": "10/25/2026 06:14 PM"
+      },
+      "app_02": {
+        "id": "app_02",
+        "name": "Whistling Helicopter Sky Spinner",
+        "category": "chakkar",
+        "type": "helicopter",
+        "emoji": "🚁",
+        "pts": 50,
+        "comment": "need a real helicoptor shot craket not a sky shot",
+        "lastUpdated": "2026-10-25T12:48:49.168Z",
+        "formattedDate": "10/25/2026 06:18 PM"
+      },
+      "w_01": {
+        "id": "w_01",
+        "name": "Zameen Chakkar Classic",
+        "category": "chakkar",
+        "type": "chakkar",
+        "emoji": "🌀",
+        "pts": 15,
+        "comment": "give a chakkar ,not skyshot",
+        "lastUpdated": "2026-10-25T12:49:23.441Z",
+        "formattedDate": "10/25/2026 06:19 PM"
+      },
+      "w_02": {
+        "id": "w_02",
+        "name": "Deluxe Special Chakkar",
+        "category": "chakkar",
+        "type": "chakkar",
+        "emoji": "💫",
+        "pts": 20,
+        "comment": "give a chakkar not a sky shot",
+        "lastUpdated": "2026-10-25T12:49:41.081Z",
+        "formattedDate": "10/25/2026 06:19 PM"
+      },
+      "w_03": {
+        "id": "w_03",
+        "name": "Disco Wheel Chakkar",
+        "category": "chakkar",
+        "type": "chakkar",
+        "emoji": "🎡",
+        "pts": 22,
+        "comment": "give chakkar not a sky shot",
+        "lastUpdated": "2026-10-25T12:50:00.193Z",
+        "formattedDate": "10/25/2026 06:20 PM"
+      },
+      "w_04": {
+        "id": "w_04",
+        "name": "Super Jumbo Chakkar",
+        "category": "chakkar",
+        "type": "chakkar",
+        "emoji": "⚡",
+        "pts": 26,
+        "comment": "give achakker not a sky shot",
+        "lastUpdated": "2026-10-25T12:50:20.185Z",
+        "formattedDate": "10/25/2026 06:20 PM"
+      },
+      "w_05": {
+        "id": "w_05",
+        "name": "Whistling Chakkar",
+        "category": "chakkar",
+        "type": "chakkar",
+        "emoji": "🌪️",
+        "pts": 28,
+        "comment": "give a chakkar not a sky shot",
+        "lastUpdated": "2026-10-25T12:50:37.978Z",
+        "formattedDate": "10/25/2026 06:20 PM"
+      },
+      "w_29": {
+        "id": "w_29",
+        "name": "Butterfly Spinner",
+        "category": "chakkar",
+        "type": "chakkar",
+        "emoji": "🦋",
+        "pts": 22,
+        "comment": "give abutterfly spinner ,not a sky shot",
+        "lastUpdated": "2026-10-25T12:51:05.993Z",
+        "formattedDate": "10/25/2026 06:21 PM"
+      },
+      "w_30": {
+        "id": "w_30",
+        "name": "Dragonfly Twirler",
+        "category": "chakkar",
+        "type": "chakkar",
+        "emoji": "🪰",
+        "pts": 24,
+        "comment": "sky shot not this model",
+        "lastUpdated": "2026-10-25T12:51:35.017Z",
+        "formattedDate": "10/25/2026 06:21 PM"
+      },
+      "w_38": {
+        "id": "w_38",
+        "name": "Whistling Siren Spinner",
+        "category": "chakkar",
+        "type": "chakkar",
+        "emoji": "🚨",
+        "pts": 28,
+        "comment": "sky shot not this model",
+        "lastUpdated": "2026-10-25T12:51:47.937Z",
+        "formattedDate": "10/25/2026 06:21 PM"
+      },
+      "w_41": {
+        "id": "w_41",
+        "name": "Ruby Ring Chakkar",
+        "category": "chakkar",
+        "type": "chakkar",
+        "emoji": "💍",
+        "pts": 25,
+        "comment": "sky shot not this model",
+        "lastUpdated": "2026-10-25T12:51:57.984Z",
+        "formattedDate": "10/25/2026 06:21 PM"
+      },
+      "b_12": {
+        "id": "b_12",
+        "name": "Rolling Wheel Spinner",
+        "category": "chakkar",
+        "type": "rolling",
+        "emoji": "🎡",
+        "pts": 24,
+        "comment": "sky shot not this model",
+        "lastUpdated": "2026-10-25T12:52:04.081Z",
+        "formattedDate": "10/25/2026 06:22 PM"
+      },
+      "b_13": {
+        "id": "b_13",
+        "name": "Fire Tornado Wheel",
+        "category": "chakkar",
+        "type": "rolling",
+        "emoji": "🌪️",
+        "pts": 28,
+        "comment": "sky shot not this model",
+        "lastUpdated": "2026-10-25T12:52:14.257Z",
+        "formattedDate": "10/25/2026 06:22 PM"
+      },
+      "b_43": {
+        "id": "b_43",
+        "name": "Ghost Rider Wheel",
+        "category": "chakkar",
+        "type": "rolling",
+        "emoji": "💀",
+        "pts": 32,
+        "comment": "sky shot not this model",
+        "lastUpdated": "2026-10-25T12:52:20.441Z",
+        "formattedDate": "10/25/2026 06:22 PM"
+      }
+    };
+
+    let crackerEnhancementNotes = { ...DEFAULT_ENHANCEMENT_NOTES };
     try {
       const stored = localStorage.getItem('carrom_cracker_enhancements');
-      if (stored) crackerEnhancementNotes = JSON.parse(stored);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        crackerEnhancementNotes = { ...DEFAULT_ENHANCEMENT_NOTES, ...parsed };
+      }
     } catch (e) {
       console.warn('Could not load cracker enhancement notes from localStorage', e);
-      crackerEnhancementNotes = {};
+      crackerEnhancementNotes = { ...DEFAULT_ENHANCEMENT_NOTES };
     }
 
     function saveCrackerEnhancementNote(c, commentText) {
@@ -5988,75 +6601,37 @@
 
         // ⭐ NOVELTY 1: Flying Butterfly Drone (app_01)
         if (t === 'drone') {
-          if (this.time < 1.6) {
-            const p = this.time / 1.6;
-            this.curX = this.x + (this.targetX - this.x) * p;
-            this.curY = this.y + (this.targetY - this.y) * p;
-            this.rot += dt * 38;
+          const p = Math.min(this.time / 4.2, 1.0);
+          this.curX = this.x + (this.targetX - this.x) * p + Math.sin(this.time * 3.5) * 45;
+          this.curY = this.y + (this.targetY - this.y) * p + Math.sin(this.time * 6.5) * 25;
+          this.rot += dt * 28;
 
-            // Butterfly flutter sparks
-            for (let i = 0; i < 3; i++) {
-              const a = this.rot + (i * Math.PI * 2 / 3);
-              this.particles.push(new Particle(
-                this.curX + Math.cos(a) * 14, this.curY + Math.sin(a) * 14,
-                Math.random() < 0.6 ? '#00e676' : '#ffd700',
-                Math.random() * 3 + 1.5, Math.cos(a) * 3, Math.sin(a) * 3, 0.035
-              ));
-            }
-          } else if (!this.dronePopped) {
-            this.dronePopped = true;
-            Sound.playSnappyPop(1500, 1.5);
-            Sound.playBassBoom(130, 0.9, 1.3);
-            triggerBoardVibration('bomb', 22, 0.88, [90, 40, 70]);
-            this.shockwaves.push(new Shockwave(this.curX, this.curY, 180, '#00e676', 9));
-            this.shockwaves.push(new Shockwave(this.curX, this.curY, 130, '#ffd700', 7));
-
-            for (let i = 0; i < 36; i++) {
-              const a = (i * Math.PI * 2) / 36;
-              const spd = 3.5 + Math.random() * 5.5;
-              this.particles.push(new Particle(
-                this.curX, this.curY,
-                i % 2 === 0 ? '#00e676' : '#ffd700',
-                3.5, Math.cos(a) * spd, Math.sin(a) * spd, 0.022
-              ));
-            }
+          // Continuous graceful butterfly stardust flutter sparks
+          if (Math.random() < 0.7) {
+            this.particles.push(new Particle(
+              this.curX + (Math.random() - 0.5) * 16, this.curY + (Math.random() - 0.5) * 16,
+              Math.random() < 0.6 ? '#00e676' : '#ffd700',
+              Math.random() * 2.8 + 1.5,
+              (Math.random() - 0.5) * 2, 0.5 + Math.random() * 2, 0.035
+            ));
           }
         }
 
         // ⭐ NOVELTY 2: Whistling Helicopter Sky Spinner (app_02)
         else if (t === 'helicopter') {
-          if (this.time < 1.7) {
-            const p = this.time / 1.7;
-            this.curX = this.x + (this.targetX - this.x) * p;
-            this.curY = this.y + (this.targetY - this.y) * p;
-            this.rot += dt * 48;
+          const p = Math.min(this.time / 4.5, 1.0);
+          this.curX = this.x + (this.targetX - this.x) * p + Math.sin(this.time * 2.5) * 24;
+          this.curY = this.y + (this.targetY - this.y) * p + Math.sin(this.time * 3.8) * 16;
+          this.rot += dt * 55;
 
-            // Neon cyan rotor wind particles streaming downwards
-            for (let i = 0; i < 3; i++) {
-              const a = this.rot + (i * Math.PI * 2 / 3);
-              this.particles.push(new Particle(
-                this.curX + Math.cos(a) * 16, this.curY + Math.sin(a) * 16,
-                Math.random() < 0.65 ? '#00e5ff' : '#ffffff',
-                Math.random() * 3 + 2, (Math.random() - 0.5) * 2, 2.5 + Math.random() * 3.5, 0.038
-              ));
-            }
-          } else if (!this.helicopterPopped) {
-            this.helicopterPopped = true;
-            Sound.playSnappyPop(1650, 1.6);
-            Sound.playBassBoom(110, 1.1, 1.35);
-            triggerBoardVibration('bomb', 26, 0.86, [120, 50, 80]);
-            this.shockwaves.push(new Shockwave(this.curX, this.curY, 210, '#00e5ff', 10));
-            this.shockwaves.push(new Shockwave(this.curX, this.curY, 150, '#ffffff', 8));
-
-            for (let i = 0; i < 42; i++) {
-              const a = (i * Math.PI * 2) / 42;
-              const spd = 4 + Math.random() * 6;
-              this.particles.push(new Particle(
-                this.curX, this.curY,
-                i % 3 === 0 ? '#00e5ff' : (i % 3 === 1 ? '#ffffff' : '#ffd700'),
-                3.5, Math.cos(a) * spd, Math.sin(a) * spd, 0.02
-              ));
-            }
+          // Continuous downward rotor downwash particles
+          for (let i = 0; i < 2; i++) {
+            this.particles.push(new Particle(
+              this.curX + (Math.random() - 0.5) * 24, this.curY + 10,
+              Math.random() < 0.65 ? '#00e5ff' : '#ffffff',
+              Math.random() * 2.5 + 1.8,
+              (Math.random() - 0.5) * 1.5, 2.5 + Math.random() * 3.0, 0.038
+            ));
           }
         }
 
@@ -6404,59 +6979,107 @@
         const t = this.cDef.type;
 
         // ⭐ NOVELTY 1: Flying Butterfly Drone (app_01)
-        if (t === 'drone' && !this.dronePopped) {
+        if (t === 'drone') {
           ctx.translate(this.curX, this.curY);
-          ctx.rotate(this.rot);
+          const wingFlap = Math.abs(Math.sin(this.time * 22));
+          const bank = Math.cos(this.time * 2.5) * 0.2;
+          ctx.rotate(bank);
 
-          // Glowing rotor halo
+          // Glowing aura
           ctx.beginPath();
-          ctx.arc(0, 0, 15, 0, Math.PI * 2);
-          ctx.strokeStyle = '#00e676';
+          ctx.arc(0, 0, 18, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(0, 230, 118, 0.15)';
           ctx.shadowColor = '#00e676';
           ctx.shadowBlur = 14;
-          ctx.lineWidth = 2.0;
-          ctx.stroke();
+          ctx.fill();
 
-          // 4-blade drone rotor cross
+          // Left Wing
+          ctx.save();
+          ctx.scale(wingFlap, 1);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-10, -16, -22, -10, -16, 2);
+          ctx.bezierCurveTo(-14, 6, -4, 4, 0, 0);
           ctx.fillStyle = '#00e676';
-          for (let i = 0; i < 4; i++) {
-            ctx.rotate(Math.PI / 2);
-            ctx.fillRect(-2, 4, 4, 10);
-            ctx.beginPath();
-            ctx.arc(0, 14, 3, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffd700';
-            ctx.fill();
-            ctx.fillStyle = '#00e676';
-          }
+          ctx.shadowColor = '#00e676';
+          ctx.shadowBlur = 10;
+          ctx.fill();
+          ctx.strokeStyle = '#ffd700';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.restore();
+
+          // Right Wing
+          ctx.save();
+          ctx.scale(-wingFlap, 1);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.bezierCurveTo(-10, -16, -22, -10, -16, 2);
+          ctx.bezierCurveTo(-14, 6, -4, 4, 0, 0);
+          ctx.fillStyle = '#00e676';
+          ctx.shadowColor = '#00e676';
+          ctx.shadowBlur = 10;
+          ctx.fill();
+          ctx.strokeStyle = '#ffd700';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.restore();
+
+          // Butterfly Body
+          ctx.beginPath();
+          ctx.ellipse(0, 1, 2, 7, 0, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffd700';
+          ctx.fill();
           ctx.restore();
           return;
         }
 
         // ⭐ NOVELTY 2: Whistling Helicopter Sky Spinner (app_02)
-        else if (t === 'helicopter' && !this.helicopterPopped) {
+        else if (t === 'helicopter') {
           ctx.translate(this.curX, this.curY);
+          const bank = Math.cos(this.time * 2.5) * 0.15;
+          ctx.rotate(bank);
 
           // Spinning cyan rotor disc
-          ctx.save();
-          ctx.rotate(this.rot);
           ctx.beginPath();
-          ctx.arc(0, 0, 18, 0, Math.PI * 2);
+          ctx.ellipse(0, -8, 26, 6, 0, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(0, 229, 255, 0.22)';
           ctx.strokeStyle = '#00e5ff';
           ctx.shadowColor = '#00e5ff';
-          ctx.shadowBlur = 16;
-          ctx.lineWidth = 2.5;
+          ctx.shadowBlur = 14;
+          ctx.lineWidth = 1.5;
+          ctx.fill();
           ctx.stroke();
 
+          // Rotor blades
+          ctx.save();
+          ctx.rotate(this.rot);
           ctx.fillStyle = '#ffffff';
-          ctx.fillRect(-18, -1.5, 36, 3);
-          ctx.fillRect(-1.5, -18, 3, 36);
+          ctx.fillRect(-24, -1.2, 48, 2.4);
+          ctx.fillRect(-1.2, -24, 2.4, 48);
           ctx.restore();
 
-          // Helicopter fuselage & strobe
+          // Fuselage
           ctx.beginPath();
-          ctx.arc(0, 0, 6, 0, Math.PI * 2);
+          ctx.ellipse(0, 2, 10, 6, 0, 0, Math.PI * 2);
           ctx.fillStyle = '#ff1744';
+          ctx.shadowColor = '#ff1744';
+          ctx.shadowBlur = 10;
           ctx.fill();
+
+          // Canopy
+          ctx.beginPath();
+          ctx.ellipse(3, 0, 4.5, 3, 0.1, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(0, 229, 255, 0.85)';
+          ctx.fill();
+
+          // Tail boom
+          ctx.strokeStyle = '#ff1744';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(-10, 2); ctx.lineTo(-20, 0); ctx.lineTo(-20, -5);
+          ctx.stroke();
+
           ctx.restore();
           return;
         }
@@ -6562,20 +7185,50 @@
 
         if (t === 'chakkar' || t === 'rolling') {
           ctx.rotate(this.rot);
+          const rad = 17;
+
+          // Outer fiery halo ring
           ctx.beginPath();
-          ctx.arc(0, 0, 16, 0, Math.PI * 2);
-          ctx.fillStyle = t === 'rolling' ? '#ff1744' : '#ff9800';
-          ctx.shadowColor = '#ffd700';
-          ctx.shadowBlur = 15;
+          ctx.arc(0, 0, rad + 2, 0, Math.PI * 2);
+          ctx.strokeStyle = t === 'rolling' ? '#ff3d00' : '#ffd700';
+          ctx.shadowColor = t === 'rolling' ? '#ff3d00' : '#ffd700';
+          ctx.shadowBlur = 16;
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+
+          // Turned clay disc
+          const grad = ctx.createRadialGradient(0, 0, 2, 0, 0, rad);
+          grad.addColorStop(0, '#ffffff');
+          grad.addColorStop(0.35, t === 'rolling' ? '#ff1744' : '#ff9800');
+          grad.addColorStop(0.85, '#e65100');
+          grad.addColorStop(1, '#3e2723');
+          ctx.beginPath();
+          ctx.arc(0, 0, rad, 0, Math.PI * 2);
+          ctx.fillStyle = grad;
           ctx.fill();
 
-          ctx.fillStyle = '#ffd700';
-          for (let i = 0; i < 4; i++) {
-            ctx.rotate(Math.PI / 2);
+          // Spiral curved nozzle vanes throwing fire
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2;
+          for (let n = 0; n < 3; n++) {
             ctx.beginPath();
-            ctx.ellipse(12, 0, 8, 4, 0, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.moveTo(0, 0);
+            const a = (n * Math.PI * 2 / 3);
+            const cpX = Math.cos(a + 0.5) * (rad * 0.65);
+            const cpY = Math.sin(a + 0.5) * (rad * 0.65);
+            const endX = Math.cos(a) * rad;
+            const endY = Math.sin(a) * rad;
+            ctx.quadraticCurveTo(cpX, cpY, endX, endY);
+            ctx.stroke();
           }
+
+          // Center burning core
+          ctx.beginPath();
+          ctx.arc(0, 0, 4, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = '#fff';
+          ctx.shadowBlur = 12;
+          ctx.fill();
         } else if (t === 'flowerpot' || t === 'peacock') {
           ctx.beginPath();
           ctx.arc(0, 0, 14, 0, Math.PI * 2);
