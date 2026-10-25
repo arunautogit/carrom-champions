@@ -4293,6 +4293,398 @@
       }
     }
 
+
+    // 🚀 4. Authentic Rocket & Aerial Continuous Simulation (w_16, w_17, w_31, w_37, w_44)
+    class PreviewRocketSimulation {
+      constructor(canvasWidth, canvasHeight, c) {
+        this.c = c;
+        this.id = c.id;
+        this.cw = canvasWidth || 340;
+        this.ch = canvasHeight || 190;
+        this.time = 0;
+        this.nextPopTime = 0;
+        this.popCount = 0;
+
+        if (this.id === 'w_16') {
+          // Hawayi Rocket Classic: Move from one place to other then pop for 10sec
+          this.flightDuration = 1.2;
+          this.popDuration = 10.0;
+          this.isRandomFly = false;
+          this.startX = 55;
+          this.startY = this.ch - 24;
+          this.destX = this.cw - 65;
+          this.destY = 46;
+          this.popInterval = 0.38;
+          this.rimColor = '#00e5ff';
+          this.burstColors = ['#00e5ff', '#ffd700', '#ff1744', '#ffffff', '#ff9800'];
+        } else if (this.id === 'w_17') {
+          // Whistling Sky Rocket: Move from one place to other then pop for 15 sec
+          this.flightDuration = 1.4;
+          this.popDuration = 15.0;
+          this.isRandomFly = false;
+          this.startX = 60;
+          this.startY = this.ch - 22;
+          this.destX = this.cw - 70;
+          this.destY = 40;
+          this.popInterval = 0.35;
+          this.rimColor = '#00b0ff';
+          this.burstColors = ['#00b0ff', '#80d8ff', '#ffd700', '#ffffff', '#e040fb'];
+        } else if (this.id === 'w_31') {
+          // Starlight Aerial Comet: Move from one place to other then pop for 20sec
+          this.flightDuration = 1.5;
+          this.popDuration = 20.0;
+          this.isRandomFly = false;
+          this.startX = this.cw - 60;
+          this.startY = this.ch - 22;
+          this.destX = 65;
+          this.destY = 38;
+          this.popInterval = 0.32;
+          this.rimColor = '#ffffff';
+          this.burstColors = ['#ffffff', '#fff9c4', '#ffd700', '#b388ff', '#80d8ff'];
+        } else if (this.id === 'w_37') {
+          // Sky Lantern Ascent: Move from one place to other then pop for 20sec fly randomly
+          this.flightDuration = 0.8;
+          this.popDuration = 20.0;
+          this.isRandomFly = true;
+          this.startX = 60;
+          this.startY = this.ch - 25;
+          this.popInterval = 0.50;
+          this.rimColor = '#ff9e80';
+          this.burstColors = ['#ff9e80', '#ffd700', '#ff6d00', '#ffeb3b', '#ffffff'];
+        } else if (this.id === 'w_44') {
+          // Aurora Sky Burst: Move from one place to other then pop for 25sec fly randomly
+          this.flightDuration = 0.8;
+          this.popDuration = 25.0;
+          this.isRandomFly = true;
+          this.startX = this.cw - 60;
+          this.startY = this.ch - 25;
+          this.popInterval = 0.40;
+          this.rimColor = '#b388ff';
+          this.burstColors = ['#b388ff', '#00e5ff', '#76ff03', '#e040fb', '#ffffff', '#ffd700'];
+        } else {
+          this.flightDuration = 1.2;
+          this.popDuration = 10.0;
+          this.isRandomFly = false;
+          this.startX = 60;
+          this.startY = this.ch - 25;
+          this.destX = this.cw - 60;
+          this.destY = 45;
+          this.popInterval = 0.40;
+          this.rimColor = c.rim || '#00e5ff';
+          this.burstColors = [this.rimColor, '#ffd700', '#ffffff'];
+        }
+
+        this.duration = this.flightDuration + this.popDuration;
+        this.x = this.startX;
+        this.y = this.startY;
+        this.angle = -Math.PI / 3;
+        this.nextPopTime = this.flightDuration + 0.1;
+      }
+
+      update(dt, canvas, ctx) {
+        this.time += dt;
+        if (this.time >= this.duration) return false;
+
+        const cx = this.cw / 2;
+        const cy = this.ch / 2;
+
+        if (this.isRandomFly) {
+          // Smooth 2D multi-harmonic wandering flight across stage bounds
+          const t = this.time;
+          const prevX = this.x;
+          const prevY = this.y;
+
+          if (t < this.flightDuration) {
+            // Initial liftoff climb into sky
+            const p = t / this.flightDuration;
+            const targetSkyX = cx + (this.startX < cx ? -40 : 40);
+            const targetSkyY = cy - 20;
+            this.x = this.startX + (targetSkyX - this.startX) * (p * (2 - p));
+            this.y = this.startY + (targetSkyY - this.startY) * (p * (2 - p));
+          } else {
+            // Continuous random flight across canvas bounds
+            const flightTime = t - this.flightDuration;
+            const wanderX = Math.sin(flightTime * 0.95 + 0.5) * (cx - 45) + Math.cos(flightTime * 0.42) * 30;
+            const wanderY = Math.cos(flightTime * 0.78) * (cy - 42) + Math.sin(flightTime * 1.35) * 22;
+            this.x = cx + wanderX;
+            this.y = cy + wanderY;
+          }
+
+          const dx = this.x - prevX;
+          const dy = this.y - prevY;
+          if (Math.hypot(dx, dy) > 0.1) {
+            this.angle = Math.atan2(dy, dx);
+          }
+
+          // Shimmering ambient trails
+          if (this.id === 'w_37') {
+            // Sky Lantern glowing ember drift
+            if (Math.random() < 0.65) {
+              previewParticles.push(new PreviewParticle(
+                this.x + (Math.random() - 0.5) * 10, this.y + 12,
+                (Math.random() - 0.5) * 0.8, 1.2 + Math.random() * 1.6,
+                Math.random() < 0.7 ? '#ffd700' : '#ff9800',
+                2.0 + Math.random() * 1.8,
+                0.6, -0.02, 0.98
+              ));
+            }
+          } else if (this.id === 'w_44') {
+            // Aurora Borealis celestial stardust
+            for (let i = 0; i < 2; i++) {
+              const col = this.burstColors[Math.floor(Math.random() * this.burstColors.length)];
+              previewParticles.push(new PreviewParticle(
+                this.x + (Math.random() - 0.5) * 14, this.y + (Math.random() - 0.5) * 14,
+                (Math.random() - 0.5) * 1.4, (Math.random() - 0.5) * 1.4,
+                col, 2.6 + Math.random() * 2.2, 0.7, 0.01, 0.96
+              ));
+            }
+          }
+        } else {
+          // Classic / Whistling / Starlight Rocket (move from one place to other)
+          if (this.time < this.flightDuration) {
+            const p = this.time / this.flightDuration;
+            const ease = p * (2 - p);
+            const prevX = this.x;
+            const prevY = this.y;
+            this.x = this.startX + (this.destX - this.startX) * ease;
+            this.y = this.startY + (this.destY - this.startY) * ease;
+            this.angle = Math.atan2(this.y - prevY, this.x - prevX);
+
+            // Supersonic jet exhaust flame & smoke
+            const backX = this.x - Math.cos(this.angle) * 14;
+            const backY = this.y - Math.sin(this.angle) * 14;
+            for (let i = 0; i < 3; i++) {
+              const spread = (Math.random() - 0.5) * 1.8;
+              const spd = 3.5 + Math.random() * 4.0;
+              const col = (this.id === 'w_31')
+                ? (Math.random() < 0.6 ? '#ffffff' : '#ffd700')
+                : (Math.random() < 0.6 ? '#ff9100' : '#ffff00');
+              previewParticles.push(new PreviewParticle(
+                backX, backY,
+                -Math.cos(this.angle) * spd + spread,
+                -Math.sin(this.angle) * spd + spread,
+                col, 2.8 + Math.random() * 2.0, 0.42, 0.04, 0.96
+              ));
+            }
+          } else {
+            // Arrived at destination apex: gentle floating hover at destX, destY
+            const tDiff = this.time - this.flightDuration;
+            this.x = this.destX + Math.sin(tDiff * 2.4) * 10;
+            this.y = this.destY + Math.cos(tDiff * 1.8) * 6;
+          }
+        }
+
+        // 💥 CONTINUOUS POPPING FOR SPECIFIED DURATION
+        const isPoppingTime = this.isRandomFly
+          ? (this.time >= this.flightDuration * 0.5)
+          : (this.time >= this.flightDuration);
+
+        if (isPoppingTime && this.time >= this.nextPopTime) {
+          this.popCount++;
+          this.nextPopTime = this.time + this.popInterval + (Math.random() - 0.5) * 0.06;
+
+          // Audio
+          if (typeof Sound !== 'undefined' && Sound.isEnabled && Sound.isEnabled()) {
+            if (this.popCount % 4 === 0) {
+              Sound.playBassBoom(160 + (this.popCount % 5) * 20, 0.55, 1.15);
+            } else {
+              Sound.playSnappyPop(880 + (this.popCount % 8) * 120, 0.95, true);
+            }
+          }
+
+          // Expanding shockwave ring
+          const swRadius = 40 + (this.popCount % 5) * 12;
+          previewShockwaves.push(new PreviewShockwave(this.x, this.y, swRadius, this.rimColor, 0.35));
+
+          // Starburst sparks
+          const numParticles = 22 + Math.floor(Math.random() * 12);
+          for (let i = 0; i < numParticles; i++) {
+            const a = (i * Math.PI * 2) / numParticles + (Math.random() * 0.25);
+            const spd = 2.4 + Math.random() * 4.6;
+            const col = this.burstColors[i % this.burstColors.length];
+            const p = new PreviewParticle(
+              this.x, this.y,
+              Math.cos(a) * spd,
+              Math.sin(a) * spd,
+              col,
+              2.4 + Math.random() * 2.6,
+              0.55 + Math.random() * 0.4,
+              0.08, 0.96
+            );
+            previewParticles.push(p);
+          }
+        }
+
+        return true;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+
+        if (this.id === 'w_37') {
+          // 🏮 Authentic Glowing Sky Lantern
+          const sway = Math.sin(this.time * 3.0) * 0.12;
+          ctx.rotate(sway);
+
+          // Warm ambient halo
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 24, 28, 0, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255, 158, 128, 0.25)';
+          ctx.shadowColor = '#ff6d00';
+          ctx.shadowBlur = 24;
+          ctx.fill();
+
+          // Lantern paper body
+          const lGrad = ctx.createLinearGradient(0, -18, 0, 18);
+          lGrad.addColorStop(0, '#ffe0b2');
+          lGrad.addColorStop(0.3, '#ff9800');
+          lGrad.addColorStop(0.85, '#e65100');
+          lGrad.addColorStop(1, '#bf360c');
+          ctx.beginPath();
+          ctx.moveTo(-11, -16);
+          ctx.quadraticCurveTo(-15, 0, -12, 14);
+          ctx.lineTo(12, 14);
+          ctx.quadraticCurveTo(15, 0, 11, -16);
+          ctx.closePath();
+          ctx.fillStyle = lGrad;
+          ctx.shadowColor = '#ffd700';
+          ctx.shadowBlur = 16;
+          ctx.fill();
+          ctx.strokeStyle = '#ffe082';
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          // Bamboo collars
+          ctx.strokeStyle = '#5d4037';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(-11, -16); ctx.lineTo(11, -16);
+          ctx.moveTo(-12, 14); ctx.lineTo(12, 14);
+          ctx.stroke();
+
+          // Burning inner flame
+          const flameSize = 4 + Math.sin(this.time * 24) * 1.5;
+          ctx.beginPath();
+          ctx.arc(0, 4, flameSize, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = '#fff';
+          ctx.shadowBlur = 18;
+          ctx.fill();
+
+          // Hanging golden tassels
+          ctx.strokeStyle = '#ffd700';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(-4, 15); ctx.lineTo(-6, 23);
+          ctx.moveTo(0, 15); ctx.lineTo(0, 25);
+          ctx.moveTo(4, 15); ctx.lineTo(6, 23);
+          ctx.stroke();
+
+          ctx.restore();
+          return;
+        }
+
+        if (this.id === 'w_44') {
+          // 🌌 Aurora Sky Burst Celestial Orb
+          const rot = this.time * 4.5;
+          ctx.rotate(rot);
+
+          // Ethereal outer aura
+          ctx.beginPath();
+          ctx.arc(0, 0, 26, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(179, 136, 255, 0.25)';
+          ctx.shadowColor = '#b388ff';
+          ctx.shadowBlur = 26;
+          ctx.fill();
+
+          // Rotating astral rings
+          ctx.strokeStyle = '#00e5ff';
+          ctx.lineWidth = 1.8;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 22, 9, 0.4, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.strokeStyle = '#76ff03';
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 22, 9, -0.4, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // Radiant luminous core
+          const aGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, 12);
+          aGrad.addColorStop(0, '#ffffff');
+          aGrad.addColorStop(0.4, '#b388ff');
+          aGrad.addColorStop(0.8, '#6200ea');
+          aGrad.addColorStop(1, '#00e5ff');
+          ctx.beginPath();
+          ctx.arc(0, 0, 11, 0, Math.PI * 2);
+          ctx.fillStyle = aGrad;
+          ctx.shadowColor = '#fff';
+          ctx.shadowBlur = 20;
+          ctx.fill();
+
+          ctx.restore();
+          return;
+        }
+
+        // 🚀 Hawayi Rocket / Whistling Rocket / Starlight Comet
+        const isFlying = this.time < this.flightDuration;
+        if (isFlying) {
+          ctx.rotate(this.angle);
+
+          // Rocket fuselage body
+          ctx.fillStyle = (this.id === 'w_31') ? '#ffffff' : ((this.id === 'w_17') ? '#00b0ff' : '#ff1744');
+          ctx.shadowColor = this.rimColor;
+          ctx.shadowBlur = 14;
+          ctx.fillRect(-12, -4.5, 18, 9);
+
+          // Conical nose cone
+          ctx.beginPath();
+          ctx.moveTo(6, -6);
+          ctx.lineTo(16, 0);
+          ctx.lineTo(6, 6);
+          ctx.closePath();
+          ctx.fillStyle = '#ffd700';
+          ctx.fill();
+
+          // Stabilizer fins
+          ctx.beginPath();
+          ctx.moveTo(-12, -4.5); ctx.lineTo(-17, -9); ctx.lineTo(-8, -4.5);
+          ctx.moveTo(-12, 4.5);  ctx.lineTo(-17, 9);  ctx.lineTo(-8, 4.5);
+          ctx.fillStyle = '#ffd700';
+          ctx.fill();
+
+          // Exhaust nozzle
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(-14, -2.5, 3, 5);
+        } else {
+          // Continuous Popping Apex Orb / Flare
+          const pulse = 10 + Math.sin(this.time * 26) * 3;
+          ctx.beginPath();
+          ctx.arc(0, 0, pulse, 0, Math.PI * 2);
+          const pGrad = ctx.createRadialGradient(0, 0, 2, 0, 0, pulse);
+          pGrad.addColorStop(0, '#ffffff');
+          pGrad.addColorStop(0.4, this.rimColor);
+          pGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = pGrad;
+          ctx.shadowColor = this.rimColor;
+          ctx.shadowBlur = 22;
+          ctx.fill();
+
+          // Twinkling star cross
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(-pulse * 1.3, 0); ctx.lineTo(pulse * 1.3, 0);
+          ctx.moveTo(0, -pulse * 1.3); ctx.lineTo(0, pulse * 1.3);
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+    }
+
     function runPreviewFxLoop(timestamp) {
       if (!currentPreviewCracker) return;
       const dt = Math.min((timestamp - lastPreviewTime) / 1000, 0.1);
@@ -4366,10 +4758,35 @@
       // Status tag
       const statusTag = document.getElementById('preview-status-tag');
       if (statusTag) {
-        if (c.id === 'app_01') statusTag.textContent = '🦋 BUTTERFLY FLUTTERING!';
-        else if (c.id === 'app_02') statusTag.textContent = '🚁 HELICOPTER HOVERING!';
-        else if (c.category === 'chakkar' || c.type === 'chakkar' || c.type === 'rolling') statusTag.textContent = '🌀 ZAMEEN CHAKKAR SPINNING!';
-        else statusTag.textContent = '💥 IGNITED & POPPING!';
+        let simDuration = 4.8;
+        if (c.id === 'app_01') {
+          statusTag.textContent = '🦋 BUTTERFLY FLUTTERING!';
+          simDuration = 5.0;
+        } else if (c.id === 'app_02') {
+          statusTag.textContent = '🚁 HELICOPTER HOVERING!';
+          simDuration = 5.0;
+        } else if (c.id === 'w_16') {
+          statusTag.textContent = '🚀 HAWAYI ROCKET FLYING & POPPING (10s)!';
+          simDuration = 11.2;
+        } else if (c.id === 'w_17') {
+          statusTag.textContent = '🛰️ WHISTLING ROCKET ASCENDING & POPPING (15s)!';
+          simDuration = 16.5;
+        } else if (c.id === 'w_31') {
+          statusTag.textContent = '☄️ STARLIGHT COMET SOARING & POPPING (20s)!';
+          simDuration = 21.5;
+        } else if (c.id === 'w_37') {
+          statusTag.textContent = '🏮 SKY LANTERN RANDOM FLIGHT & POPPING (20s)!';
+          simDuration = 20.0;
+        } else if (c.id === 'w_44') {
+          statusTag.textContent = '🌌 AURORA SKY BURST RANDOM FLIGHT & POPPING (25s)!';
+          simDuration = 25.0;
+        } else if (c.category === 'chakkar' || c.type === 'chakkar' || c.type === 'rolling') {
+          statusTag.textContent = '🌀 ZAMEEN CHAKKAR SPINNING!';
+          simDuration = 5.0;
+        } else {
+          statusTag.textContent = '💥 IGNITED & POPPING!';
+          simDuration = 4.8;
+        }
         statusTag.style.color = '#ffd700';
 
         setTimeout(() => {
@@ -4377,7 +4794,7 @@
             statusTag.textContent = '✨ READY TO POP AGAIN';
             statusTag.style.color = '#00e676';
           }
-        }, 4800);
+        }, simDuration * 1000);
       }
 
       // Play audio
@@ -4395,6 +4812,10 @@
       }
       if (c.id === 'app_02') {
         previewActiveSimulation = new PreviewHelicopterSimulation(cx, cy, c);
+        return;
+      }
+      if (c.id === 'w_16' || c.id === 'w_17' || c.id === 'w_31' || c.id === 'w_37' || c.id === 'w_44' || c.type === 'rocket') {
+        previewActiveSimulation = new PreviewRocketSimulation(canvas ? canvas.width : 340, canvas ? canvas.height : 190, c);
         return;
       }
       if (c.category === 'chakkar' || t === 'chakkar' || t === 'rolling' || t === 'drone' || t === 'helicopter') {
@@ -4565,160 +4986,215 @@
        ========================================================================= */
     const DEFAULT_ENHANCEMENT_NOTES = {
       "app_01": {
-        "id": "app_01",
-        "name": "Flying Butterfly Drone (Chidiya)",
-        "category": "chakkar",
-        "type": "drone",
-        "emoji": "🦋",
-        "pts": 45,
-        "comment": "need like a butterfly ,it explode like a sky shot",
-        "lastUpdated": "2026-10-25T12:44:12.288Z",
-        "formattedDate": "10/25/2026 06:14 PM"
+            "id": "app_01",
+            "name": "Flying Butterfly Drone (Chidiya)",
+            "category": "chakkar",
+            "type": "drone",
+            "emoji": "🦋",
+            "pts": 45,
+            "comment": "need like a butterfly ,it explode like a sky shot",
+            "lastUpdated": "2026-10-25T12:44:12.288Z",
+            "formattedDate": "10/25/2026 06:14 PM"
       },
       "app_02": {
-        "id": "app_02",
-        "name": "Whistling Helicopter Sky Spinner",
-        "category": "chakkar",
-        "type": "helicopter",
-        "emoji": "🚁",
-        "pts": 50,
-        "comment": "need a real helicoptor shot craket not a sky shot",
-        "lastUpdated": "2026-10-25T12:48:49.168Z",
-        "formattedDate": "10/25/2026 06:18 PM"
+            "id": "app_02",
+            "name": "Whistling Helicopter Sky Spinner",
+            "category": "chakkar",
+            "type": "helicopter",
+            "emoji": "🚁",
+            "pts": 50,
+            "comment": "need a real helicoptor shot craket not a sky shot",
+            "lastUpdated": "2026-10-25T12:48:49.168Z",
+            "formattedDate": "10/25/2026 06:18 PM"
       },
       "w_01": {
-        "id": "w_01",
-        "name": "Zameen Chakkar Classic",
-        "category": "chakkar",
-        "type": "chakkar",
-        "emoji": "🌀",
-        "pts": 15,
-        "comment": "give a chakkar ,not skyshot",
-        "lastUpdated": "2026-10-25T12:49:23.441Z",
-        "formattedDate": "10/25/2026 06:19 PM"
+            "id": "w_01",
+            "name": "Zameen Chakkar Classic",
+            "category": "chakkar",
+            "type": "chakkar",
+            "emoji": "🌀",
+            "pts": 15,
+            "comment": "give a chakkar ,not skyshot",
+            "lastUpdated": "2026-10-25T12:49:23.441Z",
+            "formattedDate": "10/25/2026 06:19 PM"
       },
       "w_02": {
-        "id": "w_02",
-        "name": "Deluxe Special Chakkar",
-        "category": "chakkar",
-        "type": "chakkar",
-        "emoji": "💫",
-        "pts": 20,
-        "comment": "give a chakkar not a sky shot",
-        "lastUpdated": "2026-10-25T12:49:41.081Z",
-        "formattedDate": "10/25/2026 06:19 PM"
+            "id": "w_02",
+            "name": "Deluxe Special Chakkar",
+            "category": "chakkar",
+            "type": "chakkar",
+            "emoji": "💫",
+            "pts": 20,
+            "comment": "give a chakkar not a sky shot",
+            "lastUpdated": "2026-10-25T12:49:41.081Z",
+            "formattedDate": "10/25/2026 06:19 PM"
       },
       "w_03": {
-        "id": "w_03",
-        "name": "Disco Wheel Chakkar",
-        "category": "chakkar",
-        "type": "chakkar",
-        "emoji": "🎡",
-        "pts": 22,
-        "comment": "give chakkar not a sky shot",
-        "lastUpdated": "2026-10-25T12:50:00.193Z",
-        "formattedDate": "10/25/2026 06:20 PM"
+            "id": "w_03",
+            "name": "Disco Wheel Chakkar",
+            "category": "chakkar",
+            "type": "chakkar",
+            "emoji": "🎡",
+            "pts": 22,
+            "comment": "give chakkar not a sky shot",
+            "lastUpdated": "2026-10-25T12:50:00.193Z",
+            "formattedDate": "10/25/2026 06:20 PM"
       },
       "w_04": {
-        "id": "w_04",
-        "name": "Super Jumbo Chakkar",
-        "category": "chakkar",
-        "type": "chakkar",
-        "emoji": "⚡",
-        "pts": 26,
-        "comment": "give achakker not a sky shot",
-        "lastUpdated": "2026-10-25T12:50:20.185Z",
-        "formattedDate": "10/25/2026 06:20 PM"
+            "id": "w_04",
+            "name": "Super Jumbo Chakkar",
+            "category": "chakkar",
+            "type": "chakkar",
+            "emoji": "⚡",
+            "pts": 26,
+            "comment": "give achakker not a sky shot",
+            "lastUpdated": "2026-10-25T12:50:20.185Z",
+            "formattedDate": "10/25/2026 06:20 PM"
       },
       "w_05": {
-        "id": "w_05",
-        "name": "Whistling Chakkar",
-        "category": "chakkar",
-        "type": "chakkar",
-        "emoji": "🌪️",
-        "pts": 28,
-        "comment": "give a chakkar not a sky shot",
-        "lastUpdated": "2026-10-25T12:50:37.978Z",
-        "formattedDate": "10/25/2026 06:20 PM"
+            "id": "w_05",
+            "name": "Whistling Chakkar",
+            "category": "chakkar",
+            "type": "chakkar",
+            "emoji": "🌪️",
+            "pts": 28,
+            "comment": "give a chakkar not a sky shot",
+            "lastUpdated": "2026-10-25T12:50:37.978Z",
+            "formattedDate": "10/25/2026 06:20 PM"
       },
       "w_29": {
-        "id": "w_29",
-        "name": "Butterfly Spinner",
-        "category": "chakkar",
-        "type": "chakkar",
-        "emoji": "🦋",
-        "pts": 22,
-        "comment": "give abutterfly spinner ,not a sky shot",
-        "lastUpdated": "2026-10-25T12:51:05.993Z",
-        "formattedDate": "10/25/2026 06:21 PM"
+            "id": "w_29",
+            "name": "Butterfly Spinner",
+            "category": "chakkar",
+            "type": "chakkar",
+            "emoji": "🦋",
+            "pts": 22,
+            "comment": "give abutterfly spinner ,not a sky shot",
+            "lastUpdated": "2026-10-25T12:51:05.993Z",
+            "formattedDate": "10/25/2026 06:21 PM"
       },
       "w_30": {
-        "id": "w_30",
-        "name": "Dragonfly Twirler",
-        "category": "chakkar",
-        "type": "chakkar",
-        "emoji": "🪰",
-        "pts": 24,
-        "comment": "sky shot not this model",
-        "lastUpdated": "2026-10-25T12:51:35.017Z",
-        "formattedDate": "10/25/2026 06:21 PM"
+            "id": "w_30",
+            "name": "Dragonfly Twirler",
+            "category": "chakkar",
+            "type": "chakkar",
+            "emoji": "🪰",
+            "pts": 24,
+            "comment": "sky shot not this model",
+            "lastUpdated": "2026-10-25T12:51:35.017Z",
+            "formattedDate": "10/25/2026 06:21 PM"
       },
       "w_38": {
-        "id": "w_38",
-        "name": "Whistling Siren Spinner",
-        "category": "chakkar",
-        "type": "chakkar",
-        "emoji": "🚨",
-        "pts": 28,
-        "comment": "sky shot not this model",
-        "lastUpdated": "2026-10-25T12:51:47.937Z",
-        "formattedDate": "10/25/2026 06:21 PM"
+            "id": "w_38",
+            "name": "Whistling Siren Spinner",
+            "category": "chakkar",
+            "type": "chakkar",
+            "emoji": "🚨",
+            "pts": 28,
+            "comment": "sky shot not this model",
+            "lastUpdated": "2026-10-25T12:51:47.937Z",
+            "formattedDate": "10/25/2026 06:21 PM"
       },
       "w_41": {
-        "id": "w_41",
-        "name": "Ruby Ring Chakkar",
-        "category": "chakkar",
-        "type": "chakkar",
-        "emoji": "💍",
-        "pts": 25,
-        "comment": "sky shot not this model",
-        "lastUpdated": "2026-10-25T12:51:57.984Z",
-        "formattedDate": "10/25/2026 06:21 PM"
+            "id": "w_41",
+            "name": "Ruby Ring Chakkar",
+            "category": "chakkar",
+            "type": "chakkar",
+            "emoji": "💍",
+            "pts": 25,
+            "comment": "sky shot not this model",
+            "lastUpdated": "2026-10-25T12:51:57.984Z",
+            "formattedDate": "10/25/2026 06:21 PM"
       },
       "b_12": {
-        "id": "b_12",
-        "name": "Rolling Wheel Spinner",
-        "category": "chakkar",
-        "type": "rolling",
-        "emoji": "🎡",
-        "pts": 24,
-        "comment": "sky shot not this model",
-        "lastUpdated": "2026-10-25T12:52:04.081Z",
-        "formattedDate": "10/25/2026 06:22 PM"
+            "id": "b_12",
+            "name": "Rolling Wheel Spinner",
+            "category": "chakkar",
+            "type": "rolling",
+            "emoji": "🎡",
+            "pts": 24,
+            "comment": "sky shot not this model",
+            "lastUpdated": "2026-10-25T12:52:04.081Z",
+            "formattedDate": "10/25/2026 06:22 PM"
       },
       "b_13": {
-        "id": "b_13",
-        "name": "Fire Tornado Wheel",
-        "category": "chakkar",
-        "type": "rolling",
-        "emoji": "🌪️",
-        "pts": 28,
-        "comment": "sky shot not this model",
-        "lastUpdated": "2026-10-25T12:52:14.257Z",
-        "formattedDate": "10/25/2026 06:22 PM"
+            "id": "b_13",
+            "name": "Fire Tornado Wheel",
+            "category": "chakkar",
+            "type": "rolling",
+            "emoji": "🌪️",
+            "pts": 28,
+            "comment": "sky shot not this model",
+            "lastUpdated": "2026-10-25T12:52:14.257Z",
+            "formattedDate": "10/25/2026 06:22 PM"
       },
       "b_43": {
-        "id": "b_43",
-        "name": "Ghost Rider Wheel",
-        "category": "chakkar",
-        "type": "rolling",
-        "emoji": "💀",
-        "pts": 32,
-        "comment": "sky shot not this model",
-        "lastUpdated": "2026-10-25T12:52:20.441Z",
-        "formattedDate": "10/25/2026 06:22 PM"
+            "id": "b_43",
+            "name": "Ghost Rider Wheel",
+            "category": "chakkar",
+            "type": "rolling",
+            "emoji": "💀",
+            "pts": 32,
+            "comment": "sky shot not this model",
+            "lastUpdated": "2026-10-25T12:52:20.441Z",
+            "formattedDate": "10/25/2026 06:22 PM"
+      },
+      "w_16": {
+            "id": "w_16",
+            "name": "Hawayi Rocket Classic",
+            "category": "rocket",
+            "type": "rocket",
+            "emoji": "🚀",
+            "pts": 24,
+            "comment": "need the rocket to move from one place to other then pop for 10sec",
+            "lastUpdated": "2026-10-25T16:52:44.491Z",
+            "formattedDate": "10/25/2026 10:22 PM"
+      },
+      "w_17": {
+            "id": "w_17",
+            "name": "Whistling Sky Rocket",
+            "category": "rocket",
+            "type": "rocket",
+            "emoji": "🛰️",
+            "pts": 28,
+            "comment": "need the rocket to move from one place to other then pop for 15 sec",
+            "lastUpdated": "2026-10-25T16:53:01.691Z",
+            "formattedDate": "10/25/2026 10:23 PM"
+      },
+      "w_31": {
+            "id": "w_31",
+            "name": "Starlight Aerial Comet",
+            "category": "rocket",
+            "type": "rocket",
+            "emoji": "☄️",
+            "pts": 28,
+            "comment": "need the rocket to move from one place to other then pop for 20sec",
+            "lastUpdated": "2026-10-25T16:53:21.282Z",
+            "formattedDate": "10/25/2026 10:23 PM"
+      },
+      "w_37": {
+            "id": "w_37",
+            "name": "Sky Lantern Ascent",
+            "category": "rocket",
+            "type": "rocket",
+            "emoji": "🏮",
+            "pts": 24,
+            "comment": "need the rocket to move from one place to other then pop for 20sec  fly randomly",
+            "lastUpdated": "2026-10-25T16:53:49.059Z",
+            "formattedDate": "10/25/2026 10:23 PM"
+      },
+      "w_44": {
+            "id": "w_44",
+            "name": "Aurora Sky Burst",
+            "category": "rocket",
+            "type": "rocket",
+            "emoji": "🌌",
+            "pts": 32,
+            "comment": "need the rocket to move from one place to other then pop for 25sec  fly randomly",
+            "lastUpdated": "2026-10-25T16:54:04.859Z",
+            "formattedDate": "10/25/2026 10:24 PM"
       }
-    };
+};
 
     let crackerEnhancementNotes = { ...DEFAULT_ENHANCEMENT_NOTES };
     try {
@@ -6543,26 +7019,48 @@
           this.popInterval = t === 'mirchi' ? 0.09 : 0.13;
           this.nextPopTime = 0.05;
         } else if (t === 'rocket') {
-          this.duration = 3.5;
+          if (this.key === 'w_16') {
+            this.duration = 11.2;
+            this.popDuration = 10.0;
+            this.flightDuration = 1.2;
+            this.isRandomFly = false;
+          } else if (this.key === 'w_17') {
+            this.duration = 16.5;
+            this.popDuration = 15.0;
+            this.flightDuration = 1.4;
+            this.isRandomFly = false;
+          } else if (this.key === 'w_31') {
+            this.duration = 21.5;
+            this.popDuration = 20.0;
+            this.flightDuration = 1.5;
+            this.isRandomFly = false;
+          } else if (this.key === 'w_37') {
+            this.duration = 20.0;
+            this.popDuration = 20.0;
+            this.flightDuration = 0.8;
+            this.isRandomFly = true;
+          } else if (this.key === 'w_44') {
+            this.duration = 25.0;
+            this.popDuration = 25.0;
+            this.flightDuration = 0.8;
+            this.isRandomFly = true;
+          } else {
+            this.duration = 3.5;
+            this.popDuration = 1.5;
+            this.flightDuration = 0.7;
+            this.isRandomFly = false;
+          }
+
           this.rocketExploded = false;
           this.rocketX = pocketX;
           this.rocketY = pocketY;
-          this.targetX = HALF_SIZE + (Math.random() - 0.5) * 160;
-          this.targetY = HALF_SIZE + (Math.random() - 0.5) * 160;
+          this.targetX = HALF_SIZE + (Math.random() - 0.5) * 260;
+          this.targetY = HALF_SIZE + (Math.random() - 0.5) * 260;
+          this.nextPopTime = this.flightDuration + 0.15;
+          this.popCount = 0;
+          this.popInterval = (this.key === 'w_37' ? 0.55 : (this.key === 'w_44' ? 0.42 : 0.38));
           Sound.playRocketScreech();
           addCrackerCarbonAndPaperDebris(pocketX, pocketY, 26, 16, 6.5);
-
-          const startPt = boardToScreen(pocketX, pocketY);
-          const targetPt = boardToScreen(this.targetX, this.targetY);
-          launchSkyShot(startPt.x, startPt.y, targetPt.x, targetPt.y, this.cDef.rim || '#00e5ff', () => {
-            if (!this.rocketExploded) {
-              this.rocketExploded = true;
-              Sound.playBassBoom(180, 0.85, 1.25);
-              triggerBoardVibration('bomb', 24, 0.87, [140, 40, 90]);
-              this.shockwaves.push(new Shockwave(this.targetX, this.targetY, 180, '#00e5ff', 9));
-              addCrackerCarbonAndPaperDebris(this.targetX, this.targetY, 44, 34, 12);
-            }
-          });
         } else if (t === 'bomb' || t === 'gorilla') {
           this.duration = 3.2;
           this.detonated = false;
@@ -6818,32 +7316,74 @@
           }
         }
 
-        // 5. Hawayi Rocket
+        // 5. Hawayi Rocket & Aerial Continuous Popping (w_16, w_17, w_31, w_37, w_44)
         else if (t === 'rocket') {
-          const travelRatio = Math.min(this.time / 0.7, 1.0);
-          this.rocketX = this.x + (this.targetX - this.x) * travelRatio;
-          this.rocketY = this.y + (this.targetY - this.y) * travelRatio;
+          if (this.isRandomFly) {
+            // Random flight across board bounds
+            if (this.time < this.flightDuration) {
+              const p = this.time / this.flightDuration;
+              this.rocketX = this.x + (HALF_SIZE - this.x) * (p * 0.5);
+              this.rocketY = this.y + (HALF_SIZE - this.y) * (p * 0.5);
+            } else {
+              const ft = this.time - this.flightDuration;
+              this.rocketX = HALF_SIZE + Math.sin(ft * 0.85) * (HALF_SIZE - 90) + Math.cos(ft * 0.35) * 45;
+              this.rocketY = HALF_SIZE + Math.cos(ft * 0.72) * (HALF_SIZE - 90) + Math.sin(ft * 1.15) * 35;
+            }
+            this.curX = this.rocketX;
+            this.curY = this.rocketY;
 
-          if (travelRatio < 1.0) {
-            this.particles.push(new Particle(
-              this.rocketX, this.rocketY,
-              Math.random() < 0.5 ? '#ff9100' : '#ffff00',
-              3.5, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 0.05
-            ));
-          } else if (!this.rocketExploded) {
-            this.rocketExploded = true;
-            Sound.playBassBoom(180, 0.85, 1.25);
-            triggerBoardVibration('bomb', 24, 0.87, [140, 40, 90]);
-            this.shockwaves.push(new Shockwave(this.targetX, this.targetY, 180, '#00e5ff', 9));
-            addCrackerCarbonAndPaperDebris(this.targetX, this.targetY, 44, 34, 12);
+            // Ambient sparks
+            if (Math.random() < 0.6) {
+              const col = (this.key === 'w_37') ? '#ffd700' : (Math.random() < 0.5 ? '#b388ff' : '#00e5ff');
+              this.particles.push(new Particle(this.rocketX, this.rocketY, col, 2.8, (Math.random()-0.5)*2, (Math.random()-0.5)*2, 0.04));
+            }
+          } else {
+            // Move from pocket to target
+            const travelRatio = Math.min(this.time / this.flightDuration, 1.0);
+            this.rocketX = this.x + (this.targetX - this.x) * travelRatio;
+            this.rocketY = this.y + (this.targetY - this.y) * travelRatio;
+            this.curX = this.rocketX;
+            this.curY = this.rocketY;
 
-            for (let i = 0; i < 36; i++) {
-              const a = (i * Math.PI * 2) / 36;
-              const spd = 4 + Math.random() * 5;
-              const cols = ['#00e5ff', '#ff007f', '#ffd700', '#76ff03', '#ffffff'];
+            if (travelRatio < 1.0) {
               this.particles.push(new Particle(
-                this.targetX, this.targetY, cols[i % cols.length], 3.5,
-                Math.cos(a) * spd, Math.sin(a) * spd, 0.02
+                this.rocketX, this.rocketY,
+                Math.random() < 0.5 ? '#ff9100' : '#ffff00',
+                3.5, (Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 0.05
+              ));
+            } else {
+              // Hovering drift at target
+              const tDiff = this.time - this.flightDuration;
+              this.rocketX = this.targetX + Math.sin(tDiff * 2.2) * 12;
+              this.rocketY = this.targetY + Math.cos(tDiff * 1.6) * 8;
+              this.curX = this.rocketX;
+              this.curY = this.rocketY;
+            }
+          }
+
+          // Sequential popping loop during popDuration
+          const isPopping = this.isRandomFly ? (this.time >= this.flightDuration * 0.5) : (this.time >= this.flightDuration);
+          if (isPopping && this.time >= this.nextPopTime && this.time < this.duration) {
+            this.popCount++;
+            this.nextPopTime = this.time + this.popInterval + (Math.random() - 0.5) * 0.05;
+
+            Sound.playSnappyPop(850 + (this.popCount % 7) * 120, 1.25, true);
+            if (this.popCount % 4 === 0) {
+              Sound.playBassBoom(175, 0.7, 1.2);
+              triggerBoardVibration('bomb', 16, 0.86, [40]);
+            }
+
+            const rim = this.cDef.rim || '#00e5ff';
+            this.shockwaves.push(new Shockwave(this.rocketX, this.rocketY, 110 + (this.popCount % 3) * 25, rim, 8));
+            addCrackerCarbonAndPaperDebris(this.rocketX, this.rocketY, 16, 10, 5.5);
+
+            for (let i = 0; i < 18; i++) {
+              const a = (i * Math.PI * 2) / 18;
+              const spd = 3.2 + Math.random() * 4.5;
+              const cols = [rim, '#ffd700', '#ffffff', '#ff1744', '#76ff03'];
+              this.particles.push(new Particle(
+                this.rocketX, this.rocketY, cols[i % cols.length], 3.2,
+                Math.cos(a) * spd, Math.sin(a) * spd, 0.03
               ));
             }
           }
@@ -7236,18 +7776,81 @@
           ctx.shadowColor = '#ffd700';
           ctx.shadowBlur = 20;
           ctx.fill();
-        } else if (t === 'rocket' && !this.rocketExploded) {
+        } else if (t === 'rocket') {
           ctx.restore();
           ctx.save();
           ctx.translate(this.rocketX, this.rocketY);
-          const angle = Math.atan2(this.targetY - this.y, this.targetX - this.x);
-          ctx.rotate(angle);
-          ctx.fillStyle = '#ff1744';
-          ctx.fillRect(-12, -4, 16, 8);
-          ctx.beginPath();
-          ctx.moveTo(4, -6); ctx.lineTo(12, 0); ctx.lineTo(4, 6);
-          ctx.fillStyle = '#ffd700';
-          ctx.fill();
+
+          if (this.key === 'w_37') {
+            // Sky Lantern on board
+            const sway = Math.sin(this.time * 3.0) * 0.12;
+            ctx.rotate(sway);
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 16, 20, 0, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 158, 128, 0.3)';
+            ctx.shadowColor = '#ff6d00';
+            ctx.shadowBlur = 18;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.rect(-9, -12, 18, 24);
+            ctx.fillStyle = '#ff9800';
+            ctx.fill();
+            ctx.strokeStyle = '#ffe082';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(0, 2, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.restore();
+            return;
+          } else if (this.key === 'w_44') {
+            // Aurora Sky Burst orb on board
+            ctx.rotate(this.time * 4.0);
+            ctx.beginPath();
+            ctx.arc(0, 0, 18, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(179, 136, 255, 0.3)';
+            ctx.shadowColor = '#b388ff';
+            ctx.shadowBlur = 20;
+            ctx.fill();
+
+            ctx.strokeStyle = '#00e5ff';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 15, 6, 0.4, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, 8, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.restore();
+            return;
+          }
+
+          // Classic / Whistling / Starlight Rocket
+          const isFlying = this.time < this.flightDuration;
+          if (isFlying) {
+            const angle = Math.atan2(this.targetY - this.y, this.targetX - this.x);
+            ctx.rotate(angle);
+            ctx.fillStyle = (this.key === 'w_31') ? '#ffffff' : ((this.key === 'w_17') ? '#00b0ff' : '#ff1744');
+            ctx.fillRect(-12, -4, 16, 8);
+            ctx.beginPath();
+            ctx.moveTo(4, -6); ctx.lineTo(12, 0); ctx.lineTo(4, 6);
+            ctx.fillStyle = '#ffd700';
+            ctx.fill();
+          } else {
+            // Pulsing pop core
+            const pulse = 8 + Math.sin(this.time * 24) * 2.5;
+            ctx.beginPath();
+            ctx.arc(0, 0, pulse, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.shadowColor = this.cDef.rim || '#00e5ff';
+            ctx.shadowBlur = 18;
+            ctx.fill();
+          }
           ctx.restore();
           return;
         }

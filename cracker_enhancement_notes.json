@@ -2,8 +2,8 @@
   "_metadata": {
     "title": "Diwali Crackers Enhancement & Refactoring Notes",
     "description": "Database recording developer reviews, physics refactoring notes, and audio balance tweaks for Diwali crackers.",
-    "totalRecorded": 14,
-    "exportedAt": "2026-10-25T12:52:21.849Z"
+    "totalRecorded": 19,
+    "exportedAt": "2026-10-25T16:54:08.387Z"
   },
   "notes": {
     "app_01": {
@@ -159,6 +159,61 @@
       "comment": "sky shot not this model",
       "lastUpdated": "2026-10-25T12:52:20.441Z",
       "formattedDate": "10/25/2026 06:22 PM"
+    },
+    "w_16": {
+      "id": "w_16",
+      "name": "Hawayi Rocket Classic",
+      "category": "rocket",
+      "type": "rocket",
+      "emoji": "🚀",
+      "pts": 24,
+      "comment": "need the rocket to move from one place to other then pop for 10sec",
+      "lastUpdated": "2026-10-25T16:52:44.491Z",
+      "formattedDate": "10/25/2026 10:22 PM"
+    },
+    "w_17": {
+      "id": "w_17",
+      "name": "Whistling Sky Rocket",
+      "category": "rocket",
+      "type": "rocket",
+      "emoji": "🛰️",
+      "pts": 28,
+      "comment": "need the rocket to move from one place to other then pop for 15 sec",
+      "lastUpdated": "2026-10-25T16:53:01.691Z",
+      "formattedDate": "10/25/2026 10:23 PM"
+    },
+    "w_31": {
+      "id": "w_31",
+      "name": "Starlight Aerial Comet",
+      "category": "rocket",
+      "type": "rocket",
+      "emoji": "☄️",
+      "pts": 28,
+      "comment": "need the rocket to move from one place to other then pop for 20sec",
+      "lastUpdated": "2026-10-25T16:53:21.282Z",
+      "formattedDate": "10/25/2026 10:23 PM"
+    },
+    "w_37": {
+      "id": "w_37",
+      "name": "Sky Lantern Ascent",
+      "category": "rocket",
+      "type": "rocket",
+      "emoji": "🏮",
+      "pts": 24,
+      "comment": "need the rocket to move from one place to other then pop for 20sec  fly randomly",
+      "lastUpdated": "2026-10-25T16:53:49.059Z",
+      "formattedDate": "10/25/2026 10:23 PM"
+    },
+    "w_44": {
+      "id": "w_44",
+      "name": "Aurora Sky Burst",
+      "category": "rocket",
+      "type": "rocket",
+      "emoji": "🌌",
+      "pts": 32,
+      "comment": "need the rocket to move from one place to other then pop for 25sec  fly randomly",
+      "lastUpdated": "2026-10-25T16:54:04.859Z",
+      "formattedDate": "10/25/2026 10:24 PM"
     }
   }
 }
