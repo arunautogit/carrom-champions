@@ -1,0 +1,219 @@
+{
+  "_metadata": {
+    "title": "Diwali Crackers Enhancement & Refactoring Notes",
+    "description": "Database recording developer reviews, physics refactoring notes, and audio balance tweaks for Diwali crackers.",
+    "totalRecorded": 19,
+    "exportedAt": "2026-10-25T16:54:08.387Z"
+  },
+  "notes": {
+    "app_01": {
+      "id": "app_01",
+      "name": "Flying Butterfly Drone (Chidiya)",
+      "category": "chakkar",
+      "type": "drone",
+      "emoji": "🦋",
+      "pts": 45,
+      "comment": "need like a butterfly ,it explode like a sky shot",
+      "lastUpdated": "2026-10-25T12:44:12.288Z",
+      "formattedDate": "10/25/2026 06:14 PM"
+    },
+    "app_02": {
+      "id": "app_02",
+      "name": "Whistling Helicopter Sky Spinner",
+      "category": "chakkar",
+      "type": "helicopter",
+      "emoji": "🚁",
+      "pts": 50,
+      "comment": "need a real helicoptor shot craket not a sky shot",
+      "lastUpdated": "2026-10-25T12:48:49.168Z",
+      "formattedDate": "10/25/2026 06:18 PM"
+    },
+    "w_01": {
+      "id": "w_01",
+      "name": "Zameen Chakkar Classic",
+      "category": "chakkar",
+      "type": "chakkar",
+      "emoji": "🌀",
+      "pts": 15,
+      "comment": "give a chakkar ,not skyshot",
+      "lastUpdated": "2026-10-25T12:49:23.441Z",
+      "formattedDate": "10/25/2026 06:19 PM"
+    },
+    "w_02": {
+      "id": "w_02",
+      "name": "Deluxe Special Chakkar",
+      "category": "chakkar",
+      "type": "chakkar",
+      "emoji": "💫",
+      "pts": 20,
+      "comment": "give a chakkar not a sky shot",
+      "lastUpdated": "2026-10-25T12:49:41.081Z",
+      "formattedDate": "10/25/2026 06:19 PM"
+    },
+    "w_03": {
+      "id": "w_03",
+      "name": "Disco Wheel Chakkar",
+      "category": "chakkar",
+      "type": "chakkar",
+      "emoji": "🎡",
+      "pts": 22,
+      "comment": "give chakkar not a sky shot",
+      "lastUpdated": "2026-10-25T12:50:00.193Z",
+      "formattedDate": "10/25/2026 06:20 PM"
+    },
+    "w_04": {
+      "id": "w_04",
+      "name": "Super Jumbo Chakkar",
+      "category": "chakkar",
+      "type": "chakkar",
+      "emoji": "⚡",
+      "pts": 26,
+      "comment": "give achakker not a sky shot",
+      "lastUpdated": "2026-10-25T12:50:20.185Z",
+      "formattedDate": "10/25/2026 06:20 PM"
+    },
+    "w_05": {
+      "id": "w_05",
+      "name": "Whistling Chakkar",
+      "category": "chakkar",
+      "type": "chakkar",
+      "emoji": "🌪️",
+      "pts": 28,
+      "comment": "give a chakkar not a sky shot",
+      "lastUpdated": "2026-10-25T12:50:37.978Z",
+      "formattedDate": "10/25/2026 06:20 PM"
+    },
+    "w_29": {
+      "id": "w_29",
+      "name": "Butterfly Spinner",
+      "category": "chakkar",
+      "type": "chakkar",
+      "emoji": "🦋",
+      "pts": 22,
+      "comment": "give abutterfly spinner ,not a sky shot",
+      "lastUpdated": "2026-10-25T12:51:05.993Z",
+      "formattedDate": "10/25/2026 06:21 PM"
+    },
+    "w_30": {
+      "id": "w_30",
+      "name": "Dragonfly Twirler",
+      "category": "chakkar",
+      "type": "chakkar",
+      "emoji": "🪰",
+      "pts": 24,
+      "comment": "sky shot not this model",
+      "lastUpdated": "2026-10-25T12:51:35.017Z",
+      "formattedDate": "10/25/2026 06:21 PM"
+    },
+    "w_38": {
+      "id": "w_38",
+      "name": "Whistling Siren Spinner",
+      "category": "chakkar",
+      "type": "chakkar",
+      "emoji": "🚨",
+      "pts": 28,
+      "comment": "sky shot not this model",
+      "lastUpdated": "2026-10-25T12:51:47.937Z",
+      "formattedDate": "10/25/2026 06:21 PM"
+    },
+    "w_41": {
+      "id": "w_41",
+      "name": "Ruby Ring Chakkar",
+      "category": "chakkar",
+      "type": "chakkar",
+      "emoji": "💍",
+      "pts": 25,
+      "comment": "sky shot not this model",
+      "lastUpdated": "2026-10-25T12:51:57.984Z",
+      "formattedDate": "10/25/2026 06:21 PM"
+    },
+    "b_12": {
+      "id": "b_12",
+      "name": "Rolling Wheel Spinner",
+      "category": "chakkar",
+      "type": "rolling",
+      "emoji": "🎡",
+      "pts": 24,
+      "comment": "sky shot not this model",
+      "lastUpdated": "2026-10-25T12:52:04.081Z",
+      "formattedDate": "10/25/2026 06:22 PM"
+    },
+    "b_13": {
+      "id": "b_13",
+      "name": "Fire Tornado Wheel",
+      "category": "chakkar",
+      "type": "rolling",
+      "emoji": "🌪️",
+      "pts": 28,
+      "comment": "sky shot not this model",
+      "lastUpdated": "2026-10-25T12:52:14.257Z",
+      "formattedDate": "10/25/2026 06:22 PM"
+    },
+    "b_43": {
+      "id": "b_43",
+      "name": "Ghost Rider Wheel",
+      "category": "chakkar",
+      "type": "rolling",
+      "emoji": "💀",
+      "pts": 32,
+      "comment": "sky shot not this model",
+      "lastUpdated": "2026-10-25T12:52:20.441Z",
+      "formattedDate": "10/25/2026 06:22 PM"
+    },
+    "w_16": {
+      "id": "w_16",
+      "name": "Hawayi Rocket Classic",
+      "category": "rocket",
+      "type": "rocket",
+      "emoji": "🚀",
+      "pts": 24,
+      "comment": "need the rocket to move from one place to other then pop for 10sec",
+      "lastUpdated": "2026-10-25T16:52:44.491Z",
+      "formattedDate": "10/25/2026 10:22 PM"
+    },
+    "w_17": {
+      "id": "w_17",
+      "name": "Whistling Sky Rocket",
+      "category": "rocket",
+      "type": "rocket",
+      "emoji": "🛰️",
+      "pts": 28,
+      "comment": "need the rocket to move from one place to other then pop for 15 sec",
+      "lastUpdated": "2026-10-25T16:53:01.691Z",
+      "formattedDate": "10/25/2026 10:23 PM"
+    },
+    "w_31": {
+      "id": "w_31",
+      "name": "Starlight Aerial Comet",
+      "category": "rocket",
+      "type": "rocket",
+      "emoji": "☄️",
+      "pts": 28,
+      "comment": "need the rocket to move from one place to other then pop for 20sec",
+      "lastUpdated": "2026-10-25T16:53:21.282Z",
+      "formattedDate": "10/25/2026 10:23 PM"
+    },
+    "w_37": {
+      "id": "w_37",
+      "name": "Sky Lantern Ascent",
+      "category": "rocket",
+      "type": "rocket",
+      "emoji": "🏮",
+      "pts": 24,
+      "comment": "need the rocket to move from one place to other then pop for 20sec  fly randomly",
+      "lastUpdated": "2026-10-25T16:53:49.059Z",
+      "formattedDate": "10/25/2026 10:23 PM"
+    },
+    "w_44": {
+      "id": "w_44",
+      "name": "Aurora Sky Burst",
+      "category": "rocket",
+      "type": "rocket",
+      "emoji": "🌌",
+      "pts": 32,
+      "comment": "need the rocket to move from one place to other then pop for 25sec  fly randomly",
+      "lastUpdated": "2026-10-25T16:54:04.859Z",
+      "formattedDate": "10/25/2026 10:24 PM"
+    }
+  }
+}

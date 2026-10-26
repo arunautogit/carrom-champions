@@ -2,8 +2,8 @@
   "_metadata": {
     "title": "Diwali Crackers Enhancement & Refactoring Notes",
     "description": "Database recording developer reviews, physics refactoring notes, and audio balance tweaks for Diwali crackers.",
-    "totalRecorded": 19,
-    "exportedAt": "2026-10-25T16:54:08.387Z"
+    "totalRecorded": 38,
+    "exportedAt": "2026-10-26T16:38:14.023Z"
   },
   "notes": {
     "app_01": {
@@ -214,6 +214,215 @@
       "comment": "need the rocket to move from one place to other then pop for 25sec  fly randomly",
       "lastUpdated": "2026-10-25T16:54:04.859Z",
       "formattedDate": "10/25/2026 10:24 PM"
+    },
+    "app_03": {
+      "id": "app_03",
+      "name": "Illuminated Silk Parachute Rocket",
+      "category": "parachute",
+      "type": "parachute",
+      "emoji": "🪂",
+      "pts": 55,
+      "comment": "need a real prachute ,its not the real one",
+      "lastUpdated": "2026-10-26T16:28:38.868Z",
+      "formattedDate": "10/26/2026 09:58 PM"
+    },
+    "w_18": {
+      "id": "w_18",
+      "name": "Parachute Flash Rocket",
+      "category": "parachute",
+      "type": "rocket",
+      "emoji": "🪂",
+      "pts": 30,
+      "comment": "rocket is fine but no parachute is there",
+      "lastUpdated": "2026-10-26T16:29:06.468Z",
+      "formattedDate": "10/26/2026 09:59 PM"
+    },
+    "b_01": {
+      "id": "b_01",
+      "name": "100-Wala Ladi Classic",
+      "category": "wala",
+      "type": "100wala",
+      "emoji": "🧨",
+      "pts": 22,
+      "comment": "100 wala should have at least 50 sound should come",
+      "lastUpdated": "2026-10-26T16:30:27.859Z",
+      "formattedDate": "10/26/2026 10:00 PM"
+    },
+    "b_02": {
+      "id": "b_02",
+      "name": "200-Wala Super Ladi",
+      "category": "wala",
+      "type": "100wala",
+      "emoji": "🧨",
+      "pts": 26,
+      "comment": "200 wala should have at least 125 sound should come",
+      "lastUpdated": "2026-10-26T16:30:48.597Z",
+      "formattedDate": "10/26/2026 10:00 PM"
+    },
+    "b_03": {
+      "id": "b_03",
+      "name": "500-Wala Grand Ladi",
+      "category": "wala",
+      "type": "100wala",
+      "emoji": "🧨",
+      "pts": 32,
+      "comment": "500 wala should have at least 220 sound should come",
+      "lastUpdated": "2026-10-26T16:31:05.908Z",
+      "formattedDate": "10/26/2026 10:01 PM"
+    },
+    "b_10": {
+      "id": "b_10",
+      "name": "Mirchi Pataka String",
+      "category": "wala",
+      "type": "mirchi",
+      "emoji": "🌶️",
+      "pts": 20,
+      "comment": "big sound should come",
+      "lastUpdated": "2026-10-26T16:31:32.125Z",
+      "formattedDate": "10/26/2026 10:01 PM"
+    },
+    "b_11": {
+      "id": "b_11",
+      "name": "Red Hot Chili Bomb",
+      "category": "wala",
+      "type": "mirchi",
+      "emoji": "🌶️",
+      "pts": 24,
+      "comment": "big sound should come",
+      "lastUpdated": "2026-10-26T16:31:48.332Z",
+      "formattedDate": "10/26/2026 10:01 PM"
+    },
+    "b_29": {
+      "id": "b_29",
+      "name": "Cracker String 50-Wala",
+      "category": "wala",
+      "type": "100wala",
+      "emoji": "🧨",
+      "pts": 18,
+      "comment": "50 wala should have at least 25 sound should come",
+      "lastUpdated": "2026-10-26T16:32:05.932Z",
+      "formattedDate": "10/26/2026 10:02 PM"
+    },
+    "b_30": {
+      "id": "b_30",
+      "name": "Bappi Lahiri Disco Bomb",
+      "category": "wala",
+      "type": "100wala",
+      "emoji": "🪩",
+      "pts": 26,
+      "comment": "bomb sound should come with proper smoke",
+      "lastUpdated": "2026-10-26T16:32:31.068Z",
+      "formattedDate": "10/26/2026 10:02 PM"
+    },
+    "q_01": {
+      "id": "q_01",
+      "name": "1000-Wala Rajah Maha Dhamaka",
+      "category": "wala",
+      "type": "mega_diwali",
+      "emoji": "🪔",
+      "pts": 60,
+      "comment": "restore the cracker present in the gift box",
+      "lastUpdated": "2026-10-26T16:33:48.828Z",
+      "formattedDate": "10/26/2026 10:03 PM"
+    },
+    "q_03": {
+      "id": "q_03",
+      "name": "5000-Wala Maharaja Finale",
+      "category": "wala",
+      "type": "mega_diwali",
+      "emoji": "🎆",
+      "pts": 70,
+      "comment": "restore the cracker present in the gift box- 1000 wala with 5secs more",
+      "lastUpdated": "2026-10-26T16:34:23.020Z",
+      "formattedDate": "10/26/2026 10:04 PM"
+    },
+    "app_04": {
+      "id": "app_04",
+      "name": "Brocade Crown 240-Shot Aerial Cake",
+      "category": "skyshot",
+      "type": "cake240",
+      "emoji": "🎆",
+      "pts": 95,
+      "comment": "use the skyshot already we implemented in our game",
+      "lastUpdated": "2026-10-26T16:35:17.637Z",
+      "formattedDate": "10/26/2026 10:05 PM"
+    },
+    "b_34": {
+      "id": "b_34",
+      "name": "Thunderstorm Salvo",
+      "category": "skyshot",
+      "type": "sevenshot",
+      "emoji": "⛈️",
+      "pts": 34,
+      "comment": "use the skyshot already we implemented in our game -- like sky shot",
+      "lastUpdated": "2026-10-26T16:35:57.037Z",
+      "formattedDate": "10/26/2026 10:05 PM"
+    },
+    "b_17": {
+      "id": "b_17",
+      "name": "12-Shots Sky Salvo",
+      "category": "skyshot",
+      "type": "sevenshot",
+      "emoji": "🎆",
+      "pts": 36,
+      "comment": "use the skyshot already we implemented in our game -- like sky shot  12 times",
+      "lastUpdated": "2026-10-26T16:36:07.725Z",
+      "formattedDate": "10/26/2026 10:06 PM"
+    },
+    "b_16": {
+      "id": "b_16",
+      "name": "Sky Shot 5-Times",
+      "category": "skyshot",
+      "type": "sevenshot",
+      "emoji": "🎯",
+      "pts": 30,
+      "comment": "use the skyshot already we implemented in our game -- like sky shot 5 times",
+      "lastUpdated": "2026-10-26T16:36:17.630Z",
+      "formattedDate": "10/26/2026 10:06 PM"
+    },
+    "app_05": {
+      "id": "app_05",
+      "name": "Fan-Shape W-Shot Aerial Matrix",
+      "category": "skyshot",
+      "type": "fanshot",
+      "emoji": "✨",
+      "pts": 85,
+      "comment": "use the skyshot already we implemented in our game -- like sky shot  should give in a continuous line shots",
+      "lastUpdated": "2026-10-26T16:37:03.950Z",
+      "formattedDate": "10/26/2026 10:07 PM"
+    },
+    "w_21": {
+      "id": "w_21",
+      "name": "Roman Candle 5-Shots",
+      "category": "skyshot",
+      "type": "romancandle",
+      "emoji": "🌟",
+      "pts": 24,
+      "comment": "use the skyshot already we implemented in our game -- like sky shot 5",
+      "lastUpdated": "2026-10-26T16:37:13.175Z",
+      "formattedDate": "10/26/2026 10:07 PM"
+    },
+    "w_22": {
+      "id": "w_22",
+      "name": "Roman Candle 10-Shots",
+      "category": "skyshot",
+      "type": "romancandle",
+      "emoji": "🌠",
+      "pts": 30,
+      "comment": "use the skyshot already we implemented in our game -- like sky shot 10",
+      "lastUpdated": "2026-10-26T16:37:21.709Z",
+      "formattedDate": "10/26/2026 10:07 PM"
+    },
+    "b_42": {
+      "id": "b_42",
+      "name": "Red Fort Salvo",
+      "category": "skyshot",
+      "type": "sevenshot",
+      "emoji": "🏰",
+      "pts": 34,
+      "comment": "use heavy sound like 100 wala with great sound",
+      "lastUpdated": "2026-10-26T16:37:47.965Z",
+      "formattedDate": "10/26/2026 10:07 PM"
     }
   }
 }

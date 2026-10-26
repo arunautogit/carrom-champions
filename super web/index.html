@@ -4685,6 +4685,560 @@
       }
     }
 
+
+    // 🪂 5. Authentic Real Silk Parachute Rocket Simulation (app_03, w_18)
+    class PreviewParachuteSimulation {
+      constructor(canvasWidth, canvasHeight, c) {
+        this.c = c;
+        this.id = c.id;
+        this.cw = canvasWidth || 340;
+        this.ch = canvasHeight || 190;
+        this.time = 0;
+        this.duration = 7.5;
+        this.ascentDuration = 0.85;
+        this.isDeployed = false;
+
+        this.startX = this.cw / 2;
+        this.startY = this.ch - 15;
+        this.apexX = this.cw / 2 + (Math.random() - 0.5) * 40;
+        this.apexY = 36;
+
+        this.x = this.startX;
+        this.y = this.startY;
+        this.angle = -Math.PI / 2;
+        this.chuteColor = (this.id === 'w_18') ? '#ff4081' : '#ffeb3b';
+        this.flareColor = (this.id === 'w_18') ? '#ff80ab' : '#ffd700';
+      }
+
+      update(dt, canvas, ctx) {
+        this.time += dt;
+        if (this.time >= this.duration) return false;
+
+        if (this.time < this.ascentDuration) {
+          // Phase 1: High-speed rocket ascent with exhaust flame & smoke
+          const p = this.time / this.ascentDuration;
+          const ease = p * (2 - p);
+          this.x = this.startX + (this.apexX - this.startX) * ease;
+          this.y = this.startY + (this.apexY - this.startY) * ease;
+
+          for (let i = 0; i < 3; i++) {
+            previewParticles.push(new PreviewParticle(
+              this.x + (Math.random() - 0.5) * 4,
+              this.y + 12,
+              (Math.random() - 0.5) * 1.5,
+              3.5 + Math.random() * 4.0,
+              Math.random() < 0.6 ? '#ff9800' : '#ffeb3b',
+              2.5 + Math.random() * 2.0,
+              0.4, 0.05, 0.96
+            ));
+          }
+        } else {
+          // Phase 2: Parachute deployed! Detonation pop on first frame
+          if (!this.isDeployed) {
+            this.isDeployed = true;
+            if (typeof Sound !== 'undefined' && Sound.isEnabled && Sound.isEnabled()) {
+              Sound.playSnappyPop(1150, 1.25);
+              Sound.playBassBoom(170, 0.55);
+            }
+            previewShockwaves.push(new PreviewShockwave(this.apexX, this.apexY, 70, this.chuteColor, 0.45));
+            for (let i = 0; i < 28; i++) {
+              const a = Math.random() * Math.PI * 2;
+              const spd = 2.0 + Math.random() * 4.5;
+              previewParticles.push(new PreviewParticle(
+                this.apexX, this.apexY,
+                Math.cos(a) * spd, Math.sin(a) * spd,
+                Math.random() < 0.6 ? this.chuteColor : '#ffffff',
+                2.6 + Math.random() * 2.0,
+                0.7, 0.06, 0.96
+              ));
+            }
+          }
+
+          // Gentle drifting descent & lateral pendulum sway
+          const tFloat = this.time - this.ascentDuration;
+          this.x = this.apexX + Math.sin(tFloat * 2.0) * 45;
+          this.y = this.apexY + (tFloat * 17); // soft terminal descent
+
+          // Continuous falling golden embers from the illuminated flare
+          if (Math.random() < 0.65) {
+            previewParticles.push(new PreviewParticle(
+              this.x + (Math.random() - 0.5) * 6,
+              this.y + 24,
+              (Math.random() - 0.5) * 1.2,
+              1.2 + Math.random() * 1.8,
+              this.flareColor,
+              2.2 + Math.random() * 1.8,
+              0.65, 0.03, 0.98
+            ));
+          }
+        }
+        return true;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+
+        if (this.time < this.ascentDuration) {
+          // Ascending aerodynamic rocket
+          ctx.rotate(this.angle);
+          ctx.fillStyle = this.chuteColor;
+          ctx.fillRect(-10, -4, 16, 8);
+          ctx.beginPath();
+          ctx.moveTo(6, -5); ctx.lineTo(14, 0); ctx.lineTo(6, 5);
+          ctx.fillStyle = '#ffd700';
+          ctx.fill();
+        } else {
+          // REAL SILK PARACHUTE CANOPY + SUSPENSION CORDS + ILLUMINATED FLARE
+          const tFloat = this.time - this.ascentDuration;
+          const sway = Math.sin(tFloat * 2.0) * 0.16;
+          ctx.rotate(sway);
+
+          // 1. Shrouded Suspension Cords (6 lines connecting canopy to payload)
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+          ctx.lineWidth = 1.0;
+          const rimPoints = [-24, -15, -6, 6, 15, 24];
+          const payloadY = 22;
+          rimPoints.forEach(rx => {
+            ctx.beginPath();
+            ctx.moveTo(rx, -4);
+            ctx.lineTo(0, payloadY);
+            ctx.stroke();
+          });
+
+          // 2. Translucent Ribbed Silk Parachute Dome
+          const domeW = 26;
+          const domeH = 18;
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(-domeW, -4);
+          ctx.bezierCurveTo(-domeW, -domeH - 8, domeW, -domeH - 8, domeW, -4);
+          ctx.bezierCurveTo(domeW * 0.5, 0, -domeW * 0.5, 0, -domeW, -4);
+          ctx.closePath();
+
+          const cGrad = ctx.createRadialGradient(0, -domeH * 0.5, 2, 0, -domeH * 0.5, domeW);
+          cGrad.addColorStop(0, '#ffffff');
+          cGrad.addColorStop(0.35, this.chuteColor);
+          cGrad.addColorStop(0.85, (this.id === 'w_18') ? '#c2185b' : '#ffb300');
+          cGrad.addColorStop(1, 'rgba(100, 50, 0, 0.8)');
+          ctx.fillStyle = cGrad;
+          ctx.shadowColor = this.chuteColor;
+          ctx.shadowBlur = 18;
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          // Silk gore panel ribs (vertical curved seams)
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+          ctx.lineWidth = 1.0;
+          [-14, 0, 14].forEach(gx => {
+            ctx.beginPath();
+            ctx.moveTo(gx, -4);
+            ctx.quadraticCurveTo(gx * 0.6, -domeH - 2, 0, -domeH - 5);
+            ctx.stroke();
+          });
+          ctx.restore();
+
+          // 3. Hanging Illuminated Flare with Radial Halo
+          const fGrad = ctx.createRadialGradient(0, payloadY, 1, 0, payloadY, 14);
+          fGrad.addColorStop(0, '#ffffff');
+          fGrad.addColorStop(0.3, this.flareColor);
+          fGrad.addColorStop(1, 'rgba(255, 235, 59, 0)');
+          ctx.beginPath();
+          ctx.arc(0, payloadY, 14, 0, Math.PI * 2);
+          ctx.fillStyle = fGrad;
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(0, payloadY, 4, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = '#fff';
+          ctx.shadowBlur = 12;
+          ctx.fill();
+        }
+
+        ctx.restore();
+      }
+    }
+
+    // 💥 6. Authentic Rapid Chain Wala & Bomb Simulation (b_01, b_02, b_03, b_10, b_11, b_29, b_30, q_01, q_03)
+    class PreviewWalaSimulation {
+      constructor(canvasWidth, canvasHeight, c) {
+        this.c = c;
+        this.id = c.id;
+        this.cw = canvasWidth || 340;
+        this.ch = canvasHeight || 190;
+        this.time = 0;
+        this.popCount = 0;
+        this.nextPopTime = 0.08;
+
+        if (this.id === 'b_29') {
+          // 50-Wala: at least 25 sound pops
+          this.totalPops = 28;
+          this.duration = 3.6;
+          this.popInterval = 0.11;
+          this.isBigSound = false;
+        } else if (this.id === 'b_01') {
+          // 100-Wala: at least 50 sound pops
+          this.totalPops = 56;
+          this.duration = 4.5;
+          this.popInterval = 0.075;
+          this.isBigSound = false;
+        } else if (this.id === 'b_02') {
+          // 200-Wala: at least 125 sound pops
+          this.totalPops = 135;
+          this.duration = 5.6;
+          this.popInterval = 0.038;
+          this.isBigSound = false;
+        } else if (this.id === 'b_03') {
+          // 500-Wala: at least 220 sound pops
+          this.totalPops = 235;
+          this.duration = 6.8;
+          this.popInterval = 0.026;
+          this.isBigSound = false;
+        } else if (this.id === 'b_10') {
+          // Mirchi Pataka String: big sound should come
+          this.totalPops = 42;
+          this.duration = 3.8;
+          this.popInterval = 0.08;
+          this.isBigSound = true;
+          this.isMirchi = true;
+        } else if (this.id === 'b_11') {
+          // Red Hot Chili Bomb: big sound should come
+          this.totalPops = 26;
+          this.duration = 4.0;
+          this.popInterval = 0.13;
+          this.isBigSound = true;
+          this.isChiliBomb = true;
+        } else if (this.id === 'b_30') {
+          // Bappi Lahiri Disco Bomb: bomb sound with proper smoke
+          this.totalPops = 20;
+          this.duration = 4.6;
+          this.popInterval = 0.18;
+          this.isDiscoBomb = true;
+        } else if (this.id === 'q_01') {
+          // 1000-Wala Rajah Maha Dhamaka: gift box restored
+          this.totalPops = 110;
+          this.duration = 7.5;
+          this.popInterval = 0.06;
+          this.isGiftBox = true;
+        } else if (this.id === 'q_03') {
+          // 5000-Wala Maharaja Finale: gift box restored with 5s more
+          this.totalPops = 175;
+          this.duration = 12.5; // +5 seconds!
+          this.popInterval = 0.065;
+          this.isGiftBox = true;
+          this.is5000Wala = true;
+        } else {
+          this.totalPops = 50;
+          this.duration = 4.5;
+          this.popInterval = 0.08;
+          this.isBigSound = false;
+        }
+
+        this.fuseProgress = 0;
+      }
+
+      update(dt, canvas, ctx) {
+        this.time += dt;
+        if (this.time >= this.duration) return false;
+
+        this.fuseProgress = Math.min(this.time / this.duration, 1.0);
+
+        if (this.time >= this.nextPopTime && this.popCount < this.totalPops) {
+          this.popCount++;
+          this.nextPopTime = this.time + this.popInterval + (Math.random() - 0.5) * (this.popInterval * 0.35);
+
+          const cx = this.cw / 2;
+          const cy = this.ch / 2;
+          let popX, popY;
+
+          if (this.isGiftBox) {
+            const corners = [
+              { x: 50, y: 40 }, { x: this.cw - 50, y: 40 },
+              { x: 50, y: this.ch - 40 }, { x: this.cw - 50, y: this.ch - 40 },
+              { x: cx, y: cy }
+            ];
+            const pt = corners[this.popCount % corners.length];
+            popX = pt.x + (Math.random() - 0.5) * 45;
+            popY = pt.y + (Math.random() - 0.5) * 35;
+          } else {
+            const startX = 60, startY = this.ch - 40;
+            const endX = this.cw - 60, endY = 45;
+            const p = (this.popCount / this.totalPops);
+            popX = startX + (endX - startX) * p + (Math.random() - 0.5) * 25;
+            popY = startY + (endY - startY) * p + (Math.random() - 0.5) * 20;
+          }
+
+          if (typeof Sound !== 'undefined' && Sound.isEnabled && Sound.isEnabled()) {
+            if (this.isDiscoBomb || this.isChiliBomb) {
+              Sound.playBassBoom(130 + (this.popCount % 4) * 25, 0.8, 1.35);
+            } else if (this.isBigSound) {
+              Sound.playSnappyPop(1350 + (this.popCount % 6) * 120, 1.45, true);
+              if (this.popCount % 5 === 0) Sound.playBassBoom(160, 0.7);
+            } else {
+              Sound.playSnappyPop(1050 + (this.popCount % 8) * 80, 1.15, true);
+              if (this.popCount % 12 === 0 || this.popCount === this.totalPops) {
+                Sound.playBassBoom(190, 0.65, 1.2);
+              }
+            }
+          }
+
+          const swRadius = (this.isBigSound || this.isDiscoBomb) ? 45 : 30;
+          previewShockwaves.push(new PreviewShockwave(
+            popX, popY, swRadius,
+            (this.isDiscoBomb ? ['#ff007f', '#00e5ff', '#ffd700'][this.popCount % 3] : '#ff1744'),
+            0.28
+          ));
+
+          const sparkCount = (this.isBigSound || this.isDiscoBomb) ? 18 : 12;
+          for (let i = 0; i < sparkCount; i++) {
+            const a = Math.random() * Math.PI * 2;
+            const spd = 1.5 + Math.random() * 4.5;
+            let col = (Math.random() < 0.6) ? '#ffeb3b' : '#ff5722';
+            if (this.isDiscoBomb) {
+              const discoCols = ['#ff007f', '#00e5ff', '#76ff03', '#ffd700', '#ffffff'];
+              col = discoCols[Math.floor(Math.random() * discoCols.length)];
+            }
+            previewParticles.push(new PreviewParticle(
+              popX, popY,
+              Math.cos(a) * spd, Math.sin(a) * spd,
+              col, 2.2 + Math.random() * 2.2, 0.45, 0.05, 0.95
+            ));
+          }
+
+          for (let r = 0; r < 4; r++) {
+            previewParticles.push(new PreviewParticle(
+              popX, popY,
+              (Math.random() - 0.5) * 3, -1 - Math.random() * 3,
+              '#d50000', 3.0, 0.65, 0.08, 0.96
+            ));
+          }
+
+          const smokeCount = this.isDiscoBomb ? 6 : 2;
+          for (let s = 0; s < smokeCount; s++) {
+            previewParticles.push(new PreviewParticle(
+              popX, popY,
+              (Math.random() - 0.5) * 1.5, -0.8 - Math.random() * 1.5,
+              this.isDiscoBomb ? 'rgba(220, 220, 230, 0.85)' : '#757575',
+              this.isDiscoBomb ? 6.5 + Math.random() * 5 : 4.0,
+              this.isDiscoBomb ? 1.2 : 0.6,
+              -0.01, 0.98
+            ));
+          }
+        }
+        return true;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        const startX = 55, startY = this.ch - 35;
+        const endX = this.cw - 55, endY = 40;
+
+        if (this.isGiftBox) {
+          ctx.strokeStyle = '#ffd700';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(18, 18, this.cw - 36, this.ch - 36);
+          ctx.fillStyle = 'rgba(255, 215, 0, 0.08)';
+          ctx.fillRect(18, 18, this.cw - 36, this.ch - 36);
+        } else {
+          ctx.strokeStyle = '#8b0000';
+          ctx.lineWidth = 6;
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          ctx.lineTo(endX, endY);
+          ctx.stroke();
+
+          const fx = startX + (endX - startX) * this.fuseProgress;
+          const fy = startY + (endY - startY) * this.fuseProgress;
+
+          ctx.beginPath();
+          ctx.arc(fx, fy, 4, 0, Math.PI * 2);
+          ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = '#ffd700';
+          ctx.shadowBlur = 12;
+          ctx.fill();
+        }
+
+        ctx.restore();
+      }
+    }
+
+    // 🎆 7. Authentic Consecutive Sky Shot Engine Simulation (app_04, app_05, b_16, b_17, b_34, w_21, w_22, b_42)
+    class PreviewSkyShotSimulation {
+      constructor(canvasWidth, canvasHeight, c) {
+        this.c = c;
+        this.id = c.id;
+        this.cw = canvasWidth || 340;
+        this.ch = canvasHeight || 190;
+        this.time = 0;
+        this.shotCount = 0;
+        this.nextShotTime = 0.15;
+        this.activeShells = [];
+
+        if (this.id === 'b_16') {
+          // Sky Shot 5-Times: 5 consecutive shots
+          this.totalShots = 5;
+          this.shotInterval = 0.70;
+          this.duration = 4.6;
+        } else if (this.id === 'w_21') {
+          // Roman Candle 5-Shots: 5 consecutive shots
+          this.totalShots = 5;
+          this.shotInterval = 0.70;
+          this.duration = 4.6;
+        } else if (this.id === 'w_22') {
+          // Roman Candle 10-Shots: 10 consecutive shots
+          this.totalShots = 10;
+          this.shotInterval = 0.50;
+          this.duration = 6.2;
+        } else if (this.id === 'b_17') {
+          // 12-Shots Sky Salvo: 12 consecutive shots
+          this.totalShots = 12;
+          this.shotInterval = 0.45;
+          this.duration = 6.8;
+        } else if (this.id === 'app_05') {
+          // Fan-Shape W-Shot Aerial Matrix: continuous line shots in wide fan
+          this.totalShots = 15;
+          this.shotInterval = 0.32;
+          this.duration = 6.0;
+          this.isFanLine = true;
+        } else if (this.id === 'app_04') {
+          // Brocade Crown 240-Shot Aerial Cake: golden brocade cascades
+          this.totalShots = 16;
+          this.shotInterval = 0.36;
+          this.duration = 6.8;
+          this.isBrocade = true;
+        } else if (this.id === 'b_34') {
+          // Thunderstorm Salvo: rolling thunderstorm sky shots
+          this.totalShots = 8;
+          this.shotInterval = 0.58;
+          this.duration = 5.5;
+          this.isThunder = true;
+        } else if (this.id === 'b_42') {
+          // Red Fort Salvo: heavy 100-wala crackle + heavy sky shots
+          this.totalShots = 8;
+          this.shotInterval = 0.58;
+          this.duration = 5.5;
+          this.isHeavyCrackle = true;
+        } else {
+          this.totalShots = 5;
+          this.shotInterval = 0.7;
+          this.duration = 4.5;
+        }
+
+        this.colors = ['#ffd700', '#00e5ff', '#ff007f', '#76ff03', '#ffffff', '#e040fb', '#ff9800'];
+      }
+
+      update(dt, canvas, ctx) {
+        this.time += dt;
+        if (this.time >= this.duration) return false;
+
+        // Launch next shell
+        if (this.shotCount < this.totalShots && this.time >= this.nextShotTime) {
+          this.shotCount++;
+          this.nextShotTime = this.time + this.shotInterval;
+
+          const cx = this.cw / 2;
+          const startX = cx + (Math.random() - 0.5) * 30;
+          const startY = this.ch - 15;
+
+          let targetX, targetY;
+          if (this.isFanLine) {
+            const fanFrac = (this.shotCount - 1) / Math.max(1, this.totalShots - 1);
+            targetX = 40 + fanFrac * (this.cw - 80);
+            targetY = 32 + Math.abs(fanFrac - 0.5) * 26;
+          } else {
+            targetX = 60 + Math.random() * (this.cw - 120);
+            targetY = 28 + Math.random() * 45;
+          }
+
+          const col = this.isBrocade
+            ? '#ffd700'
+            : (this.isThunder ? '#00e5ff' : this.colors[(this.shotCount - 1) % this.colors.length]);
+
+          this.activeShells.push({
+            startX, startY,
+            x: startX, y: startY,
+            targetX, targetY,
+            color: col,
+            time: 0,
+            flightDuration: 0.38 + Math.random() * 0.12,
+            exploded: false
+          });
+
+          if (typeof Sound !== 'undefined' && Sound.isEnabled && Sound.isEnabled()) {
+            Sound.playRocketScreech();
+            if (this.isHeavyCrackle) {
+              Sound.playSnappyPop(1100, 1.25, true);
+            }
+          }
+        }
+
+        // Update active flying shells & burst on arrival
+        for (let i = this.activeShells.length - 1; i >= 0; i--) {
+          const s = this.activeShells[i];
+          s.time += dt;
+          const p = Math.min(s.time / s.flightDuration, 1.0);
+          const ease = p * (2 - p);
+          s.x = s.startX + (s.targetX - s.startX) * ease;
+          s.y = s.startY + (s.targetY - s.startY) * ease;
+
+          previewParticles.push(new PreviewParticle(
+            s.x, s.y,
+            (Math.random() - 0.5) * 1.5, 2.5 + Math.random() * 2,
+            s.color, 2.4, 0.28, 0.05, 0.95
+          ));
+
+          if (p >= 1.0 && !s.exploded) {
+            s.exploded = true;
+            this.activeShells.splice(i, 1);
+
+            if (typeof Sound !== 'undefined' && Sound.isEnabled && Sound.isEnabled()) {
+              if (this.isThunder) {
+                Sound.playBassBoom(95, 1.3, 1.45);
+              } else if (this.isHeavyCrackle) {
+                Sound.playBassBoom(150, 0.85);
+                Sound.playSnappyPop(1250, 1.35, true);
+              } else {
+                Sound.playBassBoom(170, 0.7, 1.2);
+                Sound.playSnappyPop(950 + (this.shotCount % 6) * 100, 1.25);
+              }
+            }
+
+            previewShockwaves.push(new PreviewShockwave(s.targetX, s.targetY, 65, s.color, 0.4));
+
+            const count = this.isBrocade ? 36 : 28;
+            for (let k = 0; k < count; k++) {
+              const a = (k * Math.PI * 2) / count + (Math.random() - 0.5) * 0.15;
+              const spd = 2.4 + Math.random() * 4.2;
+              const pColor = (this.isBrocade && Math.random() < 0.75) ? '#ffd700' : s.color;
+              previewParticles.push(new PreviewParticle(
+                s.targetX, s.targetY,
+                Math.cos(a) * spd,
+                Math.sin(a) * spd,
+                pColor,
+                this.isBrocade ? 3.0 : 2.4 + Math.random() * 2.0,
+                0.75 + Math.random() * 0.45,
+                this.isBrocade ? 0.08 : 0.05,
+                0.96
+              ));
+            }
+          }
+        }
+        return true;
+      }
+
+      draw(ctx) {
+        ctx.save();
+        ctx.fillStyle = '#455a64';
+        ctx.fillRect(this.cw / 2 - 10, this.ch - 14, 20, 14);
+        ctx.fillStyle = '#cfd8dc';
+        ctx.fillRect(this.cw / 2 - 8, this.ch - 16, 16, 3);
+        ctx.restore();
+      }
+    }
+
     function runPreviewFxLoop(timestamp) {
       if (!currentPreviewCracker) return;
       const dt = Math.min((timestamp - lastPreviewTime) / 1000, 0.1);
@@ -4765,6 +5319,60 @@
         } else if (c.id === 'app_02') {
           statusTag.textContent = '🚁 HELICOPTER HOVERING!';
           simDuration = 5.0;
+        } else if (c.id === 'app_03' || c.id === 'w_18' || c.type === 'parachute') {
+          statusTag.textContent = '🪂 REAL SILK PARACHUTE ASCENDING & FLOATING!';
+          simDuration = 7.5;
+        } else if (c.id === 'b_29') {
+          statusTag.textContent = '💥 50-WALA RAPID CRACKER STRING (28 POPS)!';
+          simDuration = 3.6;
+        } else if (c.id === 'b_01') {
+          statusTag.textContent = '💥 100-WALA LADI STRING (56 POPS)!';
+          simDuration = 4.5;
+        } else if (c.id === 'b_02') {
+          statusTag.textContent = '💥 200-WALA SUPER LADI (135 POPS)!';
+          simDuration = 5.6;
+        } else if (c.id === 'b_03') {
+          statusTag.textContent = '💥 500-WALA GRAND LADI (235 POPS)!';
+          simDuration = 6.8;
+        } else if (c.id === 'b_10') {
+          statusTag.textContent = '🌶️ MIRCHI PATAKA BIG CRACKLE STRING!';
+          simDuration = 3.8;
+        } else if (c.id === 'b_11') {
+          statusTag.textContent = '💣 RED HOT CHILI BOMB BLAST!';
+          simDuration = 4.0;
+        } else if (c.id === 'b_30') {
+          statusTag.textContent = '🕺 BAPPI LAHIRI DISCO BOMB & HEAVY SMOKE!';
+          simDuration = 4.6;
+        } else if (c.id === 'q_01') {
+          statusTag.textContent = '🪔 1000-WALA RAJAH MAHA DHAMAKA (GIFT BOX RESTORED)!';
+          simDuration = 7.5;
+        } else if (c.id === 'q_03') {
+          statusTag.textContent = '👑 5000-WALA MAHARAJA FINALE (+5s EXTENDED BARRAGE)!';
+          simDuration = 12.5;
+        } else if (c.id === 'b_16') {
+          statusTag.textContent = '🎆 SKY SHOT 5-TIMES (5 CONSECUTIVE SHOTS)!';
+          simDuration = 4.6;
+        } else if (c.id === 'w_21') {
+          statusTag.textContent = '✨ ROMAN CANDLE (5 SHOTS)!';
+          simDuration = 4.6;
+        } else if (c.id === 'w_22') {
+          statusTag.textContent = '✨ ROMAN CANDLE (10 SHOTS)!';
+          simDuration = 6.2;
+        } else if (c.id === 'b_17') {
+          statusTag.textContent = '🎆 12-SHOTS SKY SALVO (12 CONSECUTIVE TIMES)!';
+          simDuration = 6.8;
+        } else if (c.id === 'app_04') {
+          statusTag.textContent = '👑 BROCADE CROWN 240-SHOT AERIAL CAKE!';
+          simDuration = 6.8;
+        } else if (c.id === 'app_05') {
+          statusTag.textContent = '✨ FAN-SHAPE W-SHOT CONTINUOUS LINE SHOTS!';
+          simDuration = 6.0;
+        } else if (c.id === 'b_34') {
+          statusTag.textContent = '⛈️ THUNDERSTORM SALVO SKY SHOTS!';
+          simDuration = 5.5;
+        } else if (c.id === 'b_42') {
+          statusTag.textContent = '🏰 RED FORT SALVO WITH HEAVY 100-WALA SOUND!';
+          simDuration = 5.5;
         } else if (c.id === 'w_16') {
           statusTag.textContent = '🚀 HAWAYI ROCKET FLYING & POPPING (10s)!';
           simDuration = 11.2;
@@ -4812,6 +5420,18 @@
       }
       if (c.id === 'app_02') {
         previewActiveSimulation = new PreviewHelicopterSimulation(cx, cy, c);
+        return;
+      }
+      if (c.id === 'app_03' || c.id === 'w_18' || c.type === 'parachute') {
+        previewActiveSimulation = new PreviewParachuteSimulation(canvas ? canvas.width : 340, canvas ? canvas.height : 190, c);
+        return;
+      }
+      if (c.id === 'b_01' || c.id === 'b_02' || c.id === 'b_03' || c.id === 'b_10' || c.id === 'b_11' || c.id === 'b_29' || c.id === 'b_30' || c.id === 'q_01' || c.id === 'q_03' || c.category === 'wala') {
+        previewActiveSimulation = new PreviewWalaSimulation(canvas ? canvas.width : 340, canvas ? canvas.height : 190, c);
+        return;
+      }
+      if (c.id === 'app_04' || c.id === 'app_05' || c.id === 'b_16' || c.id === 'b_17' || c.id === 'b_34' || c.id === 'w_21' || c.id === 'w_22' || c.id === 'b_42' || c.category === 'skyshot') {
+        previewActiveSimulation = new PreviewSkyShotSimulation(canvas ? canvas.width : 340, canvas ? canvas.height : 190, c);
         return;
       }
       if (c.id === 'w_16' || c.id === 'w_17' || c.id === 'w_31' || c.id === 'w_37' || c.id === 'w_44' || c.type === 'rocket') {
@@ -5193,6 +5813,215 @@
             "comment": "need the rocket to move from one place to other then pop for 25sec  fly randomly",
             "lastUpdated": "2026-10-25T16:54:04.859Z",
             "formattedDate": "10/25/2026 10:24 PM"
+      },
+      "app_03": {
+            "id": "app_03",
+            "name": "Illuminated Silk Parachute Rocket",
+            "category": "parachute",
+            "type": "parachute",
+            "emoji": "🪂",
+            "pts": 55,
+            "comment": "need a real prachute ,its not the real one",
+            "lastUpdated": "2026-10-26T16:28:38.868Z",
+            "formattedDate": "10/26/2026 09:58 PM"
+      },
+      "w_18": {
+            "id": "w_18",
+            "name": "Parachute Flash Rocket",
+            "category": "parachute",
+            "type": "rocket",
+            "emoji": "🪂",
+            "pts": 30,
+            "comment": "rocket is fine but no parachute is there",
+            "lastUpdated": "2026-10-26T16:29:06.468Z",
+            "formattedDate": "10/26/2026 09:59 PM"
+      },
+      "b_01": {
+            "id": "b_01",
+            "name": "100-Wala Ladi Classic",
+            "category": "wala",
+            "type": "100wala",
+            "emoji": "🧨",
+            "pts": 22,
+            "comment": "100 wala should have at least 50 sound should come",
+            "lastUpdated": "2026-10-26T16:30:27.859Z",
+            "formattedDate": "10/26/2026 10:00 PM"
+      },
+      "b_02": {
+            "id": "b_02",
+            "name": "200-Wala Super Ladi",
+            "category": "wala",
+            "type": "100wala",
+            "emoji": "🧨",
+            "pts": 26,
+            "comment": "200 wala should have at least 125 sound should come",
+            "lastUpdated": "2026-10-26T16:30:48.597Z",
+            "formattedDate": "10/26/2026 10:00 PM"
+      },
+      "b_03": {
+            "id": "b_03",
+            "name": "500-Wala Grand Ladi",
+            "category": "wala",
+            "type": "100wala",
+            "emoji": "🧨",
+            "pts": 32,
+            "comment": "500 wala should have at least 220 sound should come",
+            "lastUpdated": "2026-10-26T16:31:05.908Z",
+            "formattedDate": "10/26/2026 10:01 PM"
+      },
+      "b_10": {
+            "id": "b_10",
+            "name": "Mirchi Pataka String",
+            "category": "wala",
+            "type": "mirchi",
+            "emoji": "🌶️",
+            "pts": 20,
+            "comment": "big sound should come",
+            "lastUpdated": "2026-10-26T16:31:32.125Z",
+            "formattedDate": "10/26/2026 10:01 PM"
+      },
+      "b_11": {
+            "id": "b_11",
+            "name": "Red Hot Chili Bomb",
+            "category": "wala",
+            "type": "mirchi",
+            "emoji": "🌶️",
+            "pts": 24,
+            "comment": "big sound should come",
+            "lastUpdated": "2026-10-26T16:31:48.332Z",
+            "formattedDate": "10/26/2026 10:01 PM"
+      },
+      "b_29": {
+            "id": "b_29",
+            "name": "Cracker String 50-Wala",
+            "category": "wala",
+            "type": "100wala",
+            "emoji": "🧨",
+            "pts": 18,
+            "comment": "50 wala should have at least 25 sound should come",
+            "lastUpdated": "2026-10-26T16:32:05.932Z",
+            "formattedDate": "10/26/2026 10:02 PM"
+      },
+      "b_30": {
+            "id": "b_30",
+            "name": "Bappi Lahiri Disco Bomb",
+            "category": "wala",
+            "type": "100wala",
+            "emoji": "🪩",
+            "pts": 26,
+            "comment": "bomb sound should come with proper smoke",
+            "lastUpdated": "2026-10-26T16:32:31.068Z",
+            "formattedDate": "10/26/2026 10:02 PM"
+      },
+      "q_01": {
+            "id": "q_01",
+            "name": "1000-Wala Rajah Maha Dhamaka",
+            "category": "wala",
+            "type": "mega_diwali",
+            "emoji": "🪔",
+            "pts": 60,
+            "comment": "restore the cracker present in the gift box",
+            "lastUpdated": "2026-10-26T16:33:48.828Z",
+            "formattedDate": "10/26/2026 10:03 PM"
+      },
+      "q_03": {
+            "id": "q_03",
+            "name": "5000-Wala Maharaja Finale",
+            "category": "wala",
+            "type": "mega_diwali",
+            "emoji": "🎆",
+            "pts": 70,
+            "comment": "restore the cracker present in the gift box- 1000 wala with 5secs more",
+            "lastUpdated": "2026-10-26T16:34:23.020Z",
+            "formattedDate": "10/26/2026 10:04 PM"
+      },
+      "app_04": {
+            "id": "app_04",
+            "name": "Brocade Crown 240-Shot Aerial Cake",
+            "category": "skyshot",
+            "type": "cake240",
+            "emoji": "🎆",
+            "pts": 95,
+            "comment": "use the skyshot already we implemented in our game",
+            "lastUpdated": "2026-10-26T16:35:17.637Z",
+            "formattedDate": "10/26/2026 10:05 PM"
+      },
+      "b_34": {
+            "id": "b_34",
+            "name": "Thunderstorm Salvo",
+            "category": "skyshot",
+            "type": "sevenshot",
+            "emoji": "⛈️",
+            "pts": 34,
+            "comment": "use the skyshot already we implemented in our game -- like sky shot",
+            "lastUpdated": "2026-10-26T16:35:57.037Z",
+            "formattedDate": "10/26/2026 10:05 PM"
+      },
+      "b_17": {
+            "id": "b_17",
+            "name": "12-Shots Sky Salvo",
+            "category": "skyshot",
+            "type": "sevenshot",
+            "emoji": "🎆",
+            "pts": 36,
+            "comment": "use the skyshot already we implemented in our game -- like sky shot  12 times",
+            "lastUpdated": "2026-10-26T16:36:07.725Z",
+            "formattedDate": "10/26/2026 10:06 PM"
+      },
+      "b_16": {
+            "id": "b_16",
+            "name": "Sky Shot 5-Times",
+            "category": "skyshot",
+            "type": "sevenshot",
+            "emoji": "🎯",
+            "pts": 30,
+            "comment": "use the skyshot already we implemented in our game -- like sky shot 5 times",
+            "lastUpdated": "2026-10-26T16:36:17.630Z",
+            "formattedDate": "10/26/2026 10:06 PM"
+      },
+      "app_05": {
+            "id": "app_05",
+            "name": "Fan-Shape W-Shot Aerial Matrix",
+            "category": "skyshot",
+            "type": "fanshot",
+            "emoji": "✨",
+            "pts": 85,
+            "comment": "use the skyshot already we implemented in our game -- like sky shot  should give in a continuous line shots",
+            "lastUpdated": "2026-10-26T16:37:03.950Z",
+            "formattedDate": "10/26/2026 10:07 PM"
+      },
+      "w_21": {
+            "id": "w_21",
+            "name": "Roman Candle 5-Shots",
+            "category": "skyshot",
+            "type": "romancandle",
+            "emoji": "🌟",
+            "pts": 24,
+            "comment": "use the skyshot already we implemented in our game -- like sky shot 5",
+            "lastUpdated": "2026-10-26T16:37:13.175Z",
+            "formattedDate": "10/26/2026 10:07 PM"
+      },
+      "w_22": {
+            "id": "w_22",
+            "name": "Roman Candle 10-Shots",
+            "category": "skyshot",
+            "type": "romancandle",
+            "emoji": "🌠",
+            "pts": 30,
+            "comment": "use the skyshot already we implemented in our game -- like sky shot 10",
+            "lastUpdated": "2026-10-26T16:37:21.709Z",
+            "formattedDate": "10/26/2026 10:07 PM"
+      },
+      "b_42": {
+            "id": "b_42",
+            "name": "Red Fort Salvo",
+            "category": "skyshot",
+            "type": "sevenshot",
+            "emoji": "🏰",
+            "pts": 34,
+            "comment": "use heavy sound like 100 wala with great sound",
+            "lastUpdated": "2026-10-26T16:37:47.965Z",
+            "formattedDate": "10/26/2026 10:07 PM"
       }
 };
 
@@ -6975,26 +7804,26 @@
           Sound.playWhistleSpin(3.6, 950);
           addCrackerCarbonAndPaperDebris(pocketX, pocketY, 34, 18, 6.0, '#00e5ff');
         }
-        // ⭐ NOVELTY 3: Illuminated Silk Parachute Rocket (app_03)
-        else if (t === 'parachute') {
-          this.duration = 6.2;
+        // ⭐ NOVELTY 3: Real Silk Parachute Rocket (app_03, w_18)
+        else if (t === 'parachute' || this.key === 'app_03' || this.key === 'w_18') {
+          this.duration = 7.5;
           this.targetX = pocketX + (HALF_SIZE - pocketX) * 0.65;
           this.targetY = Math.max(120, pocketY + (HALF_SIZE - pocketY) * 0.65 - 80);
           Sound.playRocketScreech();
-          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 30, 14, 5.0, '#ffeb3b');
+          addCrackerCarbonAndPaperDebris(pocketX, pocketY, 30, 14, 5.0, (this.key === 'w_18') ? '#ff4081' : '#ffeb3b');
         }
         // ⭐ NOVELTY 4: Brocade Crown 240-Shot Aerial Cake (app_04)
-        else if (t === 'cake240') {
+        else if (t === 'cake240' || this.key === 'app_04') {
           this.duration = 6.8;
-          this.maxShots = 14;
+          this.maxShots = 16;
           this.nextShotTime = 0.15;
           Sound.playBassBoom(140, 0.85);
           addCrackerCarbonAndPaperDebris(pocketX, pocketY, 46, 32, 11, '#ffd700');
         }
         // ⭐ NOVELTY 5: Fan-Shape W-Shot Aerial Matrix (app_05)
-        else if (t === 'fanshot') {
-          this.duration = 6.2;
-          this.maxWaves = 4;
+        else if (t === 'fanshot' || this.key === 'app_05') {
+          this.duration = 6.0;
+          this.maxWaves = 5;
           this.nextWaveTime = 0.2;
           Sound.playBassBoom(120, 0.95);
           addCrackerCarbonAndPaperDebris(pocketX, pocketY, 44, 30, 10, '#e040fb');
@@ -7012,11 +7841,41 @@
           this.duration = 4.2;
           Sound.playFountainSizzle(4.2, 1600);
           addCrackerCarbonAndPaperDebris(pocketX, pocketY, 24, 12, 4.5);
-        } else if (t === '100wala' || t === 'mirchi') {
-          this.duration = 4.5;
+        } else if (t === '100wala' || t === 'mirchi' || this.key === 'b_29' || this.key === 'b_01' || this.key === 'b_02' || this.key === 'b_03' || this.key === 'b_10' || this.key === 'b_11' || this.key === 'b_30') {
+          if (this.key === 'b_29') {
+            this.duration = 4.0;
+            this.maxPops = 28; // req >= 25
+            this.popInterval = 0.12;
+          } else if (this.key === 'b_01') {
+            this.duration = 5.0;
+            this.maxPops = 56; // req >= 50
+            this.popInterval = 0.08;
+          } else if (this.key === 'b_02') {
+            this.duration = 6.5;
+            this.maxPops = 135; // req >= 125
+            this.popInterval = 0.045;
+          } else if (this.key === 'b_03') {
+            this.duration = 8.0;
+            this.maxPops = 235; // req >= 220
+            this.popInterval = 0.032;
+          } else if (this.key === 'b_10') {
+            this.duration = 4.2;
+            this.maxPops = 42;
+            this.popInterval = 0.085;
+          } else if (this.key === 'b_11') {
+            this.duration = 4.2;
+            this.maxPops = 26;
+            this.popInterval = 0.14;
+          } else if (this.key === 'b_30') {
+            this.duration = 4.8;
+            this.maxPops = 22;
+            this.popInterval = 0.18;
+          } else {
+            this.duration = 4.5;
+            this.maxPops = t === 'mirchi' ? 42 : 30;
+            this.popInterval = t === 'mirchi' ? 0.09 : 0.13;
+          }
           this.popCount = 0;
-          this.maxPops = t === 'mirchi' ? 42 : 30;
-          this.popInterval = t === 'mirchi' ? 0.09 : 0.13;
           this.nextPopTime = 0.05;
         } else if (t === 'rocket') {
           if (this.key === 'w_16') {
@@ -7068,17 +7927,31 @@
         } else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
           this.duration = 2.4;
           this.snapped = false;
-        } else if (t === 'romancandle' || t === 'sevenshot') {
-          this.duration = 5.2;
+        } else if (t === 'romancandle' || t === 'sevenshot' || this.key === 'b_16' || this.key === 'b_17' || this.key === 'w_21' || this.key === 'w_22' || this.key === 'b_34' || this.key === 'b_42') {
+          if (this.key === 'b_16' || this.key === 'w_21') {
+            this.maxShots = 5;
+            this.duration = 4.2;
+          } else if (this.key === 'w_22') {
+            this.maxShots = 10;
+            this.duration = 5.8;
+          } else if (this.key === 'b_17') {
+            this.maxShots = 12;
+            this.duration = 6.5;
+          } else if (this.key === 'b_34' || this.key === 'b_42') {
+            this.maxShots = 8;
+            this.duration = 5.2;
+          } else {
+            this.maxShots = t === 'romancandle' ? 7 : 9;
+            this.duration = 5.2;
+          }
           this.shotCount = 0;
-          this.maxShots = t === 'romancandle' ? 7 : 9;
           this.nextShotTime = 0.25;
         } else if (t === 'snake') {
           this.duration = 4.8;
           Sound.playFountainSizzle(4.8, 500);
           addCrackerCarbonAndPaperDebris(pocketX, pocketY, 32, 10, 3.5, '#3e2723');
-        } else if (t === 'mega_diwali') {
-          this.duration = 6.5;
+        } else if (t === 'mega_diwali' || this.key === 'q_01' || this.key === 'q_03') {
+          this.duration = (this.key === 'q_03') ? 12.0 : 7.0; // q_03 has 5s more!
           Sound.playFountainSizzle(5.0, 900);
           Sound.playWhistleSpin(4.5, 750);
         }
@@ -7133,8 +8006,8 @@
           }
         }
 
-        // ⭐ NOVELTY 3: Illuminated Silk Parachute Rocket (app_03)
-        else if (t === 'parachute') {
+        // ⭐ NOVELTY 3: Real Silk Parachute Rocket (app_03, w_18)
+        else if (t === 'parachute' || this.key === 'app_03' || this.key === 'w_18') {
           if (this.time < 0.8) {
             const p = this.time / 0.8;
             this.curX = this.x + (this.targetX - this.x) * p;
@@ -7305,7 +8178,15 @@
                 Math.random() * 3 + 2, Math.cos(a) * 4, Math.sin(a) * 4, 0.05
               ));
             }
-            this.particles.push(new Particle(popX, popY, '#757575', 5, (Math.random()-0.5)*2, (Math.random()-0.5)*2, 0.03));
+            if (this.key === 'b_30') {
+              for (let sm = 0; sm < 4; sm++) {
+                const sp = new Particle(popX, popY, 'rgba(230, 230, 240, 0.85)', 7.5, (Math.random()-0.5)*2, -1 - Math.random()*2, 0.015);
+                sp.gravity = -0.02;
+                this.particles.push(sp);
+              }
+            } else {
+              this.particles.push(new Particle(popX, popY, '#757575', 5, (Math.random()-0.5)*2, (Math.random()-0.5)*2, 0.03));
+            }
 
             if (this.popCount === this.maxPops) {
               Sound.playBassBoom(220, 0.7, 1.2);
@@ -7624,8 +8505,8 @@
           return;
         }
 
-        // ⭐ NOVELTY 3: Illuminated Silk Parachute Rocket (app_03)
-        else if (t === 'parachute') {
+        // ⭐ NOVELTY 3: Real Silk Parachute Rocket (app_03, w_18)
+        else if (t === 'parachute' || this.key === 'app_03' || this.key === 'w_18') {
           if (!this.chuteDeployed) {
             // Ascending rocket
             ctx.translate(this.curX, this.curY);
