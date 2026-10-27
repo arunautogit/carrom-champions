@@ -1,4 +1,4 @@
-# 🎱 Carrom Champions - Standalone Web Edition
+# ③ Carrom Champions - Standalone Web Edition
 
 A 100% self-contained, zero-dependency HTML5 Canvas & Web Audio Carrom game backup.
 
