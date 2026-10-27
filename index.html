@@ -2736,6 +2736,59 @@
     }
 
     /* Online Room Styles */
+    .cloud-user-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, rgba(46, 26, 17, 0.95), rgba(28, 14, 8, 0.95));
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+      padding: 8px 14px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    .cloud-user-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+    }
+    .user-avatar-badge {
+      font-size: 1.3rem;
+      background: rgba(255, 215, 0, 0.15);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .user-display-name {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #fff;
+    }
+    .user-meta {
+      font-size: 0.74rem;
+      color: #ffd700;
+    }
+    .btn-subtle-edit {
+      background: rgba(255, 215, 0, 0.12);
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      color: #f7d08a;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-subtle-edit:hover {
+      background: rgba(255, 215, 0, 0.25);
+      color: #fff;
+    }
     .server-status-bar {
       display: flex;
       align-items: center;
@@ -3765,6 +3818,18 @@
         </div>
 
         <!-- Room Setup / Action Panel (Visible before entering room) -->
+        <!-- Cloud User Database Bar -->
+        <div id="cloud-user-bar" class="cloud-user-bar">
+          <div class="cloud-user-left">
+            <span class="user-avatar-badge">👤</span>
+            <div class="user-text-info">
+              <div class="user-display-name" id="cloud-username">Connecting to Cloud DB...</div>
+              <div class="user-meta" id="cloud-user-meta">🪙 Loading coins &amp; stats...</div>
+            </div>
+          </div>
+          <button id="btn-edit-profile" class="btn-subtle-edit">✏️ Rename</button>
+        </div>
+
         <div id="room-setup-panel">
           <div class="lobby-section-title">1. Your Player Name</div>
           <div class="player-name-row" style="margin-bottom: 12px; max-width: 100%;">
@@ -12765,9 +12830,75 @@
           const proto = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
           return proto + window.location.host;
         }
-        return 'ws://localhost:3000';
+        // Fallback for Android APK & LAN devices
+        return 'ws://192.168.0.107:3000';
       }
       let serverUrl = getServerUrl();
+
+      function getApiBaseUrl() {
+        if (typeof window !== 'undefined' && window.location.protocol.startsWith('http')) {
+          return window.location.origin;
+        }
+        return 'http://192.168.0.107:3000';
+      }
+
+      let currentUser = null;
+
+      async function loginUser(customName = null) {
+        try {
+          let saved = null;
+          try { saved = JSON.parse(localStorage.getItem('carrom_cloud_user')); } catch(e) {}
+
+          const inputEl = document.getElementById('online-player-name');
+          const typedName = (inputEl && inputEl.value.trim()) || '';
+
+          const username = customName || typedName || (saved && saved.username) || ('Player ' + Math.floor(1000 + Math.random() * 9000));
+          const deviceId = (saved && saved.deviceId) || ('dev_' + Math.random().toString(36).substring(2, 10));
+
+          const res = await fetch(getApiBaseUrl() + '/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, deviceId })
+          });
+
+          const data = await res.json();
+          if (data && data.success && data.user) {
+            currentUser = data.user;
+            localStorage.setItem('carrom_cloud_user', JSON.stringify(currentUser));
+            updateCloudUserUI(currentUser);
+
+            if (ws && ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({
+                type: 'USER_LOGIN',
+                username: currentUser.username,
+                deviceId: currentUser.deviceId
+              }));
+            }
+          }
+        } catch (err) {
+          console.warn('[Cloud Auth] Local fallback active:', err);
+          if (!currentUser) {
+            currentUser = {
+              userId: 'local_' + Math.random().toString(36).substring(2, 8),
+              username: customName || 'Player 1',
+              coins: 1000,
+              matchesWon: 0,
+              matchesPlayed: 0
+            };
+            updateCloudUserUI(currentUser);
+          }
+        }
+      }
+
+      function updateCloudUserUI(user) {
+        if (!user) return;
+        const nameEl = document.getElementById('cloud-username');
+        const metaEl = document.getElementById('cloud-user-meta');
+        const inputEl = document.getElementById('online-player-name');
+        if (nameEl) nameEl.textContent = user.username;
+        if (metaEl) metaEl.textContent = '🪙 ' + Number(user.coins || 0).toLocaleString() + ' Coins • ' + (user.matchesWon || 0) + ' Wins (' + (user.matchesPlayed || 0) + ' Played)';
+        if (inputEl) inputEl.value = user.username;
+      }
 
       function init() {
         // Main Menu Multiplayer Card Button
@@ -12875,13 +13006,37 @@
         const btnGuestLeave = document.getElementById('btn-guest-leave-room');
         if (btnGuestLeave) btnGuestLeave.addEventListener('click', leaveOnlineRoom);
 
-        // Auto-connect to WebSocket
+        // Edit / Rename Profile Button
+        const btnEditProfile = document.getElementById('btn-edit-profile');
+        if (btnEditProfile) {
+          btnEditProfile.addEventListener('click', () => {
+            Sound.playFlick();
+            const current = currentUser ? currentUser.username : 'Player';
+            const newName = prompt('Enter new Player Name:', current);
+            if (newName && newName.trim().length >= 2) {
+              loginUser(newName.trim());
+            }
+          });
+        }
+
+        const nameInput = document.getElementById('online-player-name');
+        if (nameInput) {
+          nameInput.addEventListener('change', () => {
+            if (nameInput.value.trim().length >= 2) {
+              loginUser(nameInput.value.trim());
+            }
+          });
+        }
+
+        // Auto-connect to WebSocket & load DB profile
+        loginUser();
         connectWebSocket();
       }
 
       function openLobbyModal() {
         const overlay = document.getElementById('lobby-overlay');
         if (overlay) overlay.classList.remove('hidden');
+        loginUser();
         if (!ws || ws.readyState !== WebSocket.OPEN) {
           connectWebSocket();
         }
@@ -12947,7 +13102,8 @@
             playerCount: selectedPlayerCount,
             isFun: selectedVariant === 'diwali',
             variant: selectedVariant === 'diwali' ? 'crackers' : 'normal',
-            playerName: name
+            playerName: name,
+            userId: currentUser ? currentUser.userId : null
           }));
         } else {
           // Offline simulator fallback
@@ -12967,7 +13123,8 @@
           ws.send(JSON.stringify({
             type: 'JOIN_ROOM',
             roomCode: code,
-            playerName: name
+            playerName: name,
+            userId: currentUser ? currentUser.userId : null
           }));
         } else {
           alert('Cannot join room: Server is not connected. Run run_game.bat to start server.');
@@ -13063,6 +13220,26 @@
 
       function handleServerMessage(msg) {
         switch (msg.type) {
+          case 'USER_PROFILE': {
+            if (msg.user) {
+              currentUser = msg.user;
+              localStorage.setItem('carrom_cloud_user', JSON.stringify(currentUser));
+              updateCloudUserUI(currentUser);
+            }
+            break;
+          }
+
+          case 'MATCH_REWARD': {
+            if (currentUser) {
+              currentUser.coins = msg.newCoins !== undefined ? msg.newCoins : (currentUser.coins + msg.coinsEarned);
+              currentUser.matchesWon = msg.matchesWon !== undefined ? msg.matchesWon : currentUser.matchesWon;
+              currentUser.matchesPlayed = msg.matchesPlayed !== undefined ? msg.matchesPlayed : currentUser.matchesPlayed;
+              localStorage.setItem('carrom_cloud_user', JSON.stringify(currentUser));
+              updateCloudUserUI(currentUser);
+            }
+            break;
+          }
+
           case 'ROOM_CREATED': {
             mySlot = msg.slot;
             selectedPlayerCount = msg.playerCount || selectedPlayerCount;
