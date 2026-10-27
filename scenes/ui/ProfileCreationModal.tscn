@@ -1,0 +1,171 @@
+[gd_scene format=3 uid="uid://cprofmodal123"]
+
+[ext_resource type="Script" path="res://scripts/ui/profile_creation_modal.gd" id="1_pcm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Card"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.8, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0, 1, 0.8, 0.2)
+shadow_size = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Btn"]
+bg_color = Color(0.1, 0.1, 0.1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 1, 0.8, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BtnHover"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.8, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="ProfileCreationModal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pcm")
+
+[node name="DimBackground" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.8)
+
+[node name="ModalFrame" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(800, 600)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Card")
+
+[node name="Margin" type="MarginContainer" parent="ModalFrame"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBox" type="VBoxContainer" parent="ModalFrame/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="ModalFrame/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 48
+text = "PLAYER PROFILE"
+horizontal_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="ModalFrame/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 40
+
+[node name="FormVBox" type="VBoxContainer" parent="ModalFrame/Margin/VBox/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="ModalFrame/Margin/VBox/HBox/FormVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 24
+text = "Player Name"
+
+[node name="NameInput" type="LineEdit" parent="ModalFrame/Margin/VBox/HBox/FormVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+placeholder_text = "Enter Name"
+max_length = 15
+
+[node name="ExpertiseLabel" type="Label" parent="ModalFrame/Margin/VBox/HBox/FormVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 24
+text = "Expertise Area"
+
+[node name="ExpertiseDropdown" type="OptionButton" parent="ModalFrame/Margin/VBox/HBox/FormVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+item_count = 3
+popup/item_0/text = "Balanced"
+popup/item_0/id = 0
+popup/item_1/text = "Aggressive Striker"
+popup/item_1/id = 1
+popup/item_2/text = "Defensive Tactician"
+popup/item_2/id = 2
+
+[node name="AvatarLabel" type="Label" parent="ModalFrame/Margin/VBox/HBox/FormVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 24
+text = "Select Avatar"
+
+[node name="AvatarScroll" type="ScrollContainer" parent="ModalFrame/Margin/VBox/HBox/FormVBox"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="AvatarGrid" type="HBoxContainer" parent="ModalFrame/Margin/VBox/HBox/FormVBox/AvatarScroll"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="PreviewVBox" type="VBoxContainer" parent="ModalFrame/Margin/VBox/HBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="PreviewRect" type="TextureRect" parent="ModalFrame/Margin/VBox/HBox/PreviewVBox"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SaveBtn" type="Button" parent="ModalFrame/Margin/VBox"]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_Btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_BtnHover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_BtnHover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_BtnHover")
+text = "SAVE PROFILE"

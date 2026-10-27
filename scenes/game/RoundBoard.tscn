@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dkae85wrni3bl"]
+
+[ext_resource type="PackedScene" uid="uid://bpnw7hsdhj4f0" path="res://assets/3dmodel/roundboard.glb" id="1_model"]
+[ext_resource type="Script" uid="uid://sjiw0fyw7007" path="res://scenes/game/RoundBoard.gd" id="2_script"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_30872"]
+height = 0.19958496
+radius = 4.76709
+
+[node name="RoundBoard" type="Node3D" unique_id=944049906]
+transform = Transform3D(0.667, 0, 0, 0, 0.667, 0, 0, 0, 0.667, 0, 0, 0)
+script = ExtResource("2_script")
+
+[node name="Model" parent="." unique_id=628905516 instance=ExtResource("1_model")]
+
+[node name="FloorStaticBody" type="StaticBody3D" parent="." unique_id=1946093342]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.006, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloorStaticBody" unique_id=1398870553]
+transform = Transform3D(0.99999684, 0, 0, 0, 0.99999684, 0, 0, 0, 0.99999684, 0, 0.0061632204, 0)
+shape = SubResource("CylinderShape3D_30872")

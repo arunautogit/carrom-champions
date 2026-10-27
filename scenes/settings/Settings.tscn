@@ -1,0 +1,190 @@
+[gd_scene load_steps=5 format=3 uid="uid://settings123"]
+
+[ext_resource type="Script" path="res://scenes/settings/Settings.gd" id="1_h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Card"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.8, 0.5)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_CardFocus"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.8, 0, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(1, 0.8, 0, 0.3)
+shadow_size = 15
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_h")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0666667, 0.0705882, 0.0823529, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 60
+
+[node name="TopBar" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="BackButton" type="Button" parent="MarginContainer/TopBar"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_Card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_CardFocus")
+text = "BACK"
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CenterContainer"]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="Title" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 80
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="AudioLabel" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 32
+text = "AUDIO"
+
+[node name="SoundPanel" type="PanelContainer" parent="MarginContainer/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(800, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Card")
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/CenterContainer/VBoxContainer/SoundPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="HBox" type="HBoxContainer" parent="MarginContainer/CenterContainer/VBoxContainer/SoundPanel/Margin"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer/SoundPanel/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "Sound Effects"
+
+[node name="SoundBtn" type="CheckButton" parent="MarginContainer/CenterContainer/VBoxContainer/SoundPanel/Margin/HBox"]
+layout_mode = 2
+
+[node name="MusicPanel" type="PanelContainer" parent="MarginContainer/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(800, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Card")
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/CenterContainer/VBoxContainer/MusicPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="HBox" type="HBoxContainer" parent="MarginContainer/CenterContainer/VBoxContainer/MusicPanel/Margin"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer/MusicPanel/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "Background Music"
+
+[node name="MusicBtn" type="CheckButton" parent="MarginContainer/CenterContainer/VBoxContainer/MusicPanel/Margin/HBox"]
+layout_mode = 2
+
+[node name="GameplayLabel" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 32
+text = "GAMEPLAY"
+
+[node name="AimPanel" type="PanelContainer" parent="MarginContainer/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(800, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Card")
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/CenterContainer/VBoxContainer/AimPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="HBox" type="HBoxContainer" parent="MarginContainer/CenterContainer/VBoxContainer/AimPanel/Margin"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer/AimPanel/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "Aim Guide Line"
+
+[node name="AimBtn" type="CheckButton" parent="MarginContainer/CenterContainer/VBoxContainer/AimPanel/Margin/HBox"]
+layout_mode = 2
+
+[node name="VibrationPanel" type="PanelContainer" parent="MarginContainer/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(800, 80)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_Card")
+
+[node name="Margin" type="MarginContainer" parent="MarginContainer/CenterContainer/VBoxContainer/VibrationPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+
+[node name="HBox" type="HBoxContainer" parent="MarginContainer/CenterContainer/VBoxContainer/VibrationPanel/Margin"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer/VibrationPanel/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "Vibration / Haptics"
+
+[node name="VibrationBtn" type="CheckButton" parent="MarginContainer/CenterContainer/VBoxContainer/VibrationPanel/Margin/HBox"]
+layout_mode = 2

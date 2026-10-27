@@ -1,0 +1,55 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
+[application]
+
+config/name="Carrom Champions"
+config/description="Premium Carrom Game UI Prototype"
+run/main_scene="res://scenes/splash/SplashScreen.tscn"
+config/features=PackedStringArray("4.6", "Mobile")
+config/icon="res://assets/textures/icon.png"
+
+[autoload]
+
+YouTubePlayablesBridge="*res://scripts/managers/YouTubePlayablesBridge.gd"
+PlayerProfileManager="*res://scripts/managers/player_profile_manager.gd"
+SaveManager="*res://scripts/SaveManager.gd"
+AudioManager="*res://scripts/AudioManager.gd"
+UIManager="*res://scripts/UIManager.gd"
+GameManager="*res://scripts/GameManager.gd"
+ThemeManager="*res://scripts/ThemeManager.gd"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/window_width_override=1152
+window/size/window_height_override=648
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation="landscape"
+
+[filesystem]
+
+import/blender/enabled=false
+
+[gui]
+
+theme/custom_font="res://assets/fonts/Montserrat-Bold.ttf"
+
+[rendering]
+
+renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
+environment/defaults/default_clear_color=Color(0.141176, 0.090196, 0.066667, 1)

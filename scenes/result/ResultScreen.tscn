@@ -1,0 +1,185 @@
+[gd_scene load_steps=5 format=3 uid="uid://result123"]
+
+[ext_resource type="Script" path="res://scenes/result/ResultScreen.gd" id="1_j"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Card"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0.8, 0.5)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_CardFocus"]
+bg_color = Color(0.0666667, 0.0705882, 0.0823529, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.8, 0, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(1, 0.8, 0, 0.3)
+shadow_size = 15
+
+[node name="ResultScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0666667, 0.0705882, 0.0823529, 1)
+
+[node name="Confetti1" type="ColorRect" parent="Background"]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 200.0
+offset_right = 220.0
+offset_bottom = 220.0
+color = Color(0, 1, 0.8, 1)
+rotation = 0.5
+
+[node name="Confetti2" type="ColorRect" parent="Background"]
+layout_mode = 0
+offset_left = 1600.0
+offset_top = 800.0
+offset_right = 1620.0
+offset_bottom = 820.0
+color = Color(1, 0.8, 0, 1)
+rotation = 0.2
+
+[node name="Confetti3" type="ColorRect" parent="Background"]
+layout_mode = 0
+offset_left = 1400.0
+offset_top = 200.0
+offset_right = 1420.0
+offset_bottom = 220.0
+color = Color(1, 0.33, 0, 1)
+rotation = -0.4
+
+[node name="Confetti4" type="ColorRect" parent="Background"]
+layout_mode = 0
+offset_left = 400.0
+offset_top = 800.0
+offset_right = 420.0
+offset_bottom = 820.0
+color = Color(0, 1, 0.8, 1)
+rotation = -0.1
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="Icon" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+theme_override_font_sizes/font_size = 100
+text = "VICTORY"
+horizontal_alignment = 1
+
+[node name="ResultText" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 80
+text = "YOU WIN!"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 100
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Name" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 48
+text = "P1"
+horizontal_alignment = 1
+
+[node name="Score" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 60
+text = "42"
+horizontal_alignment = 1
+
+[node name="VS" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 40
+text = "VS"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Name" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.33, 0, 1)
+theme_override_font_sizes/font_size = 48
+text = "P2"
+horizontal_alignment = 1
+
+[node name="Score" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 60
+text = "31"
+horizontal_alignment = 1
+
+[node name="Buttons" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 40
+
+[node name="PlayAgainBtn" type="Button" parent="CenterContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+focus_mode = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_Card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_CardFocus")
+text = "PLAY AGAIN"
+
+[node name="MenuBtn" type="Button" parent="CenterContainer/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(300, 80)
+layout_mode = 2
+focus_mode = 2
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_Card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_CardFocus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_CardFocus")
+text = "MAIN MENU"
+

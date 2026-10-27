@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/3dmodel/Strikers/Striker5.glb" id="1_mesh"]
+
+[node name="StrikerModel5" type="Node3D"]
+
+[node name="Striker5" parent="." instance=ExtResource("1_mesh")]
