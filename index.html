@@ -100,14 +100,17 @@
     /* Primary Split Cards: Normal vs Fun Mode */
     .primary-mode-row {
       display: flex;
-      gap: 16px;
+      flex-wrap: wrap;
+      gap: 14px;
       width: 100%;
-      max-width: 540px;
+      max-width: 680px;
       margin-bottom: 16px;
+      justify-content: center;
     }
 
     .big-card {
-      flex: 1;
+      flex: 1 1 160px;
+      min-width: 140px;
       background: linear-gradient(135deg, #3d2210 0%, #1e1008 100%);
       border: 2px solid #a07855;
       border-radius: 18px;
@@ -2567,7 +2570,596 @@
       background: linear-gradient(135deg, #fff 0%, #ffd700 100%);
     }
 
+  
+    /* =========================================================================
+       MULTIPLAYER & 2-4 PLAYER LOBBY STYLES (MATCHING GOLD & MAHOGANY THEME)
+       ========================================================================= */
+    .lobby-modal-box {
+      background: linear-gradient(135deg, #2b170c 0%, #150a04 100%);
+      border: 2px solid #ffd700;
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 580px;
+      width: 95%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.85), 0 0 30px rgba(255, 215, 0, 0.25);
+      text-align: center;
+      position: relative;
+    }
+
+    .lobby-tabs {
+      display: flex;
+      background: rgba(15, 7, 3, 0.85);
+      border: 1px solid #7c5839;
+      border-radius: 24px;
+      padding: 4px;
+      margin-bottom: 18px;
+      gap: 4px;
+    }
+
+    .lobby-tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #d1b89d;
+      padding: 10px 14px;
+      border-radius: 20px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.22s ease;
+    }
+
+    .lobby-tab-btn.active {
+      background: linear-gradient(135deg, #ffd700 0%, #ff8f00 100%);
+      color: #1a0801;
+      box-shadow: 0 3px 14px rgba(255, 215, 0, 0.45);
+    }
+
+    .lobby-section-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #ffd700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: left;
+      margin-bottom: 8px;
+    }
+
+    .player-count-selector {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .count-card {
+      flex: 1;
+      background: linear-gradient(135deg, #331c0e 0%, #190c06 100%);
+      border: 2px solid #6b4629;
+      border-radius: 14px;
+      padding: 12px 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .count-card:hover {
+      border-color: #ffd700;
+      transform: translateY(-2px);
+    }
+
+    .count-card.active {
+      border-color: #ffd700;
+      background: linear-gradient(135deg, #4d2b15 0%, #291408 100%);
+      box-shadow: 0 0 16px rgba(255, 215, 0, 0.35);
+    }
+
+    .count-number {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #ffd700;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+
+    .count-label {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .count-sub {
+      font-size: 0.68rem;
+      color: #bda38b;
+      margin-top: 2px;
+    }
+
+    .variant-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .variant-pill {
+      flex: 1;
+      background: rgba(35, 18, 10, 0.9);
+      border: 1.5px solid #7c5839;
+      border-radius: 18px;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #e0cfbe;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .variant-pill.active {
+      border-color: #ffd700;
+      color: #ffd700;
+      background: rgba(75, 38, 15, 0.95);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    }
+
+    .player-names-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .player-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(22, 11, 5, 0.85);
+      border: 1px solid #6b4629;
+      border-radius: 10px;
+      padding: 6px 10px;
+    }
+
+    .player-name-row input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #ffd700;
+      font-weight: 600;
+      font-size: 0.85rem;
+      outline: none;
+      width: 100%;
+    }
+
+    .p-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1.5px solid #000;
+      flex-shrink: 0;
+    }
+
+    /* Online Room Styles */
+    .server-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: #bda38b;
+      margin-bottom: 12px;
+      background: rgba(0,0,0,0.4);
+      padding: 5px 12px;
+      border-radius: 12px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4caf50;
+      display: inline-block;
+      box-shadow: 0 0 8px #4caf50;
+    }
+
+    .status-dot.offline {
+      background: #ff9800;
+      box-shadow: 0 0 8px #ff9800;
+    }
+
+    .online-actions-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .online-actions-row .btn {
+      flex: 1 1 140px;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+    }
+
+    .join-room-box {
+      flex: 1.5 1 200px;
+      display: flex;
+      gap: 6px;
+    }
+
+    .join-room-box input {
+      flex: 1;
+      background: rgba(20, 10, 5, 0.9);
+      border: 1.5px solid #8c6747;
+      border-radius: 14px;
+      padding: 8px 12px;
+      color: #ffd700;
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      outline: none;
+    }
+
+    .join-room-box input:focus {
+      border-color: #ffd700;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    }
+
+    .active-room-card {
+      background: rgba(20, 10, 5, 0.92);
+      border: 1.5px solid #c99742;
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .room-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(201, 151, 66, 0.3);
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      font-size: 0.88rem;
+      color: #e0cfbe;
+    }
+
+    .room-code-badge {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #ffd700;
+      letter-spacing: 3px;
+      background: rgba(0,0,0,0.6);
+      padding: 3px 10px;
+      border-radius: 8px;
+      border: 1px solid #ffd700;
+    }
+
+    .room-slots-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .room-slot {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(35, 18, 10, 0.7);
+      border: 1px dashed #6b4629;
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 0.78rem;
+    }
+
+    .room-slot.occupied {
+      border-style: solid;
+      border-color: #ffd700;
+      background: rgba(55, 28, 14, 0.85);
+    }
+
+    .slot-avatar {
+      font-size: 1.3rem;
+    }
+
+    .slot-info {
+      flex: 1;
+      text-align: left;
+      overflow: hidden;
+    }
+
+    .slot-name {
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .slot-baseline {
+      font-size: 0.68rem;
+      color: #ffb74d;
+    }
+
+    .slot-status {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: rgba(0,0,0,0.5);
+      color: #aaa;
+    }
+
+    .slot-status.ready {
+      background: #2e7d32;
+      color: #fff;
+    }
+
+    /* 4-Player HUD Badges styling */
+    .player-badge {
+      padding: 5px 10px !important;
+      font-size: 0.82rem;
+    }
+  
+    /* =========================================================================
+       CLEAN UI/UX HIERARCHY & FLOW STYLES
+       ========================================================================= */
+    .main-menu-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .game-logo {
+      font-size: 2.8rem;
+      color: #ffd700;
+      text-shadow: 0 4px 18px rgba(255, 215, 0, 0.45), 0 2px 4px #000;
+      margin-bottom: 4px;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    .btn-main-primary {
+      width: 100%;
+      max-width: 320px;
+      background: linear-gradient(135deg, #ffd700 0%, #ff8f00 100%);
+      color: #1a0801;
+      border: none;
+      border-radius: 36px;
+      padding: 18px 24px;
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 8px 30px rgba(255, 143, 0, 0.55), 0 0 25px rgba(255, 215, 0, 0.35);
+      transition: all 0.22s ease;
+      margin: 22px 0 16px 0;
+    }
+
+    .btn-main-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 10px 36px rgba(255, 180, 0, 0.75), 0 0 35px rgba(255, 215, 0, 0.6);
+      background: linear-gradient(135deg, #fff 0%, #ffd700 60%, #ff8f00 100%);
+    }
+
+    .btn-main-primary:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .main-menu-secondary-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 320px;
+      margin-bottom: 22px;
+    }
+
+    .btn-main-secondary {
+      width: 100%;
+      background: linear-gradient(135deg, #3d2010 0%, #1f0f07 100%);
+      border: 1.5px solid #8c6747;
+      color: #ffd700;
+      border-radius: 28px;
+      padding: 13px 20px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+      transition: all 0.22s ease;
+    }
+
+    .btn-main-secondary:hover {
+      transform: translateY(-2px);
+      border-color: #ffd700;
+      background: linear-gradient(135deg, #522b15 0%, #291408 100%);
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+      color: #fff;
+    }
+
+    .main-menu-utility-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .btn-utility {
+      background: rgba(30, 15, 8, 0.88);
+      border: 1px solid #7c5839;
+      color: #d1b89d;
+      border-radius: 20px;
+      padding: 7px 18px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-utility:hover {
+      color: #ffd700;
+      border-color: #ffd700;
+      background: rgba(55, 28, 14, 0.95);
+      transform: translateY(-1px);
+    }
+
+    .btn-utility-bazaar {
+      color: #ffd700;
+      border-color: rgba(255, 215, 0, 0.45);
+    }
+
+    /* Customize Hub Cards */
+    .customize-hub-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto 18px auto;
+    }
+
+    .customize-card {
+      background: linear-gradient(135deg, #2d180d 0%, #170d06 100%);
+      border: 1.5px solid #7c5839;
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+      text-align: left;
+    }
+
+    .customize-card:hover {
+      border-color: #ffd700;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.25);
+      background: linear-gradient(135deg, #442412 0%, #221208 100%);
+    }
+
+    .customize-card-info {
+      flex: 1;
+    }
+
+    .customize-card-tag {
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #ff9800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .customize-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .customize-card-sub {
+      font-size: 0.76rem;
+      color: #bda38b;
+      margin-top: 2px;
+    }
+
+    /* Settings Rows */
+    .settings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto 20px auto;
+    }
+
+    .settings-row {
+      background: rgba(30, 16, 9, 0.88);
+      border: 1px solid #7c5839;
+      border-radius: 14px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .settings-label {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #ffd700;
+      text-align: left;
+    }
+
+    .settings-sub {
+      font-size: 0.72rem;
+      color: #bda38b;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #422718;
+      border: 1px solid #7c5839;
+      transition: .3s;
+      border-radius: 26px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #d1b89d;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background-color: #ffd700;
+      border-color: #ffd700;
+    }
+
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(24px);
+      background-color: #1a0801;
+    }
+
   </style>
+
 </head>
 <body>
 
@@ -2577,17 +3169,22 @@
   <div id="game-container">
     <canvas id="carromCanvas" width="800" height="800"></canvas>
 
-    <!-- Top In-Game HUD -->
+    <!-- Top In-Game HUD (Responsive 2-4 Players) -->
     <div id="hud" class="hidden">
-      <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
         <button id="btn-in-game-exit" class="btn-hud-exit" title="Exit match and return to menu">
           <span style="font-size: 0.95rem;">🔙</span>
           <span>Exit</span>
         </button>
-        <div id="p1-badge" class="player-badge active-turn">
+        <div id="p1-badge" class="player-badge active-turn" title="Player 1 (Bottom)">
           <div id="p1-badge-coin" class="badge-icon"></div>
-          <span>You</span>:
+          <span id="p1-badge-name">You</span>:
           <span id="p1-score" class="score-txt">0</span>
+        </div>
+        <div id="p2-badge" class="player-badge" title="Player 2">
+          <div id="p2-badge-coin" class="badge-icon"></div>
+          <span id="p2-badge-name">AI Bot</span>:
+          <span id="p2-score" class="score-txt">0</span>
         </div>
       </div>
 
@@ -2596,59 +3193,186 @@
         <div id="mode-sub-pill"></div>
       </div>
 
-      <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+        <div id="p3-badge" class="player-badge hidden" title="Player 3 (Top)">
+          <div id="p3-badge-coin" class="badge-icon" style="background:#ffb74d;"></div>
+          <span id="p3-badge-name">P3</span>:
+          <span id="p3-score" class="score-txt">0</span>
+        </div>
+        <div id="p4-badge" class="player-badge hidden" title="Player 4 (Right)">
+          <div id="p4-badge-coin" class="badge-icon" style="background:#90caf9;"></div>
+          <span id="p4-badge-name">P4</span>:
+          <span id="p4-score" class="score-txt">0</span>
+        </div>
         <button id="btn-striker-cracker-toggle" class="btn-striker-cracker-toggle hidden" title="Click to Toggle Striker Cracker Mode (Chakkar & Flower Pot)">
           🔥 CRACKER STRIKER: ON
         </button>
         <button id="sound-btn" class="icon-btn" title="Toggle Sound">🔊</button>
       </div>
-
-      <div id="p2-badge" class="player-badge">
-        <div id="p2-badge-coin" class="badge-icon"></div>
-        <span>AI Bot</span>:
-        <span id="p2-score" class="score-txt">0</span>
-      </div>
     </div>
 
     <div id="turn-msg" class="hidden">Slide striker & drag to shoot</div>
 
-    <!-- 1. STARTING SCREEN: Split Normal Mode & Fun Mode -->
+    <!-- 1. MAIN MENU: Clean Hierarchy -->
     <div id="menu-overlay" class="overlay">
-      <h1>CARROM CHAMPIONS</h1>
-      <p class="subtitle">Player vs Intelligent AI Edition</p>
+      <div class="main-menu-content">
+        <h1 class="game-logo">CARROM CHAMPIONS</h1>
+        <p class="subtitle" style="margin-bottom: 8px;">Player vs Intelligent AI Edition</p>
+
+        <!-- Primary Action: PLAY NOW -->
+        <button id="btn-main-play" class="btn-main-primary">
+          <span>▶ PLAY NOW</span>
+        </button>
+
+        <!-- Secondary Actions Stack -->
+        <div class="main-menu-secondary-stack">
+          <button id="btn-main-online" class="btn-main-secondary">
+            <span>🌐 ONLINE</span>
+          </button>
+
+          <button id="btn-main-customize" class="btn-main-secondary">
+            <span>🎨 CUSTOMIZE</span>
+          </button>
+        </div>
+
+        <!-- Small Utility Controls Row: Settings & Bazaar -->
+        <div class="main-menu-utility-row">
+          <button id="btn-main-settings" class="btn-utility">
+            <span>⚙</span>
+            <span>Settings</span>
+          </button>
+          <button id="btn-main-bazaar" class="btn-utility btn-utility-bazaar">
+            <span>🛒</span>
+            <span>Bazaar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1B. PLAY NOW -> CHOOSE GAME SCREEN -->
+    <div id="play-mode-overlay" class="overlay hidden">
+      <h1>CHOOSE GAME</h1>
+      <p class="subtitle">Select your game experience</p>
 
       <div class="primary-mode-row">
         <!-- Normal Mode Card -->
         <div id="card-normal" class="big-card">
-          <div class="big-card-icon">🌟</div>
+          <div class="big-card-icon">⭐</div>
           <div class="big-card-title">NORMAL MODE</div>
-          <div class="big-card-desc">Standard professional carrom rules against intelligent AI bot.</div>
+          <div class="big-card-desc">Classic professional carrom rules against intelligent AI.</div>
         </div>
 
         <!-- Fun Mode Card -->
         <div id="card-fun" class="big-card">
           <div class="big-card-icon">🚀</div>
           <div class="big-card-title">FUN MODE</div>
-          <div class="big-card-desc">Diwali crackers, magnet vortex, stone pulse & time bombs!</div>
+          <div class="big-card-desc">Diwali crackers, magnet vortex, stone pulse &amp; time bombs!</div>
         </div>
       </div>
 
-      <!-- EQUIPPED STRIKER SHOWCASE (Godot Strikers 0 to 5) -->
-      <div id="equipped-striker-card" class="striker-showcase-bar">
-        <div class="striker-showcase-canvas-wrap">
-          <canvas id="home-striker-canvas" width="56" height="56"></canvas>
+      <div class="btn-group" style="margin-top: 18px;">
+        <button id="btn-play-mode-back" class="btn btn-secondary">← BACK</button>
+      </div>
+    </div>
+
+    <!-- 1C. CUSTOMIZE HUB SCREEN -->
+    <div id="customize-menu-overlay" class="overlay hidden">
+      <h1>CUSTOMIZE</h1>
+      <p class="subtitle">Equip Strikers, Board Themes &amp; Cracker Arsenal</p>
+
+      <div class="customize-hub-container">
+        <!-- 1. EQUIPPED STRIKER SHOWCASE (Godot Strikers 0 to 5) -->
+        <div id="equipped-striker-card" class="striker-showcase-bar">
+          <div class="striker-showcase-canvas-wrap">
+            <canvas id="home-striker-canvas" width="56" height="56"></canvas>
+          </div>
+          <div class="striker-showcase-details">
+            <div class="striker-showcase-tag">EQUIPPED STRIKER (GODOT ARSENAL)</div>
+            <div id="home-striker-name" class="striker-showcase-title">Striker 0 • Classic Champion</div>
+            <div id="home-striker-desc" class="striker-showcase-sub">Balanced Tournament Disc • Ivory &amp; Gold</div>
+          </div>
+          <button id="btn-open-arsenal" class="btn-arsenal">Select Striker ⚡</button>
         </div>
-        <div class="striker-showcase-details">
-          <div class="striker-showcase-tag">EQUIPPED STRIKER (GODOT ARSENAL)</div>
-          <div id="home-striker-name" class="striker-showcase-title">Striker 0 • Classic Champion</div>
-          <div id="home-striker-desc" class="striker-showcase-sub">Balanced Tournament Disc • Ivory & Gold</div>
+
+        <!-- 2. Board & Coins Card -->
+        <div id="card-themes-link" class="customize-card">
+          <div style="font-size: 2.2rem;">🎨</div>
+          <div class="customize-card-info">
+            <div class="customize-card-tag">BOARD &amp; COINS</div>
+            <div class="customize-card-title">Board Themes &amp; Coin Styles</div>
+            <div class="customize-card-sub">Wood grain finishes, felt textures &amp; color palettes</div>
+          </div>
+          <button id="btn-custom" class="btn btn-secondary" style="font-size: 0.88rem; padding: 8px 16px;">Change ➔</button>
         </div>
-        <button id="btn-open-arsenal" class="btn-arsenal">Select Striker ⚡</button>
+
+        <!-- 3. Cracker Bazaar Card -->
+        <div id="card-bazaar-link" class="customize-card">
+          <div style="font-size: 2.2rem;">🛒</div>
+          <div class="customize-card-info">
+            <div class="customize-card-tag">DIWALI CRACKER BAZAAR</div>
+            <div class="customize-card-title">100 Cracker Varieties Store</div>
+            <div class="customize-card-sub">Chakkars, Flower Pots, Rockets, Sky Shots &amp; 1000-Wala</div>
+          </div>
+          <button id="btn-custom-open-bazaar" class="btn btn-secondary" style="font-size: 0.88rem; padding: 8px 16px; color: #ffd700; border-color: #ffd700;">Open Bazaar ➔</button>
+        </div>
       </div>
 
-      <div class="btn-group">
-        <button id="btn-custom" class="btn btn-secondary" style="font-size: 0.92rem;">🎨 Board & Coin Themes</button>
-        <button id="btn-home-bazaar" class="btn btn-secondary" style="font-size: 0.92rem; color: #ffd700; border-color: rgba(255,215,0,0.5); display: inline-flex; align-items: center; justify-content: center; gap: 6px;">🏪 Cracker Bazaar ➔</button>
+      <div class="btn-group" style="margin-top: 14px;">
+        <button id="btn-customize-back" class="btn btn-secondary">← BACK</button>
+      </div>
+    </div>
+
+    <!-- 1D. SETTINGS SCREEN -->
+    <div id="settings-overlay" class="overlay hidden">
+      <div class="modal-box" style="max-width: 520px;">
+        <h1 style="font-size: 2.1rem; margin-bottom: 2px;">SETTINGS</h1>
+        <p class="subtitle" style="margin-bottom: 18px;">Audio, Haptics &amp; Game Preferences</p>
+
+        <div class="settings-list">
+          <div class="settings-row">
+            <div>
+              <div class="settings-label">🔊 Sound Effects &amp; Audio</div>
+              <div class="settings-sub">Embedded Godot sound synthesis &amp; crackles</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-toggle-sound" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <div>
+              <div class="settings-label">📳 Phone Vibration (Haptics)</div>
+              <div class="settings-sub">Tactile feedback on shot release &amp; coin pocket</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-toggle-haptics" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <div>
+              <div class="settings-label">🎆 Sparkler &amp; Particle Effects</div>
+              <div class="settings-sub">Phuljhadi sparklers, smoke and burst embers</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-toggle-particles" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="settings-row" style="background: rgba(18, 9, 4, 0.7);">
+            <div>
+              <div class="settings-label" style="color: #ffb74d;">ℹ️ About Carrom Champions</div>
+              <div class="settings-sub">v2.0 • Standalone Web &amp; Android APK Edition • 2-4 Players</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-group" style="margin-top: 14px;">
+          <button id="btn-settings-back" class="btn btn-secondary">← BACK</button>
+        </div>
       </div>
     </div>
 
@@ -3024,6 +3748,120 @@
         <div class="giftbox-btn-row">
           <button id="btn-giftbox-close" class="btn-giftbox-btn btn-giftbox-secondary">CLOSE ✕</button>
           <button id="btn-giftbox-claim" class="btn-giftbox-btn btn-giftbox-primary">🎁 USE & PLAY MATCH 🪔</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2B. ONLINE MULTIPLAYER LOBBY OVERLAY (2-4 PLAYERS ONLY) -->
+    <div id="lobby-overlay" class="overlay hidden">
+      <div class="lobby-modal-box">
+        <h1 style="font-size: 2.1rem; margin-bottom: 2px;">ONLINE PLAY</h1>
+        <p class="subtitle" style="margin-bottom: 12px;">Real-Time 2 to 4 Players Matchmaking (GCP &amp; WebSocket)</p>
+
+        <!-- Server Status Indicator -->
+        <div class="server-status-bar">
+          <span id="server-status-dot" class="status-dot"></span>
+          <span id="server-status-text">Connecting to Multiplayer Server...</span>
+        </div>
+
+        <!-- Room Setup / Action Panel (Visible before entering room) -->
+        <div id="room-setup-panel">
+          <div class="lobby-section-title">1. Your Player Name</div>
+          <div class="player-name-row" style="margin-bottom: 12px; max-width: 100%;">
+            <span class="p-dot" style="background:#ffd700;"></span>
+            <input type="text" id="online-player-name" value="Player 1" maxlength="14" placeholder="Enter your display name" />
+          </div>
+
+          <div class="lobby-section-title">2. Select Player Count</div>
+          <div class="player-count-selector">
+            <div id="btn-count-2p" class="count-card active">
+              <div class="count-number">2</div>
+              <div class="count-label">1v1 Match</div>
+              <div class="count-sub">Opposite Baselines (Bottom vs Top)</div>
+            </div>
+            <div id="btn-count-4p" class="count-card">
+              <div class="count-number">4</div>
+              <div class="count-label">Team Carrom (4 Players)</div>
+              <div class="count-sub">All 4 Board Baselines (Clockwise)</div>
+            </div>
+          </div>
+
+          <div class="lobby-section-title">3. Select Match Variant</div>
+          <div class="variant-selector">
+            <div id="btn-variant-classic" class="variant-pill active">🌟 Tournament Classic</div>
+            <div id="btn-variant-diwali" class="variant-pill">🪔 Diwali Crackers (100 Bazaar)</div>
+          </div>
+
+          <div class="lobby-section-title">4. Create or Join Room</div>
+          <div class="online-actions-row">
+            <button id="btn-create-room" class="btn btn-primary">➕ Create Private Room</button>
+            <div class="join-room-box">
+              <input type="text" id="room-code-input" placeholder="CODE" maxlength="6" />
+              <button id="btn-join-room" class="btn btn-secondary">Join</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Room Waiting Lobby Panel (Visible once inside room) -->
+        <div id="active-room-view" class="active-room-card hidden">
+          <div class="room-header">
+            <div>ROOM CODE: <span id="display-room-code" class="room-code-badge">----</span></div>
+            <div id="room-player-count-badge" style="font-size:0.8rem; color:#ffd700; font-weight: bold;">4 Players Max</div>
+          </div>
+
+          <p style="font-size:0.75rem; color:#d1b89d; margin-bottom: 10px; text-align: left;">
+            Share this Room Code with your friends on Wi-Fi or online to join:
+          </p>
+
+          <div class="room-slots-grid" id="room-slots">
+            <div class="room-slot occupied" id="slot-1">
+              <div class="slot-avatar">👑</div>
+              <div class="slot-info">
+                <div class="slot-name" id="slot-1-name">You (Host)</div>
+                <div class="slot-baseline">Bottom Baseline (P1)</div>
+              </div>
+              <div class="slot-status ready" id="slot-1-status">READY</div>
+            </div>
+            <div class="room-slot empty" id="slot-2">
+              <div class="slot-avatar">⏳</div>
+              <div class="slot-info">
+                <div class="slot-name" id="slot-2-name">Waiting for Player 2...</div>
+                <div class="slot-baseline" id="slot-2-baseline">Top Baseline (P2)</div>
+              </div>
+              <div class="slot-status" id="slot-2-status">OPEN</div>
+            </div>
+            <div class="room-slot empty" id="slot-3">
+              <div class="slot-avatar">⏳</div>
+              <div class="slot-info">
+                <div class="slot-name" id="slot-3-name">Waiting for Player 3...</div>
+                <div class="slot-baseline">Top Baseline (P3)</div>
+              </div>
+              <div class="slot-status" id="slot-3-status">OPEN</div>
+            </div>
+            <div class="room-slot empty" id="slot-4">
+              <div class="slot-avatar">⏳</div>
+              <div class="slot-info">
+                <div class="slot-name" id="slot-4-name">Waiting for Player 4...</div>
+                <div class="slot-baseline">Right Baseline (P4)</div>
+              </div>
+              <div class="slot-status" id="slot-4-status">OPEN</div>
+            </div>
+          </div>
+
+          <div id="host-controls" class="btn-group" style="margin-top: 14px;">
+            <button id="btn-start-online-match" class="btn btn-primary" style="font-size:1.05rem; padding: 12px 28px;">
+              🚀 START MATCH FOR ALL
+            </button>
+            <button id="btn-leave-room" class="btn btn-secondary">Leave Room</button>
+          </div>
+          <div id="guest-controls" class="btn-group hidden" style="margin-top: 14px;">
+            <div style="font-size: 0.82rem; color: #ffd700; align-self: center;">⏳ Waiting for Host to start match...</div>
+            <button id="btn-guest-leave-room" class="btn btn-secondary">Leave Room</button>
+          </div>
+        </div>
+
+        <div class="btn-group" style="margin-top: 16px;">
+          <button id="btn-close-lobby" class="btn btn-secondary">🔙 Back to Main Menu</button>
         </div>
       </div>
     </div>
@@ -6629,6 +7467,7 @@
       giftboxUsed = false;
       document.getElementById('menu-overlay').classList.add('hidden');
       document.getElementById('fun-menu-overlay').classList.add('hidden');
+          document.getElementById('lobby-overlay')?.classList.add('hidden');
       document.getElementById('bazaar-overlay').classList.remove('hidden');
       renderBazaarUI();
     }
@@ -9189,8 +10028,92 @@
       let isFunMode = false;
       let funVariant = 'crackers';
 
-      let turn = 1; // 1 = Player, 2 = AI
-      let scores = { 1: 0, 2: 0 };
+      // 2 to 4 Players Multiplayer Logic
+      let matchMode = 'vs_ai'; // 'vs_ai', '2p_local', '4p_local', 'online'
+      let totalPlayers = 2; // 2 or 4
+      let playerNames = { 1: 'Player 1', 2: 'AI Bot', 3: 'Player 3', 4: 'Player 4' };
+      let myOnlineIndex = 1; // For online multiplayer: 1..4
+
+      let turn = 1; // 1..totalPlayers
+      let scores = { 1: 0, 2: 0, 3: 0, 4: 0 };
+
+      function getCurrentBaseline(pTurn, pTotal) {
+        if (pTotal === 2) {
+          if (pTurn === 1) {
+            // Bottom baseline
+            return {
+              axis: 'x',
+              fixedCoord: HALF_SIZE + BASELINE_OFFSET,
+              min: HALF_SIZE - BASELINE_HALF_LEN,
+              max: HALF_SIZE + BASELINE_HALF_LEN,
+              defaultX: HALF_SIZE,
+              defaultY: HALF_SIZE + BASELINE_OFFSET,
+              rect: { x: HALF_SIZE - BASELINE_HALF_LEN, y: HALF_SIZE + BASELINE_OFFSET - 14, w: BASELINE_HALF_LEN * 2, h: 28 }
+            };
+          } else {
+            // Top baseline
+            return {
+              axis: 'x',
+              fixedCoord: HALF_SIZE - BASELINE_OFFSET,
+              min: HALF_SIZE - BASELINE_HALF_LEN,
+              max: HALF_SIZE + BASELINE_HALF_LEN,
+              defaultX: HALF_SIZE,
+              defaultY: HALF_SIZE - BASELINE_OFFSET,
+              rect: { x: HALF_SIZE - BASELINE_HALF_LEN, y: HALF_SIZE - BASELINE_OFFSET - 14, w: BASELINE_HALF_LEN * 2, h: 28 }
+            };
+          }
+        } else {
+          // 4 Players: P1 Bottom, P2 Left, P3 Top, P4 Right (Standard clockwise 4 baselines)
+          if (pTurn === 1) { // Bottom
+            return {
+              axis: 'x',
+              fixedCoord: HALF_SIZE + BASELINE_OFFSET,
+              min: HALF_SIZE - BASELINE_HALF_LEN,
+              max: HALF_SIZE + BASELINE_HALF_LEN,
+              defaultX: HALF_SIZE,
+              defaultY: HALF_SIZE + BASELINE_OFFSET,
+              rect: { x: HALF_SIZE - BASELINE_HALF_LEN, y: HALF_SIZE + BASELINE_OFFSET - 14, w: BASELINE_HALF_LEN * 2, h: 28 }
+            };
+          } else if (pTurn === 2) { // Left
+            return {
+              axis: 'y',
+              fixedCoord: HALF_SIZE - BASELINE_OFFSET,
+              min: HALF_SIZE - BASELINE_HALF_LEN,
+              max: HALF_SIZE + BASELINE_HALF_LEN,
+              defaultX: HALF_SIZE - BASELINE_OFFSET,
+              defaultY: HALF_SIZE,
+              rect: { x: HALF_SIZE - BASELINE_OFFSET - 14, y: HALF_SIZE - BASELINE_HALF_LEN, w: 28, h: BASELINE_HALF_LEN * 2 }
+            };
+          } else if (pTurn === 3) { // Top
+            return {
+              axis: 'x',
+              fixedCoord: HALF_SIZE - BASELINE_OFFSET,
+              min: HALF_SIZE - BASELINE_HALF_LEN,
+              max: HALF_SIZE + BASELINE_HALF_LEN,
+              defaultX: HALF_SIZE,
+              defaultY: HALF_SIZE - BASELINE_OFFSET,
+              rect: { x: HALF_SIZE - BASELINE_HALF_LEN, y: HALF_SIZE - BASELINE_OFFSET - 14, w: BASELINE_HALF_LEN * 2, h: 28 }
+            };
+          } else { // 4: Right
+            return {
+              axis: 'y',
+              fixedCoord: HALF_SIZE + BASELINE_OFFSET,
+              min: HALF_SIZE - BASELINE_HALF_LEN,
+              max: HALF_SIZE + BASELINE_HALF_LEN,
+              defaultX: HALF_SIZE + BASELINE_OFFSET,
+              defaultY: HALF_SIZE,
+              rect: { x: HALF_SIZE + BASELINE_OFFSET - 14, y: HALF_SIZE - BASELINE_HALF_LEN, w: 28, h: BASELINE_HALF_LEN * 2 }
+            };
+          }
+        }
+      }
+
+      function isHumanTurn() {
+        if (matchMode === 'vs_ai') return turn === 1;
+        if (matchMode === '2p_local' || matchMode === '4p_local') return true;
+        if (matchMode === 'online') return turn === myOnlineIndex;
+        return false;
+      }
       let queenPocketedBy = null;
       let queenNeedsCover = false;
       let piecesPocketedThisTurn = [];
@@ -9237,7 +10160,7 @@
         carbonMarks = [];
         paperDebris = [];
         p1WonCoins = [];
-        scores = { 1: 0, 2: 0 };
+        scores = { 1: 0, 2: 0, 3: 0, 4: 0 };
         turn = 1;
         queenPocketedBy = null;
         queenNeedsCover = false;
@@ -9367,24 +10290,32 @@
       }
 
       function updateHUD() {
-        document.getElementById('p1-score').textContent = scores[1];
-        document.getElementById('p2-score').textContent = scores[2];
-
-        const p1Badge = document.getElementById('p1-badge');
-        const p2Badge = document.getElementById('p2-badge');
-        const p1Dot = document.getElementById('p1-badge-coin');
-        const p2Dot = document.getElementById('p2-badge-coin');
-
+        // Dynamic badges for 1 to 4 players
         const palette = COIN_PALETTES[selectedCoinKey];
-        p1Dot.style.background = palette.p1.fill;
-        p2Dot.style.background = palette.p2.fill;
+        const dotColors = [palette.p1.fill, palette.p2.fill, '#ffb74d', '#90caf9'];
 
-        if (turn === 1) {
-          p1Badge.classList.add('active-turn');
-          p2Badge.classList.remove('active-turn');
-        } else {
-          p2Badge.classList.add('active-turn');
-          p1Badge.classList.remove('active-turn');
+        for (let i = 1; i <= 4; i++) {
+          const badge = document.getElementById('p' + i + '-badge');
+          const scoreEl = document.getElementById('p' + i + '-score');
+          const nameEl = document.getElementById('p' + i + '-badge-name');
+          const dotEl = document.getElementById('p' + i + '-badge-coin');
+
+          if (!badge) continue;
+
+          if (i > totalPlayers) {
+            badge.classList.add('hidden');
+          } else {
+            badge.classList.remove('hidden');
+            if (scoreEl) scoreEl.textContent = scores[i] || 0;
+            if (nameEl) nameEl.textContent = playerNames[i] || ('P' + i);
+            if (dotEl && dotColors[i - 1]) dotEl.style.background = dotColors[i - 1];
+
+            if (turn === i) {
+              badge.classList.add('active-turn');
+            } else {
+              badge.classList.remove('active-turn');
+            }
+          }
         }
 
         const modePill = document.getElementById('mode-pill');
@@ -9957,21 +10888,38 @@
         }
 
         const scoredValidThisTurn = piecesPocketedThisTurn.length > 0 && !strikerPocketed;
-        if (!scoredValidThisTurn) turn = (turn === 1) ? 2 : 1;
+        if (!scoredValidThisTurn) {
+          if (totalPlayers === 2) {
+            turn = (turn === 1) ? 2 : 1;
+          } else {
+            turn = (turn % 4) + 1; // Clockwise 1 -> 2 -> 3 -> 4 -> 1
+          }
+        }
 
         piecesPocketedThisTurn = [];
 
-        striker.reset(HALF_SIZE, turn === 1 ? strikerBaseY : aiStrikerBaseY);
+        const curBase = getCurrentBaseline(turn, totalPlayers);
+        striker.reset(curBase.defaultX, curBase.defaultY);
         striker.mass = STRIKER_CONFIGS[selectedStrikerId].mass;
 
         updateHUD();
 
         const msg = document.getElementById('turn-msg');
-        if (turn === 1) {
-          msg.textContent = 'Your Turn! Drag slider to position striker.';
+        if (matchMode === 'vs_ai') {
+          if (turn === 1) {
+            msg.textContent = 'Your Turn! Drag baseline & shoot.';
+          } else {
+            msg.textContent = 'AI is calculating shot...';
+            setTimeout(runAITurn, 900);
+          }
+        } else if (matchMode === 'online') {
+          if (turn === myOnlineIndex) {
+            msg.textContent = '🌟 YOUR TURN (' + (playerNames[turn] || ('P' + turn)) + ')! Drag baseline & shoot.';
+          } else {
+            msg.textContent = '⏳ Waiting for ' + (playerNames[turn] || ('Player ' + turn)) + ' to shoot...';
+          }
         } else {
-          msg.textContent = 'AI is calculating shot...';
-          setTimeout(runAITurn, 900);
+          msg.textContent = (playerNames[turn] || ('Player ' + turn)) + "'s Turn! Drag baseline & shoot.";
         }
       }
 
@@ -10079,19 +11027,39 @@
         const winTitle = document.getElementById('winner-title');
         const winDesc = document.getElementById('winner-desc');
 
-        if (scores[1] >= scores[2]) {
-          const reward = isFunMode && funVariant === 'crackers' ? 350 : 200;
-          userCredits += reward;
-          winTitle.textContent = isFunMode && funVariant === 'crackers' ? '🪔 DIWALI DHAMAKA VICTORY!' : '🏆 VICTORY!';
-          winDesc.textContent = 'You defeated the AI Bot with ' + scores[1] + ' points! Earned +' + reward + ' Cracker Credits! 💰';
+        // Find winner among all players
+        let winnerNum = 1;
+        let highestScore = -9999;
+        for (let p = 1; p <= totalPlayers; p++) {
+          if (scores[p] > highestScore) {
+            highestScore = scores[p];
+            winnerNum = p;
+          }
+        }
 
-          // Launch Diwali 2026 Victory Sequence: pop all won crackers in board center & show Happy Diwali 2026 dialog!
-          startDiwaliVictorySequence();
+        const isDiwali = isFunMode && funVariant === 'crackers';
+        const reward = isDiwali ? 350 : 200;
+        userCredits += reward;
+
+        if (matchMode === 'vs_ai') {
+          if (winnerNum === 1) {
+            winTitle.textContent = isDiwali ? '🪔 DIWALI DHAMAKA VICTORY!' : '🏆 VICTORY!';
+            winDesc.textContent = 'You defeated the AI Bot with ' + scores[1] + ' points! Earned +' + reward + ' Cracker Credits! 💰';
+            startDiwaliVictorySequence();
+          } else {
+            winTitle.textContent = 'DEFEAT!';
+            winDesc.textContent = 'AI Bot won with ' + scores[2] + ' points. Better luck next time!';
+            document.getElementById('result-overlay').classList.remove('hidden');
+          }
         } else {
-          userCredits += 50; // Consolation credits
-          winTitle.textContent = 'DEFEAT!';
-          winDesc.textContent = 'AI Bot won with ' + scores[2] + ' points. Better luck next time!';
-          document.getElementById('result-overlay').classList.remove('hidden');
+          const wName = playerNames[winnerNum] || ('Player ' + winnerNum);
+          winTitle.textContent = '🏆 ' + wName.toUpperCase() + ' WINS!';
+          winDesc.textContent = wName + ' won the match with ' + highestScore + ' points! Congratulations!';
+          if (isDiwali) {
+            startDiwaliVictorySequence();
+          } else {
+            document.getElementById('result-overlay').classList.remove('hidden');
+          }
         }
       }
 
@@ -10248,12 +11216,13 @@
           ctx.stroke();
         });
 
-        if (state === 'aiming' && turn === 1) {
+        if (state === 'aiming') {
+          const curBase = getCurrentBaseline(turn, totalPlayers);
           ctx.beginPath();
-          ctx.rect(strikerMinX, strikerBaseY - 14, BASELINE_HALF_LEN * 2, 28);
-          ctx.fillStyle = 'rgba(247, 202, 72, 0.2)';
+          ctx.rect(curBase.rect.x, curBase.rect.y, curBase.rect.w, curBase.rect.h);
+          ctx.fillStyle = 'rgba(247, 202, 72, 0.22)';
           ctx.fill();
-          ctx.strokeStyle = 'rgba(247, 202, 72, 0.6)';
+          ctx.strokeStyle = 'rgba(247, 202, 72, 0.65)';
           ctx.lineWidth = 1.5;
           ctx.stroke();
         }
@@ -10739,7 +11708,7 @@
         }
       }
 
-        if (isAiming && state === 'aiming' && turn === 1) {
+        if (isAiming && state === 'aiming' && (isHumanTurn() || matchMode === 'online')) {
           const dx = striker.x - aimCurrent.x;
           const dy = striker.y - aimCurrent.y;
           const dist = Math.hypot(dx, dy);
@@ -10826,11 +11795,17 @@
       }
 
       canvas.addEventListener('pointerdown', e => {
-        if (state !== 'aiming' || turn !== 1) return;
+        if (state !== 'aiming' || !isHumanTurn()) return;
         const pos = getCanvasCoords(e);
+        const curBase = getCurrentBaseline(turn, totalPlayers);
 
         const distToStriker = Math.hypot(pos.x - striker.x, pos.y - striker.y);
-        const nearBaseline = Math.abs(pos.y - strikerBaseY) < 32 && pos.x >= strikerMinX - 20 && pos.x <= strikerMaxX + 20;
+        let nearBaseline = false;
+        if (curBase.axis === 'x') {
+          nearBaseline = Math.abs(pos.y - curBase.fixedCoord) < 36 && pos.x >= curBase.min - 22 && pos.x <= curBase.max + 22;
+        } else {
+          nearBaseline = Math.abs(pos.x - curBase.fixedCoord) < 36 && pos.y >= curBase.min - 22 && pos.y <= curBase.max + 22;
+        }
 
         if (distToStriker < STRIKER_RADIUS * 1.5) {
           isAiming = true;
@@ -10844,17 +11819,41 @@
           }
         } else if (nearBaseline) {
           isDraggingStriker = true;
-          striker.x = Math.max(strikerMinX, Math.min(strikerMaxX, pos.x));
+          if (curBase.axis === 'x') {
+            striker.x = Math.max(curBase.min, Math.min(curBase.max, pos.x));
+            striker.y = curBase.fixedCoord;
+          } else {
+            striker.y = Math.max(curBase.min, Math.min(curBase.max, pos.y));
+            striker.x = curBase.fixedCoord;
+          }
+          if (matchMode === 'online' && typeof MultiplayerLobby !== 'undefined') {
+            MultiplayerLobby.broadcastStrikerMove(striker.x, striker.y);
+          }
         }
       });
 
       let lastSparklerSizzleTime = 0;
       window.addEventListener('pointermove', e => {
-        if (state !== 'aiming') return;
+        if (state !== 'aiming' || !isHumanTurn()) return;
         const pos = getCanvasCoords(e);
-        if (isDraggingStriker) striker.x = Math.max(strikerMinX, Math.min(strikerMaxX, pos.x));
-        else if (isAiming) {
+        const curBase = getCurrentBaseline(turn, totalPlayers);
+
+        if (isDraggingStriker) {
+          if (curBase.axis === 'x') {
+            striker.x = Math.max(curBase.min, Math.min(curBase.max, pos.x));
+            striker.y = curBase.fixedCoord;
+          } else {
+            striker.y = Math.max(curBase.min, Math.min(curBase.max, pos.y));
+            striker.x = curBase.fixedCoord;
+          }
+          if (matchMode === 'online' && typeof MultiplayerLobby !== 'undefined') {
+            MultiplayerLobby.broadcastStrikerMove(striker.x, striker.y);
+          }
+        } else if (isAiming) {
           aimCurrent = pos;
+          if (matchMode === 'online' && typeof MultiplayerLobby !== 'undefined') {
+            MultiplayerLobby.broadcastStrikerAim(aimCurrent.x, aimCurrent.y);
+          }
           const isDiwaliMode = isFunMode && funVariant === 'crackers';
           if (isDiwaliMode) {
             const now = Date.now();
@@ -10867,6 +11866,7 @@
       });
 
       window.addEventListener('pointerup', e => {
+        if (!isHumanTurn()) return;
         if (isDraggingStriker) isDraggingStriker = false;
         if (isAiming) {
           isAiming = false;
@@ -10884,6 +11884,10 @@
             striker.vx = Math.cos(angle) * speed;
             striker.vy = Math.sin(angle) * speed;
             state = 'shooting';
+
+            if (matchMode === 'online' && typeof MultiplayerLobby !== 'undefined') {
+              MultiplayerLobby.broadcastStrikerShoot(striker.x, striker.y, striker.vx, striker.vy);
+            }
           }
         }
       });
@@ -10913,18 +11917,46 @@
           requestAnimationFrame((t) => { lastTime = t; loop(t); });
         },
 
-        launchMatch(isFun, variant = 'normal') {
+        syncRemoteStrikerMove(remoteSlot, x, y) {
+          if (striker && turn === remoteSlot) {
+            striker.x = x;
+            striker.y = y;
+          }
+        },
+        syncRemoteStrikerAim(remoteSlot, x, y) {
+          if (turn === remoteSlot) {
+            isAiming = true;
+            aimCurrent = { x, y };
+          }
+        },
+        syncRemoteStrikerShoot(remoteSlot, x, y, vx, vy) {
+          if (striker) {
+            striker.x = x;
+            striker.y = y;
+            striker.vx = vx;
+            striker.vy = vy;
+            isAiming = false;
+            state = 'shooting';
+            Sound.playFlick();
+          }
+        },
+
+        launchMatch(isFun, variant = 'normal', pMode = 'vs_ai', pCount = 2, customNames = null, playerSlot = 1) {
           isFunMode = isFun;
           funVariant = variant;
+          matchMode = pMode;
+          totalPlayers = pCount;
+          myOnlineIndex = playerSlot || 1;
+          if (customNames) {
+            playerNames = { ...playerNames, ...customNames };
+          } else if (pMode === 'vs_ai') {
+            playerNames = { 1: 'You', 2: 'AI Bot' };
+          }
           initBoard();
           state = 'aiming';
 
-          document.getElementById('menu-overlay').classList.add('hidden');
-          document.getElementById('fun-menu-overlay').classList.add('hidden');
-          document.getElementById('arsenal-overlay').classList.add('hidden');
-          document.getElementById('custom-overlay').classList.add('hidden');
-          document.getElementById('diwali-celebration-overlay')?.classList.add('hidden');
-          document.getElementById('result-overlay').classList.add('hidden');
+          // Hide ALL menu/modal overlays completely so the canvas game screen is fully revealed
+          document.querySelectorAll('.overlay, .celebration-overlay').forEach(el => el.classList.add('hidden'));
 
           document.getElementById('hud').classList.remove('hidden');
           document.getElementById('turn-msg').classList.remove('hidden');
@@ -10956,9 +11988,7 @@
           boardShakeIntensity = 0;
           document.getElementById('hud').classList.add('hidden');
           document.getElementById('turn-msg').classList.add('hidden');
-          document.getElementById('exit-confirm-overlay')?.classList.add('hidden');
-          document.getElementById('diwali-celebration-overlay')?.classList.add('hidden');
-          document.getElementById('result-overlay')?.classList.add('hidden');
+          document.querySelectorAll('.overlay, .celebration-overlay').forEach(el => el.classList.add('hidden'));
 
           if (destination === 'fun') {
             document.getElementById('fun-menu-overlay').classList.remove('hidden');
@@ -11230,14 +12260,14 @@
 
     document.getElementById('card-fun').addEventListener('click', () => {
       Sound.playFlick();
-      document.getElementById('menu-overlay').classList.add('hidden');
+      document.getElementById('play-mode-overlay').classList.add('hidden');
       document.getElementById('fun-menu-overlay').classList.remove('hidden');
     });
 
     document.getElementById('btn-fun-back').addEventListener('click', () => {
       Sound.playFlick();
       document.getElementById('fun-menu-overlay').classList.add('hidden');
-      document.getElementById('menu-overlay').classList.remove('hidden');
+      document.getElementById('play-mode-overlay').classList.remove('hidden');
     });
 
     document.querySelectorAll('.fun-card').forEach(card => {
@@ -11309,12 +12339,7 @@
 
       // Close overlays and launch match directly to play as desired!
       closeGiftboxModal();
-      const funMenu = document.getElementById('fun-menu-overlay');
-      if (funMenu) funMenu.classList.add('hidden');
-      const bazaar = document.getElementById('bazaar-overlay');
-      if (bazaar) bazaar.classList.add('hidden');
-      const mainMenu = document.getElementById('menu-overlay');
-      if (mainMenu) mainMenu.classList.add('hidden');
+      document.querySelectorAll('.overlay, .celebration-overlay').forEach(el => el.classList.add('hidden'));
 
       // Start Diwali Cracker Match
       Game.launchMatch(true, 'crackers');
@@ -11718,6 +12743,598 @@
       });
     }
 
+    /* =========================================================================
+       MULTIPLAYER LOBBY CONTROLLER (PASS & PLAY + WEBSOCKET / GCP BRIDGE)
+       ========================================================================= */
+    const MultiplayerLobby = (() => {
+      let selectedPlayerCount = 2; // 2 or 4
+      let selectedVariant = 'classic'; // 'classic' or 'diwali'
+      let currentRoomCode = null;
+      let isHost = false;
+      let mySlot = 1;
+      let ws = null;
+      let roomPlayers = [];
+
+      function getServerUrl() {
+        if (typeof window !== 'undefined' && window.location.protocol.startsWith('http')) {
+          const proto = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+          return proto + window.location.host;
+        }
+        return 'ws://localhost:3000';
+      }
+      let serverUrl = getServerUrl();
+
+      function init() {
+        // Main Menu Multiplayer Card Button
+        const cardMulti = document.getElementById('card-multiplayer');
+        if (cardMulti) {
+          cardMulti.addEventListener('click', () => {
+            Sound.playFlick();
+            openLobbyModal();
+          });
+        }
+
+        // Close Lobby Modal
+        const btnClose = document.getElementById('btn-close-lobby');
+        if (btnClose) {
+          btnClose.addEventListener('click', () => {
+            Sound.playFlick();
+            closeLobbyModal();
+          });
+        }
+
+        // Player Count Selection (2P vs 4P)
+        const btn2P = document.getElementById('btn-count-2p');
+        const btn4P = document.getElementById('btn-count-4p');
+        const slot3 = document.getElementById('slot-3');
+        const slot4 = document.getElementById('slot-4');
+        const countBadge = document.getElementById('room-player-count-badge');
+        const slot2Baseline = document.getElementById('slot-2-baseline');
+
+        if (btn2P && btn4P) {
+          btn2P.addEventListener('click', () => {
+            Sound.playFlick();
+            btn2P.classList.add('active');
+            btn4P.classList.remove('active');
+            selectedPlayerCount = 2;
+            if (slot3) slot3.classList.add('hidden');
+            if (slot4) slot4.classList.add('hidden');
+            if (countBadge) countBadge.textContent = '2 Players Max';
+            if (slot2Baseline) slot2Baseline.textContent = 'Top Baseline (P2)';
+          });
+
+          btn4P.addEventListener('click', () => {
+            Sound.playFlick();
+            btn4P.classList.add('active');
+            btn2P.classList.remove('active');
+            selectedPlayerCount = 4;
+            if (slot3) slot3.classList.remove('hidden');
+            if (slot4) slot4.classList.remove('hidden');
+            if (countBadge) countBadge.textContent = '4 Players Max';
+            if (slot2Baseline) slot2Baseline.textContent = 'Left Baseline (P2)';
+          });
+        }
+
+        // Variant Selection
+        const varClassic = document.getElementById('btn-variant-classic');
+        const varDiwali = document.getElementById('btn-variant-diwali');
+
+        if (varClassic && varDiwali) {
+          varClassic.addEventListener('click', () => {
+            Sound.playFlick();
+            varClassic.classList.add('active');
+            varDiwali.classList.remove('active');
+            selectedVariant = 'classic';
+          });
+
+          varDiwali.addEventListener('click', () => {
+            Sound.playFlick();
+            varDiwali.classList.add('active');
+            varClassic.classList.remove('active');
+            selectedVariant = 'diwali';
+          });
+        }
+
+        // Create Room Button
+        const btnCreate = document.getElementById('btn-create-room');
+        if (btnCreate) {
+          btnCreate.addEventListener('click', () => {
+            Sound.playFlick();
+            createOnlineRoom();
+          });
+        }
+
+        // Join Room Button
+        const btnJoin = document.getElementById('btn-join-room');
+        if (btnJoin) {
+          btnJoin.addEventListener('click', () => {
+            Sound.playFlick();
+            const input = document.getElementById('room-code-input');
+            const code = input ? input.value.trim().toUpperCase() : '';
+            if (code) joinOnlineRoom(code);
+          });
+        }
+
+        // Start Match Button (Host only)
+        const btnStart = document.getElementById('btn-start-online-match');
+        if (btnStart) {
+          btnStart.addEventListener('click', () => {
+            Sound.playPocket();
+            requestStartMatch();
+          });
+        }
+
+        // Leave Room Buttons
+        const btnLeave = document.getElementById('btn-leave-room');
+        if (btnLeave) btnLeave.addEventListener('click', leaveOnlineRoom);
+        const btnGuestLeave = document.getElementById('btn-guest-leave-room');
+        if (btnGuestLeave) btnGuestLeave.addEventListener('click', leaveOnlineRoom);
+
+        // Auto-connect to WebSocket
+        connectWebSocket();
+      }
+
+      function openLobbyModal() {
+        const overlay = document.getElementById('lobby-overlay');
+        if (overlay) overlay.classList.remove('hidden');
+        if (!ws || ws.readyState !== WebSocket.OPEN) {
+          connectWebSocket();
+        }
+      }
+
+      function closeLobbyModal() {
+        const overlay = document.getElementById('lobby-overlay');
+        if (overlay) overlay.classList.add('hidden');
+      }
+
+      function getMyPlayerName() {
+        const input = document.getElementById('online-player-name');
+        return (input && input.value.trim()) || ('Player ' + (Math.floor(Math.random() * 899) + 100));
+      }
+
+      function connectWebSocket() {
+        const dot = document.getElementById('server-status-dot');
+        const statusText = document.getElementById('server-status-text');
+
+        try {
+          if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) return;
+
+          ws = new WebSocket(serverUrl);
+
+          ws.onopen = () => {
+            if (dot) { dot.classList.remove('offline'); dot.style.background = '#4caf50'; }
+            if (statusText) statusText.textContent = '🟢 Server Connected (' + serverUrl + ')';
+          };
+
+          ws.onmessage = (event) => {
+            try {
+              const data = JSON.parse(event.data);
+              handleServerMessage(data);
+            } catch (err) {
+              console.error('Server message error:', err);
+            }
+          };
+
+          ws.onerror = () => {
+            if (dot) { dot.classList.add('offline'); dot.style.background = '#ff9800'; }
+            if (statusText) statusText.textContent = '🟡 Server Connecting... (' + serverUrl + ')';
+          };
+
+          ws.onclose = () => {
+            if (dot) { dot.classList.add('offline'); dot.style.background = '#ff9800'; }
+            if (statusText) statusText.textContent = '🟡 Reconnecting to server...';
+            setTimeout(connectWebSocket, 2500);
+          };
+        } catch (e) {
+          if (dot) { dot.classList.add('offline'); dot.style.background = '#ff9800'; }
+          if (statusText) statusText.textContent = '🟡 Offline Mode (Run run_game.bat to start server)';
+        }
+      }
+
+      function createOnlineRoom() {
+        const name = getMyPlayerName();
+        isHost = true;
+        mySlot = 1;
+
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'CREATE_ROOM',
+            playerCount: selectedPlayerCount,
+            isFun: selectedVariant === 'diwali',
+            variant: selectedVariant === 'diwali' ? 'crackers' : 'normal',
+            playerName: name
+          }));
+        } else {
+          // Offline simulator fallback
+          const randChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+          let code = '';
+          for (let i = 0; i < 4; i++) code += randChars[Math.floor(Math.random() * randChars.length)];
+          currentRoomCode = code;
+          updateRoomLobbyUI(code, [{ slot: 1, name: name + ' (Host)', isHost: true }], true);
+        }
+      }
+
+      function joinOnlineRoom(code) {
+        const name = getMyPlayerName();
+        isHost = false;
+
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'JOIN_ROOM',
+            roomCode: code,
+            playerName: name
+          }));
+        } else {
+          alert('Cannot join room: Server is not connected. Run run_game.bat to start server.');
+        }
+      }
+
+      function requestStartMatch() {
+        if (!isHost) return;
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: 'START_MATCH', roomCode: currentRoomCode }));
+        } else {
+          // Start offline simulation
+          launchOnlineGame(selectedVariant === 'diwali', selectedVariant === 'diwali' ? 'crackers' : 'normal', selectedPlayerCount, { 1: getMyPlayerName() + ' (You)', 2: 'Player 2' });
+        }
+      }
+
+      function leaveOnlineRoom() {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: 'LEAVE_ROOM' }));
+        }
+        currentRoomCode = null;
+        const activeView = document.getElementById('active-room-view');
+        const setupPanel = document.getElementById('room-setup-panel');
+        if (activeView) activeView.classList.add('hidden');
+        if (setupPanel) setupPanel.classList.remove('hidden');
+      }
+
+      function updateRoomLobbyUI(code, players, hostFlag) {
+        currentRoomCode = code;
+        isHost = hostFlag;
+        roomPlayers = players || [];
+
+        const codeEl = document.getElementById('display-room-code');
+        const activeView = document.getElementById('active-room-view');
+        const setupPanel = document.getElementById('room-setup-panel');
+        const hostCtrl = document.getElementById('host-controls');
+        const guestCtrl = document.getElementById('guest-controls');
+
+        if (codeEl) codeEl.textContent = code;
+        if (setupPanel) setupPanel.classList.add('hidden');
+        if (activeView) activeView.classList.remove('hidden');
+
+        if (isHost) {
+          if (hostCtrl) hostCtrl.classList.remove('hidden');
+          if (guestCtrl) guestCtrl.classList.add('hidden');
+        } else {
+          if (hostCtrl) hostCtrl.classList.add('hidden');
+          if (guestCtrl) guestCtrl.classList.remove('hidden');
+        }
+
+        // Render slots 1..4
+        for (let s = 1; s <= 4; s++) {
+          const slotEl = document.getElementById('slot-' + s);
+          const nameEl = document.getElementById('slot-' + s + '-name');
+          const statusEl = document.getElementById('slot-' + s + '-status');
+
+          if (!slotEl) continue;
+
+          // Check if slot exceeds current room player count
+          if (s > selectedPlayerCount) {
+            slotEl.classList.add('hidden');
+            continue;
+          } else {
+            slotEl.classList.remove('hidden');
+          }
+
+          const player = roomPlayers.find(p => p.slot === s);
+          if (player) {
+            slotEl.classList.add('occupied');
+            slotEl.classList.remove('empty');
+            const isMe = (player.slot === mySlot);
+            if (nameEl) nameEl.textContent = player.name + (isMe ? ' (You)' : '') + (player.isHost ? ' 👑' : '');
+            if (statusEl) {
+              statusEl.textContent = 'READY';
+              statusEl.className = 'slot-status ready';
+            }
+          } else {
+            slotEl.classList.remove('occupied');
+            slotEl.classList.add('empty');
+            if (nameEl) nameEl.textContent = 'Waiting for Player ' + s + '...';
+            if (statusEl) {
+              statusEl.textContent = 'OPEN';
+              statusEl.className = 'slot-status';
+            }
+          }
+        }
+      }
+
+      function launchOnlineGame(isFun, variant, pCount, playerNamesMap) {
+        closeLobbyModal();
+        Game.launchMatch(isFun, variant, 'online', pCount, playerNamesMap, mySlot);
+      }
+
+      function handleServerMessage(msg) {
+        switch (msg.type) {
+          case 'ROOM_CREATED': {
+            mySlot = msg.slot;
+            selectedPlayerCount = msg.playerCount || selectedPlayerCount;
+            updateRoomLobbyUI(msg.roomCode, msg.players, true);
+            break;
+          }
+
+          case 'ROOM_JOINED': {
+            mySlot = msg.slot;
+            selectedPlayerCount = msg.playerCount || selectedPlayerCount;
+            updateRoomLobbyUI(msg.roomCode, msg.players, false);
+            break;
+          }
+
+          case 'PLAYER_JOINED': {
+            Sound.playPocket();
+            updateRoomLobbyUI(currentRoomCode, msg.players, isHost);
+            break;
+          }
+
+          case 'PLAYER_LEFT': {
+            updateRoomLobbyUI(currentRoomCode, msg.players, isHost);
+            break;
+          }
+
+          case 'MATCH_STARTED': {
+            Sound.playPocket();
+            launchOnlineGame(msg.isFun, msg.variant, msg.playerCount, msg.playerNames);
+            break;
+          }
+
+          case 'STRIKER_MOVE': {
+            // Non-active clients receive striker movement from remote player
+            if (Game.getState() === 'aiming') {
+              Game.syncRemoteStrikerMove(msg.slot, msg.x, msg.y);
+            }
+            break;
+          }
+
+          case 'STRIKER_AIM': {
+            if (Game.getState() === 'aiming') {
+              Game.syncRemoteStrikerAim(msg.slot, msg.x, msg.y);
+            }
+            break;
+          }
+
+          case 'STRIKER_SHOOT': {
+            Game.syncRemoteStrikerShoot(msg.slot, msg.x, msg.y, msg.vx, msg.vy);
+            break;
+          }
+
+          case 'ERROR': {
+            alert(msg.message || 'An error occurred.');
+            break;
+          }
+        }
+      }
+
+      return {
+        init,
+        open: openLobbyModal,
+        close: closeLobbyModal,
+        getMySlot: () => mySlot,
+        isHost: () => isHost,
+        broadcastStrikerMove(x, y) {
+          if (ws && ws.readyState === WebSocket.OPEN && currentRoomCode) {
+            ws.send(JSON.stringify({ type: 'STRIKER_MOVE', roomCode: currentRoomCode, x, y }));
+          }
+        },
+        broadcastStrikerAim(x, y) {
+          if (ws && ws.readyState === WebSocket.OPEN && currentRoomCode) {
+            ws.send(JSON.stringify({ type: 'STRIKER_AIM', roomCode: currentRoomCode, x, y }));
+          }
+        },
+        broadcastStrikerShoot(x, y, vx, vy) {
+          if (ws && ws.readyState === WebSocket.OPEN && currentRoomCode) {
+            ws.send(JSON.stringify({ type: 'STRIKER_SHOOT', roomCode: currentRoomCode, x, y, vx, vy }));
+          }
+        }
+      };
+    })();
+
+    
+    /* =========================================================================
+       NEW CLEAN FLOW NAVIGATION CONTROLLER
+       PLAY NOW -> GAME MODES
+       ONLINE -> ONLINE LOBBY
+       CUSTOMIZE -> STRIKER / THEMES / BAZAAR
+       SETTINGS -> SETTINGS
+       ========================================================================= */
+    let currentActiveOverlay = 'menu-overlay';
+    let bazaarReturnScreen = 'menu-overlay';
+
+    function switchOverlay(fromId, toId) {
+      Sound.playFlick();
+      if (fromId) {
+        const fromEl = document.getElementById(fromId);
+        if (fromEl) fromEl.classList.add('hidden');
+      }
+      if (toId) {
+        const toEl = document.getElementById(toId);
+        if (toEl) toEl.classList.remove('hidden');
+        currentActiveOverlay = toId;
+      }
+    }
+
+    // 1. MAIN MENU NAVIGATION
+    // [PLAY NOW] -> Opens Choose Game Screen
+    const btnMainPlay = document.getElementById('btn-main-play');
+    if (btnMainPlay) {
+      btnMainPlay.addEventListener('click', () => {
+        switchOverlay('menu-overlay', 'play-mode-overlay');
+      });
+    }
+
+    // [ONLINE] -> Opens Online Play Lobby
+    const btnMainOnline = document.getElementById('btn-main-online');
+    if (btnMainOnline) {
+      btnMainOnline.addEventListener('click', () => {
+        switchOverlay('menu-overlay', 'lobby-overlay');
+        if (typeof MultiplayerLobby !== 'undefined') {
+          MultiplayerLobby.open();
+        }
+      });
+    }
+
+    // [CUSTOMIZE] -> Opens Customize Hub
+    const btnMainCustomize = document.getElementById('btn-main-customize');
+    if (btnMainCustomize) {
+      btnMainCustomize.addEventListener('click', () => {
+        updateEquippedStrikerCard();
+        switchOverlay('menu-overlay', 'customize-menu-overlay');
+      });
+    }
+
+    // [SETTINGS] -> Opens Settings Screen
+    const btnMainSettings = document.getElementById('btn-main-settings');
+    if (btnMainSettings) {
+      btnMainSettings.addEventListener('click', () => {
+        switchOverlay('menu-overlay', 'settings-overlay');
+      });
+    }
+
+    // [BAZAAR] from Main Menu -> Opens Cracker Bazaar directly
+    const btnMainBazaar = document.getElementById('btn-main-bazaar');
+    if (btnMainBazaar) {
+      btnMainBazaar.addEventListener('click', () => {
+        bazaarReturnScreen = 'menu-overlay';
+        switchOverlay('menu-overlay', 'bazaar-overlay');
+        renderBazaarUI();
+      });
+    }
+
+    // 2. PLAY NOW -> CHOOSE GAME BACK BUTTON
+    const btnPlayModeBack = document.getElementById('btn-play-mode-back');
+    if (btnPlayModeBack) {
+      btnPlayModeBack.addEventListener('click', () => {
+        switchOverlay('play-mode-overlay', 'menu-overlay');
+      });
+    }
+
+    // Fun Mode Card in Choose Game -> Opens Fun Mode Selection
+    // (card-fun is already handled, but now its back button returns to play-mode-overlay)
+    const btnFunBack = document.getElementById('btn-fun-back');
+    if (btnFunBack) {
+      // Replace previous listener with new hierarchy back
+      btnFunBack.onclick = (e) => {
+        e.stopPropagation();
+        Sound.playFlick();
+        document.getElementById('fun-menu-overlay').classList.add('hidden');
+        document.getElementById('play-mode-overlay').classList.remove('hidden');
+      };
+    }
+
+    // 3. ONLINE BACK BUTTON
+    const btnOnlineBack = document.getElementById('btn-close-lobby');
+    if (btnOnlineBack) {
+      btnOnlineBack.onclick = (e) => {
+        e.stopPropagation();
+        Sound.playFlick();
+        document.getElementById('lobby-overlay').classList.add('hidden');
+        document.getElementById('menu-overlay').classList.remove('hidden');
+      };
+    }
+
+    // 4. CUSTOMIZE HUB NAVIGATION
+    const btnCustomizeBack = document.getElementById('btn-customize-back');
+    if (btnCustomizeBack) {
+      btnCustomizeBack.addEventListener('click', () => {
+        switchOverlay('customize-menu-overlay', 'menu-overlay');
+      });
+    }
+
+    const cardThemesLink = document.getElementById('card-themes-link');
+    if (cardThemesLink) {
+      cardThemesLink.addEventListener('click', (e) => {
+        Sound.playFlick();
+        document.getElementById('customize-menu-overlay').classList.add('hidden');
+        document.getElementById('custom-overlay').classList.remove('hidden');
+      });
+    }
+
+    const btnCustomDone = document.getElementById('btn-custom-done');
+    if (btnCustomDone) {
+      btnCustomDone.onclick = (e) => {
+        e.stopPropagation();
+        Sound.playFlick();
+        document.getElementById('custom-overlay').classList.add('hidden');
+        document.getElementById('customize-menu-overlay').classList.remove('hidden');
+        updateEquippedStrikerCard();
+      };
+    }
+
+    const btnCustomOpenBazaar = document.getElementById('btn-custom-open-bazaar');
+    if (btnCustomOpenBazaar) {
+      btnCustomOpenBazaar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        Sound.playFlick();
+        bazaarReturnScreen = 'customize-menu-overlay';
+        document.getElementById('customize-menu-overlay').classList.add('hidden');
+        document.getElementById('bazaar-overlay').classList.remove('hidden');
+        renderBazaarUI();
+      });
+    }
+
+    const cardBazaarLink = document.getElementById('card-bazaar-link');
+    if (cardBazaarLink) {
+      cardBazaarLink.addEventListener('click', (e) => {
+        Sound.playFlick();
+        bazaarReturnScreen = 'customize-menu-overlay';
+        document.getElementById('customize-menu-overlay').classList.add('hidden');
+        document.getElementById('bazaar-overlay').classList.remove('hidden');
+        renderBazaarUI();
+      });
+    }
+
+    const btnArsenalDone = document.getElementById('btn-arsenal-done');
+    if (btnArsenalDone) {
+      btnArsenalDone.onclick = (e) => {
+        e.stopPropagation();
+        Sound.playFlick();
+        document.getElementById('arsenal-overlay').classList.add('hidden');
+        document.getElementById('customize-menu-overlay').classList.remove('hidden');
+        updateEquippedStrikerCard();
+      };
+    }
+
+    // Bazaar Back Button: Returns to wherever the player opened it from
+    const btnBazaarBack = document.getElementById('btn-bazaar-back');
+    if (btnBazaarBack) {
+      btnBazaarBack.onclick = (e) => {
+        e.stopPropagation();
+        Sound.playFlick();
+        document.getElementById('bazaar-overlay').classList.add('hidden');
+        const returnEl = document.getElementById(bazaarReturnScreen || 'menu-overlay');
+        if (returnEl) returnEl.classList.remove('hidden');
+      };
+    }
+
+    // 5. SETTINGS SCREEN CONTROLS & BACK BUTTON
+    const btnSettingsBack = document.getElementById('btn-settings-back');
+    if (btnSettingsBack) {
+      btnSettingsBack.addEventListener('click', () => {
+        switchOverlay('settings-overlay', 'menu-overlay');
+      });
+    }
+
+    const toggleSoundEl = document.getElementById('setting-toggle-sound');
+    if (toggleSoundEl) {
+      toggleSoundEl.addEventListener('change', (e) => {
+        if (typeof Sound !== 'undefined' && Sound.toggle) {
+          Sound.toggle();
+        }
+      });
+    }
+
+    MultiplayerLobby.init();
     updateEquippedStrikerCard();
     Game.start();
   </script>
