@@ -8317,7 +8317,12 @@
       boardShakeDecay = customDecay !== undefined ? customDecay : prof.decay;
 
       const haptics = customHaptics || prof.haptics;
-      if (typeof navigator !== 'undefined' && 'vibrate' in navigator && haptics) {
+      if (typeof window !== 'undefined' && window.AndroidBridge && haptics) {
+        try {
+          if (Array.isArray(haptics)) window.AndroidBridge.vibratePattern(haptics);
+          else window.AndroidBridge.vibrate(haptics);
+        } catch(e) {}
+      } else if (typeof navigator !== 'undefined' && 'vibrate' in navigator && haptics) {
         try {
           navigator.vibrate(haptics);
         } catch(e) {}
