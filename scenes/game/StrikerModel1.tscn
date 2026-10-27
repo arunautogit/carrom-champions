@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://tpp6f1p5lk71"]
+
+[ext_resource type="PackedScene" uid="uid://b75ysta8j51e7" path="res://assets/3dmodel/Strikers/Striker1.glb" id="1_2ei8c"]
+
+[node name="StrikerModel1" type="Node3D" unique_id=50406949]
+
+[node name="Striker1" parent="." unique_id=1590991143 instance=ExtResource("1_2ei8c")]

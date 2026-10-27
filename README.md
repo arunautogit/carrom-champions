@@ -1,41 +1,72 @@
-# ③ Carrom Champions - Standalone Web Edition
+# 🎱 Carrom Champions
 
-A 100% self-contained, zero-dependency HTML5 Canvas & Web Audio Carrom game backup.
-
-This entire game is located in this folder (`carromweb`) and runs completely standalone with **zero external folder dependencies**. You can copy or move this `carromweb` folder anywhere on your computer or host it on any web server.
+A high-performance 3D Carrom board game built with **Godot 4.3**, fully optimized for **Web (HTML5 / WebGL 2.0)**, **GitHub Pages**, and **Google YouTube Playables**.
 
 ---
 
-## 🚀 How to Play
+## 🎮 Play Online
 
-### Option 1: Double-Click & Play Offline (Easiest)
-- Simply double-click **`play_offline.bat`** OR double-click **`index.html`** in this folder.
-- Opens instantly in your web browser. No internet connection or installation required!
-
-### Option 2: Run via Local HTTP Server
-- Double-click **`start_server.bat`**.
-- Starts a local server at `http://localhost:8080` and opens your browser automatically.
+Once deployed to GitHub Pages, the game is playable directly in any browser:
+- **Live URL**: [https://arunautogit.github.io/carrom-champions/](https://arunautogit.github.io/carrom-champions/)
 
 ---
 
-## 🎮 Game Features & Modes
+## 🚀 YouTube Playables Integration
 
-### 1. 🌟 Classic / Normal Mode
-- Official tournament Carrom rules (White coins, Black coins, Red Queen cover rule).
-- Clean, authentic physics, cushion bounces, and AI Bot opponent.
-- Pure classic tournament aiming trajectory (clean yellow dashed guide line and pull indicator).
+The project adheres to Google's official [YouTube Playables Developer Guidelines](https://developers.google.com/youtube/gaming/playables).
 
-### 2. 🪔 Diwali Cracker Mode (100 Varieties Bazaar)
-- **100 Cracker Bazaar**: Equip and collect up to 100 cracker varieties across 9 White, 9 Black, and 1 Queen coins.
-- **Diwali Shubh Giftbox**: Centered celebratory modal with instant one-click preset arsenal (4 Chakkars, 4 Flower Pots, 1 Peacock, 2 100-Wala, 4 Rockets, 2 Sky Shots, and the 1000-Wala Rajah Maha Dhamaka Queen).
-- **Interactive Striker Sparklers**: Radiating golden Phuljhadi needle sparks and pulsating fire corona while aiming.
-- **Trajectory Sparkles**: Luminous trajectory beam with animated streaming starburst embers and rotating crosshairs.
-- **3D Striking Cue Rod**: Realistic 3D cylindrical wooden cue stick with drop shadow, leather tip, brass ferrule, power tension inlays, knurled grip, pommel, and sparkler contact arcs.
-- **Striker Cracker Mode**: Striker transforms into a roaring Chakkar spinner and Flower Pot geyser during active cycles (starts at 3 mins for 30s, then recurs every 2 mins for 20s) with HUD ON/OFF toggle button. Hit coins crackle in place and explode with high kinetic force.
-- **Coin Vibration Haptics**: Pocketing crackers triggers variety-specific camera shake and physical phone vibration haptics via the Web Haptics API.
-- **Burnt Soot Marks & Paper Debris**: Explosions leave authentic black carbon residue on the felt and scatter colorful paper confetti.
-- **Happy Diwali 2026 Celebration**: At match victory, all won cracker coins celebrate simultaneously in the center of the board with a festive golden popup dialog before the final scoreboard.
+### Integrated SDK Features:
+1. **Core SDK Loader**: Loaded via official script tag in `<head>` (`https://www.youtube.com/game_api/v1`).
+2. **Lifecycle Handlers**:
+   - `ytgame.game.firstFrameReady()` is fired during splash screen boot (`scenes/splash/SplashScreen.gd`).
+   - `ytgame.game.gameReady()` is fired once the game is interactive in `scenes/menu/MainMenu.gd`.
+3. **Pausing & Resuming**:
+   - `ytgame.system.onPause`: Gracefully halts the Godot SceneTree and mutes all audio buses.
+   - `ytgame.system.onResume`: Resumes gameplay and restores user audio settings.
+4. **Audio State Synchronization**:
+   - `ytgame.system.onAudioEnabledChange`: Syncs Master audio volume with YouTube's player chrome mute/unmute state.
+5. **Cloud Saves**:
+   - Integrated with `ytgame.game.saveData` and `ytgame.game.loadData` inside `scripts/SaveManager.gd` for seamless cross-device persistence.
+6. **IFrame & Sandbox Compatibility**:
+   - Exported using Godot 4.3's **Single-Threaded WebGL 2** (`gl_compatibility`) renderer, eliminating `SharedArrayBuffer` / cross-origin isolation (COOP/COEP) constraints inside embedded iframes.
+7. **Offline / Standalone Fallback**:
+   - Includes a sandbox mock so the game runs outside the YouTube container (e.g. locally or on GitHub Pages) without errors.
 
-### 3. ⚡ Striker Arsenal & Customization
-- 6 Godot-matched strikers (Classic, Amber Gold Cyber, Emerald Jade Glass, Cobalt Sapphire Orb, Acid Lime Prism, Titanium Mirror Chrome).
-- Board & coin felt themes with wood grain finishes and procedural sound synthesis.
+---
+
+## 📦 How to Build the YouTube Playables Package
+
+### Option 1: Automated Script (Windows PowerShell)
+Run the bundled build script from the repository root:
+```powershell
+.\scripts\export_playables.ps1
+```
+This produces:
+- `export/playables/` — Clean unpacked HTML5 bundle with `index.html` at the root.
+- `export/CarromChampions_YouTubePlayables.zip` — Certified zip package ready for YouTube Developer Console upload.
+
+### Option 2: Automated GitHub Actions CI/CD
+Every push to `main` triggers `.github/workflows/deploy.yml`:
+1. Compiles the Godot Web project.
+2. Deploys the live game to **GitHub Pages**.
+3. Uploads `CarromChampions_YouTubePlayables.zip` as a workflow release artifact.
+
+---
+
+## 🛠 Project Structure
+
+```
+├── .github/workflows/         # Automated GitHub Pages & Playables CI/CD
+├── assets/                    # 3D models, textures, audio, fonts
+├── export/
+│   ├── youtube_playables/     # Custom HTML shell with YouTube SDK
+│   └── playables/             # Compiled Web build output
+├── scenes/                    # Game scenes (splash, menu, game, ui)
+├── scripts/
+│   ├── ai/                    # Carrom AI bots and shot evaluators
+│   ├── managers/              # YouTubePlayablesBridge.gd, player profile
+│   └── export_playables.ps1   # PowerShell export script
+├── export_presets.cfg         # Android and Web export presets
+├── project.godot              # Godot 4 engine configuration
+└── README.md
+```

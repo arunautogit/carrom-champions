@@ -1,0 +1,45 @@
+# Godot 4+ cache & user data
+.godot/
+*.translation
+
+# Build outputs
+CarromChampions.apk
+CarromChampions_update.apk
+CarromChampions_update_v4.apk
+CarromChampions.apk.idsig
+CarromChampions_update.apk.idsig
+CarromChampions_update_v4.apk.idsig
+*.apk
+*.aab
+*.idsig
+
+# Exported bundles
+export/playables/
+export/web/
+export/*.zip
+*.zip
+
+# Engine binaries & local tools
+Godot_*.exe
+*.exe
+
+# Logs and debug files
+*.log
+debug.txt
+export_error.log
+export_log.txt
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Python / extraction caches
+__pycache__/
+extracted_tpz/
+
+.backup_seaside_rock_1k/
+
+scratch/
+*.bak
+node_modules/
