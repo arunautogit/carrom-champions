@@ -3152,6 +3152,39 @@
       justify-content: space-between;
       gap: 12px;
     }
+    .volume-slider-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+      width: 100%;
+    }
+    .volume-slider {
+      flex: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 215, 0, 0.25);
+      outline: none;
+    }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #ffd700;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    }
+    .volume-val-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #ffd700;
+      min-width: 40px;
+      text-align: right;
+    }
 
     .settings-label {
       font-size: 0.92rem;
@@ -3382,15 +3415,57 @@
         <p class="subtitle" style="margin-bottom: 18px;">Audio, Haptics &amp; Game Preferences</p>
 
         <div class="settings-list">
-          <div class="settings-row">
-            <div>
-              <div class="settings-label">🔊 Sound Effects &amp; Audio</div>
-              <div class="settings-sub">Embedded Godot sound synthesis &amp; crackles</div>
+          <!-- 1. Master Audio -->
+          <div class="settings-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div class="settings-label">🔊 Master Audio</div>
+                <div class="settings-sub">Main sound output &amp; master mute</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="setting-toggle-sound" checked />
+                <span class="toggle-slider"></span>
+              </label>
             </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="setting-toggle-sound" checked />
-              <span class="toggle-slider"></span>
-            </label>
+            <div class="volume-slider-row">
+              <span style="font-size: 0.85rem; color: #ffd700;">🔈</span>
+              <input type="range" id="setting-slider-master" class="volume-slider" min="0" max="100" value="100" />
+              <span id="label-val-master" class="volume-val-badge">100%</span>
+            </div>
+          </div>
+
+          <!-- 2. Background Music -->
+          <div class="settings-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div class="settings-label">🎵 Background Music</div>
+                <div class="settings-sub">Diwali Darbar tanpura &amp; ambient tabla rhythms</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="setting-toggle-music" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="volume-slider-row">
+              <span style="font-size: 0.85rem; color: #ffd700;">🎶</span>
+              <input type="range" id="setting-slider-music" class="volume-slider" min="0" max="100" value="55" />
+              <span id="label-val-music" class="volume-val-badge">55%</span>
+            </div>
+          </div>
+
+          <!-- 3. Sound Effects (SFX) -->
+          <div class="settings-row" style="flex-direction: column; align-items: stretch; gap: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div class="settings-label">🎯 Sound Effects (SFX)</div>
+                <div class="settings-sub">Coin clacks, striker hits &amp; 90dB cracker reports</div>
+              </div>
+            </div>
+            <div class="volume-slider-row">
+              <span style="font-size: 0.85rem; color: #ffd700;">💥</span>
+              <input type="range" id="setting-slider-sfx" class="volume-slider" min="0" max="100" value="100" />
+              <span id="label-val-sfx" class="volume-val-badge">100%</span>
+            </div>
           </div>
 
           <div class="settings-row">
@@ -3968,37 +4043,95 @@
 
     const Sound = (() => {
       let ctx = null;
-      let masterNode = null;
-      let enabled = true;
+      let masterGainNode = null;
+      let sfxGainNode = null;
+      let musicGainNode = null;
+      let sfxBus = null;
       let decodedBuffers = {};
+
+      // Persistent Audio Settings (Defaults)
+      let enabled = true;
+      let musicEnabled = true;
+      let masterVol = 1.0;
+      let sfxVol = 1.0;
+      let musicVol = 0.55;
+
+      // Music State
+      let currentMusicType = null; // 'menu' | 'normal' | 'fun' | null
+      let musicInterval = null;
+      let activeMusicNodes = [];
+
+      // Load settings from localStorage
+      function loadPreferences() {
+        try {
+          const raw = localStorage.getItem('carrom_audio_prefs_v2');
+          if (raw) {
+            const p = JSON.parse(raw);
+            if (typeof p.enabled === 'boolean') enabled = p.enabled;
+            if (typeof p.musicEnabled === 'boolean') musicEnabled = p.musicEnabled;
+            if (typeof p.masterVol === 'number') masterVol = Math.max(0, Math.min(1, p.masterVol));
+            if (typeof p.sfxVol === 'number') sfxVol = Math.max(0, Math.min(1, p.sfxVol));
+            if (typeof p.musicVol === 'number') musicVol = Math.max(0, Math.min(1, p.musicVol));
+          }
+        } catch(e) {}
+      }
+      loadPreferences();
+
+      function savePreferences() {
+        try {
+          localStorage.setItem('carrom_audio_prefs_v2', JSON.stringify({
+            enabled, musicEnabled, masterVol, sfxVol, musicVol
+          }));
+        } catch(e) {}
+      }
 
       function getCtx() {
         if (!ctx) {
           const AudioContext = window.AudioContext || window.webkitAudioContext;
           if (AudioContext) {
             ctx = new AudioContext();
+
+            // 1. Master Output Gain
+            masterGainNode = ctx.createGain();
+            masterGainNode.gain.setValueAtTime(enabled ? masterVol * 1.35 : 0, ctx.currentTime);
+            masterGainNode.connect(ctx.destination);
+
+            // 2. SFX Bus with Dynamics Compressor (calibrated for 90dB cracker headroom)
             const comp = ctx.createDynamicsCompressor();
-            comp.threshold.setValueAtTime(-6, ctx.currentTime);
-            comp.knee.setValueAtTime(24, ctx.currentTime);
-            comp.ratio.setValueAtTime(3.5, ctx.currentTime);
-            comp.attack.setValueAtTime(0.002, ctx.currentTime);
-            comp.release.setValueAtTime(0.2, ctx.currentTime);
+            comp.threshold.setValueAtTime(-8, ctx.currentTime);
+            comp.knee.setValueAtTime(18, ctx.currentTime);
+            comp.ratio.setValueAtTime(4.5, ctx.currentTime);
+            comp.attack.setValueAtTime(0.001, ctx.currentTime);
+            comp.release.setValueAtTime(0.15, ctx.currentTime);
 
-            const masterGain = ctx.createGain();
-            masterGain.gain.setValueAtTime(1.65, ctx.currentTime); // +65% extra loudness punch!
+            sfxGainNode = ctx.createGain();
+            sfxGainNode.gain.setValueAtTime(sfxVol, ctx.currentTime);
+            sfxGainNode.connect(comp);
+            comp.connect(masterGainNode);
+            sfxBus = sfxGainNode;
 
-            comp.connect(masterGain);
-            masterGain.connect(ctx.destination);
-            masterNode = comp;
+            // 3. Independent Music Bus (Warm, smooth, separate volume)
+            musicGainNode = ctx.createGain();
+            musicGainNode.gain.setValueAtTime((enabled && musicEnabled) ? musicVol * 0.75 : 0, ctx.currentTime);
+            
+            // Soft lowpass filter on music to prevent masking gameplay coin frequencies
+            const musicFilter = ctx.createBiquadFilter();
+            musicFilter.type = 'lowpass';
+            musicFilter.frequency.setValueAtTime(4200, ctx.currentTime);
+            musicFilter.connect(masterGainNode);
+            musicGainNode.connect(musicFilter);
           }
         }
-        if (ctx && ctx.state === 'suspended') ctx.resume();
+        if (ctx && ctx.state === 'suspended') {
+          ctx.resume().catch(() => {});
+        }
         return ctx;
       }
 
-      function getDest() {
+      function getDest(isMusic = false) {
         getCtx();
-        return masterNode || (ctx ? ctx.destination : null);
+        if (isMusic) return musicGainNode || (ctx ? ctx.destination : null);
+        return sfxBus || (ctx ? ctx.destination : null);
       }
 
       function initDecoders() {
@@ -4018,7 +4151,23 @@
         });
       }
 
-      window.addEventListener('pointerdown', initDecoders, { once: true });
+      // Robust touch & gesture listener for Android WebView and Mobile Browsers
+      ['pointerdown', 'touchstart', 'click', 'keydown'].forEach(evt => {
+        window.addEventListener(evt, () => {
+          getCtx();
+          initDecoders();
+          if (musicEnabled && !currentMusicType) {
+            playMenuMusic();
+          }
+        }, { once: false, passive: true });
+      });
+
+      // Resume context when returning to tab / waking phone
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && ctx && ctx.state === 'suspended') {
+          ctx.resume().catch(() => {});
+        }
+      });
 
       function playSample(key, vol = 1.0, pitchVariation = 0.06) {
         if (!enabled) return false;
@@ -4042,10 +4191,421 @@
         }
       }
 
+      /* =========================================================================
+         BACKGROUND MUSIC GENERATOR (WebAudio Synthesized Indian Atmosphere)
+         No external MP3 files required — 100% procedurally synthesized in real-time
+         ========================================================================= */
+
+      function stopActiveMusicNodes(fadeTime = 0.6) {
+        if (musicInterval) {
+          clearInterval(musicInterval);
+          musicInterval = null;
+        }
+        if (activeMusicNodes.length > 0 && ctx) {
+          const now = ctx.currentTime;
+          activeMusicNodes.forEach(({ osc, gain }) => {
+            try {
+              if (gain && gain.gain) {
+                gain.gain.setValueAtTime(gain.gain.value, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + fadeTime);
+              }
+              if (osc && osc.stop) {
+                setTimeout(() => { try { osc.stop(); osc.disconnect(); } catch(e){} }, fadeTime * 1000 + 50);
+              }
+            } catch(e) {}
+          });
+          activeMusicNodes = [];
+        }
+      }
+
+      // ── Menu Music: "Diwali Darbar" (Meditative Tanpura Drone + Bhupali Sitar Bells + Soft Tabla) ──
+      function playMenuMusic() {
+        if (!enabled || !musicEnabled) return;
+        if (currentMusicType === 'menu' && activeMusicNodes.length > 0) return;
+        stopActiveMusicNodes(0.4);
+        currentMusicType = 'menu';
+
+        const ac = getCtx();
+        if (!ac) return;
+        const now = ac.currentTime;
+        const dest = getDest(true);
+
+        // Tanpura Root & 5th Drones (C3, G3, C4, C4+2ct)
+        const tanpuraPitches = [130.81, 196.00, 261.63, 262.2];
+        tanpuraPitches.forEach((freq, idx) => {
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = idx % 2 === 0 ? 'triangle' : 'sine';
+          osc.frequency.setValueAtTime(freq, now);
+
+          // Gentle breathing LFO pulse on drone
+          const lfo = ac.createOscillator();
+          const lfoGain = ac.createGain();
+          lfo.frequency.setValueAtTime(0.18 + idx * 0.05, now);
+          lfoGain.gain.setValueAtTime(0.04, now);
+          lfo.connect(lfoGain);
+          lfoGain.connect(gain.gain);
+          lfo.start(now);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.12 - idx * 0.02, now + 2.0);
+
+          osc.connect(gain);
+          gain.connect(dest);
+          osc.start(now);
+
+          activeMusicNodes.push({ osc, gain });
+          activeMusicNodes.push({ osc: lfo, gain: lfoGain });
+        });
+
+        // Raga Bhupali Pentatonic Notes (C4, D4, E4, G4, A4, C5)
+        const ragaNotes = [261.63, 293.66, 329.63, 392.00, 440.00, 523.25];
+        let noteStep = 0;
+
+        function triggerMelodicChime() {
+          if (!enabled || !musicEnabled || currentMusicType !== 'menu') return;
+          const a = getCtx(); if (!a) return;
+          const t = a.currentTime;
+          const noteFreq = ragaNotes[noteStep % ragaNotes.length];
+          noteStep = (noteStep + Math.floor(1 + Math.random() * 3)) % ragaNotes.length;
+
+          // Sitar/Bell harmonic chime
+          const chimeOsc = a.createOscillator();
+          const chimeGain = a.createGain();
+          chimeOsc.type = 'triangle';
+          chimeOsc.frequency.setValueAtTime(noteFreq, t);
+
+          chimeGain.gain.setValueAtTime(0.08, t);
+          chimeGain.gain.exponentialRampToValueAtTime(0.0001, t + 1.8);
+
+          // Gentle ambient echo
+          const delay = a.createDelay();
+          delay.delayTime.value = 0.28;
+          const fb = a.createGain();
+          fb.gain.value = 0.35;
+          delay.connect(fb);
+          fb.connect(delay);
+
+          chimeOsc.connect(chimeGain);
+          chimeGain.connect(dest);
+          chimeGain.connect(delay);
+          delay.connect(dest);
+
+          chimeOsc.start(t);
+          chimeOsc.stop(t + 2.2);
+
+          // Soft low tabla pulse every 2 notes
+          if (noteStep % 2 === 0) {
+            const bayanOsc = a.createOscillator();
+            const bayanGain = a.createGain();
+            bayanOsc.type = 'sine';
+            bayanOsc.frequency.setValueAtTime(82, t);
+            bayanOsc.frequency.exponentialRampToValueAtTime(45, t + 0.35);
+            bayanGain.gain.setValueAtTime(0.12, t);
+            bayanGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+            bayanOsc.connect(bayanGain);
+            bayanGain.connect(dest);
+            bayanOsc.start(t);
+            bayanOsc.stop(t + 0.45);
+          }
+        }
+
+        // Trigger ambient phrase every 2.4 seconds
+        musicInterval = setInterval(triggerMelodicChime, 2400);
+      }
+
+      // ── Game Music: Normal Mode (Deep Zen Focus) or Fun Mode (Diwali Festive Rhythm) ──
+      function playGameMusic(mode = 'normal') {
+        if (!enabled || !musicEnabled) return;
+        const targetType = mode === 'fun' ? 'fun' : 'normal';
+        if (currentMusicType === targetType && activeMusicNodes.length > 0) return;
+        stopActiveMusicNodes(0.3);
+        currentMusicType = targetType;
+
+        const ac = getCtx();
+        if (!ac) return;
+        const now = ac.currentTime;
+        const dest = getDest(true);
+
+        if (targetType === 'normal') {
+          // Zen Carrom Focus: Deep Sa-Pa Drone (D2 = 73.4Hz, A2 = 110Hz, D3 = 146.8Hz)
+          [73.42, 110.0, 146.83].forEach((f, i) => {
+            const osc = ac.createOscillator();
+            const gain = ac.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(f, now);
+
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.linearRampToValueAtTime(0.11 - i * 0.02, now + 1.5);
+
+            osc.connect(gain);
+            gain.connect(dest);
+            osc.start(now);
+
+            activeMusicNodes.push({ osc, gain });
+          });
+
+          // Periodic gentle wooden resonance chime (every 4.5s)
+          musicInterval = setInterval(() => {
+            if (!enabled || !musicEnabled || currentMusicType !== 'normal') return;
+            const a = getCtx(); if (!a) return;
+            const t = a.currentTime;
+            const f = [220, 293.66, 369.99, 440][Math.floor(Math.random() * 4)];
+            const osc = a.createOscillator();
+            const gain = a.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(f, t);
+            gain.gain.setValueAtTime(0.05, t);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.6);
+            osc.connect(gain);
+            gain.connect(dest);
+            osc.start(t);
+            osc.stop(t + 1.8);
+          }, 4500);
+
+        } else {
+          // Fun / Diwali Mode: Energetic 116 BPM Celebration Rhythm + Festive Melody
+          [146.83, 220.0, 293.66].forEach((f, i) => {
+            const osc = ac.createOscillator();
+            const gain = ac.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(f, now);
+            gain.gain.setValueAtTime(0.001, now);
+            gain.gain.linearRampToValueAtTime(0.09, now + 1.0);
+            osc.connect(gain);
+            gain.connect(dest);
+            osc.start(now);
+            activeMusicNodes.push({ osc, gain });
+          });
+
+          const festiveScale = [293.66, 329.63, 369.99, 440.00, 493.88, 587.33];
+          let beat = 0;
+          const beatDuration = (60 / 116) * 1000; // ~517ms per beat
+
+          musicInterval = setInterval(() => {
+            if (!enabled || !musicEnabled || currentMusicType !== 'fun') return;
+            const a = getCtx(); if (!a) return;
+            const t = a.currentTime;
+            beat++;
+
+            // Tabla Bass beat on 1 and 3
+            if (beat % 2 === 1) {
+              const bass = a.createOscillator();
+              const bGain = a.createGain();
+              bass.type = 'sine';
+              bass.frequency.setValueAtTime(95, t);
+              bass.frequency.exponentialRampToValueAtTime(45, t + 0.22);
+              bGain.gain.setValueAtTime(0.14, t);
+              bGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+              bass.connect(bGain);
+              bGain.connect(dest);
+              bass.start(t);
+              bass.stop(t + 0.28);
+            }
+
+            // Dayan treble rim tap on every beat
+            const rim = a.createOscillator();
+            const rGain = a.createGain();
+            rim.type = 'triangle';
+            rim.frequency.setValueAtTime(420, t);
+            rim.frequency.exponentialRampToValueAtTime(260, t + 0.08);
+            rGain.gain.setValueAtTime(0.05, t);
+            rGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.09);
+            rim.connect(rGain);
+            rGain.connect(dest);
+            rim.start(t);
+            rim.stop(t + 0.1);
+
+            // Melodic phrase every 4 beats
+            if (beat % 4 === 0) {
+              const f = festiveScale[Math.floor(Math.random() * festiveScale.length)];
+              const lead = a.createOscillator();
+              const lGain = a.createGain();
+              lead.type = 'sawtooth';
+              lead.frequency.setValueAtTime(f, t);
+              lGain.gain.setValueAtTime(0.06, t);
+              lGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.7);
+              lead.connect(lGain);
+              lGain.connect(dest);
+              lead.start(t);
+              lead.stop(t + 0.75);
+            }
+          }, beatDuration);
+        }
+      }
+
+      function stopMusic(fadeTime = 0.5) {
+        currentMusicType = null;
+        stopActiveMusicNodes(fadeTime);
+      }
+
       return {
-        setEnabled(val) { enabled = val; },
+        // --- System & Preferences ---
+        setEnabled(val) {
+          enabled = !!val;
+          savePreferences();
+          if (masterGainNode && ctx) {
+            masterGainNode.gain.setValueAtTime(enabled ? masterVol * 1.35 : 0, ctx.currentTime);
+          }
+          if (!enabled) {
+            stopActiveMusicNodes(0.2);
+          } else if (musicEnabled && !currentMusicType) {
+            playMenuMusic();
+          }
+        },
         isEnabled() { return enabled; },
 
+        toggle() {
+          this.setEnabled(!enabled);
+          return enabled;
+        },
+
+        setMasterVolume(val) {
+          masterVol = Math.max(0, Math.min(1, Number(val) || 0));
+          savePreferences();
+          if (masterGainNode && ctx && enabled) {
+            masterGainNode.gain.setValueAtTime(masterVol * 1.35, ctx.currentTime);
+          }
+        },
+        getMasterVolume() { return masterVol; },
+
+        setSfxVolume(val) {
+          sfxVol = Math.max(0, Math.min(1, Number(val) || 0));
+          savePreferences();
+          if (sfxGainNode && ctx) {
+            sfxGainNode.gain.setValueAtTime(sfxVol, ctx.currentTime);
+          }
+        },
+        getSfxVolume() { return sfxVol; },
+
+        setMusicVolume(val) {
+          musicVol = Math.max(0, Math.min(1, Number(val) || 0));
+          savePreferences();
+          if (musicGainNode && ctx && enabled && musicEnabled) {
+            musicGainNode.gain.setValueAtTime(musicVol * 0.75, ctx.currentTime);
+          }
+        },
+        getMusicVolume() { return musicVol; },
+
+        setMusicEnabled(val) {
+          musicEnabled = !!val;
+          savePreferences();
+          if (musicGainNode && ctx) {
+            musicGainNode.gain.setValueAtTime((enabled && musicEnabled) ? musicVol * 0.75 : 0, ctx.currentTime);
+          }
+          if (musicEnabled && !currentMusicType) {
+            playMenuMusic();
+          } else if (!musicEnabled) {
+            stopActiveMusicNodes(0.2);
+            currentMusicType = null;
+          }
+        },
+        isMusicEnabled() { return musicEnabled; },
+
+        toggleMusic() {
+          this.setMusicEnabled(!musicEnabled);
+          return musicEnabled;
+        },
+
+        getAudioSettings() {
+          return { enabled, musicEnabled, masterVol, sfxVol, musicVol };
+        },
+
+        // --- Music Controls ---
+        playMenuMusic,
+        playGameMusic,
+        stopMusic,
+
+        // --- Special Polish Jingles ---
+        playQueenPocket() {
+          if (!enabled) return;
+          const ac = getCtx(); if (!ac) return;
+          const now = ac.currentTime;
+          const dest = getDest();
+
+          // Royal 5-note ascending arpeggio with golden resonance
+          const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51]; // C5, E5, G5, C6, E6
+          notes.forEach((freq, idx) => {
+            const osc = ac.createOscillator();
+            const gain = ac.createGain();
+            const t = now + idx * 0.055;
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0.18, t);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.65);
+            osc.connect(gain);
+            gain.connect(dest);
+            osc.start(t);
+            osc.stop(t + 0.7);
+          });
+
+          // Soft sub-thump to ground the pocket
+          const sub = ac.createOscillator();
+          const sGain = ac.createGain();
+          sub.type = 'sine';
+          sub.frequency.setValueAtTime(140, now);
+          sub.frequency.exponentialRampToValueAtTime(40, now + 0.25);
+          sGain.gain.setValueAtTime(0.35, now);
+          sGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+          sub.connect(sGain);
+          sGain.connect(dest);
+          sub.start(now);
+          sub.stop(now + 0.3);
+        },
+
+        playWinJingle() {
+          if (!enabled) return;
+          const ac = getCtx(); if (!ac) return;
+          const now = ac.currentTime;
+          const dest = getDest();
+
+          // Triumphant 5-chord celebration fanfare
+          const fanfare = [
+            { f: 261.63, d: 0.18 }, // C4
+            { f: 329.63, d: 0.18 }, // E4
+            { f: 392.00, d: 0.22 }, // G4
+            { f: 523.25, d: 0.35 }, // C5
+            { f: 659.25, d: 0.75 }  // E5 (sustained)
+          ];
+          let curTime = now;
+          fanfare.forEach(({ f, d }) => {
+            const osc = ac.createOscillator();
+            const gain = ac.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(f, curTime);
+            gain.gain.setValueAtTime(0.24, curTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, curTime + d);
+            osc.connect(gain);
+            gain.connect(dest);
+            osc.start(curTime);
+            osc.stop(curTime + d + 0.05);
+            curTime += d * 0.85;
+          });
+        },
+
+        playLossJingle() {
+          if (!enabled) return;
+          const ac = getCtx(); if (!ac) return;
+          const now = ac.currentTime;
+          const dest = getDest();
+
+          // Gentle sympathetic 3-note resolution (G4 -> E4 -> C4)
+          [392.00, 329.63, 261.63].forEach((f, idx) => {
+            const osc = ac.createOscillator();
+            const gain = ac.createGain();
+            const t = now + idx * 0.22;
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(f, t);
+            gain.gain.setValueAtTime(0.18, t);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+            osc.connect(gain);
+            gain.connect(dest);
+            osc.start(t);
+            osc.stop(t + 0.6);
+          });
+        },
+
+        // --- Core Gameplay SFX ---
         playClack(velocity = 1.0, strikerId = null) {
           if (!enabled) return;
           const ac = getCtx();
@@ -4145,238 +4705,375 @@
           osc.stop(ac.currentTime + 0.07);
         },
 
-        /* =================== 19 DIWALI CRACKER AUDIO PROFILES (AMPLIFIED) =================== */
-        playWhistleSpin(duration = 4.5, baseFreq = 700) {
-          if (!enabled) return;
-          const ac = getCtx(); if (!ac) return;
-          const now = ac.currentTime;
-
-          const osc = ac.createOscillator();
-          const gain = ac.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(baseFreq, now);
-          osc.frequency.linearRampToValueAtTime(baseFreq * 1.8, now + duration * 0.4);
-          osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.6, now + duration);
-
-          gain.gain.setValueAtTime(0.65, now);
-          gain.gain.linearRampToValueAtTime(0.98, now + 0.3);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-          osc.connect(gain);
-          gain.connect(getDest() || ac.destination);
-          osc.start();
-          osc.stop(now + duration);
+        /* =============================================================================
+           AUTHENTIC INDIAN CRACKER AUDIO ENGINE v3.0 (90% dB Matching)
+           ============================================================================= */
+        _mkNoise(ac, dur, envDecay = 0.3) {
+          const n = Math.floor(ac.sampleRate * dur);
+          const buf = ac.createBuffer(1, n, ac.sampleRate);
+          const d = buf.getChannelData(0);
+          for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (n * envDecay));
+          const src = ac.createBufferSource();
+          src.buffer = buf;
+          return src;
         },
 
-        playFountainSizzle(duration = 5.0, freq = 900) {
-          if (!enabled) return;
-          const ac = getCtx(); if (!ac) return;
-          const now = ac.currentTime;
-
-          const bufferSize = ac.sampleRate * duration;
-          const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
-          const data = buffer.getChannelData(0);
-          for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-
-          const noise = ac.createBufferSource();
-          noise.buffer = buffer;
-
-          const filter = ac.createBiquadFilter();
-          filter.type = 'bandpass';
-          filter.frequency.setValueAtTime(freq, now);
-          filter.frequency.linearRampToValueAtTime(freq * 2.2, now + duration * 0.5);
-          filter.frequency.exponentialRampToValueAtTime(freq * 0.8, now + duration);
-          filter.Q.value = 2.5;
-
-          const gain = ac.createGain();
-          gain.gain.setValueAtTime(0.75, now);
-          gain.gain.linearRampToValueAtTime(1.1, now + 0.5);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-          noise.connect(filter);
-          filter.connect(gain);
-          gain.connect(getDest() || ac.destination);
-          noise.start();
+        _mkShaper(ac, amount = 200) {
+          const ws = ac.createWaveShaper();
+          const k = amount;
+          const n = 512;
+          const curve = new Float32Array(n);
+          for (let i = 0; i < n; i++) {
+            const x = (i * 2) / n - 1;
+            curve[i] = ((Math.PI + k) * x) / (Math.PI + k * Math.abs(x));
+          }
+          ws.curve = curve;
+          ws.oversample = '4x';
+          return ws;
         },
 
         playSnappyPop(freq = 900, intensity = 1.0, is100Wala = false) {
           if (!enabled) return;
           const ac = getCtx(); if (!ac) return;
           const now = ac.currentTime;
+          const dest = getDest() || ac.destination;
+          const vol = Math.min(1.5 * intensity, 1.8);
 
-          // Layer 1: Sharp high-pressure supersonic crack with transient distortion
-          const osc = ac.createOscillator();
-          const gain = ac.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(freq * 1.35, now);
-          osc.frequency.exponentialRampToValueAtTime(80, now + 0.045);
+          // Layer A: Supersonic air-pressure crack
+          {
+            const o = ac.createOscillator();
+            const g = ac.createGain();
+            const ws = this._mkShaper(ac, is100Wala ? 300 : 180);
+            o.type = 'sawtooth';
+            o.frequency.setValueAtTime(freq * 1.6, now);
+            o.frequency.exponentialRampToValueAtTime(55, now + 0.032);
+            g.gain.setValueAtTime(vol, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.038);
+            o.connect(ws); ws.connect(g); g.connect(dest);
+            o.start(); o.stop(now + 0.04);
+          }
 
-          // Increased dB (boosted gain)
-          const masterPopGain = Math.min(1.25 * intensity, 1.4);
-          gain.gain.setValueAtTime(masterPopGain, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          // Layer B: Broadband explosive burst
+          {
+            const ns = this._mkNoise(ac, 0.06, 0.18);
+            const hp = ac.createBiquadFilter();
+            hp.type = 'highpass'; hp.frequency.value = freq * 0.45; hp.Q.value = 0.7;
+            const bp = ac.createBiquadFilter();
+            bp.type = 'peaking'; bp.frequency.value = 2400; bp.gain.value = 9; bp.Q.value = 1.2;
+            const g = ac.createGain();
+            g.gain.setValueAtTime(vol * 0.9, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+            ns.connect(hp); hp.connect(bp); bp.connect(g); g.connect(dest);
+            ns.start();
+          }
 
-          osc.connect(gain);
-          gain.connect(getDest() || ac.destination);
-          osc.start();
-          osc.stop(now + 0.055);
+          // Layer C: Sub-bass pressure thump
+          if (intensity >= 1.0) {
+            const o = ac.createOscillator();
+            const g = ac.createGain();
+            o.type = 'sine';
+            o.frequency.setValueAtTime(120, now);
+            o.frequency.exponentialRampToValueAtTime(18, now + 0.06);
+            g.gain.setValueAtTime(vol * 0.7, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+            o.connect(g); g.connect(dest);
+            o.start(); o.stop(now + 0.07);
+          }
 
-          // Layer 2: White noise explosive burst with steep bandpass
-          const bSize = Math.floor(ac.sampleRate * 0.07);
-          const buf = ac.createBuffer(1, bSize, ac.sampleRate);
-          const data = buf.getChannelData(0);
-          for (let i = 0; i < bSize; i++) data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bSize * 0.28));
-
-          const noise = ac.createBufferSource();
-          noise.buffer = buf;
-          const filter = ac.createBiquadFilter();
-          filter.type = 'highpass';
-          filter.frequency.setValueAtTime(freq * 0.6, now);
-
-          const nGain = ac.createGain();
-          nGain.gain.setValueAtTime(0.95 * intensity, now);
-          nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
-
-          noise.connect(filter);
-          filter.connect(nGain);
-          nGain.connect(getDest() || ac.destination);
-          noise.start();
-
-          // Layer 3: Play real high-velocity physical sample for authentic paper crack report
-          const sampleKeys = ['coin_hit_1', 'coin_hit_4', 'button_click'];
-          const randKey = sampleKeys[Math.floor(Math.random() * sampleKeys.length)];
-          playSample(randKey, 1.15 * intensity, 0.25);
+          playSample('coin_hit_' + (1 + Math.floor(Math.random() * 5)), vol * 0.75, 0.35);
         },
 
         playBassBoom(bassFreq = 160, duration = 0.85, powerMultiplier = 1.0) {
           if (!enabled) return;
           const ac = getCtx(); if (!ac) return;
           const now = ac.currentTime;
+          const dest = getDest() || ac.destination;
+          const vol = Math.min(1.6 * powerMultiplier, 2.0);
 
-          // Layer 1: Subterranean Sub-Bass Sine Wave (Increased dB)
-          const osc = ac.createOscillator();
-          const gain = ac.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(bassFreq * 1.15, now);
-          osc.frequency.exponentialRampToValueAtTime(20, now + duration);
-
-          // Increased dB punch (amplified peak amplitude)
-          const baseVol = Math.min(1.35 * powerMultiplier, 1.5);
-          gain.gain.setValueAtTime(baseVol, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-          osc.connect(gain);
-          gain.connect(getDest() || ac.destination);
-          osc.start();
-          osc.stop(now + duration);
-
-          // Layer 2: Heavy shockwave low-frequency distortion noise
-          const bSize = Math.floor(ac.sampleRate * Math.min(duration * 0.8, 0.5));
-          const buf = ac.createBuffer(1, bSize, ac.sampleRate);
-          const data = buf.getChannelData(0);
-          for (let i = 0; i < bSize; i++) {
-            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bSize * 0.35));
+          // Layer A: Ground-shaking sub-bass fundamental
+          {
+            const o = ac.createOscillator();
+            const g = ac.createGain();
+            const ws = this._mkShaper(ac, 80);
+            o.type = 'sine';
+            o.frequency.setValueAtTime(bassFreq * 1.2, now);
+            o.frequency.exponentialRampToValueAtTime(12, now + duration);
+            g.gain.setValueAtTime(vol, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            o.connect(ws); ws.connect(g); g.connect(dest);
+            o.start(); o.stop(now + duration + 0.05);
           }
 
-          const noise = ac.createBufferSource();
-          noise.buffer = buf;
+          // Layer B: 2nd harmonic body
+          {
+            const o2 = ac.createOscillator();
+            const g2 = ac.createGain();
+            o2.type = 'triangle';
+            o2.frequency.setValueAtTime(bassFreq * 2.1, now);
+            o2.frequency.exponentialRampToValueAtTime(30, now + duration * 0.7);
+            g2.gain.setValueAtTime(vol * 0.65, now);
+            g2.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.75);
+            o2.connect(g2); g2.connect(dest);
+            o2.start(); o2.stop(now + duration * 0.8);
+          }
 
-          const lowpass = ac.createBiquadFilter();
-          lowpass.type = 'lowpass';
-          lowpass.frequency.setValueAtTime(450, now);
-          lowpass.frequency.exponentialRampToValueAtTime(70, now + duration * 0.6);
+          // Layer C: Shockwave broadband noise
+          {
+            const ns = this._mkNoise(ac, Math.min(duration * 0.55, 0.55), 0.22);
+            const lp = ac.createBiquadFilter();
+            lp.type = 'lowpass'; lp.frequency.value = 600;
+            lp.frequency.exponentialRampToValueAtTime(60, now + duration * 0.5);
+            const g = ac.createGain();
+            g.gain.setValueAtTime(vol * 1.1, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.5);
+            ns.connect(lp); lp.connect(g); g.connect(dest);
+            ns.start();
+          }
 
-          const nGain = ac.createGain();
-          nGain.gain.setValueAtTime(1.15 * powerMultiplier, now);
-          nGain.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.55);
+          // Layer D: High-freq sizzle tail
+          {
+            const ns2 = this._mkNoise(ac, Math.min(duration * 0.4, 0.4), 0.9);
+            const bp = ac.createBiquadFilter();
+            bp.type = 'bandpass'; bp.frequency.value = 2800; bp.Q.value = 0.5;
+            const g = ac.createGain();
+            g.gain.setValueAtTime(0.25 * powerMultiplier, now + 0.04);
+            g.gain.exponentialRampToValueAtTime(0.001, now + duration * 0.45);
+            ns2.connect(bp); bp.connect(g); g.connect(dest);
+            ns2.start();
+          }
 
-          noise.connect(lowpass);
-          lowpass.connect(nGain);
-          nGain.connect(getDest() || ac.destination);
-          noise.start();
-
-          // Layer 3: Layered real Godot impact acoustic sample for true physical thump
-          const impactSample = Math.random() < 0.5 ? 'striker_hit_1' : 'wall_hit_1';
-          playSample(impactSample, 1.25 * powerMultiplier, 0.15);
+          playSample(Math.random() < 0.5 ? 'striker_hit_1' : 'wall_hit_1', vol * 0.9, 0.18);
         },
 
         playRocketScreech() {
           if (!enabled) return;
           const ac = getCtx(); if (!ac) return;
           const now = ac.currentTime;
+          const dest = getDest() || ac.destination;
 
-          const osc = ac.createOscillator();
-          const gain = ac.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(320, now);
-          osc.frequency.exponentialRampToValueAtTime(2400, now + 0.7);
+          {
+            const o = ac.createOscillator();
+            const g = ac.createGain();
+            const ws = this._mkShaper(ac, 120);
+            o.type = 'sawtooth';
+            o.frequency.setValueAtTime(280, now);
+            o.frequency.exponentialRampToValueAtTime(3200, now + 0.65);
+            g.gain.setValueAtTime(0.45, now);
+            g.gain.linearRampToValueAtTime(1.3, now + 0.5);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.72);
+            o.connect(ws); ws.connect(g); g.connect(dest);
+            o.start(); o.stop(now + 0.72);
+          }
 
-          gain.gain.setValueAtTime(0.55, now);
-          gain.gain.linearRampToValueAtTime(1.25, now + 0.45);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
+          {
+            const ns = this._mkNoise(ac, 0.7, 0.85);
+            const hp = ac.createBiquadFilter();
+            hp.type = 'highpass'; hp.frequency.value = 1800;
+            const g = ac.createGain();
+            g.gain.setValueAtTime(0.55, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+            ns.connect(hp); hp.connect(g); g.connect(dest);
+            ns.start();
+          }
 
-          osc.connect(gain);
-          gain.connect(getDest() || ac.destination);
-          osc.start();
-          osc.stop(now + 0.75);
+          const boom = this.playBassBoom.bind(this);
+          setTimeout(() => boom(170, 0.7, 1.3), 680);
         },
 
-        playExplosion() { this.playBassBoom(180, 0.85); },
+        playWhistleSpin(duration = 4.5, baseFreq = 700) {
+          if (!enabled) return;
+          const ac = getCtx(); if (!ac) return;
+          const now = ac.currentTime;
+          const dest = getDest() || ac.destination;
+
+          {
+            const o = ac.createOscillator();
+            const g = ac.createGain();
+            const ws = this._mkShaper(ac, 60);
+            o.type = 'sawtooth';
+            o.frequency.setValueAtTime(baseFreq * 0.85, now);
+            o.frequency.linearRampToValueAtTime(baseFreq * 2.4, now + duration * 0.55);
+            o.frequency.exponentialRampToValueAtTime(baseFreq * 0.5, now + duration);
+            g.gain.setValueAtTime(0.7, now);
+            g.gain.linearRampToValueAtTime(1.1, now + 0.25);
+            g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            o.connect(ws); ws.connect(g); g.connect(dest);
+            o.start(); o.stop(now + duration);
+          }
+
+          {
+            const bufSz = Math.floor(ac.sampleRate * duration);
+            const buf = ac.createBuffer(1, bufSz, ac.sampleRate);
+            const d = buf.getChannelData(0);
+            for (let i = 0; i < bufSz; i++) d[i] = (Math.random() * 2 - 1) * (0.4 + 0.6 * Math.sin(i / (ac.sampleRate * 0.12)));
+            const ns = ac.createBufferSource(); ns.buffer = buf;
+            const bp = ac.createBiquadFilter();
+            bp.type = 'bandpass'; bp.frequency.value = baseFreq * 1.5; bp.Q.value = 3.5;
+            bp.frequency.linearRampToValueAtTime(baseFreq * 3, now + duration * 0.5);
+            const g = ac.createGain();
+            g.gain.setValueAtTime(0.45, now);
+            g.gain.linearRampToValueAtTime(0.7, now + 0.3);
+            g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            ns.connect(bp); bp.connect(g); g.connect(dest);
+            ns.start();
+          }
+
+          {
+            const o2 = ac.createOscillator();
+            const g2 = ac.createGain();
+            o2.type = 'triangle';
+            o2.frequency.setValueAtTime(baseFreq * 1.5, now);
+            o2.frequency.linearRampToValueAtTime(baseFreq * 3.2, now + duration * 0.5);
+            o2.frequency.exponentialRampToValueAtTime(baseFreq * 0.7, now + duration);
+            g2.gain.setValueAtTime(0.38, now);
+            g2.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            o2.connect(g2); g2.connect(dest);
+            o2.start(); o2.stop(now + duration);
+          }
+        },
+
+        playFountainSizzle(duration = 5.0, freq = 900) {
+          if (!enabled) return;
+          const ac = getCtx(); if (!ac) return;
+          const now = ac.currentTime;
+          const dest = getDest() || ac.destination;
+
+          {
+            const bufSz = Math.floor(ac.sampleRate * duration);
+            const buf = ac.createBuffer(1, bufSz, ac.sampleRate);
+            const d = buf.getChannelData(0);
+            for (let i = 0; i < bufSz; i++) d[i] = Math.random() * 2 - 1;
+            const ns = ac.createBufferSource(); ns.buffer = buf;
+            const bp = ac.createBiquadFilter();
+            bp.type = 'bandpass'; bp.frequency.value = freq; bp.Q.value = 2.2;
+            bp.frequency.linearRampToValueAtTime(freq * 2.8, now + duration * 0.6);
+            bp.frequency.exponentialRampToValueAtTime(freq * 0.75, now + duration);
+            const g = ac.createGain();
+            g.gain.setValueAtTime(0.6, now);
+            g.gain.linearRampToValueAtTime(1.2, now + duration * 0.4);
+            g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            ns.connect(bp); bp.connect(g); g.connect(dest);
+            ns.start();
+          }
+
+          {
+            const bufSz = Math.floor(ac.sampleRate * duration);
+            const buf = ac.createBuffer(1, bufSz, ac.sampleRate);
+            const d = buf.getChannelData(0);
+            for (let i = 0; i < bufSz; i++) {
+              const progress = i / bufSz;
+              const density = 0.001 + progress * 0.008;
+              d[i] = Math.random() < density ? (Math.random() * 2 - 1) * (1 - Math.exp(-20 * density)) : 0;
+            }
+            const ns = ac.createBufferSource(); ns.buffer = buf;
+            const hp = ac.createBiquadFilter();
+            hp.type = 'highpass'; hp.frequency.value = freq * 2;
+            const g = ac.createGain();
+            g.gain.setValueAtTime(0.55, now);
+            g.gain.linearRampToValueAtTime(0.9, now + duration * 0.5);
+            g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            ns.connect(hp); hp.connect(g); g.connect(dest);
+            ns.start();
+          }
+
+          {
+            const o = ac.createOscillator();
+            const g = ac.createGain();
+            o.type = 'triangle';
+            o.frequency.setValueAtTime(80, now);
+            o.frequency.linearRampToValueAtTime(280, now + duration * 0.7);
+            g.gain.setValueAtTime(0.18, now);
+            g.gain.linearRampToValueAtTime(0.42, now + duration * 0.5);
+            g.gain.exponentialRampToValueAtTime(0.001, now + duration);
+            o.connect(g); g.connect(dest);
+            o.start(); o.stop(now + duration);
+          }
+        },
+
+        playBijliCrack(freq = 1800, intensity = 1.4) {
+          if (!enabled) return;
+          const ac = getCtx(); if (!ac) return;
+          const now = ac.currentTime;
+          const dest = getDest() || ac.destination;
+
+          {
+            const o = ac.createOscillator();
+            const ws = this._mkShaper(ac, 400);
+            const g = ac.createGain();
+            o.type = 'square';
+            o.frequency.setValueAtTime(freq, now);
+            o.frequency.exponentialRampToValueAtTime(100, now + 0.022);
+            g.gain.setValueAtTime(1.8 * intensity, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+            o.connect(ws); ws.connect(g); g.connect(dest);
+            o.start(); o.stop(now + 0.028);
+          }
+
+          {
+            const ns = this._mkNoise(ac, 0.03, 0.08);
+            const hp = ac.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 3500;
+            const g = ac.createGain();
+            g.gain.setValueAtTime(1.5 * intensity, now);
+            g.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+            ns.connect(hp); hp.connect(g); g.connect(dest);
+            ns.start();
+          }
+        },
+
+        playExplosion() { this.playBassBoom(180, 0.85, 1.2); },
+
         playMagnetHum() {
           if (!enabled) return;
           const ac = getCtx(); if (!ac) return;
-          const osc = ac.createOscillator();
-          const gain = ac.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(160, ac.currentTime);
-          osc.frequency.linearRampToValueAtTime(320, ac.currentTime + 0.15);
-          gain.gain.setValueAtTime(0.28, ac.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.2);
-          osc.connect(gain);
-          gain.connect(getDest() || ac.destination);
-          osc.start();
-          osc.stop(ac.currentTime + 0.2);
+          const o = ac.createOscillator();
+          const g = ac.createGain();
+          o.type = 'sawtooth';
+          o.frequency.setValueAtTime(160, ac.currentTime);
+          o.frequency.linearRampToValueAtTime(320, ac.currentTime + 0.15);
+          g.gain.setValueAtTime(0.28, ac.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.2);
+          o.connect(g); g.connect(getDest() || ac.destination);
+          o.start(); o.stop(ac.currentTime + 0.2);
         },
+
         playFoul() {
           if (!enabled) return;
           const ac = getCtx(); if (!ac) return;
-          const osc = ac.createOscillator();
-          const gain = ac.createGain();
-          osc.type = 'sawtooth';
-          osc.frequency.setValueAtTime(220, ac.currentTime);
-          osc.frequency.setValueAtTime(160, ac.currentTime + 0.1);
-          gain.gain.setValueAtTime(0.35, ac.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.25);
-          osc.connect(gain);
-          gain.connect(ac.destination);
-          osc.start();
-          osc.stop(ac.currentTime + 0.25);
+          const o = ac.createOscillator();
+          const g = ac.createGain();
+          o.type = 'sawtooth';
+          o.frequency.setValueAtTime(220, ac.currentTime);
+          o.frequency.setValueAtTime(160, ac.currentTime + 0.1);
+          g.gain.setValueAtTime(0.35, ac.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.25);
+          o.connect(g);
+          g.connect(getDest() || ac.destination);
+          o.start(); o.stop(ac.currentTime + 0.25);
         },
+
         playSparklerCrackles(intensity = 0.5) {
           if (!enabled) return;
           const ac = getCtx(); if (!ac) return;
           const now = ac.currentTime;
-          const dur = 0.07 + Math.random() * 0.04;
-          const bufferSize = Math.floor(ac.sampleRate * dur);
-          const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
-          const data = buffer.getChannelData(0);
-          for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * (Math.random() < 0.35 ? 1 : 0.15);
-          const noise = ac.createBufferSource();
-          noise.buffer = buffer;
-          const filter = ac.createBiquadFilter();
-          filter.type = 'highpass';
-          filter.frequency.setValueAtTime(2800 + Math.random() * 1500, now);
-          const gain = ac.createGain();
-          gain.gain.setValueAtTime(0.06 * intensity, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
-          noise.connect(filter);
-          filter.connect(gain);
-          gain.connect(getDest() || ac.destination);
-          noise.start();
+          const dur = 0.05 + Math.random() * 0.06;
+          const bufSz = Math.floor(ac.sampleRate * dur);
+          const buf = ac.createBuffer(1, bufSz, ac.sampleRate);
+          const d = buf.getChannelData(0);
+          for (let i = 0; i < bufSz; i++) {
+            d[i] = (Math.random() * 2 - 1) * (Math.random() < 0.4 ? Math.exp(-i / (bufSz * 0.15)) : 0.08);
+          }
+          const ns = ac.createBufferSource(); ns.buffer = buf;
+          const hp1 = ac.createBiquadFilter(); hp1.type = 'highpass'; hp1.frequency.value = 3200 + Math.random() * 2200;
+          const pk = ac.createBiquadFilter(); pk.type = 'peaking'; pk.frequency.value = 6800; pk.gain.value = 8; pk.Q.value = 1.5;
+          const g = ac.createGain();
+          g.gain.setValueAtTime(0.18 * intensity, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+          ns.connect(hp1); hp1.connect(pk); pk.connect(g);
+          g.connect(getDest() || ac.destination);
+          ns.start();
         }
       };
     })();
-
     /* =========================================================================
        YOUTUBE PLAYABLES SDK INTEGRATION & LIFECYCLE
        ========================================================================= */
@@ -4631,7 +5328,7 @@
       } else if (t === 'bomb' || t === 'gorilla' || t === 'dragon') {
         Sound.playBassBoom(140, 1.1, 1.35);
       } else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
-        Sound.playSnappyPop(1400, 1.45, false);
+        Sound.playBijliCrack(1600, 1.5);
       } else if (t === 'romancandle' || t === 'sevenshot') {
         Sound.playSnappyPop(750, 1.2, false);
         setTimeout(() => Sound.playSnappyPop(900, 1.25, false), 160);
@@ -9214,7 +9911,9 @@
         else if (t === 'bullet' || t === 'kuruvi' || t === 'bijli') {
           if (!this.snapped) {
             this.snapped = true;
-            Sound.playSnappyPop(t === 'kuruvi' ? 1450 : (t === 'bijli' ? 1650 : 750), 1.45, false);
+            if (t === 'bijli') Sound.playBijliCrack(1650, 1.6);
+            else if (t === 'kuruvi') Sound.playBijliCrack(1450, 1.5);
+            else Sound.playSnappyPop(750, 1.45, false);
             triggerBoardVibration(t, 18, 0.74, [85]);
             this.shockwaves.push(new Shockwave(this.x, this.y, 110, t === 'bijli' ? '#fff' : '#ff5252', 12));
             addCrackerCarbonAndPaperDebris(this.x, this.y, 28, 22, 9);
@@ -10095,6 +10794,7 @@
       const ctx = canvas.getContext('2d');
 
       let state = 'menu';
+          if (typeof Sound !== 'undefined' && Sound.playMenuMusic) Sound.playMenuMusic();
       let isFunMode = false;
       let funVariant = 'crackers';
 
@@ -10886,7 +11586,11 @@
               p.isPocketed = true;
               p.vx = 0; p.vy = 0;
               p.angularVelocity = 0;
-              Sound.playPocket();
+              if (p.type === 'queen') {
+                Sound.playQueenPocket();
+              } else {
+                Sound.playPocket();
+              }
 
               if (p.type === 'striker') {
                 Sound.playFoul();
@@ -11020,6 +11724,7 @@
           if (celebrationFinished) return;
           celebrationFinished = true;
           if (diwaliOverlay) diwaliOverlay.classList.add('hidden');
+          if (typeof Sound !== 'undefined' && Sound.playMenuMusic) Sound.playMenuMusic();
           document.getElementById('result-overlay').classList.remove('hidden');
         }
 
@@ -11113,10 +11818,12 @@
 
         if (matchMode === 'vs_ai') {
           if (winnerNum === 1) {
+            Sound.playWinJingle();
             winTitle.textContent = isDiwali ? '🪔 DIWALI DHAMAKA VICTORY!' : '🏆 VICTORY!';
             winDesc.textContent = 'You defeated the AI Bot with ' + scores[1] + ' points! Earned +' + reward + ' Cracker Credits! 💰';
             startDiwaliVictorySequence();
           } else {
+            Sound.playLossJingle();
             winTitle.textContent = 'DEFEAT!';
             winDesc.textContent = 'AI Bot won with ' + scores[2] + ' points. Better luck next time!';
             document.getElementById('result-overlay').classList.remove('hidden');
@@ -12030,6 +12737,9 @@
 
           document.getElementById('hud').classList.remove('hidden');
           document.getElementById('turn-msg').classList.remove('hidden');
+          if (typeof Sound !== 'undefined' && Sound.playGameMusic) {
+            Sound.playGameMusic(isFun ? 'fun' : 'normal');
+          }
           updateStrikerCrackerUI();
 
           YouTubePlayables.gameReady();
@@ -13507,14 +14217,96 @@
       });
     }
 
+    // --- Comprehensive Sound & Music Settings Wire-up ---
+    function syncSettingsAudioUI() {
+      if (typeof Sound === 'undefined') return;
+      const s = Sound.getAudioSettings ? Sound.getAudioSettings() : {};
+
+      const toggleSound = document.getElementById('setting-toggle-sound');
+      const sliderMaster = document.getElementById('setting-slider-master');
+      const valMaster = document.getElementById('label-val-master');
+
+      const toggleMusic = document.getElementById('setting-toggle-music');
+      const sliderMusic = document.getElementById('setting-slider-music');
+      const valMusic = document.getElementById('label-val-music');
+
+      const sliderSfx = document.getElementById('setting-slider-sfx');
+      const valSfx = document.getElementById('label-val-sfx');
+
+      if (toggleSound && typeof s.enabled === 'boolean') toggleSound.checked = s.enabled;
+      if (sliderMaster && typeof s.masterVol === 'number') {
+        const pct = Math.round(s.masterVol * 100);
+        sliderMaster.value = pct;
+        if (valMaster) valMaster.textContent = pct + '%';
+      }
+
+      if (toggleMusic && typeof s.musicEnabled === 'boolean') toggleMusic.checked = s.musicEnabled;
+      if (sliderMusic && typeof s.musicVol === 'number') {
+        const pct = Math.round(s.musicVol * 100);
+        sliderMusic.value = pct;
+        if (valMusic) valMusic.textContent = pct + '%';
+      }
+
+      if (sliderSfx && typeof s.sfxVol === 'number') {
+        const pct = Math.round(s.sfxVol * 100);
+        sliderSfx.value = pct;
+        if (valSfx) valSfx.textContent = pct + '%';
+      }
+    }
+
     const toggleSoundEl = document.getElementById('setting-toggle-sound');
     if (toggleSoundEl) {
       toggleSoundEl.addEventListener('change', (e) => {
-        if (typeof Sound !== 'undefined' && Sound.toggle) {
-          Sound.toggle();
+        if (typeof Sound !== 'undefined' && Sound.setEnabled) {
+          Sound.setEnabled(e.target.checked);
         }
       });
     }
+
+    const sliderMasterEl = document.getElementById('setting-slider-master');
+    if (sliderMasterEl) {
+      sliderMasterEl.addEventListener('input', (e) => {
+        const pct = Number(e.target.value);
+        document.getElementById('label-val-master').textContent = pct + '%';
+        if (typeof Sound !== 'undefined' && Sound.setMasterVolume) {
+          Sound.setMasterVolume(pct / 100);
+        }
+      });
+    }
+
+    const toggleMusicEl = document.getElementById('setting-toggle-music');
+    if (toggleMusicEl) {
+      toggleMusicEl.addEventListener('change', (e) => {
+        if (typeof Sound !== 'undefined' && Sound.setMusicEnabled) {
+          Sound.setMusicEnabled(e.target.checked);
+        }
+      });
+    }
+
+    const sliderMusicEl = document.getElementById('setting-slider-music');
+    if (sliderMusicEl) {
+      sliderMusicEl.addEventListener('input', (e) => {
+        const pct = Number(e.target.value);
+        document.getElementById('label-val-music').textContent = pct + '%';
+        if (typeof Sound !== 'undefined' && Sound.setMusicVolume) {
+          Sound.setMusicVolume(pct / 100);
+        }
+      });
+    }
+
+    const sliderSfxEl = document.getElementById('setting-slider-sfx');
+    if (sliderSfxEl) {
+      sliderSfxEl.addEventListener('input', (e) => {
+        const pct = Number(e.target.value);
+        document.getElementById('label-val-sfx').textContent = pct + '%';
+        if (typeof Sound !== 'undefined' && Sound.setSfxVolume) {
+          Sound.setSfxVolume(pct / 100);
+        }
+      });
+    }
+
+    // Initialize UI on load
+    syncSettingsAudioUI();
 
     MultiplayerLobby.init();
     updateEquippedStrikerCard();
