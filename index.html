@@ -3468,6 +3468,15 @@
             </div>
           </div>
 
+          <!-- Sound Suite Link -->
+          <div class="settings-row" style="background: rgba(46, 26, 17, 0.95); border: 1px solid rgba(255, 215, 0, 0.4); justify-content: space-between;">
+            <div>
+              <div class="settings-label" style="color: #ffd700;">🎛️ Sound Verification Suite</div>
+              <div class="settings-sub">Test, visualize &amp; approve all 32 sounds, crackers &amp; music</div>
+            </div>
+            <a href="sound_test.html" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.78rem; text-decoration: none; display: inline-block;">Open Suite ▶</a>
+          </div>
+
           <div class="settings-row">
             <div>
               <div class="settings-label">📳 Phone Vibration (Haptics)</div>
@@ -4440,6 +4449,10 @@
       }
 
       return {
+        getCtx: () => getCtx(),
+        getMasterGainNode: () => masterGainNode,
+        playSample: (key, vol, pitch) => playSample(key, vol, pitch),
+
         // --- System & Preferences ---
         setEnabled(val) {
           enabled = !!val;
