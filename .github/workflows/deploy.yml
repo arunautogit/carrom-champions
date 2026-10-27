@@ -1,3 +1,4 @@
+
 name: Deploy Game to GitHub Pages
 
 on:
@@ -8,61 +9,99 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pages: write
-  id-token: write
+  contents: read
 
 concurrency:
-  group: "pages"
+  group: github-pages
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
+    name: Build Godot Web Game
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Setup Godot 4.3
+        shell: bash
         run: |
+          set -euo pipefail
+
           GODOT_VERSION="4.3"
           GODOT_RELEASE="stable"
-          wget -q https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64.zip
+          TEMPLATE_DIR="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}"
+
+          wget -q \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64.zip"
+
           unzip -q Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64.zip
-          mv Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64 /usr/local/bin/godot
-          chmod +x /usr/local/bin/godot
-          
-          # Install export templates
-          mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}
-          wget -q https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz
+
+          sudo mv Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64 /usr/local/bin/godot
+          sudo chmod +x /usr/local/bin/godot
+
+          wget -q \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz"
+
+          mkdir -p "$TEMPLATE_DIR"
           unzip -q Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz
-          mv templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}/
 
-      - name: Export Web Project (HTML5)
+          cp -a templates/. "$TEMPLATE_DIR/"
+
+          godot --version
+
+      - name: Export Web Project
+        shell: bash
         run: |
+          set -euo pipefail
+
           mkdir -p export/web
-          godot --headless --export-release "Web" export/web/index.html
 
-      - name: Package Web HTML5 Zip
+          godot --headless --path . \
+            --export-release "Web" export/web/index.html
+
+          test -f export/web/index.html
+
+      - name: Package Web Build
+        shell: bash
         run: |
+          set -euo pipefail
+
           cd export/web
           zip -r ../CarromChampions_Web.zip .
           cd ../..
 
-      - name: Upload Web Build Artifact
+      - name: Upload Downloadable Web ZIP
         uses: actions/upload-artifact@v4
         with:
           name: CarromChampions_Web
           path: export/CarromChampions_Web.zip
+          if-no-files-found: error
+          retention-days: 14
 
-      - name: Setup GitHub Pages
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload GitHub Pages Artifact
+      - name: Upload Pages Build
         uses: actions/upload-pages-artifact@v3
         with:
           path: export/web
 
-      - name: Deploy to GitHub Pages
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy Game
         id: deployment
         uses: actions/deploy-pages@v4
